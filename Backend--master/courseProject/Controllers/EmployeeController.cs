@@ -85,53 +85,30 @@ namespace courseProject.Controllers
 
 
 
-        [HttpPost("CreateSubAdmin")]
+        [HttpPost("CreateEmployee")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<SubAdmin>> CreateSubAdmin(EmployeeForCreate subadmin)
+        public async Task<ActionResult> CreateEmployee(EmployeeForCreate model)
         {
+            if (model == null)
+            {
 
-            //var employeeMapped = mapper.Map<EmployeeForCreate, SubAdmin>(subadmin);
-            //var userMapped = mapper.Map<EmployeeForCreate, User>(subadmin);
-            //await  subAdminRepo.createSubAdminAccountAsync(employeeMapped);
-            //await userRepo.createSubAdminAccountAsync(userMapped);
-            //var success1 = await subAdminRepo.saveAsync();
-            //var success2 = await userRepo.saveAsync();
-            //if (success1 > 0 && success2 > 0)
-            //{
-            //    responce.StatusCode = HttpStatusCode.Created;
-            //    responce.IsSuccess = true;
-            //    responce.Result = subadmin;
-            //    return Ok(responce);
-            //}
-            //responce.StatusCode = HttpStatusCode.BadRequest;
-            //responce.IsSuccess = false;
-            //return BadRequest(responce);
-        
+                responce.StatusCode = HttpStatusCode.BadRequest;
+                responce.IsSuccess = false;
 
+                return BadRequest(responce);
+            }
+            bool ifUserIsUniqe = unitOfWork.UserRepository.isUniqeUser(model.email);
 
-            //var employeeMapped = mapper.Map<EmployeeForCreate, SubAdmin>(subadmin);
-            //var userMapped = mapper.Map<EmployeeForCreate, User>(subadmin);
-            //await  subAdminRepo.createSubAdminAccountAsync(employeeMapped);
-            //await userRepo.createSubAdminAccountAsync(userMapped);
-            //var success1 = await subAdminRepo.saveAsync();
-            //var success2 = await userRepo.saveAsync();
-            //if (success1 > 0 && success2 > 0)
-            //{
-            //    responce.StatusCode = HttpStatusCode.Created;
-            //    responce.IsSuccess = true;
-            //    responce.Result = subadmin;
-            //    return Ok(responce);
-            //}
-            //responce.StatusCode = HttpStatusCode.BadRequest;
-            //responce.IsSuccess = false;
-            //return BadRequest(responce);
-
-
-
-            var subAdminMapped = mapper.Map<SubAdmin>(subadmin);
-            var userMapped = mapper.Map<RegistrationRequestDTO>(subadmin);
+            if (!ifUserIsUniqe)
+            {
+                responce.StatusCode = HttpStatusCode.BadRequest;
+                responce.IsSuccess = false;
+                responce.ErrorMassages.Add("Email is already exists !!");
+                return BadRequest(responce);
+            }
+            var userMapped = mapper.Map<RegistrationRequestDTO>(model);
 
             using (var transaction = await unitOfWork.SubAdminRepository.BeginTransactionAsync())
             {
@@ -139,19 +116,26 @@ namespace courseProject.Controllers
                 {
                     await unitOfWork.UserRepository.RegisterAsync(userMapped);
                     var success1 = await unitOfWork.SubAdminRepository.saveAsync();
-
-                    // var idd = mapper.Map<SubAdmin, RegistrationRequestDTO>(subAdminMapped);
-                    //  subAdminMapped.email = idd.email;
-                    await unitOfWork.SubAdminRepository.createSubAdminAccountAsync(subAdminMapped);
+                    if (model.role.ToLower() == "subadmin")
+                    {
+                        var modelMapped = mapper.Map<SubAdmin>(model);
+                        await unitOfWork.SubAdminRepository.createSubAdminAccountAsync(modelMapped);
+                    }
+                    else
+                    {
+                        var modelMapped = mapper.Map<Instructor>(model);
+                        await unitOfWork.instructorRepositpry.createInstructorAccountAsync(modelMapped);
+                    }
                     var success2 = await unitOfWork.SubAdminRepository.saveAsync();
 
-                    await transaction.CommitAsync();
+
 
                     if (success1 > 0 && success2 > 0)
                     {
+                        await transaction.CommitAsync();
                         responce.StatusCode = (HttpStatusCode)StatusCodes.Status201Created;
                         responce.IsSuccess = true;
-                        responce.Result = subadmin;
+                        responce.Result = model;
                         return Ok(responce);
                     }
 
@@ -202,71 +186,8 @@ namespace courseProject.Controllers
         }
 
 
-        [HttpPost("CreateInstructor")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(404)]
-        [ProducesResponseType(400)]
-        public async Task<ActionResult<Instructor>> CreateInstructor(EmployeeForCreate instructor)
-        {
-            //var employeeMapped = mapper.Map<EmployeeForCreate, Instructor>(instructor);
-            //var userMapped = mapper.Map<EmployeeForCreate, User>(instructor);
-            //await instructorRepo.createSubAdminAccountAsync(employeeMapped);
-            //await userRepo.createSubAdminAccountAsync(userMapped);
-            //var success1 = await subAdminRepo.saveAsync();
-            //var success2 = await userRepo.saveAsync();
-            //if (success1 > 0 && success2 > 0)
-            //{
-            //    responce.StatusCode = HttpStatusCode.Created;
-            //    responce.IsSuccess = true;
-            //    responce.Result = instructor;
-            //    return Ok(responce);
-            //}
-            //responce.StatusCode = HttpStatusCode.BadRequest;
-            //responce.IsSuccess = false;
-            //return BadRequest(responce);
-
-            var instructorMapped = mapper.Map<Instructor>(instructor);
-            var userMapped = mapper.Map<RegistrationRequestDTO>(instructor);
-
-            using (var transaction = await unitOfWork.SubAdminRepository.BeginTransactionAsync())
-            {
-                try
-                {
-                    await unitOfWork.UserRepository.RegisterAsync(userMapped);
-                    var success1 = await unitOfWork.SubAdminRepository.saveAsync();
-
-
-                    await unitOfWork.instructorRepositpry.createInstructorAccountAsync(instructorMapped);
-                    var success2 = await unitOfWork.SubAdminRepository.saveAsync();
-
-                    await transaction.CommitAsync();
-
-                    if (success1 > 0 && success2 > 0)
-                    {
-                        responce.StatusCode = (HttpStatusCode)StatusCodes.Status201Created;
-                        responce.IsSuccess = true;
-                        responce.Result = instructor;
-                        return Ok(responce);
-                    }
-
-                    return BadRequest(responce);
-                }
-                catch (Exception ex)
-                {
-                    await transaction.RollbackAsync();
-
-
-                    responce.StatusCode = (HttpStatusCode)StatusCodes.Status400BadRequest;
-                    responce.IsSuccess = false;
-
-                    return BadRequest(responce);
-                }
-
-
-
-
-            }
-        }
+       
+        
 
 
         [HttpPut("UpdateSubAdmin")]
