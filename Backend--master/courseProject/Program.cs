@@ -24,6 +24,17 @@ namespace courseProject
             //    options.UseSqlServer(connectionString);
 
             //});
+
+             builder.Services.AddCors(a =>
+ {
+     a.AddPolicy("AllowOrigin", builder =>
+     {
+         builder.AllowAnyOrigin()
+         .AllowAnyMethod()
+         .AllowAnyHeader();
+     });
+ });
+            
             builder.Services.AddControllers();
             builder.Services.AddDbContext<projectDbContext>(options =>
             {
