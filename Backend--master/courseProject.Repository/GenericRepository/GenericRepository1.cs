@@ -17,8 +17,7 @@ namespace courseProject.Repository.GenericRepository
     public class GenericRepository1<T> : IGenericRepository1<T> where T : class
     {
         private readonly projectDbContext dbContext;
-        //SqlConnection connection;
-        //SqlCommand command;
+       
 
         public GenericRepository1(projectDbContext dbContext)
         {
@@ -26,19 +25,7 @@ namespace courseProject.Repository.GenericRepository
             this.dbContext = dbContext;
         }
 
-        //public void DBConnectionOpen()
-        //{
-        //    connection = new SqlConnection();
-        //   // connection.ConnectionString = ConfigurationManager.ConnectionStrings["con"].ConnectionString;
-
-        //    if (connection.State != ConnectionState.Open)
-        //        connection.Open();
-        //}
-        //public void DBConnectionClose()
-        //{
-        //    if (connection.State != ConnectionState.Closed)
-        //        connection.Close();
-        //}
+   
 
         public async Task<IEnumerable<T>> GetAllStudentsAsync()
         {

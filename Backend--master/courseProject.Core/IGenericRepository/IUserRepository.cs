@@ -9,7 +9,7 @@ using courseProject.Core.Models.DTO;
 
 namespace courseProject.Core.IGenericRepository
 {
-    public interface IUserRepository
+    public interface IUserRepository :IGenericRepository1<User>
     {
 
      Task< LoginResponseDTO> LoginAsync(LoginRequestDTO loginRequestDTO); 
@@ -17,6 +17,6 @@ namespace courseProject.Core.IGenericRepository
 
        bool isUniqeUser(string email);
 
-        //Task LogOut();
+       // void LogOut();
     }
 }

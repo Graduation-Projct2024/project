@@ -22,7 +22,7 @@ namespace courseProject.Repository.GenericRepository
         
         private readonly projectDbContext dbContext;
         private string secretKey;
-
+        private string token1 = "";
         public UserRepository( projectDbContext dbContext ,IConfiguration configuration):base(dbContext)
         {
             this.dbContext = dbContext;
@@ -74,19 +74,15 @@ namespace courseProject.Repository.GenericRepository
             LoginResponseDTO loginResponseDTO = new LoginResponseDTO()
             {
                 User = user,
-                Token=tokenHandler.WriteToken(token)
+                Token = tokenHandler.WriteToken(token)
             
             };
-
+            token1 = loginResponseDTO.Token;
             return loginResponseDTO;
 
         }
 
-        //public Task LogOut()
-        //{
-            
-        //    LoginAsync().Token = "";
-        //}
+     
 
         public async Task<User> RegisterAsync( RegistrationRequestDTO registerRequestDTO)
         {
@@ -103,7 +99,7 @@ namespace courseProject.Repository.GenericRepository
                 role= registerRequestDTO.role
             };
            await dbContext.users.AddAsync(user);
-           await dbContext.SaveChangesAsync();
+          // await dbContext.SaveChangesAsync();
           //  user.password = "";
             return  user;
         }

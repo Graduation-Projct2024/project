@@ -14,6 +14,13 @@ namespace courseProject.MappingProfile
 
             CreateMap<Student, ContactDto>()
                     .ForMember(x => x.userName, o => o.MapFrom(y => y.user.userName));
+
+
+            CreateMap<RegistrationRequestDTO, Student>();
+            CreateMap<Student, RegistrationRequestDTO>();
+
+            CreateMap<RegistrationRequestDTO, Admin>();
+            CreateMap<Admin, RegistrationRequestDTO>();
         }
 
 

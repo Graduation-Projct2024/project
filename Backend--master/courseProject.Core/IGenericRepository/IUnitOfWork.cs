@@ -12,5 +12,7 @@ namespace courseProject.Core.IGenericRepository
         public ISubAdminRepository SubAdminRepository { get; set; }
         public IUserRepository UserRepository { get; set; }
         public IinstructorRepositpry instructorRepositpry { get; set; }
+        public IStudentRepository StudentRepository { get; set; }
+        public IAdminRepository AdminRepository { get; set; }
     }
 }

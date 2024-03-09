@@ -27,6 +27,9 @@ namespace courseProject.MappingProfile
             CreateMap<EmployeeDto, Instructor>();
             CreateMap<EmployeeDto, SubAdmin>();
             CreateMap<updateEmployeeDTO, SubAdmin>();
+            CreateMap<EmployeeForCreate, SubAdmin>();
+            CreateMap<EmployeeForCreate, Instructor>();
+
 
 
 
@@ -37,6 +40,9 @@ namespace courseProject.MappingProfile
 
 
             CreateMap<SubAdmin, RegistrationRequestDTO>();
+            CreateMap<Admin, RegistrationRequestDTO>();
+            
+
 
         }
     }

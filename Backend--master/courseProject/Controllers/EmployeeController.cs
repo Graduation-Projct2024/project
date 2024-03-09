@@ -96,7 +96,7 @@ namespace courseProject.Controllers
 
                 responce.StatusCode = HttpStatusCode.BadRequest;
                 responce.IsSuccess = false;
-
+                
                 return BadRequest(responce);
             }
             bool ifUserIsUniqe = unitOfWork.UserRepository.isUniqeUser(model.email);
@@ -107,7 +107,7 @@ namespace courseProject.Controllers
                 responce.IsSuccess = false;
                 responce.ErrorMassages.Add("Email is already exists !!");
                 return BadRequest(responce);
-            }
+            }         
             var userMapped = mapper.Map<RegistrationRequestDTO>(model);
 
             using (var transaction = await unitOfWork.SubAdminRepository.BeginTransactionAsync())
@@ -120,15 +120,15 @@ namespace courseProject.Controllers
                     {
                         var modelMapped = mapper.Map<SubAdmin>(model);
                         await unitOfWork.SubAdminRepository.createSubAdminAccountAsync(modelMapped);
-                    }
-                    else
+                    } 
+                    else 
                     {
                         var modelMapped = mapper.Map<Instructor>(model);
                         await unitOfWork.instructorRepositpry.createInstructorAccountAsync(modelMapped);
                     }
                     var success2 = await unitOfWork.SubAdminRepository.saveAsync();
 
-
+                    
 
                     if (success1 > 0 && success2 > 0)
                     {
@@ -154,6 +154,7 @@ namespace courseProject.Controllers
 
             }
         }
+
 
 
         [HttpGet("GetEmployeeById")]
@@ -184,10 +185,6 @@ namespace courseProject.Controllers
             responce.Result = mappedemployee;
             return Ok(responce);
         }
-
-
-       
-        
 
 
         [HttpPut("UpdateSubAdmin")]
@@ -249,6 +246,7 @@ namespace courseProject.Controllers
 
             }
 
+        
 
 
         }

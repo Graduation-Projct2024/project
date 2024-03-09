@@ -25,16 +25,20 @@ namespace courseProject
 
             //});
 
-             builder.Services.AddCors(a =>
- {
-     a.AddPolicy("AllowOrigin", builder =>
-     {
-         builder.AllowAnyOrigin()
-         .AllowAnyMethod()
-         .AllowAnyHeader();
-     });
- });
-            
+
+
+            builder.Services.AddCors(a =>
+            {
+                a.AddPolicy("AllowOrigin", policyBuilder =>
+                {
+                    policyBuilder.WithOrigins("http://localhost:3000");
+                    
+                    policyBuilder.AllowAnyMethod();
+                    policyBuilder.AllowAnyHeader();
+                    policyBuilder.AllowCredentials();
+                });
+            });
+
             builder.Services.AddControllers();
             builder.Services.AddDbContext<projectDbContext>(options =>
             {
@@ -45,6 +49,7 @@ namespace courseProject
             builder.Services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
             builder.Services.AddScoped(typeof(ISubAdminRepository), typeof(SubAdminRepository));
             builder.Services.AddScoped(typeof(IUserRepository), typeof(UserRepository));
+            builder.Services.AddScoped(typeof(IStudentRepository), typeof(StudentRepository));
             builder.Services.AddAutoMapper(typeof(MappingProfileForStudentsInformation));
             builder.Services.AddAutoMapper(typeof(MappingForCourseInformation));
             builder.Services.AddAutoMapper(typeof(MappingForEmployee));
@@ -101,6 +106,9 @@ namespace courseProject
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseCors("AllowOrigin");
+
 
             app.UseHttpsRedirection();
 
