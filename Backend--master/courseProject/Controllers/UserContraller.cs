@@ -25,7 +25,7 @@ namespace courseProject.Controllers
 
         [HttpPost("Login")]
         [AllowAnonymous]
-        public async Task<IActionResult> Login([FromForm] LoginRequestDTO loginRequestDTO)
+        public async Task<IActionResult> Login(LoginRequestDTO loginRequestDTO)
         {
             var loginResponse = await unitOfWork.UserRepository.LoginAsync(loginRequestDTO);
 

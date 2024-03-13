@@ -25,16 +25,18 @@ namespace courseProject
 
             //});
 
-             builder.Services.AddCors(a =>
- {
-     a.AddPolicy("AllowOrigin", builder =>
-     {
-         builder.AllowAnyOrigin()
-         .AllowAnyMethod()
-         .AllowAnyHeader();
-     });
- });
-            
+            builder.Services.AddCors(a =>
+            {
+                a.AddPolicy("AllowOrigin", policyBuilder =>
+                {
+                    policyBuilder.WithOrigins("http://localhost:3000");
+
+                    policyBuilder.AllowAnyMethod();
+                    policyBuilder.AllowAnyHeader();
+                    policyBuilder.AllowCredentials();
+                });
+            });
+
             builder.Services.AddControllers();
             builder.Services.AddDbContext<projectDbContext>(options =>
             {
@@ -103,7 +105,7 @@ namespace courseProject
             }
 
             app.UseHttpsRedirection();
-
+            app.UseCors("AllowOrigin");
             app.UseAuthentication();
             app.UseAuthorization();
 
