@@ -65,51 +65,50 @@ namespace courseProject.Controllers
         }
 
 
-        [HttpPost("CreateStudent")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(404)]
-        [ProducesResponseType(400)]
-        public async Task<ActionResult<Student>> CreateStudent(RegistrationRequestDTO model)
-        {
+        ////[HttpPost("CreateStudent")]
+        //[ProducesResponseType(200)]
+        //[ProducesResponseType(404)]
+        //[ProducesResponseType(400)]
+        //public async Task<ActionResult<Student>> CreateStudent(RegistrationRequestDTO model)
+        //{
 
-            var modelMapped = mapper.Map<Student>(model);
-            using (var transaction = await unitOfWork.SubAdminRepository.BeginTransactionAsync())
-            {
-                try
-                {
-                   await unitOfWork.UserRepository.RegisterAsync(model);
-                    var success1 = await unitOfWork.StudentRepository.saveAsync();
+        //    var modelMapped = mapper.Map<Student>(model);
+        //    using (var transaction = await unitOfWork.SubAdminRepository.BeginTransactionAsync())
+        //    {
+        //        try
+        //        {
+        //           await unitOfWork.UserRepository.RegisterAsync(model);
+        //            var success1 = await unitOfWork.StudentRepository.saveAsync();
 
-                    await unitOfWork.StudentRepository.CreateStudentAccountAsync(modelMapped);
-                    var success2 = await unitOfWork.StudentRepository.saveAsync();
-
-                   
-
-                    if (success1 > 0 && success2 > 0)
-                    { 
-                        await transaction.CommitAsync();
-                        response.StatusCode = (HttpStatusCode)StatusCodes.Status201Created;
-                        response.IsSuccess = true;
-                        response.Result = model;
-                        return Ok(response);
-                    }
-
-                    return BadRequest(response);
-                }
-                catch (Exception ex)
-                {
-                    await transaction.RollbackAsync();
+        //            await unitOfWork.StudentRepository.CreateStudentAccountAsync(modelMapped);
+        //            var success2 = await unitOfWork.StudentRepository.saveAsync();
 
 
-                    response.StatusCode = (HttpStatusCode)StatusCodes.Status400BadRequest;
-                    response.IsSuccess = false;
+        //            if (success1 > 0 && success2 > 0)
+        //            { 
+        //                await transaction.CommitAsync();
+        //                response.StatusCode = (HttpStatusCode)StatusCodes.Status201Created;
+        //                response.IsSuccess = true;
+        //                response.Result = model;
+        //                return Ok(response);
+        //            }
 
-                    return BadRequest(response);
-                }
+        //            return BadRequest(response);
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            await transaction.RollbackAsync();
 
-            }
+
+        //            response.StatusCode = (HttpStatusCode)StatusCodes.Status400BadRequest;
+        //            response.IsSuccess = false;
+
+        //            return BadRequest(response);
+        //        }
+
+        //    }
         }
 
 
     }
-}
+

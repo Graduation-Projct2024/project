@@ -13,7 +13,8 @@ namespace courseProject.Core.Models
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-
+        [ForeignKey("User")]
+        public int AId { get; set; }
         public string? LName { get; set; }
 
         [ForeignKey("User")]

@@ -10,10 +10,12 @@ namespace courseProject.MappingProfile
         {
 
             CreateMap<SubAdmin , EmployeeDto>()
-                .ForMember(x=>x.FName , o=>o.MapFrom(y=>y.user.userName));
+                .ForMember(x=>x.FName , o=>o.MapFrom(y=>y.user.userName))
+                .ForMember(x => x.Id, o => o.MapFrom(y => y.SAId));
 
             CreateMap<Instructor, EmployeeDto>()
-                .ForMember(x => x.FName, o => o.MapFrom(y => y.user.userName));
+                .ForMember(x => x.FName, o => o.MapFrom(y => y.user.userName))
+                .ForMember(x => x.Id, o => o.MapFrom(y => y.IId));
 
             CreateMap<SubAdmin, ContactDto>()
                 .ForMember(x => x.userName, o => o.MapFrom(y => y.user.userName));
@@ -32,8 +34,6 @@ namespace courseProject.MappingProfile
 
 
 
-
-
             CreateMap<EmployeeForCreate, RegistrationRequestDTO>()
                .ForMember(x => x.userName, o => o.MapFrom(y => y.FName))
             .ForMember(x => x.ConfirmPassword, o => o.MapFrom(y => y.password));
@@ -41,8 +41,22 @@ namespace courseProject.MappingProfile
 
             CreateMap<SubAdmin, RegistrationRequestDTO>();
             CreateMap<Admin, RegistrationRequestDTO>();
-            
 
+            CreateMap<User, SubAdmin>()
+              .ForMember(x => x.SAId, o => o.MapFrom(y => y.UserId));
+            CreateMap<User, Instructor>()
+              .ForMember(x => x.IId, o => o.MapFrom(y => y.UserId));
+
+
+            CreateMap< ProfileDTO ,User >()
+                .ForMember(x => x.userName, o => o.MapFrom(y => y.FName))
+                .ForMember(x=>x.email , o=>o.MapFrom(y=>y.email));
+
+            CreateMap<ProfileDTO, Admin>();
+            CreateMap<ProfileDTO, SubAdmin>();
+            CreateMap<ProfileDTO, Instructor>();
+            CreateMap<ProfileDTO, Student>();
+            
 
         }
     }

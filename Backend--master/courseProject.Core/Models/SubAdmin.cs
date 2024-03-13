@@ -13,6 +13,8 @@ namespace courseProject.Core.Models
         
         public int Id { get; set; }
 
+        [ForeignKey("User")]
+        public int SAId { get; set; }
         public string? LName { get; set; }
 
         [ForeignKey("User")]

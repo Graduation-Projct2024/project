@@ -62,6 +62,7 @@ namespace courseProject.Repository.GenericRepository
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
+                    new Claim(ClaimTypes.NameIdentifier,user.UserId.ToString()),
                     new Claim(ClaimTypes.Email ,user.email),
                     
                    new Claim(ClaimTypes.Role , user.role )
@@ -93,6 +94,7 @@ namespace courseProject.Repository.GenericRepository
             var passHash = BC.HashPassword(registerRequestDTO.password);
             User user = new User()
             {
+               
                 userName = registerRequestDTO.userName,
                 email= registerRequestDTO.email,
                 password= passHash,

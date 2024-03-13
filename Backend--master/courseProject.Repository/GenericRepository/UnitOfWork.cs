@@ -25,6 +25,7 @@ namespace courseProject.Repository.GenericRepository
             instructorRepositpry = new instructorRepositpry(dbContext);
             StudentRepository=new StudentRepository(dbContext);
             AdminRepository = new AdminRepository(dbContext);
+            FileRepository = new FileRepository();
         }
 
         public ISubAdminRepository SubAdminRepository { get; set; }
@@ -32,6 +33,7 @@ namespace courseProject.Repository.GenericRepository
         public IinstructorRepositpry instructorRepositpry { get ; set ; }
         public IStudentRepository StudentRepository { get; set ; }
         public IAdminRepository AdminRepository { get; set ; }
+        public IFileRepository FileRepository { get; set; }
     }
 }
 

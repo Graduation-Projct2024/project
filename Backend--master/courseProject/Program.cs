@@ -75,7 +75,7 @@ namespace courseProject
                 };
             });
 
-
+            builder.Services.AddHttpClient();
 
             builder.Services.AddAuthorization(options =>
             {
