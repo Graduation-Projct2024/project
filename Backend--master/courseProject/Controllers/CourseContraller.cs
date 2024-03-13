@@ -130,22 +130,16 @@ namespace courseProject.Controllers
                     await unitOfWork.SubAdminRepository.CreateCourse(courseMapped);
                     var success2 = await unitOfWork.SubAdminRepository.saveAsync();
 
-                    await transaction.CommitAsync();
-
                     if (success1 > 0 && success2 > 0)
                            {
+                        await transaction.CommitAsync();
                                 responce.StatusCode = (HttpStatusCode)StatusCodes.Status201Created;
                         responce.IsSuccess = true;
                                 responce.Result = model;
                                  return Ok(responce);
                           }
 
-                        //responce.StatusCode = HttpStatusCode.Created;
-                        //responce.IsSuccess = true;
-                        //    responce.Result = model;
 
-
-                      //  return Ok(responce);
                     return BadRequest(responce);
                 }
                 catch (Exception ex)
@@ -157,7 +151,6 @@ namespace courseProject.Controllers
                     responce.IsSuccess = false;
                   //  responce.ErrorMassages = ex.Message ;
                     
-
                     return BadRequest(responce);
                 }
             }
@@ -184,8 +177,8 @@ namespace courseProject.Controllers
                     await unitOfWork.SubAdminRepository.CreateRequest(requestMapped);
                     var success1 = await unitOfWork.SubAdminRepository.saveAsync();
 
-                    var idd = mapper.Map<Request, Event>(requestMapped);
-                    EventMapped.requestId = idd.Id;
+                    var eventid = mapper.Map<Request, Event>(requestMapped);
+                    EventMapped.requestId = eventid.Id;
                     await unitOfWork.SubAdminRepository.CreateEvent(EventMapped);
                     var success2 = await unitOfWork.SubAdminRepository.saveAsync();
 

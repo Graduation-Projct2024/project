@@ -10,10 +10,20 @@ namespace courseProject.Core.Models
 {
     public class Student
     {
+        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+
+        // [ForeignKey("User")]
+        // public int Id { get; set; }
+
+        [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public string? LName { get; set; }
+        
+        [ForeignKey("User")]
+        public int SId { get; set; }
 
+        public string? LName { get; set; }
+        
         [ForeignKey("User")]
         public string email {  get; set; }
         

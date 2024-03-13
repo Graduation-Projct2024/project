@@ -31,26 +31,26 @@ namespace courseProject.Controllers
         //    return dbContext.students.ToList();
         //}
 
-        [HttpPost]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(404)]
-        [ProducesResponseType(400)]
-        public ActionResult<SubAdmin> CreateSubAdmins(SubAdmin subAdmin)
-        {
-            if(subAdmin == null)
-            {
-                return BadRequest();
-            }
+       //// [HttpPost]
+       // [ProducesResponseType(200)]
+       // [ProducesResponseType(404)]
+       // [ProducesResponseType(400)]
+       // public ActionResult<SubAdmin> CreateSubAdmins(SubAdmin subAdmin)
+       // {
+       //     if(subAdmin == null)
+       //     {
+       //         return BadRequest();
+       //     }
 
-            if(subAdmin.Id >0)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-            dbContext.subadmins.Add(subAdmin);
-            dbContext.SaveChanges();
-            return Ok(subAdmin);
+       //     if(subAdmin.Id >0)
+       //     {
+       //         return StatusCode(StatusCodes.Status500InternalServerError);
+       //     }
+       //     dbContext.subadmins.Add(subAdmin);
+       //     dbContext.SaveChanges();
+       //     return Ok(subAdmin);
 
-        }
+       // }
 
     }
 }

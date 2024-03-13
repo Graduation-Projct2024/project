@@ -7,7 +7,6 @@
 
         public string? LName { get; set; }
 
-
         public string email { get; set; }
         public  string type { get; set; } 
 

@@ -54,7 +54,27 @@ namespace courseProject.Repository.Data
                     e.HasKey(x=> new {x.studentId , x.courseId});
                 }
                 );
-                
+
+            modelBuilder.Entity<SubAdmin>()
+           .Property(c => c.DateOfBirth)
+           .HasColumnType("date");
+
+            modelBuilder.Entity<Admin>()
+           .Property(c => c.DateOfBirth)
+           .HasColumnType("date");
+
+            modelBuilder.Entity<Instructor>()
+           .Property(c => c.DateOfBirth)
+           .HasColumnType("date");
+
+            modelBuilder.Entity<Student>()
+           .Property(c => c.DateOfBirth)
+           .HasColumnType("date");
+
+            // modelBuilder.Entity<Student>()
+            //.Property(s => s.Id)
+            //.ValueGeneratedOnAdd()
+            //.UseIdentityColumn();
 
         }
 

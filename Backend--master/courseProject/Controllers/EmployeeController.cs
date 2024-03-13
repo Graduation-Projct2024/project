@@ -13,7 +13,6 @@ using System.Net;
 
 namespace courseProject.Controllers
 {
-    // testing add changes to gitHub.
     [Route("api/[controller]")]
     [ApiController]
     public class EmployeeController : ControllerBase
@@ -43,7 +42,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         // [Authorize(Policy = "Admin")]
-        [Authorize(Policy = "Admin&subAdmin")]
+       // [Authorize(Policy = "Admin&subAdmin")]
         public async Task<ActionResult<IEnumerable<SubAdmin>>> GetAllEmployeeAsync()
         {
             var SubAdmins = await subAdminRepo.GetAllEmployeeAsync();
@@ -115,16 +114,20 @@ namespace courseProject.Controllers
             {
                 try
                 {
-                    await unitOfWork.UserRepository.RegisterAsync(userMapped);
+                    var Usermapp=await unitOfWork.UserRepository.RegisterAsync(userMapped);
                     var success1 = await unitOfWork.SubAdminRepository.saveAsync();
                     if (model.role.ToLower() == "subadmin")
                     {
                         var modelMapped = mapper.Map<SubAdmin>(model);
+                        var userMap = mapper.Map<User, SubAdmin>(Usermapp);
+                        modelMapped.SAId = userMap.SAId;
                         await unitOfWork.SubAdminRepository.createSubAdminAccountAsync(modelMapped);
                     } 
                     else 
                     {
                         var modelMapped = mapper.Map<Instructor>(model);
+                        var userMap = mapper.Map<User, Instructor>(Usermapp);
+                        modelMapped.IId = userMap.IId;
                         await unitOfWork.instructorRepositpry.createInstructorAccountAsync(modelMapped);
                     }
                     var success2 = await unitOfWork.SubAdminRepository.saveAsync();
@@ -172,7 +175,7 @@ namespace courseProject.Controllers
                 return BadRequest(responce);
             }
 
-            var subadmin = await subAdminRepo.GetEmployeeById(id);
+            var subadmin = await unitOfWork.SubAdminRepository.GetEmployeeById(id);
             var mappedemployee = mapper.Map<SubAdmin, EmployeeDto>(subadmin);
             if (subadmin == null)
             {
@@ -199,7 +202,7 @@ namespace courseProject.Controllers
                 {
                     responce.IsSuccess = false;
                     responce.StatusCode = HttpStatusCode.BadRequest;
-                    responce.ErrorMassages = new List<string>() { "The Id is equal 0" };
+                    responce.ErrorMassages = new List<string>() { "The Id is less or equal 0" };
                     return BadRequest(responce);
                 }
 
@@ -229,6 +232,7 @@ namespace courseProject.Controllers
                 }
 
                 var Subadminmapper = mapper.Map<EmployeeDto, SubAdmin>(subAdminModel);
+                  Subadminmapper.SAId = subAdminToUpdate.SAId;
                 await subAdminRepo.updateSubAdminAsync(Subadminmapper);
 
                 var success1 = await subAdminRepo.saveAsync();
@@ -247,8 +251,12 @@ namespace courseProject.Controllers
 
             }
 
-        
+
+
+       
+
+
 
 
         }
-    }
+}

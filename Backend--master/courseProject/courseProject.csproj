@@ -25,4 +25,8 @@
     <ProjectReference Include="..\courseProject.Repository\courseProject.Repository.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Files\" />
+  </ItemGroup>
+
 </Project>

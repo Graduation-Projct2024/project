@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using courseProject.Controllers;
 using courseProject.Core.Models;
 using courseProject.Core.Models.DTO;
 
@@ -8,6 +9,7 @@ namespace courseProject.MappingProfile
     {
         public MappingForCourseInformation()
         {
+           
 
             CreateMap<Course, CourseInformationDto>()
                 .ForMember(x => x.InstructorName  , o=>o.MapFrom(y=>y.Instructor.user.userName))
@@ -29,6 +31,17 @@ namespace courseProject.MappingProfile
             CreateMap<CourseMaterialDTO, CourseMaterial>();
 
             CreateMap<CourseForEditDTO, Course>();
+            CreateMap<TaskDTO, CourseMaterial>();
+
+            CreateMap<FileDTO, CourseMaterial>();
+            CreateMap<AnnouncementDTO, CourseMaterial>();
+            CreateMap<LinkDTO, CourseMaterial>();
+            CreateMap<CourseMaterial, TaskForRetriveDTO>();
+            CreateMap<CourseMaterial, FileForRetriveDTO>();
+            CreateMap<CourseMaterial, AnnouncementForRetriveDTO>();
+            CreateMap<CourseMaterial, LinkForRetriveDTO>();
+            //  .ForMember(x=>x.pdf , o=>o.MapFrom(y=>y.pdfUrl));
+
         }
     }
 }

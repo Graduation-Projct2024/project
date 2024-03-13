@@ -11,6 +11,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using courseProject.Core.Models.DTO;
 
 namespace courseProject.Repository.GenericRepository
 {
@@ -51,14 +52,14 @@ namespace courseProject.Repository.GenericRepository
             return await dbContext.Set<T>().ToListAsync();
         }
 
-
+        //edit status from On to Accredit 
         public async Task<IReadOnlyList<T>> GetAllCoursesAsync()
         {
             if (typeof(T) == typeof(Course))
             {
                 
                 return (IReadOnlyList<T>) await dbContext.courses
-                    .Where(x=>x.status=="On")
+                    .Where(x=>x.status== "accredit")
                     .Include(x=>x.Instructor.user).Include(x=>x.SubAdmin.user).ToListAsync();
             }
             return await dbContext.Set<T>().ToListAsync();
@@ -156,6 +157,47 @@ namespace courseProject.Repository.GenericRepository
             return await dbContext.Set<T>().FindAsync(id);
         }
 
+
+        public async Task<IEnumerable<T>> GetAllMaterialInSameCourse(int courseId)
+        {
+            if(typeof(T) == typeof(CourseMaterial))
+            {
+                return (IEnumerable<T>) await dbContext.courseMaterials
+                                                 .Where(a=>a.courseId==courseId).ToListAsync();
+            }
+            return await dbContext.Set<T>().ToListAsync();
+        }
+
+        public async Task<T> GetMaterialByIdAsync(int id)
+        {
+            if(typeof(T) == typeof(CourseMaterial))
+            {
+                return(T)(object) await dbContext.courseMaterials.FirstOrDefaultAsync(x => x.Id == id);
+            }
+            return await dbContext.Set<T>().FindAsync(id);
+        }
+
+
+        public async Task<T> EditProfile(int id , ProfileDTO profile)
+        {
+            if(typeof (T) == typeof(Admin))
+            {
+                return (T)(object)await dbContext.users.Include(x => x.admin).FirstOrDefaultAsync(x => x.UserId == id);
+            }
+            if (typeof(T) == typeof(SubAdmin))
+            {
+                return (T)(object)await dbContext.users.Include(x => x.subadmin).FirstOrDefaultAsync(x => x.UserId == id);
+            }
+            if (typeof(T) == typeof(Instructor))
+            {
+                return (T)(object)await dbContext.users.Include(x => x.instructor).FirstOrDefaultAsync(x => x.UserId == id);
+            }
+            if (typeof(T) == typeof(Student))
+            {
+                return (T)(object)await dbContext.users.Include(x => x.student).FirstOrDefaultAsync(x => x.UserId == id);
+            }
+            return await dbContext.Set<T>().FindAsync(id);
+        }
 
         //public async Task<IEnumerable<T>> createSubAdminAccountAsync(SubAdmin subadmin , User user)
         //{
