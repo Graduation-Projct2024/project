@@ -11,9 +11,9 @@
         public DateTime startDate { get; set; }
         public DateTime endDate { get; set; }
 
-        public int instructorId { get; set; }
+        public int InstructorId { get; set; }
         public string InstructorName { get; set; }
-        public int subAdminId { get; set; }
+        public int SubAdminId { get; set; }
         public string SubAdminName { get; set; }
 
 

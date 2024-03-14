@@ -11,12 +11,13 @@ namespace courseProject.Core.Models
     public class User
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
         public int UserId { get; set; }
         public string userName { get; set; }
 
         
         [DataType(DataType.EmailAddress)]
-        [Key]
+        
         public string email {  get; set; }
         public string password { get; set; }
         public string role { get; set; }

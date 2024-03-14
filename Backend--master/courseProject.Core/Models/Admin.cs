@@ -11,13 +11,12 @@ namespace courseProject.Core.Models
 {
     public class Admin
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        [Key]
         [ForeignKey("User")]
-        public int AId { get; set; }
+        public int AdminId { get; set; }
         public string? LName { get; set; }
 
-        [ForeignKey("User")]
+       // [ForeignKey("User")]
         public string email { get; set; }
 
         public DateTime? DateOfBirth { get; set; }

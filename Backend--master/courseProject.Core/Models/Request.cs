@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using courseProject.Core.Models;
 using System.Diagnostics.CodeAnalysis;
+using System.Net;
 namespace courseProject.Core.Models
 {
     public class Request
@@ -23,13 +24,13 @@ namespace courseProject.Core.Models
         public DateTime date { get; set; } = DateTime.Now;
 
         [ForeignKey("Admin")]
-        public int adminId { get; set; } = 1;
+        public int AdminId { get; set; } =1;
 
         [ForeignKey("Student")]
         [AllowNull]
-        public int? studentId { get; set; } = 3;
+        public int? StudentId { get; set; }
         [ForeignKey("SubAdmin")]
-        public int subAdminId { get; set; } 
+        public int SubAdminId { get; set; } 
 
         public Admin Admin { get; set; }
         public SubAdmin SubAdmin { get; set; }  

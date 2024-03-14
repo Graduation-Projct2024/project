@@ -24,9 +24,11 @@ namespace courseProject.Repository.GenericRepository
           await  dbContext.Set<Student>().AddAsync(student);
         }
 
-        public Task EnrollCourse(Student student)
+       
+
+        public async Task EnrollCourse(StudentCourse studentCourse)
         {
-            throw new NotImplementedException();
+           await dbContext.Set<StudentCourse>().AddAsync(studentCourse);
         }
     }
 }

@@ -14,7 +14,7 @@ namespace courseProject.Core.Models.DTO
         public DateTime dateOfEvent { get; set; }
             
 
-        public int subAdminId { get; set; }
+        public int SubAdminId { get; set; }
 
         public string subAdminName { get; set;}
     }

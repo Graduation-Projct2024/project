@@ -26,7 +26,7 @@ namespace courseProject.Core.Models
         public string? linkUrl { get; set; }
 
         [ForeignKey("Instructor")]
-        public int instructorId {  get; set; }
+        public int InstructorId {  get; set; }
 
         [ForeignKey("Course")]
         public int courseId {  get; set; }

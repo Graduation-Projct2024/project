@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using courseProject.Repository.Data;
 
@@ -11,9 +12,10 @@ using courseProject.Repository.Data;
 namespace courseProject.Repository.Migrations
 {
     [DbContext(typeof(projectDbContext))]
-    partial class projectDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240313213254_addKeyToUser")]
+    partial class addKeyToUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,7 +49,7 @@ namespace courseProject.Repository.Migrations
 
                     b.Property<string>("email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("gender")
                         .HasColumnType("nvarchar(max)");
@@ -57,10 +59,10 @@ namespace courseProject.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AId")
+                    b.HasIndex("email")
                         .IsUnique();
 
-                    b.ToTable("admins", (string)null);
+                    b.ToTable("admins");
                 });
 
             modelBuilder.Entity("courseProject.Core.Models.Consultation", b =>
@@ -111,7 +113,7 @@ namespace courseProject.Repository.Migrations
 
                     b.HasIndex("studentId");
 
-                    b.ToTable("Consultation", (string)null);
+                    b.ToTable("Consultation");
                 });
 
             modelBuilder.Entity("courseProject.Core.Models.Course", b =>
@@ -172,7 +174,7 @@ namespace courseProject.Repository.Migrations
 
                     b.HasIndex("subAdminId");
 
-                    b.ToTable("courses", (string)null);
+                    b.ToTable("courses");
                 });
 
             modelBuilder.Entity("courseProject.Core.Models.Course_Feedback", b =>
@@ -202,7 +204,7 @@ namespace courseProject.Repository.Migrations
 
                     b.HasIndex("studentId");
 
-                    b.ToTable("Course_Feedback", (string)null);
+                    b.ToTable("Course_Feedback");
                 });
 
             modelBuilder.Entity("courseProject.Core.Models.CourseMaterial", b =>
@@ -248,7 +250,7 @@ namespace courseProject.Repository.Migrations
 
                     b.HasIndex("instructorId");
 
-                    b.ToTable("courseMaterials", (string)null);
+                    b.ToTable("courseMaterials");
                 });
 
             modelBuilder.Entity("courseProject.Core.Models.Event", b =>
@@ -297,7 +299,7 @@ namespace courseProject.Repository.Migrations
 
                     b.HasIndex("subAdminId");
 
-                    b.ToTable("events", (string)null);
+                    b.ToTable("events");
                 });
 
             modelBuilder.Entity("courseProject.Core.Models.General_Feedback", b =>
@@ -308,8 +310,8 @@ namespace courseProject.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("Useremail")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("content")
                         .IsRequired()
@@ -324,9 +326,9 @@ namespace courseProject.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("Useremail");
 
-                    b.ToTable("General_Feedback", (string)null);
+                    b.ToTable("General_Feedback");
                 });
 
             modelBuilder.Entity("courseProject.Core.Models.Instructor", b =>
@@ -354,7 +356,7 @@ namespace courseProject.Repository.Migrations
 
                     b.Property<string>("email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("gender")
                         .HasColumnType("nvarchar(max)");
@@ -365,10 +367,10 @@ namespace courseProject.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IId")
+                    b.HasIndex("email")
                         .IsUnique();
 
-                    b.ToTable("instructors", (string)null);
+                    b.ToTable("instructors");
                 });
 
             modelBuilder.Entity("courseProject.Core.Models.Instructor_Feedback", b =>
@@ -398,7 +400,7 @@ namespace courseProject.Repository.Migrations
 
                     b.HasIndex("studentId");
 
-                    b.ToTable("Instructor_Feedback", (string)null);
+                    b.ToTable("Instructor_Feedback");
                 });
 
             modelBuilder.Entity("courseProject.Core.Models.Instructor_Working_Hours", b =>
@@ -417,7 +419,7 @@ namespace courseProject.Repository.Migrations
 
                     b.HasKey("instructorId", "day", "startTime", "endTime");
 
-                    b.ToTable("Instructor_Working_Hours", (string)null);
+                    b.ToTable("Instructor_Working_Hours");
                 });
 
             modelBuilder.Entity("courseProject.Core.Models.Request", b =>
@@ -457,7 +459,7 @@ namespace courseProject.Repository.Migrations
 
                     b.HasIndex("subAdminId");
 
-                    b.ToTable("requests", (string)null);
+                    b.ToTable("requests");
                 });
 
             modelBuilder.Entity("courseProject.Core.Models.Student", b =>
@@ -485,7 +487,7 @@ namespace courseProject.Repository.Migrations
 
                     b.Property<string>("email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("gender")
                         .HasColumnType("nvarchar(max)");
@@ -495,10 +497,10 @@ namespace courseProject.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SId")
+                    b.HasIndex("email")
                         .IsUnique();
 
-                    b.ToTable("students", (string)null);
+                    b.ToTable("students");
                 });
 
             modelBuilder.Entity("courseProject.Core.Models.StudentCourse", b =>
@@ -516,7 +518,7 @@ namespace courseProject.Repository.Migrations
 
                     b.HasIndex("courseId");
 
-                    b.ToTable("StudentCourse", (string)null);
+                    b.ToTable("StudentCourse");
                 });
 
             modelBuilder.Entity("courseProject.Core.Models.SubAdmin", b =>
@@ -544,7 +546,7 @@ namespace courseProject.Repository.Migrations
 
                     b.Property<string>("email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("gender")
                         .HasColumnType("nvarchar(max)");
@@ -555,22 +557,22 @@ namespace courseProject.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SAId")
+                    b.HasIndex("email")
                         .IsUnique();
 
-                    b.ToTable("subadmins", (string)null);
+                    b.ToTable("subadmins");
                 });
 
             modelBuilder.Entity("courseProject.Core.Models.User", b =>
                 {
+                    b.Property<string>("email")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"), 1L, 1);
-
-                    b.Property<string>("email")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("password")
                         .IsRequired()
@@ -584,16 +586,16 @@ namespace courseProject.Repository.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("UserId");
+                    b.HasKey("email");
 
-                    b.ToTable("users", (string)null);
+                    b.ToTable("users");
                 });
 
             modelBuilder.Entity("courseProject.Core.Models.Admin", b =>
                 {
                     b.HasOne("courseProject.Core.Models.User", "user")
                         .WithOne("admin")
-                        .HasForeignKey("courseProject.Core.Models.Admin", "AId")
+                        .HasForeignKey("courseProject.Core.Models.Admin", "email")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -707,7 +709,7 @@ namespace courseProject.Repository.Migrations
                 {
                     b.HasOne("courseProject.Core.Models.User", "User")
                         .WithMany("general_feedback")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("Useremail");
 
                     b.Navigation("User");
                 });
@@ -716,7 +718,7 @@ namespace courseProject.Repository.Migrations
                 {
                     b.HasOne("courseProject.Core.Models.User", "user")
                         .WithOne("instructor")
-                        .HasForeignKey("courseProject.Core.Models.Instructor", "IId")
+                        .HasForeignKey("courseProject.Core.Models.Instructor", "email")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -784,7 +786,7 @@ namespace courseProject.Repository.Migrations
                 {
                     b.HasOne("courseProject.Core.Models.User", "user")
                         .WithOne("student")
-                        .HasForeignKey("courseProject.Core.Models.Student", "SId")
+                        .HasForeignKey("courseProject.Core.Models.Student", "email")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -814,7 +816,7 @@ namespace courseProject.Repository.Migrations
                 {
                     b.HasOne("courseProject.Core.Models.User", "user")
                         .WithOne("subadmin")
-                        .HasForeignKey("courseProject.Core.Models.SubAdmin", "SAId")
+                        .HasForeignKey("courseProject.Core.Models.SubAdmin", "email")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

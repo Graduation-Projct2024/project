@@ -10,14 +10,13 @@ namespace courseProject.Core.Models
 {
     public class SubAdmin
     {
-        
-        public int Id { get; set; }
 
+        [Key]
         [ForeignKey("User")]
-        public int SAId { get; set; }
+        public int SubAdminId { get; set; }
         public string? LName { get; set; }
 
-        [ForeignKey("User")]
+        //[ForeignKey("User")]
         public string email { get; set; }
 
         public DateTime? DateOfBirth { get; set; }

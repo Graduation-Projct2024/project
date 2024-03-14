@@ -89,7 +89,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult> CreateEmployee(EmployeeForCreate model)
+        public async Task<ActionResult> CreateEmployee([FromForm]EmployeeForCreate model)
         {
             if (model == null)
             {
@@ -120,14 +120,14 @@ namespace courseProject.Controllers
                     {
                         var modelMapped = mapper.Map<SubAdmin>(model);
                         var userMap = mapper.Map<User, SubAdmin>(Usermapp);
-                        modelMapped.SAId = userMap.SAId;
+                        modelMapped.SubAdminId = userMap.SubAdminId;
                         await unitOfWork.SubAdminRepository.createSubAdminAccountAsync(modelMapped);
                     } 
                     else 
                     {
                         var modelMapped = mapper.Map<Instructor>(model);
                         var userMap = mapper.Map<User, Instructor>(Usermapp);
-                        modelMapped.IId = userMap.IId;
+                        modelMapped.InstructorId = userMap.InstructorId;
                         await unitOfWork.instructorRepositpry.createInstructorAccountAsync(modelMapped);
                     }
                     var success2 = await unitOfWork.SubAdminRepository.saveAsync();
@@ -191,7 +191,7 @@ namespace courseProject.Controllers
         }
 
 
-        [HttpPut("UpdateSubAdmin")]
+    /*    [HttpPut("UpdateSubAdmin")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
@@ -219,7 +219,7 @@ namespace courseProject.Controllers
                     return BadRequest(responce);
                 }
 
-                var subAdminToUpdate = dbContext.subadmins.FirstOrDefault(x => x.Id == subAdminModel.Id);
+                var subAdminToUpdate = dbContext.subadmins.FirstOrDefault(x => x.SubAdminId == subAdminModel.Id);
 
                 //  var subAdminToUpdate = await subAdminRepo.get
 
@@ -232,24 +232,24 @@ namespace courseProject.Controllers
                 }
 
                 var Subadminmapper = mapper.Map<EmployeeDto, SubAdmin>(subAdminModel);
-                  Subadminmapper.SAId = subAdminToUpdate.SAId;
+                  Subadminmapper.SubAdminId = subAdminToUpdate.SubAdminId;
                 await subAdminRepo.updateSubAdminAsync(Subadminmapper);
 
-                var success1 = await subAdminRepo.saveAsync();
-                if (success1 > 0)
-                {
-                    responce.StatusCode = HttpStatusCode.OK;
-                    responce.IsSuccess = true;
-                    responce.Result = Subadminmapper;
-                    return Ok(responce);
-                }
-                responce.StatusCode = HttpStatusCode.BadRequest;
-                responce.IsSuccess = false;
-                return BadRequest(responce);
+        //        var success1 = await subAdminRepo.saveAsync();
+        //        if (success1 > 0)
+        //        {
+        //            responce.StatusCode = HttpStatusCode.OK;
+        //            responce.IsSuccess = true;
+        //            responce.Result = Subadminmapper;
+        //            return Ok(responce);
+        //        }
+        //        responce.StatusCode = HttpStatusCode.BadRequest;
+        //        responce.IsSuccess = false;
+        //        return BadRequest(responce);
 
 
 
-            }
+        //    }*/
 
 
 

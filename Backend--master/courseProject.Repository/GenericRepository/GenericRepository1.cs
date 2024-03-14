@@ -146,12 +146,12 @@ namespace courseProject.Repository.GenericRepository
         {
             if (typeof(T) == typeof(SubAdmin))
             {
-                return (T)(object) await dbContext.subadmins.Include(x=>x.user).FirstOrDefaultAsync(a => a.Id==id);
+                return (T)(object) await dbContext.subadmins.Include(x=>x.user).FirstOrDefaultAsync(a => a.SubAdminId==id);
                
             }
             else if (typeof(T) == typeof(Instructor))
             {
-                return (T)(object) await dbContext.instructors.Include(x => x.user).FirstOrDefaultAsync(a => a.Id == id);
+                return (T)(object) await dbContext.instructors.Include(x => x.user).FirstOrDefaultAsync(a => a.InstructorId == id);
 
             }
             return await dbContext.Set<T>().FindAsync(id);

@@ -89,7 +89,7 @@ namespace courseProject.Repository.GenericRepository
 
         public async Task GetIdForUpdateSubAdmin(int id)
         {
-            await dbContext.subadmins.FirstOrDefaultAsync(x => x.Id == id);
+            await dbContext.subadmins.FirstOrDefaultAsync(x => x.SubAdminId == id);
  
         }
     }

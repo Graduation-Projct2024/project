@@ -11,7 +11,7 @@ namespace courseProject.Core.IGenericRepository
     {
 
         public Task CreateStudentAccountAsync(Student student);
-        public Task EnrollCourse(Student student);   
+        public Task EnrollCourse(StudentCourse studentCourse);   
 
     }
 }
