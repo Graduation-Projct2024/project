@@ -42,6 +42,8 @@ namespace courseProject.MappingProfile
             CreateMap<CourseMaterial, LinkForRetriveDTO>();
             //  .ForMember(x=>x.pdf , o=>o.MapFrom(y=>y.pdfUrl));
 
+
+            CreateMap<StudentCourseDTO, StudentCourse>();
         }
     }
 }

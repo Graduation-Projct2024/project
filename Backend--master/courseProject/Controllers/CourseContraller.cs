@@ -9,6 +9,9 @@ using courseProject.Core.Models.DTO;
 using courseProject.Repository.Data;
 using courseProject.Repository.GenericRepository;
 using System.Net;
+using Microsoft.AspNetCore.JsonPatch;
+using System.Linq.Expressions;
+using System;
 
 namespace courseProject.Controllers
 {
@@ -19,17 +22,19 @@ namespace courseProject.Controllers
         private readonly IUnitOfWork unitOfWork;
         private readonly projectDbContext dbContext;
         private readonly IGenericRepository1<Course> courseRepo;
+        private readonly IGenericRepository1<Request> requestRepo;
         private readonly IMapper mapper;
         protected ApiResponce responce;
-      //  private Request request;
+        //  private Request request;
 
-        public CourseContraller(IUnitOfWork unitOfWork , projectDbContext dbContext, IGenericRepository1<Course> CourseRepo , IMapper mapper)
+        public CourseContraller(IUnitOfWork unitOfWork, projectDbContext dbContext, IGenericRepository1<Course> CourseRepo, IGenericRepository1<Request> RequestRepo, IMapper mapper)
         {
             this.unitOfWork = unitOfWork;
             this.dbContext = dbContext;
             courseRepo = CourseRepo;
+            requestRepo = RequestRepo;
             this.mapper = mapper;
-             responce = new ApiResponce();
+            responce = new ApiResponce();
         }
 
         [HttpGet]
@@ -40,12 +45,12 @@ namespace courseProject.Controllers
         {
             var courses = await courseRepo.GetAllCoursesAsync();
 
-            if (courses == null )
+            if (courses == null)
             {
                 return NotFound();
             }
             var mapperCourse = mapper.Map<IReadOnlyList<Course>, IReadOnlyList<CourseInformationDto>>(courses);
-            
+
             return Ok(mapperCourse);
         }
 
@@ -57,7 +62,7 @@ namespace courseProject.Controllers
         public async Task<ActionResult<IReadOnlyList<Course>>> GetAllCoursesForAccreditAsync()
         {
             var courses = await courseRepo.GetAllCoursesForAccreditAsync();
-            if(courses == null)
+            if (courses == null)
             {
                 return NotFound();
             }
@@ -72,7 +77,7 @@ namespace courseProject.Controllers
         //[ProducesResponseType(400)]
         //public async Task<ActionResult<ApiResponce>> createCourse( CourseForCreateDTO model  )
         //{
-           
+
         //   //request.name = model.name;
         //    //request.satus = "off";
         //    //request.date= DateTime.Now ;
@@ -81,7 +86,7 @@ namespace courseProject.Controllers
         //    var requestMapped = mapper.Map<CourseForCreateDTO, Request>(model);
         //    // var id = requestMapped.Id;
         //   // model.Id = id;
-            
+
         //     unitOfWork.SubAdminRepository.CreateRequest(requestMapped);
         //    var success2 = await unitOfWork.SubAdminRepository.saveAsync();
 
@@ -110,47 +115,61 @@ namespace courseProject.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Course>> createCourse(CourseForCreateDTO model)
+        public async Task<ActionResult<Course>> createCourse([FromForm] CourseForCreateDTO model , int? StudentId)
         {
-
+            if (model == null)
+            {
+                responce.IsSuccess = false;
+                responce.StatusCode = HttpStatusCode.NotFound;
+                responce.ErrorMassages = new List<string>() { "the inputs is null" };
+                return NotFound(responce);
+            }
+            if (!ModelState.IsValid)
+            {
+                responce.IsSuccess = false;
+                responce.StatusCode = HttpStatusCode.BadRequest;
+                return BadRequest(responce);
+            }
+            await unitOfWork.FileRepository.UploadFile1(model.image);
+            
             var courseMapped = mapper.Map<Course>(model);
             var requestMapped = mapper.Map<Request>(model);
+            if(StudentId != null)
+            {
+                requestMapped.StudentId = StudentId;
+            }
+            courseMapped.ImageUrl = "Files\\" + await unitOfWork.FileRepository.UploadFile1(model.image);
 
             using (var transaction = await unitOfWork.SubAdminRepository.BeginTransactionAsync())
             {
                 try
                 {
-                  await  unitOfWork.SubAdminRepository.CreateRequest(requestMapped);
-                    var success1=  await unitOfWork.SubAdminRepository.saveAsync();
+                    await unitOfWork.SubAdminRepository.CreateRequest(requestMapped);
+                    var success1 = await unitOfWork.StudentRepository.saveAsync();
 
-                   // courseMapped.Id = requestMapped.Id;
-                    
-                        var idd= mapper.Map<Request, Course>(requestMapped);
-                    courseMapped.requestId = idd.Id;
+                    // courseMapped.Id = requestMapped.Id;
+
+                    // var idd= mapper.Map<Request, Course>(requestMapped);
+                    courseMapped.requestId = requestMapped.Id;
                     await unitOfWork.SubAdminRepository.CreateCourse(courseMapped);
-                    var success2 = await unitOfWork.SubAdminRepository.saveAsync();
+                    var success2 = await unitOfWork.StudentRepository.saveAsync();
 
                     if (success1 > 0 && success2 > 0)
-                           {
+                    {
                         await transaction.CommitAsync();
-                                responce.StatusCode = (HttpStatusCode)StatusCodes.Status201Created;
+                        responce.StatusCode = (HttpStatusCode)StatusCodes.Status201Created;
                         responce.IsSuccess = true;
-                                responce.Result = model;
-                                 return Ok(responce);
-                          }
-
+                        responce.Result = model;
+                        return Ok(responce);
+                    }
 
                     return BadRequest(responce);
                 }
                 catch (Exception ex)
                 {
                     await transaction.RollbackAsync();
-
-
                     responce.StatusCode = (HttpStatusCode)StatusCodes.Status400BadRequest;
                     responce.IsSuccess = false;
-                  //  responce.ErrorMassages = ex.Message ;
-                    
                     return BadRequest(responce);
                 }
             }
@@ -164,12 +183,13 @@ namespace courseProject.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Event>> createEvent(EventForCreateDTO model)
+        public async Task<ActionResult<Event>> createEvent([FromForm]EventForCreateDTO model)
         {
+            await unitOfWork.FileRepository.UploadFile1(model.image);
 
             var EventMapped = mapper.Map<Event>(model);
             var requestMapped = mapper.Map<Request>(model);
-
+            EventMapped.ImageUrl = "Files\\" + await unitOfWork.FileRepository.UploadFile1(model.image);
             using (var transaction = await unitOfWork.SubAdminRepository.BeginTransactionAsync())
             {
                 try
@@ -177,6 +197,7 @@ namespace courseProject.Controllers
                     await unitOfWork.SubAdminRepository.CreateRequest(requestMapped);
                     var success1 = await unitOfWork.SubAdminRepository.saveAsync();
 
+                    
                     var eventid = mapper.Map<Request, Event>(requestMapped);
                     EventMapped.requestId = eventid.Id;
                     await unitOfWork.SubAdminRepository.CreateEvent(EventMapped);
@@ -207,7 +228,33 @@ namespace courseProject.Controllers
             }
 
         }
-         
+      //  JsonPatchDocument<Course> jsonPatch;
+
+        [HttpPatch("accreditCourse")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<ApiResponce>> EditCourseStatus( int courseId , string Status )
+        {
+            
+            var entity = await dbContext.courses.FirstOrDefaultAsync(x => x.Id == courseId);
+
+            if (entity == null)
+            {
+                return NotFound();
+            }
+            
+            Expression<Func<Course, string>> path = x => x.status;
+            var patchDocument = new JsonPatchDocument<Course>();
+            patchDocument.Replace(path, Status);
+            entity.status = Status;
+            // jsonPatch.ApplyTo(entity, ModelState);
+           // jsonPatch.Replace(path , "Accredit");
+            await unitOfWork.SubAdminRepository.updateCourse(entity);
+           await unitOfWork.SubAdminRepository.saveAsync();
+            return Ok(entity);
+        }
+
 
 
         //[HttpPost("EditCourse")]

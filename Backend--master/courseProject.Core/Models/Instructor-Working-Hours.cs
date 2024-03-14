@@ -12,7 +12,7 @@ namespace courseProject.Core.Models
     {
         [Key]
         [ForeignKey("Instructor")]
-        public int instructorId {  get; set; }
+        public int InstructorId {  get; set; }
         [Key]
         public DayOfWeek day {  get; set; }
         [Key]

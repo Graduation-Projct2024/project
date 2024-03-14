@@ -65,6 +65,41 @@ namespace courseProject.Controllers
         }
 
 
+        [HttpPost("EnrollInCourse")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<ApiResponce>> EnrollInCourseAsync (StudentCourseDTO studentCourseDTO)
+        {
+            if (studentCourseDTO == null)
+            {
+                response.IsSuccess = false;
+                response.StatusCode = HttpStatusCode.NotFound;
+                response.ErrorMassages = new List<string>() { "the inputs is null" };
+                return NotFound(response);
+            }
+           // var studentFound = d
+            if ( !ModelState.IsValid)
+            {
+                response.IsSuccess = false;
+                response.StatusCode = HttpStatusCode.BadRequest;
+                return BadRequest(response);
+            }
+            var mapped = mapper.Map<StudentCourseDTO, StudentCourse>(studentCourseDTO);
+            await unitOfWork.StudentRepository.EnrollCourse(mapped);
+            var success = await unitOfWork.StudentRepository.saveAsync();
+            if (success > 0)
+            {
+                response.StatusCode = HttpStatusCode.Created;
+                response.IsSuccess = true;
+                response.Result = studentCourseDTO;
+                return Ok(response);
+            }
+            response.StatusCode = HttpStatusCode.BadRequest;
+            response.IsSuccess = false;
+            return BadRequest(response);
+        }
+
         ////[HttpPost("CreateStudent")]
         //[ProducesResponseType(200)]
         //[ProducesResponseType(404)]
@@ -107,7 +142,7 @@ namespace courseProject.Controllers
         //        }
 
         //    }
-        }
+    }
 
 
     }

@@ -23,37 +23,44 @@ namespace courseProject.Repository.Data
             modelBuilder.Entity<Instructor_Working_Hours>(
                 e =>
                 {
-                    e.HasKey(x => new {x.instructorId , x.day , x.startTime , x.endTime});
+                    e.HasKey(x => new {x.InstructorId , x.day , x.startTime , x.endTime});
                    
                 }
                 );
-
+            
             modelBuilder.Entity<User>()
                 .HasOne(x => x.instructor)
                 .WithOne(u => u.user)
-                .HasForeignKey<Instructor>(x => x.email);
+                .HasForeignKey<Instructor>(x => x.InstructorId);
 
             modelBuilder.Entity<User>()
                 .HasOne(x => x.student)
                 .WithOne(u => u.user)
-                .HasForeignKey<Student>(x => x.email);
+                .HasForeignKey<Student>(x => x.StudentId);
 
             modelBuilder.Entity<User>()
                 .HasOne(x => x.admin)
                 .WithOne(u => u.user)
-                .HasForeignKey<Admin>(x => x.email);
+                .HasForeignKey<Admin>(x => x.AdminId);
 
             modelBuilder.Entity<User>()
                 .HasOne(x => x.subadmin)
                 .WithOne(u => u.user)
-                .HasForeignKey<SubAdmin>(x => x.email);
+                .HasForeignKey<SubAdmin>(x => x.SubAdminId);
+
+
 
             modelBuilder.Entity<StudentCourse>(
                 e =>
                 {
-                    e.HasKey(x=> new {x.studentId , x.courseId});
+                    e.HasKey(x=> new {x.StudentId , x.courseId});
                 }
                 );
+            modelBuilder.Entity<Request>(entity =>
+            {
+                entity.Property(e => e.StudentId)
+                      .IsRequired(false);
+            });
 
             modelBuilder.Entity<SubAdmin>()
            .Property(c => c.DateOfBirth)

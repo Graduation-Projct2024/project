@@ -24,10 +24,10 @@ namespace courseProject.MappingProfile
             CreateMap<Admin, RegistrationRequestDTO>();
 
             CreateMap<User, Student>()
-                .ForMember(x => x.SId, o => o.MapFrom(y => y.UserId));
+                .ForMember(x => x.StudentId, o => o.MapFrom(y => y.UserId));
 
             CreateMap<User, Admin>()
-                .ForMember(x => x.AId, o => o.MapFrom(y => y.UserId));
+                .ForMember(x => x.AdminId, o => o.MapFrom(y => y.UserId));
 
         }
 

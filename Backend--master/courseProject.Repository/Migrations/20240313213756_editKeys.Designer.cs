@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using courseProject.Repository.Data;
 
@@ -11,9 +12,10 @@ using courseProject.Repository.Data;
 namespace courseProject.Repository.Migrations
 {
     [DbContext(typeof(projectDbContext))]
-    partial class projectDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240313213756_editKeys")]
+    partial class editKeys
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -60,7 +62,7 @@ namespace courseProject.Repository.Migrations
                     b.HasIndex("AId")
                         .IsUnique();
 
-                    b.ToTable("admins", (string)null);
+                    b.ToTable("admins");
                 });
 
             modelBuilder.Entity("courseProject.Core.Models.Consultation", b =>
@@ -111,7 +113,7 @@ namespace courseProject.Repository.Migrations
 
                     b.HasIndex("studentId");
 
-                    b.ToTable("Consultation", (string)null);
+                    b.ToTable("Consultation");
                 });
 
             modelBuilder.Entity("courseProject.Core.Models.Course", b =>
@@ -172,7 +174,7 @@ namespace courseProject.Repository.Migrations
 
                     b.HasIndex("subAdminId");
 
-                    b.ToTable("courses", (string)null);
+                    b.ToTable("courses");
                 });
 
             modelBuilder.Entity("courseProject.Core.Models.Course_Feedback", b =>
@@ -202,7 +204,7 @@ namespace courseProject.Repository.Migrations
 
                     b.HasIndex("studentId");
 
-                    b.ToTable("Course_Feedback", (string)null);
+                    b.ToTable("Course_Feedback");
                 });
 
             modelBuilder.Entity("courseProject.Core.Models.CourseMaterial", b =>
@@ -248,7 +250,7 @@ namespace courseProject.Repository.Migrations
 
                     b.HasIndex("instructorId");
 
-                    b.ToTable("courseMaterials", (string)null);
+                    b.ToTable("courseMaterials");
                 });
 
             modelBuilder.Entity("courseProject.Core.Models.Event", b =>
@@ -297,7 +299,7 @@ namespace courseProject.Repository.Migrations
 
                     b.HasIndex("subAdminId");
 
-                    b.ToTable("events", (string)null);
+                    b.ToTable("events");
                 });
 
             modelBuilder.Entity("courseProject.Core.Models.General_Feedback", b =>
@@ -326,7 +328,7 @@ namespace courseProject.Repository.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("General_Feedback", (string)null);
+                    b.ToTable("General_Feedback");
                 });
 
             modelBuilder.Entity("courseProject.Core.Models.Instructor", b =>
@@ -368,7 +370,7 @@ namespace courseProject.Repository.Migrations
                     b.HasIndex("IId")
                         .IsUnique();
 
-                    b.ToTable("instructors", (string)null);
+                    b.ToTable("instructors");
                 });
 
             modelBuilder.Entity("courseProject.Core.Models.Instructor_Feedback", b =>
@@ -398,7 +400,7 @@ namespace courseProject.Repository.Migrations
 
                     b.HasIndex("studentId");
 
-                    b.ToTable("Instructor_Feedback", (string)null);
+                    b.ToTable("Instructor_Feedback");
                 });
 
             modelBuilder.Entity("courseProject.Core.Models.Instructor_Working_Hours", b =>
@@ -417,7 +419,7 @@ namespace courseProject.Repository.Migrations
 
                     b.HasKey("instructorId", "day", "startTime", "endTime");
 
-                    b.ToTable("Instructor_Working_Hours", (string)null);
+                    b.ToTable("Instructor_Working_Hours");
                 });
 
             modelBuilder.Entity("courseProject.Core.Models.Request", b =>
@@ -457,7 +459,7 @@ namespace courseProject.Repository.Migrations
 
                     b.HasIndex("subAdminId");
 
-                    b.ToTable("requests", (string)null);
+                    b.ToTable("requests");
                 });
 
             modelBuilder.Entity("courseProject.Core.Models.Student", b =>
@@ -498,7 +500,7 @@ namespace courseProject.Repository.Migrations
                     b.HasIndex("SId")
                         .IsUnique();
 
-                    b.ToTable("students", (string)null);
+                    b.ToTable("students");
                 });
 
             modelBuilder.Entity("courseProject.Core.Models.StudentCourse", b =>
@@ -516,7 +518,7 @@ namespace courseProject.Repository.Migrations
 
                     b.HasIndex("courseId");
 
-                    b.ToTable("StudentCourse", (string)null);
+                    b.ToTable("StudentCourse");
                 });
 
             modelBuilder.Entity("courseProject.Core.Models.SubAdmin", b =>
@@ -558,7 +560,7 @@ namespace courseProject.Repository.Migrations
                     b.HasIndex("SAId")
                         .IsUnique();
 
-                    b.ToTable("subadmins", (string)null);
+                    b.ToTable("subadmins");
                 });
 
             modelBuilder.Entity("courseProject.Core.Models.User", b =>
@@ -586,7 +588,7 @@ namespace courseProject.Repository.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("users", (string)null);
+                    b.ToTable("users");
                 });
 
             modelBuilder.Entity("courseProject.Core.Models.Admin", b =>

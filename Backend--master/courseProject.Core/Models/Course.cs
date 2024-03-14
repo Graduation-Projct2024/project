@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -17,8 +18,9 @@ namespace courseProject.Core.Models
 
         public double price { get; set; }
 
-        public string status { get; set; } = "off";
+        public string status { get; set; } = "undefined";
         public string category { get; set; }
+        [NotMapped] public IFormFile? image { get; set; }
         public string? ImageUrl { get; set; }
 
         public DateTime? dateOfAdded { get; set; } = DateTime.Now;
@@ -27,10 +29,10 @@ namespace courseProject.Core.Models
         public DateTime? endDate { get; set;}
 
         [ForeignKey("Instructor")]
-        public int instructorId { get; set; } 
+        public int InstructorId { get; set; } 
 
         [ForeignKey("SubAdmin")]
-        public int subAdminId { get; set; } 
+        public int SubAdminId { get; set; } 
         [ForeignKey("Request")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int requestId { get; set; } 

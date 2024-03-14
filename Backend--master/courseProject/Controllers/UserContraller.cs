@@ -98,7 +98,7 @@ namespace courseProject.Controllers
                     { 
                         var idd = mapper.Map<User, Student>(mapp);
                         var modelMapped = mapper.Map<Student>(model);
-                        modelMapped.SId = idd.SId;                    
+                        modelMapped.StudentId = idd.StudentId;                    
                         await unitOfWork.StudentRepository.CreateStudentAccountAsync(modelMapped);
                         
                        

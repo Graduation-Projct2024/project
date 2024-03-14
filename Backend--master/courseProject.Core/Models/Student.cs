@@ -15,16 +15,13 @@ namespace courseProject.Core.Models
         // [ForeignKey("User")]
         // public int Id { get; set; }
 
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-        
+        [Key]       
         [ForeignKey("User")]
-        public int SId { get; set; }
+        public int StudentId { get; set; }
 
         public string? LName { get; set; }
         
-        [ForeignKey("User")]
+      //  [ForeignKey("User")]
         public string email {  get; set; }
         
         public DateTime? DateOfBirth { get; set; }
