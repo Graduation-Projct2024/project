@@ -71,7 +71,7 @@ return matchesSearchTerm ;
                     
                 </div>
                 </form>
-                <button type="button" className="btn btn-primary ms-2 addEmp" data-bs-toggle="modal" data-bs-target="#exampleModal1">
+                <button type="button" className="btn btn-primary ms-2 addEmp" data-bs-toggle="modal" data-bs-target="#staticBackdrop1">
                     <span>+ Add new</span> 
                 </button>
                
@@ -79,11 +79,12 @@ return matchesSearchTerm ;
             </div>
         </nav>
 
-        <div className="modal fade" id="exampleModal1" tabIndex="-1" aria-labelledby="exampleModal1Label" aria-hidden="true">
+        {/* <div className="modal fade" id="exampleModal1" tabIndex="-1" aria-labelledby="exampleModal1Label" aria-hidden="true"> */}
+        <div class="modal fade" id="staticBackdrop1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdrop1Label" aria-hidden="true">
           <div className="modal-dialog modal-dialog-centered modal-lg">
             <div className="modal-content row justify-content-center">
               <div className="modal-body text-center ">
-                <h2>CREATE COURSE</h2>
+                <h2 className='fs-1'>CREATE COURSE</h2>
                   <div className="row">
                     <CreateCourse/>
                   </div>

@@ -70,7 +70,8 @@ export default function ViewEvents() {
                     
                 </div>
                 </form>
-                <button type="button" className="btn btn-primary ms-2 addEmp" data-bs-toggle="modal" data-bs-target="#exampleModal2">
+                {/* <button type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop"> */}
+                <button type="button" className="btn btn-primary ms-2 addEmp" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                     <span>+ Add new</span> 
                 </button>
                
@@ -78,11 +79,12 @@ export default function ViewEvents() {
             </div>
         </nav>
 
-        <div className="modal fade" id="exampleModal2" tabIndex="-1" aria-labelledby="exampleModal2Label" aria-hidden="true">
+        {/* <div className="modal fade" id="exampleModal2" tabIndex="-1" aria-labelledby="exampleModal2Label" aria-hidden="true"> */}
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
           <div className="modal-dialog modal-dialog-centered modal-lg">
             <div className="modal-content row justify-content-center">
               <div className="modal-body text-center ">
-                <h2>CREATE  EVENT</h2>
+                <h2 className='fs-1'>CREATE  EVENT</h2>
                   <div className="row">
                     <CreateEvent/>
                   </div>

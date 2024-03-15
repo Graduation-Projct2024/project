@@ -121,17 +121,18 @@ export default function ViewEmployees() {
                     
                 </div>
                 </form>
-                <button type="button" className="btn btn-primary ms-2 addEmp" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <button type="button" className="btn btn-primary ms-2 addEmp" data-bs-toggle="modal" data-bs-target="#staticBackdrop2">
                     <span>+ Add new</span> 
                 </button>
 
             </div>
         </nav>
-        <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        {/* <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"> */}
+        <div class="modal fade" id="staticBackdrop2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdrop2Label" aria-hidden="true">
           <div className="modal-dialog modal-dialog-centered modal-lg">
             <div className="modal-content row justify-content-center">
               <div className="modal-body text-center ">
-                <h2>CREATE ACCOUNT</h2>
+                <h2 className='fs-1'>CREATE ACCOUNT</h2>
                   <div className="row">
                     <CreateEmployee/>
                   </div>
