@@ -40,7 +40,9 @@ namespace courseProject
             });
 
             builder.Services.AddControllers()
-                .AddNewtonsoftJson();
+                .AddNewtonsoftJson(options =>
+      options.SerializerSettings.ReferenceLoopHandling =
+        Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             builder.Services.AddDbContext<projectDbContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));

@@ -165,92 +165,71 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<SubAdmin>> GetById(int id)
+        public async Task<ActionResult<ApiResponce>> GetById(int id)
         {
 
-            if (id == 0)
+            if (id <= 0)
             {
                 responce.IsSuccess = false;
                 responce.StatusCode = HttpStatusCode.BadRequest;
                 return BadRequest(responce);
             }
-
-            var subadmin = await unitOfWork.SubAdminRepository.GetEmployeeById(id);
-            var mappedemployee = mapper.Map<SubAdmin, EmployeeDto>(subadmin);
-            if (subadmin == null)
+            var subAdminToGet = await dbContext.subadmins.FirstOrDefaultAsync(x => x.SubAdminId == id);
+            var instructorToGet = await dbContext.instructors.FirstOrDefaultAsync(x => x.InstructorId == id);
+            var UserToGet = await dbContext.users.FirstOrDefaultAsync(x => x.UserId == id);
+            if (UserToGet == null )
             {
                 responce.IsSuccess = false;
                 responce.StatusCode = HttpStatusCode.NotFound;
-                responce.ErrorMassages = new List<string>() { "Estate of {id} not exists" };
+                responce.ErrorMassages = new List<string>() { $"Employee of Id = {id} does not exists" };
+                responce.Result = null;
+                return NotFound(responce);
+            }
+            SubAdmin Subadmin = null;
+            Instructor Instructor = null;
+            if (subAdminToGet == null && UserToGet.role.ToLower() == "subadmin")
+            {
+                responce.IsSuccess = false;
+                responce.StatusCode = HttpStatusCode.NotFound;
+                responce.ErrorMassages = new List<string>() { "the subAdmin is not found" };
+                return NotFound(responce);
+            }
+            else if (subAdminToGet != null && UserToGet.role.ToLower() == "subadmin")
+            {
+                 Subadmin = await unitOfWork.SubAdminRepository.GetEmployeeById(id);
+                var mappedEmployee = mapper.Map<SubAdmin, EmployeeDto>(Subadmin);
+                mappedEmployee.type = "SubAdmin";
+                responce.Result= mappedEmployee;
+            }
+            if (instructorToGet == null && UserToGet.role.ToLower() == "instructor")
+            {
+                responce.IsSuccess = false;
+                responce.StatusCode = HttpStatusCode.NotFound;
+                responce.ErrorMassages = new List<string>() { "the instructor is not found" };
+                return NotFound(responce);
+            }
+            else if (instructorToGet != null && UserToGet.role.ToLower() == "instructor")
+            {
+                Instructor = await unitOfWork.instructorRepositpry.GetEmployeeById(id);
+                var mappedEmployee = mapper.Map<Instructor, EmployeeDto>(Instructor);
+                mappedEmployee.type = "Instructor";
+                responce.Result = mappedEmployee;
+            }           
+            if (Subadmin == null && Instructor ==null)
+            {
+                responce.IsSuccess = false;
+                responce.StatusCode = HttpStatusCode.NotFound;
+                responce.ErrorMassages = new List<string>() { $"Employee of Id = {id} does not exists" };
+                responce.Result = null;
                 return NotFound(responce);
             }
             responce.IsSuccess = true;
             responce.StatusCode = HttpStatusCode.OK;
-            responce.Result = mappedemployee;
             return Ok(responce);
         }
 
-
-    /*    [HttpPut("UpdateSubAdmin")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(404)]
-        [ProducesResponseType(400)]
-        public async Task<ActionResult<ApiResponce>> updateSubAdmin(int id, EmployeeDto subAdminModel)
-            {
-
-                if (id <= 0)
-                {
-                    responce.IsSuccess = false;
-                    responce.StatusCode = HttpStatusCode.BadRequest;
-                    responce.ErrorMassages = new List<string>() { "The Id is less or equal 0" };
-                    return BadRequest(responce);
-                }
-
-                if (subAdminModel == null)
-                {
-                    responce.IsSuccess = false;
-                    responce.StatusCode = HttpStatusCode.NotFound;
-                    responce.ErrorMassages = new List<string>() { "the subAdmin is not found" };
-                    return NotFound(responce);
-                }
-                if (id != subAdminModel.Id || !ModelState.IsValid) {
-                    responce.IsSuccess = false;
-                    responce.StatusCode = HttpStatusCode.BadRequest;
-                    return BadRequest(responce);
-                }
-
-                var subAdminToUpdate = dbContext.subadmins.FirstOrDefault(x => x.SubAdminId == subAdminModel.Id);
-
-                //  var subAdminToUpdate = await subAdminRepo.get
-
-
-                if (subAdminToUpdate == null) {
-                    responce.IsSuccess = false;
-                    responce.StatusCode = HttpStatusCode.NotFound;
-                    responce.ErrorMassages = new List<string>() { "the subAdmin is not found" };
-                    return NotFound(responce);
-                }
-
-                var Subadminmapper = mapper.Map<EmployeeDto, SubAdmin>(subAdminModel);
-                  Subadminmapper.SubAdminId = subAdminToUpdate.SubAdminId;
-                await subAdminRepo.updateSubAdminAsync(Subadminmapper);
-
-        //        var success1 = await subAdminRepo.saveAsync();
-        //        if (success1 > 0)
-        //        {
-        //            responce.StatusCode = HttpStatusCode.OK;
-        //            responce.IsSuccess = true;
-        //            responce.Result = Subadminmapper;
-        //            return Ok(responce);
-        //        }
-        //        responce.StatusCode = HttpStatusCode.BadRequest;
-        //        responce.IsSuccess = false;
-        //        return BadRequest(responce);
-
-
-
-        //    }*/
-
+    
+      
 
 
        

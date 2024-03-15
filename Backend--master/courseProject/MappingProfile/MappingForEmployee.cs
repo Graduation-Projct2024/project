@@ -28,6 +28,10 @@ namespace courseProject.MappingProfile
                 .ForMember(x => x.userName, o => o.MapFrom(y => y.FName));
             CreateMap<EmployeeDto, Instructor>();
             CreateMap<EmployeeDto, SubAdmin>();
+            CreateMap<EmployeeForUpdateDTO, Instructor>();
+            CreateMap<EmployeeForUpdateDTO, SubAdmin>();
+            CreateMap<EmployeeForUpdateDTO, User>()
+                .ForMember(x=>x.userName , o=>o.MapFrom(y => y.FName));
             CreateMap<updateEmployeeDTO, SubAdmin>()
                 .ForMember(x=>x.SubAdminId , o=>o.MapFrom(y=>y.Id));
             CreateMap<EmployeeForCreate, SubAdmin>();
