@@ -14,8 +14,8 @@ export default function CreateEmployee() {
   const [selectedRole, setSelectedRole] = useState('');
 
   const initialValues={
-    fName: '',
-    lName:'',
+    FName: '',
+    LName:'',
     email: '',
     password:'',
     phoneNumber:'',
@@ -40,8 +40,8 @@ const onSubmit = async (users) => {
       // });
 
       const formData = new FormData();
-      formData.append('fName', users.fName);
-      formData.append('lName', users.lName);
+      formData.append('FName', users.FName);
+      formData.append('LName', users.LName);
       formData.append('email', users.email);
       formData.append('password', users.password);
       formData.append('phoneNumber', users.phoneNumber);
@@ -55,9 +55,9 @@ const onSubmit = async (users) => {
   
       const { data } = await axios.post('http://localhost:5134/api/Employee/CreateEmployee', formData,
         {
-        headers: {
-          'Content-Type': 'multipart/form-data','Content-Type': 'application/json',
-        }
+        // headers: {
+        //   'Content-Type': 'multipart/form-data','Content-Type': 'application/json',
+        // }
         
       });
       
@@ -85,18 +85,18 @@ const formik = useFormik({
 const inputs =[
   {
     type : 'text',
-      id:'fName',
-      name:'fName',
+      id:'FName',
+      name:'FName',
       title:'First Name',
-      value:formik.values.fName,
+      value:formik.values.FName,
 },
 
   {
       type : 'text',
-      id:'lName',
-      name:'lName',
+      id:'LName',
+      name:'LName',
       title:'Last Name',
-      value:formik.values.lName,
+      value:formik.values.LName,
   },
  
     {

@@ -10,22 +10,29 @@ export default function CreateEvent() {
     name: '',
     content:'',
     category: '',
-    subAdminId:0,
+    SubAdminId:0,
+    dateOfEvent:'',
+    image:'',
 };
 
-const onSubmit = async (users) => {
+const handleFieldChange = (event) => {
+  formik.setFieldValue('image', event.target.files[0]); // Set the file directly to image
+};
+
+const onSubmit = async (values) => {
   try {
     const formData = new FormData();
-    formData.append('name', users.name);
-    formData.append('content', users.content);
-    formData.append('category', users.category);
-    formData.append('subAdminId', users.subAdminId);
+    formData.append('name', values.name);
+    formData.append('content', values.content);
+    formData.append('category', values.category);
+    formData.append('SubAdminId', values.SubAdminId);
+    formData.append('dateOfEvent', values.dateOfEvent);
+    if (values.image) {
+      formData.append('image', values.image);
+    }
 
     const { data } = await axios.post('http://localhost:5134/api/CourseContraller/CreateEvent', formData,
       {
-      headers: {
-        'Content-Type': 'multipart/form-data','Content-Type': 'application/json',
-      }
       
     });
     
@@ -78,11 +85,25 @@ const inputs =[
     
   {
       type : 'number',
-      id:'subAdminId',
-      name:'subAdminId',
+      id:'SubAdminId',
+      name:'SubAdminId',
       title:'SubAdmin Id',
-      value:formik.values.subAdminId,
+      value:formik.values.SubAdminId,
   },
+  {
+    type : 'date',
+    id:'dateOfEvent',
+    name:'dateOfEvent',
+    title:'Event Date',
+    value:formik.values.dateOfEvent,
+},
+  {
+    type:'file',
+    id:'image',
+    name:'image',
+    title:'image',
+    onChange:handleFieldChange,
+},
 ];
 
 
@@ -93,7 +114,7 @@ const renderInputs = inputs.map((input,index)=>
           title={input.title} 
           key={index} 
           errors={formik.errors} 
-          onChange={formik.handleChange}
+          onChange={input.onChange||formik.handleChange}
            onBlur={formik.handleBlur}
             touched={formik.touched}
             />

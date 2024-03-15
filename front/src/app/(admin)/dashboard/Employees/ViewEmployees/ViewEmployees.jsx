@@ -62,8 +62,8 @@ export default function ViewEmployees() {
         setSearchTerm(event.target.value);
       };
     
-      const handleRoleFilter = (role) => {
-        setSelectedRole(role);
+      const handleRoleFilter = (type) => {
+        setSelectedRole(type);
       };
 
 
@@ -74,7 +74,7 @@ export default function ViewEmployees() {
             typeof value === 'string' && value.toLowerCase().includes(searchTerm.toLowerCase())
         );
 
-        const matchesRole = selectedRole ? employee.role.toLowerCase() === selectedRole.toLowerCase() : true;
+        const matchesRole = selectedRole ? employee.type.toLowerCase() === selectedRole.toLowerCase() : true;
 
         return matchesSearchTerm && matchesRole;
   });
@@ -158,11 +158,11 @@ export default function ViewEmployees() {
   {filteredEmployees.length ? (
     filteredEmployees.map((employee) =>(
       <tr key={employee.id}>
-        {console.log(employee.id)}
+        {console.log(employee.type)}
       <th scope="row">{employee.id}</th>
       <td>{employee.fName} {employee.lName}</td>
       <td>{employee.email}</td>
-      <td>{employee.role}</td>
+      <td>{employee.type}</td>
       <td>{employee.gender}</td>
       <td>{employee.phoneNumber}</td>
       <td>{employee.address}</td>
