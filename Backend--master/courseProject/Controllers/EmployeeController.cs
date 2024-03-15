@@ -64,7 +64,7 @@ namespace courseProject.Controllers
             }
             var allEmployees = mapperSubAdmin.Concat(mapperInstructor);
 
-            return Ok(allEmployees);
+            return Ok(allEmployees.OrderBy(x => x.Id));
 
 
 
