@@ -46,18 +46,26 @@ namespace courseProject.Controllers
         public async Task<ActionResult<IEnumerable<SubAdmin>>> GetAllEmployeeAsync()
         {
             var SubAdmins = await subAdminRepo.GetAllEmployeeAsync();
+
             var instructors = await instructorRepo.GetAllEmployeeAsync();
             if (SubAdmins == null && instructors == null)
             {
                 return NotFound();
             }
             var mapperSubAdmin = mapper.Map<IEnumerable<SubAdmin>, IEnumerable<EmployeeDto>>(SubAdmins);
+            foreach (var SubAdmin in mapperSubAdmin)
+            {
+                SubAdmin.type = "SubAdmin";
+            }
             var mapperInstructor = mapper.Map<IEnumerable<Instructor>, IEnumerable<EmployeeDto>>(instructors);
-
+            foreach (var instructor in mapperInstructor)
+            {
+                instructor.type = "Instructor";
+            }
             var allEmployees = mapperSubAdmin.Concat(mapperInstructor);
 
             return Ok(allEmployees);
-            
+
 
 
         }
