@@ -16,7 +16,7 @@ namespace courseProject.Core.Models
 
         public DateTime dateOfAdded { get; set; } = DateTime.Today;
         
-        public DateTime? dateOfEvent {  get; set; }= DateTime.Today;
+        public DateTime? dateOfEvent {  get; set; }
         public string? ImageUrl { get; set; }
         public string category { get; set; }
         public string status { get; set; } = "undefined";

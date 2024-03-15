@@ -78,6 +78,10 @@ namespace courseProject.Repository.Data
            .Property(c => c.DateOfBirth)
            .HasColumnType("date");
 
+            modelBuilder.Entity<Event>()
+         .Property(c => c.dateOfEvent)
+         .HasColumnType("date");
+
             // modelBuilder.Entity<Student>()
             //.Property(s => s.Id)
             //.ValueGeneratedOnAdd()

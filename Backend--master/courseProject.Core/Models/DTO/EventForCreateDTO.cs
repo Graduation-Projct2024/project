@@ -16,6 +16,7 @@ namespace courseProject.Core.Models.DTO
 
         public string content { get; set; }
         [NotMapped] public IFormFile? image { get; set; }
+        public DateTime? dateOfEvent { get; set; }
         public string category { get; set; }
        
         public int SubAdminId { get; set; }
