@@ -17,6 +17,7 @@ namespace courseProject.Core.Models.DTO
 
         public double price { get; set; }
         public string category { get; set; }
+
        [NotMapped] public IFormFile? image { get; set; }
         public DateTime? startDate { get; set; }
         public int SubAdminId { get; set; }
