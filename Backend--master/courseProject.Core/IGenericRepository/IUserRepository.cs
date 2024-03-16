@@ -17,6 +17,8 @@ namespace courseProject.Core.IGenericRepository
 
        bool isUniqeUser(string email);
 
-       // void LogOut();
+ 
+
+        // void LogOut();
     }
 }

@@ -13,6 +13,8 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using BC= BCrypt.Net.BCrypt;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace courseProject.Repository.GenericRepository
 {
@@ -28,6 +30,9 @@ namespace courseProject.Repository.GenericRepository
             this.dbContext = dbContext;
             secretKey = configuration.GetSection("Authentication")["SecretKey"]; 
         }
+
+
+
 
         public bool isUniqeUser(string email)
         {
@@ -83,6 +88,7 @@ namespace courseProject.Repository.GenericRepository
 
         }
 
+       
      
 
         public async Task<User> RegisterAsync( RegistrationRequestDTO registerRequestDTO)
@@ -105,5 +111,10 @@ namespace courseProject.Repository.GenericRepository
           //  user.password = "";
             return  user;
         }
+
+
+
+
+
     }
 }

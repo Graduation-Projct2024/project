@@ -6,26 +6,27 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace courseProject.Repository.GenericRepository
 {
     public class FileRepository : IFileRepository
     {
+       
         public async Task<string> UploadFile1(IFormFile file)
         {
             
             string fileName = "";
+            var uploadPath = "";
             try
             {
                 if (file == null || file.Length == 0)
                 {
                     throw new ArgumentException("File is empty or null.");
                 }
-
-
                 var extension = Path.GetExtension(file.FileName);
-                fileName = file.FileName ;
+                fileName = DateTimeOffset.Now.Ticks.ToString() + extension;
 
-                var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "Files");
+                 uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "Files\\");
 
                 if (!Directory.Exists(uploadPath))
                 {
@@ -45,7 +46,7 @@ namespace courseProject.Repository.GenericRepository
                 fileName = $"Error: {ex.Message}";
             }
 
-            return fileName;
+            return uploadPath+fileName;
         }
     }
 }

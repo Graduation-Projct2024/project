@@ -12,6 +12,7 @@ using courseProject.Repository.Data;
 using Microsoft.EntityFrameworkCore;
 using courseProject.Repository.GenericRepository;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
 
 
 namespace courseProject.Controllers
@@ -34,7 +35,20 @@ namespace courseProject.Controllers
             this.response = new();
         }
 
+        [HttpGet("GetUserIdFromToken")]
+        [Authorize]
+        public IActionResult GetUserIdFromToken()
+        {
+            var Id = Convert.ToInt32( HttpContext.User.FindFirstValue("UserId"));
+           
+            if (Id==null)
+            {
+                return Unauthorized("User ID not found in token");
+            }
+            return Ok(Id );
+        }
 
+       
 
         [HttpPost("Login")]
         [AllowAnonymous]
