@@ -10,6 +10,6 @@ namespace courseProject.Core.Models.DTO
     {
         public string name { get; set; }
         public string linkUrl { get; set; }
-
+        public string type { get; set; }
     }
 }

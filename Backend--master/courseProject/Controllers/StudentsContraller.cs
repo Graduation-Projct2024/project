@@ -7,6 +7,7 @@ using courseProject.Core.Models;
 using courseProject.Core.Models.DTO;
 using courseProject.Repository.GenericRepository;
 using System.Net;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace courseProject.Controllers
@@ -33,6 +34,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [Authorize("subAdmin")]
         public async Task <ActionResult<IEnumerable<Student>>> GetAllStudentsAsync()
         {
             var Students = await studentRepo.GetAllStudentsAsync();

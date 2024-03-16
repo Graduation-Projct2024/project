@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using AutoMapper;
 using courseProject.Repository.Data;
 using Microsoft.EntityFrameworkCore;
+using courseProject.Repository.GenericRepository;
+using System.Security.Claims;
 
 
 namespace courseProject.Controllers
@@ -33,11 +35,13 @@ namespace courseProject.Controllers
         }
 
 
+
         [HttpPost("Login")]
         [AllowAnonymous]
         
         public async Task<IActionResult> Login( LoginRequestDTO loginRequestDTO)
         {
+            
             var loginResponse = await unitOfWork.UserRepository.LoginAsync(loginRequestDTO);
 
             if (loginResponse.User == null || string.IsNullOrEmpty(loginResponse.Token))
