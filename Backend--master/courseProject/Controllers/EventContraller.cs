@@ -20,7 +20,7 @@ namespace courseProject.Controllers
             this.mapper = mapper;
         }
 
-        [HttpGet]
+        [HttpGet("GetAllAccreditEvents")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
@@ -35,7 +35,7 @@ namespace courseProject.Controllers
             return Ok(mapperEvent);
         }
 
-        [HttpPost]
+        [HttpGet("GetAllUndefinedEvents")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]

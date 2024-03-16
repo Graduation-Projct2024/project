@@ -9,6 +9,6 @@ namespace courseProject.Core.IGenericRepository
 {
     public interface ICourseRepository :IGenericRepository1<Course>
     {
-        public Task GetAllCoursesAsync(Course course);
+       
     }
 }

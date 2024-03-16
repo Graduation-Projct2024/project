@@ -37,6 +37,10 @@ namespace courseProject.Repository.GenericRepository
         {
              dbContext.Update(course);
         }
+        public async Task updateEvent(Event model)
+        {
+            dbContext.Update(model);
+        }
 
         public async Task<IDbContextTransaction> BeginTransactionAsync()
         {

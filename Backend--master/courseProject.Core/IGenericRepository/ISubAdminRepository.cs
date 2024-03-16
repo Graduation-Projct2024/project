@@ -16,7 +16,7 @@ namespace courseProject.Core.IGenericRepository
         public Task updateCourse(Course course);
 
         public Task CreateEvent(Event model);
-
+        public  Task updateEvent(Event model);
         public  Task<IDbContextTransaction> BeginTransactionAsync();
         public  Task CommitTransactionAsync();
 

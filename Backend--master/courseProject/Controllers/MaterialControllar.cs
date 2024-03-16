@@ -44,7 +44,7 @@ namespace courseProject.Controllers
             await unitOfWork.FileRepository.UploadFile1(taskDTO.pdf);
             var taskMapped = mapper.Map<TaskDTO, CourseMaterial>(taskDTO);
             taskMapped.type = "Task";
-            taskMapped.pdfUrl = "Files\\" + await unitOfWork.FileRepository.UploadFile1(taskDTO.pdf);
+            taskMapped.pdfUrl = await unitOfWork.FileRepository.UploadFile1(taskDTO.pdf);
             await unitOfWork.instructorRepositpry.AddMaterial(taskMapped);
             var success = await unitOfWork.instructorRepositpry.saveAsync();
             if (success > 0)
@@ -72,7 +72,7 @@ namespace courseProject.Controllers
             await unitOfWork.FileRepository.UploadFile1(fileDTO.pdf);
             var fileMapped = mapper.Map<FileDTO, CourseMaterial>(fileDTO);
             fileMapped.type = "File";
-            fileMapped.pdfUrl = "Files\\" + await unitOfWork.FileRepository.UploadFile1(fileDTO.pdf);
+            fileMapped.pdfUrl =  await unitOfWork.FileRepository.UploadFile1(fileDTO.pdf);
             await unitOfWork.instructorRepositpry.AddMaterial(fileMapped);
             var success = await unitOfWork.instructorRepositpry.saveAsync();
             if (success > 0)
@@ -185,7 +185,7 @@ namespace courseProject.Controllers
             var Taskmapper = mapper.Map<TaskDTO, CourseMaterial>(taskDTO);
             Taskmapper.Id = id;
             Taskmapper.type = "Task";
-            Taskmapper.pdfUrl = "Files\\" + await unitOfWork.FileRepository.UploadFile1(taskDTO.pdf);
+            Taskmapper.pdfUrl =  await unitOfWork.FileRepository.UploadFile1(taskDTO.pdf);
             await unitOfWork.instructorRepositpry.EditMaterial(Taskmapper);
 
             var success1 = await unitOfWork.instructorRepositpry.saveAsync();
@@ -243,7 +243,7 @@ namespace courseProject.Controllers
             var filemapper = mapper.Map<FileDTO, CourseMaterial>(fileDTO);
             filemapper.Id = id;
             filemapper.type = "File";
-            filemapper.pdfUrl = "Files\\" + await unitOfWork.FileRepository.UploadFile1(fileDTO.pdf);
+            filemapper.pdfUrl =  await unitOfWork.FileRepository.UploadFile1(fileDTO.pdf);
             await unitOfWork.instructorRepositpry.EditMaterial(filemapper);
 
             var success1 = await unitOfWork.instructorRepositpry.saveAsync();

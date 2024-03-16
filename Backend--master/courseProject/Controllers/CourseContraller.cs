@@ -25,6 +25,7 @@ namespace courseProject.Controllers
         private readonly IGenericRepository1<Request> requestRepo;
         private readonly IMapper mapper;
         protected ApiResponce responce;
+
         //  private Request request;
 
         public CourseContraller(IUnitOfWork unitOfWork, projectDbContext dbContext, IGenericRepository1<Course> CourseRepo, IGenericRepository1<Request> RequestRepo, IMapper mapper)
@@ -138,7 +139,7 @@ namespace courseProject.Controllers
             {
                 requestMapped.StudentId = StudentId;
             }
-            courseMapped.ImageUrl = "Files\\" + await unitOfWork.FileRepository.UploadFile1(model.image);
+            courseMapped.ImageUrl =  await unitOfWork.FileRepository.UploadFile1(model.image);
 
             using (var transaction = await unitOfWork.SubAdminRepository.BeginTransactionAsync())
             {
@@ -189,7 +190,7 @@ namespace courseProject.Controllers
 
             var EventMapped = mapper.Map<Event>(model);
             var requestMapped = mapper.Map<Request>(model);
-            EventMapped.ImageUrl = "Files\\" + await unitOfWork.FileRepository.UploadFile1(model.image);
+            EventMapped.ImageUrl =  await unitOfWork.FileRepository.UploadFile1(model.image);
             using (var transaction = await unitOfWork.SubAdminRepository.BeginTransactionAsync())
             {
                 try
@@ -235,15 +236,12 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         public async Task<ActionResult<ApiResponce>> EditCourseStatus( int courseId , string Status )
-        {
-            
+        {            
             var entity = await dbContext.courses.FirstOrDefaultAsync(x => x.Id == courseId);
-
             if (entity == null)
             {
                 return NotFound();
-            }
-            
+            }            
             Expression<Func<Course, string>> path = x => x.status;
             var patchDocument = new JsonPatchDocument<Course>();
             patchDocument.Replace(path, Status);
@@ -255,7 +253,28 @@ namespace courseProject.Controllers
             return Ok(entity);
         }
 
+        [HttpPatch("accreditEvent")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<ApiResponce>> EditEventStatus(int eventId, string Status)
+        {
+            var entity = await dbContext.events.FirstOrDefaultAsync(x => x.Id == eventId);
 
+            if (entity == null)
+            {
+                return NotFound();
+            }
+            Expression<Func<Event, string>> path = x => x.status;
+            var patchDocument = new JsonPatchDocument<Event>();
+            patchDocument.Replace(path, Status);
+            entity.status = Status;
+            // jsonPatch.ApplyTo(entity, ModelState);
+            // jsonPatch.Replace(path , "Accredit");
+            await unitOfWork.SubAdminRepository.updateEvent(entity);
+            await unitOfWork.SubAdminRepository.saveAsync();
+            return Ok(entity);
+        }
 
         //[HttpPost("EditCourse")]
         //[ProducesResponseType(200)]
