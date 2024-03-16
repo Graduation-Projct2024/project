@@ -46,7 +46,7 @@ namespace courseProject.Controllers
         public async Task<ActionResult<IEnumerable<SubAdmin>>> GetAllEmployeeAsync()
         {
             var SubAdmins = await subAdminRepo.GetAllEmployeeAsync();
-
+            
             var instructors = await instructorRepo.GetAllEmployeeAsync();
             if (SubAdmins == null && instructors == null)
             {
@@ -63,9 +63,9 @@ namespace courseProject.Controllers
                 instructor.type = "Instructor";
             }
             var allEmployees = mapperSubAdmin.Concat(mapperInstructor);
-
-            return Ok(allEmployees.OrderBy(x => x.Id));
-
+           
+            return Ok(allEmployees.OrderBy(x=>x.Id));
+            
 
 
         }
@@ -236,7 +236,8 @@ namespace courseProject.Controllers
             return Ok(responce);
         }
 
-    
+
+
       
 
 

@@ -17,5 +17,6 @@ namespace courseProject.Core.Models.DTO
 
          public String? pdfUrl { get; set; }
         public DateTime? DeadLine { get; set; }
+        public string type { get; set; }
     }
 }

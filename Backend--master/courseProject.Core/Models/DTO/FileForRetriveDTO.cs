@@ -16,5 +16,6 @@ namespace courseProject.Core.Models.DTO
         public string? description { get; set; }
 
         public String? pdfUrl { get; set; }
+        public string type { get; set; }
     }
 }

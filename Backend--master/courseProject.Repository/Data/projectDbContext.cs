@@ -79,8 +79,16 @@ namespace courseProject.Repository.Data
            .HasColumnType("date");
 
             modelBuilder.Entity<Event>()
-         .Property(c => c.dateOfEvent)
-         .HasColumnType("date");
+           .Property(c => c.dateOfEvent)
+           .HasColumnType("date");
+
+            modelBuilder.Entity<Course>()
+           .Property(c => c.startDate)
+           .HasColumnType("date");
+
+            modelBuilder.Entity<Course>()
+           .Property(c => c.endDate)
+           .HasColumnType("date");
 
             // modelBuilder.Entity<Student>()
             //.Property(s => s.Id)
