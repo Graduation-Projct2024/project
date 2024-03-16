@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using courseProject.Repository.Data;
 using System.Linq;
 using System.Collections;
+using Microsoft.Extensions.Logging;
 
 namespace courseProject.Controllers
 {
@@ -181,7 +182,7 @@ namespace courseProject.Controllers
                 response.ErrorMassages = new List<string>() { "the Task is not found" };
                 return NotFound(response);
             }
-
+            
             var Taskmapper = mapper.Map<TaskDTO, CourseMaterial>(taskDTO);
             Taskmapper.Id = id;
             Taskmapper.type = "Task";
@@ -497,18 +498,22 @@ namespace courseProject.Controllers
                 if (m.type.ToLower() == "task")
                 {
                     var Taskmapper = mapper.Map<CourseMaterial,TaskForRetriveDTO>(m);
+                    Taskmapper.pdfUrl = $"http://localhost:5134/{Taskmapper.pdfUrl}";
                     arrayList.Add(Taskmapper);
 
                 }
                 else if (m.type.ToLower() == "file")
                 {
                     var Filemapper = mapper.Map<CourseMaterial,FileForRetriveDTO>(m);
+                    Filemapper.pdfUrl = $"http://localhost:5134/{Filemapper.pdfUrl}";
                     arrayList.Add(Filemapper);
+                   
 
                 }
                 else if (m.type.ToLower() == "announcement")
                 {
                     var Announcementmapper = mapper.Map<CourseMaterial,AnnouncementForRetriveDTO>(m);
+
                     arrayList.Add(Announcementmapper);
 
                 }

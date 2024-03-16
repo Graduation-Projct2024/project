@@ -52,7 +52,11 @@ namespace courseProject.Controllers
                 return NotFound();
             }
             var mapperCourse = mapper.Map<IReadOnlyList<Course>, IReadOnlyList<CourseInformationDto>>(courses);
-
+            var updatedCourses = mapperCourse.Select(course =>
+            {
+                course.ImageUrl = $"http://localhost:5134/{course.ImageUrl}";
+                return course;
+            }).ToList();
             return Ok(mapperCourse);
         }
 
@@ -70,10 +74,12 @@ namespace courseProject.Controllers
             }
 
             var mapperCourse = mapper.Map<IReadOnlyList<Course>, IReadOnlyList<CourseAccreditDTO>>(courses);
-            foreach(var course in mapperCourse)
+            var updatedCourses = mapperCourse.Select(course =>
             {
-                course.ImageUrl = "http://localhost:5134/" + course.ImageUrl;
-            }
+                course.ImageUrl = $"http://localhost:5134/{course.ImageUrl}";
+                return course;
+            }).ToList();
+            
             return Ok(mapperCourse);
         }
 
