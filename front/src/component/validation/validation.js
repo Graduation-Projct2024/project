@@ -26,5 +26,6 @@ export const createEmployee = yup.object({
    name:yup.string().required('Name is required').min(3,'Course Name must have at least 3 characters').max(30,'Course Name must have at most 30 characters'),
    content:yup.string().required('content is required').min(3,'Course content must have at least 6 characters').max(30,'Course content must have at most 30 characters'),
    category:yup.string().required('Category is required').min(3,'Course Category must have at least 6 characters').max(30,'Course Category must have at most 30 characters'),
+   startDate:yup.string().required('Start Date is required'),
    SubAdminId:yup.string().required('SubAdmin Id is required'),
 })

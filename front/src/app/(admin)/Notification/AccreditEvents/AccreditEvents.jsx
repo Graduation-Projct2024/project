@@ -1,36 +1,33 @@
-'use client'
-import axios from 'axios';
-import React, { useEffect, useState } from 'react'
-import '../../dashboard/dashboard.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { useEffect, useState } from 'react'
 import { faArrowUpFromBracket, faEye, faFilter } from '@fortawesome/free-solid-svg-icons'
-import Link from 'next/link';
+import axios from 'axios';
 
+export default function AccreditEvents() {
 
-export default function AccreditCourses() {
-  const [accreditCourses, setAccreditCourses] = useState([]);
+    const [accreditEvents, setAccreditEvents] = useState([]);
   let[loader,setLoader] = useState(false);
-  const fetchCoursesForAccredit = async () => {
+  const fetchEventsForAccredit = async () => {
     try{
-    const { data } = await axios.get(`http://localhost:5134/api/CourseContraller/GetAllCoursesForAccredit`);
+    const { data } = await axios.get(`http://localhost:5134/api/EventContraller/GetAllUndefinedEvents`);
     console.log(data);
-    setAccreditCourses(data);
+    setAccreditEvents(data);
   }
     catch(error){
       console.log(error);
     }
   };
 
-  const accreditCourse = async (courseId , Status) => {
+  const accreditEvent = async (eventId , Status) => {
     //setLoader(true);
-    console.log(courseId);
+    console.log(eventId);
     try{
-    const { data } = await axios.patch(`http://localhost:5134/api/CourseContraller/accreditCourse?courseId=${courseId}&Status=${Status}`,
+    const { data } = await axios.patch(`http://localhost:5134/api/CourseContraller/accreditEvent?eventId=${eventId}&Status=${Status}`,
   );
   if(data.isSuccess){
     console.log(data);
     //setLoader(false);
-    fetchCoursesForAccredit();
+    fetchEventsForAccredit();
   }
   }
     catch(error){
@@ -39,7 +36,7 @@ export default function AccreditCourses() {
   };
 
   useEffect(() => {
-    fetchCoursesForAccredit();
+    fetchEventsForAccredit();
   }, []);
 if(loader){
   return <p>Loading ...</p>
@@ -49,19 +46,20 @@ if(loader){
     setSearchTerm(event.target.value);
   };
 
-  const filteredAccreditCourses = accreditCourses.filter((course) => {
+  const filteredAccreditEvents = accreditEvents.filter((event) => {
     const matchesSearchTerm =
-    Object.values(course).some(
+    Object.values(event).some(
         (value) =>
         typeof value === 'string' && value.toLowerCase().includes(searchTerm.toLowerCase())
     );
-
 
     return matchesSearchTerm ;
 });
 
 
   return (
+    
+
     <>
       <div className="filter py-2 text-end">
         <nav className="navbar">
@@ -95,56 +93,50 @@ if(loader){
           </div>
         </nav>
       </div>
-      <>
-      {filteredAccreditCourses.length ? filteredAccreditCourses.map((course) =>(
-        <img src={course.imageUrl}/>
-        
-      )) : <p>no imgs</p>}
-</>
+     
       <table className="table">
         <thead>
           <tr>
             <th scope="col">ID</th>
             <th scope="col">Name</th>
-            <th scope="col">Price</th>
+            <th scope="col">Content</th>
             <th scope="col">Category</th>
-            <th scope="col">Start Date</th>
-            <th scope="col">End Date</th>
+            <th scope="col">Event Date</th>
+            <th scope="col">SubAdmin name</th>
             <th scope="col">Option</th>
           </tr>
         </thead>
         <tbody>
-          {filteredAccreditCourses.length ? (
-            filteredAccreditCourses.map((course) => (
-              <tr key={course.id}>
-                {console.log(course.id)}
-                {console.log(course.imageUrl)}
-                <th scope="row">{course.id}</th>
-                <td>{course.name}</td>
-                <td>{course.price}</td>
-                <td>{course.category}</td>
-                <td>{course.startDate}</td>
-                <td>{course.endDate}</td>
+          {filteredAccreditEvents.length ? (
+            filteredAccreditEvents.map((event) => (
+              <tr key={event.id}>
+                <th scope="row">{event.id}</th>
+                <td>{event.name}</td>
+                <td>{event.content}</td>
+                <td>{event.eventCategory}</td>
+                <td>{event.dateOfEvent}</td>
+                <td>{event.subAdminFName} {event.subAdminLName}</td>
                 <td className="d-flex gap-1">
                   {/* <Link href={"/Profile"}>
                     <button type="button" className="border-0 bg-white ">
                       <FontAwesomeIcon icon={faEye} className="edit-pen" />
                     </button>
                   </Link> */}
-                  <button type="button" className="btn accredit" onClick={()=>accreditCourse(course.id,'accredit')}>Accredit</button>  
+                  <button type="button" className="btn accredit" onClick={()=>accreditEvent(event.id,'accredit')}>Accredit</button>  
                 {/* <Link href='/dashboard' className='text-decoration-none acc'>Accredit </Link> */}
-                <button type="button" className="btn accredit" onClick={()=>accreditCourse(course.id,"reject")}>Reject</button>
+                <button type="button" className="btn accredit" onClick={()=>accreditEvent(event.id,"reject")}>Reject</button>
 
                 </td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="7">No Courses</td>
+              <td colSpan="7">No Events</td>
             </tr>
           )}
         </tbody>
       </table>
     </>
-  );
+
+  )
 }

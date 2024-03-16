@@ -14,6 +14,7 @@ export default function CreateCourse() {
     category: '',
     SubAdminId:0,
     InstructorId:0,
+    startDate:'',
     image:'',
     
 };
@@ -32,6 +33,7 @@ const onSubmit = async (values) => {
     formData.append('category', values.category);
     formData.append('SubAdminId', values.SubAdminId);
     formData.append('InstructorId', values.InstructorId);
+    formData.append('startDate', values.startDate);
     //formData.append('image', values.image,values.image.name);
     if (values.image) {
       formData.append('image', values.image);
@@ -86,7 +88,14 @@ const inputs =[
         title:'Course Category',
         value:formik.values.category,
     },
-    
+    {
+      type : 'date',
+      id:'startDate',
+      name:'startDate',
+      title:'Course start Date',
+      value:formik.values.startDate,
+  },
+  
   {
       type : 'number',
       id:'SubAdminId',
@@ -142,7 +151,7 @@ const renderInputs = inputs.map((input,index)=>
       </button>
       
       </div>
-      <div className="col-md-12"><button type="button" class="btn btn-secondary createButton mt-3 fs-3 px-3 w-25" data-bs-dismiss="modal">Close</button></div>
+      <div className="col-md-12"><button type="button" className="btn btn-secondary createButton mt-3 fs-3 px-3 w-25" data-bs-dismiss="modal">Close</button></div>
     </form>
   )
 }

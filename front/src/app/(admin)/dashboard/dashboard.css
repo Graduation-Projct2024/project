@@ -46,3 +46,20 @@ color: #4C5372!important;
 .icons,.edit-pen{
     color: #4C5372!important;
 }
+.accredit{
+    background-color: #fffdf6 !important;
+    color: #4C5372 !important;
+    border: #4C5372 1px solid !important;
+}
+.accredit:hover{
+    background-color: #4C5372 !important;
+    color: #fffdf6 !important   
+}
+.accredit:hover .acc{
+   
+    color: #fffdf6 !important   
+}
+.acc{
+color: #4C5372 !important;        
+}
+
