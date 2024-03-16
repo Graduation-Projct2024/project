@@ -106,7 +106,7 @@ namespace courseProject.Repository.GenericRepository
             if(typeof(T) == typeof(Course))
             {
                 return (IReadOnlyList<T>) await dbContext.courses
-                    .Where(x => x.status == "undefined")
+                    
                     .Include(x => x.SubAdmin.user).Include(x => x.Instructor.user).ToListAsync();
             }
             return await dbContext.Set<T>().ToListAsync();
@@ -117,7 +117,7 @@ namespace courseProject.Repository.GenericRepository
             if(typeof(T) == typeof(Event))
             {
                 return (IReadOnlyList<T>)await dbContext.events
-                    .Where(x => x.status == "undefined")
+                    
                     .Include(x => x.SubAdmin.user).ToListAsync();
             }
             return await dbContext.Set<T>().ToListAsync();
