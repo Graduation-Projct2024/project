@@ -18,9 +18,10 @@ namespace courseProject.MappingProfile
 
             CreateMap<Course, CourseAccreditDTO>()
                 .ForMember(x => x.SubAdminFName, o => o.MapFrom(y => y.SubAdmin.user.userName))
-                .ForMember(x=>x.SubAdminLName , o=>o.MapFrom(y=>y.SubAdmin.LName))
+                .ForMember(x => x.SubAdminLName, o => o.MapFrom(y => y.SubAdmin.LName))
                 .ForMember(x => x.InstructorFName, o => o.MapFrom(y => y.Instructor.user.userName))
                 .ForMember(x => x.InstructorLName, o => o.MapFrom(y => y.Instructor.LName));
+                
 
             CreateMap<CourseForCreateDTO, Course>();
             CreateMap<CourseForCreateDTO, Request>()

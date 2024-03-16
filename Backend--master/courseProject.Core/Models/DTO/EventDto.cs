@@ -11,6 +11,7 @@ namespace courseProject.Core.Models.DTO
 
         public string content { get; set; }
 
+        public string? ImageUrl { get; set; }
         public DateTime dateOfEvent { get; set; }
             
 

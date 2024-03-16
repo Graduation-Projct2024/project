@@ -34,7 +34,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        [Authorize("subAdmin")]
+       
         public async Task <ActionResult<IEnumerable<Student>>> GetAllStudentsAsync()
         {
             var Students = await studentRepo.GetAllStudentsAsync();
@@ -62,6 +62,11 @@ namespace courseProject.Controllers
                 return NotFound();
             }
             var mapperStudents = mapper.Map<IReadOnlyList<Student>, IReadOnlyList<ContactDto>>(students);
+            var updatedStudents = mapperStudents.Select(model =>
+            {
+                model.ImageUrl = $"http://localhost:5134/{model.ImageUrl}";
+                return model;
+            }).ToList();
             return Ok(mapperStudents);
 
         }

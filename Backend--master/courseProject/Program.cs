@@ -113,6 +113,12 @@ namespace courseProject
             
            
             app.UseCors("AllowOrigin");
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "Files");
+
+            if (!Directory.Exists(filePath))
+            {
+                Directory.CreateDirectory(filePath);
+            }
             app.UseStaticFiles();
             app.UseStaticFiles(new StaticFileOptions
             {
