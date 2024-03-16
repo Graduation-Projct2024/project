@@ -59,7 +59,7 @@ namespace courseProject.Repository.GenericRepository
             {
                 
                 return (IReadOnlyList<T>) await dbContext.courses
-                    .Where(x=>x.status== "accredit")
+                    .Where(x=>x.status== "accredit"|| x.status == "reject")
                     .Include(x=>x.Instructor.user).Include(x=>x.SubAdmin.user).ToListAsync();
             }
             return await dbContext.Set<T>().ToListAsync();
@@ -70,7 +70,7 @@ namespace courseProject.Repository.GenericRepository
             if (typeof(T) == typeof(Event))
             {
                 return (IReadOnlyList<T>)await dbContext.events
-                    .Where(x=>x.status== "accredit")
+                    .Where(x => x.status == "accredit" || x.status == "reject")
                     .Include(x => x.SubAdmin.user).ToListAsync();
             }
             return await dbContext.Set<T>().ToListAsync();
