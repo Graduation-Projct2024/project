@@ -40,14 +40,16 @@ namespace courseProject.Controllers
         public IActionResult GetUserIdFromToken()
         {
             var Id = Convert.ToInt32( HttpContext.User.FindFirstValue("UserId"));
-           
+            //var role = HttpContext.User.FindFirstValue(ClaimTypes.Role);
+            //  var role = (HttpContext.User.FindFirstValue("role"));
+           // HttpContext.SignOutAsync();
             if (Id==null)
             {
                 return Unauthorized("User ID not found in token");
             }
             return Ok(Id );
         }
-
+        
        
 
         [HttpPost("Login")]

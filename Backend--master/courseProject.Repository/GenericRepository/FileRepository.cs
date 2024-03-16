@@ -46,7 +46,7 @@ namespace courseProject.Repository.GenericRepository
                 fileName = $"Error: {ex.Message}";
             }
 
-            return uploadPath+fileName;
+            return fileName;
         }
     }
 }
