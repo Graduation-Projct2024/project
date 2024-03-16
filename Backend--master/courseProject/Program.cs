@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
+using Microsoft.Extensions.FileProviders;
 namespace courseProject
 {
     public class Program
@@ -79,7 +80,7 @@ namespace courseProject
             });
 
             builder.Services.AddHttpClient();
-
+            
             builder.Services.AddAuthorization(options =>
             {
                 options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
@@ -109,9 +110,16 @@ namespace courseProject
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
+            
+           
             app.UseCors("AllowOrigin");
-
+            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "Files")),
+                RequestPath = "/Files"
+            });
 
             app.UseHttpsRedirection();
 

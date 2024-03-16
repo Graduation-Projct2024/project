@@ -12,6 +12,7 @@ using System.Net;
 using Microsoft.AspNetCore.JsonPatch;
 using System.Linq.Expressions;
 using System;
+using static System.Net.WebRequestMethods;
 
 namespace courseProject.Controllers
 {
@@ -67,7 +68,12 @@ namespace courseProject.Controllers
             {
                 return NotFound();
             }
+
             var mapperCourse = mapper.Map<IReadOnlyList<Course>, IReadOnlyList<CourseAccreditDTO>>(courses);
+            foreach(var course in mapperCourse)
+            {
+                course.ImageUrl = "http://localhost:5134/" + course.ImageUrl;
+            }
             return Ok(mapperCourse);
         }
 
@@ -139,7 +145,7 @@ namespace courseProject.Controllers
             {
                 requestMapped.StudentId = StudentId;
             }
-            courseMapped.ImageUrl =  await unitOfWork.FileRepository.UploadFile1(model.image);
+            courseMapped.ImageUrl = "Files\\"+ await unitOfWork.FileRepository.UploadFile1(model.image);
 
             using (var transaction = await unitOfWork.SubAdminRepository.BeginTransactionAsync())
             {
@@ -157,7 +163,7 @@ namespace courseProject.Controllers
 
                     if (success1 > 0 && success2 > 0)
                     {
-                        await transaction.CommitAsync();
+                        await transaction.CommitAsync();                        
                         responce.StatusCode = (HttpStatusCode)StatusCodes.Status201Created;
                         responce.IsSuccess = true;
                         responce.Result = model;
@@ -190,7 +196,7 @@ namespace courseProject.Controllers
 
             var EventMapped = mapper.Map<Event>(model);
             var requestMapped = mapper.Map<Request>(model);
-            EventMapped.ImageUrl =  await unitOfWork.FileRepository.UploadFile1(model.image);
+            EventMapped.ImageUrl = "Files\\" + await unitOfWork.FileRepository.UploadFile1(model.image);
             using (var transaction = await unitOfWork.SubAdminRepository.BeginTransactionAsync())
             {
                 try
