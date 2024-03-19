@@ -1,4 +1,5 @@
-﻿using System;
+﻿using courseProject.core.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -22,7 +23,7 @@ namespace courseProject.Core.Models
         public string? LName { get; set; }
         
       //  [ForeignKey("User")]
-        public string email {  get; set; }
+       // public string email {  get; set; }
         
         public DateTime? DateOfBirth { get; set; }
 
@@ -45,6 +46,7 @@ namespace courseProject.Core.Models
         public List<Instructor_Feedback> instructor_Feedbacks { get; set; }
 
         public List<Course_Feedback> course_Feedbacks { get; set;}
+        public List<Student_Task_Submissions> Student_Task_Submissions { get; set; }
 
     }
 }

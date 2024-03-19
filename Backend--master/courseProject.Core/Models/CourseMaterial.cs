@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using courseProject.core.Models;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -32,7 +33,8 @@ namespace courseProject.Core.Models
         public int courseId {  get; set; }
 
         public Course Course { get; set; }
-        public Instructor Instructor { get; set; }  
+        public Instructor Instructor { get; set; }
+        public List<Student_Task_Submissions> Student_Task_Submissions { get; set; }
 
     }
 }

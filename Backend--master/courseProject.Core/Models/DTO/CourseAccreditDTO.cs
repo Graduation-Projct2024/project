@@ -11,7 +11,7 @@
         public double price { get; set; }
         public string category { get; set; }
         public string status { get; set; }
-        public DateTime startDate { get; set; }
+        public DateTime startDate { get; set; } 
         public DateTime endDate { get; set; }
         public string? ImageUrl { get; set; }
         public string? SubAdminFName { get; set; }

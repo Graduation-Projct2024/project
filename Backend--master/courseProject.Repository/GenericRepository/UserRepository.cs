@@ -31,8 +31,7 @@ namespace courseProject.Repository.GenericRepository
             secretKey = configuration.GetSection("Authentication")["SecretKey"]; 
         }
 
-
-
+       
 
         public bool isUniqeUser(string email)
         {

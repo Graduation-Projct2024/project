@@ -498,14 +498,14 @@ namespace courseProject.Controllers
                 if (m.type.ToLower() == "task")
                 {
                     var Taskmapper = mapper.Map<CourseMaterial,TaskForRetriveDTO>(m);
-                    Taskmapper.pdfUrl = $"http://localhost:5134/{Taskmapper.pdfUrl}";
+                  //  Taskmapper.pdfUrl = $"http://localhost:5134/{Taskmapper.pdfUrl}";
                     arrayList.Add(Taskmapper);
 
                 }
                 else if (m.type.ToLower() == "file")
                 {
                     var Filemapper = mapper.Map<CourseMaterial,FileForRetriveDTO>(m);
-                    Filemapper.pdfUrl = $"http://localhost:5134/{Filemapper.pdfUrl}";
+                   // Filemapper.pdfUrl = $"http://localhost:5134/{Filemapper.pdfUrl}";
                     arrayList.Add(Filemapper);
                    
 

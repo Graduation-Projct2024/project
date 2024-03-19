@@ -1,4 +1,5 @@
-﻿using System;
+﻿using courseProject.Core.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,5 +16,7 @@ namespace courseProject.Core.IGenericRepository
         public IStudentRepository StudentRepository { get; set; }
         public IAdminRepository AdminRepository { get; set; }
         public IFileRepository FileRepository { get; set; }
+        public ICourseRepository<Course> CourseRepository { get; set; }
+        public IMaterialRepository materialRepository { get; set; }
     }
 }

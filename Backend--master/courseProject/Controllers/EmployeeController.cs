@@ -24,6 +24,7 @@ namespace courseProject.Controllers
         private readonly IGenericRepository1<User> userRepo;
         private readonly IMapper mapper;
         protected ApiResponce responce;
+        private Common.CommonClass CommonClass;
 
 
         public EmployeeController(projectDbContext dbContext, IUnitOfWork unitOfWork, IGenericRepository1<SubAdmin> SubAdminRepo, IGenericRepository1<Instructor> InstructorRepo, IGenericRepository1<User> userRepo, IMapper mapper)
@@ -35,6 +36,7 @@ namespace courseProject.Controllers
             this.userRepo = userRepo;
             this.mapper = mapper;
             responce = new ApiResponce();
+            CommonClass = new Common.CommonClass();
         }
 
         [HttpGet("GetAllEmployee")]
@@ -238,13 +240,38 @@ namespace courseProject.Controllers
 
 
        
-      
 
-
-       
-
-
-
-
+        [HttpGet("GetAllCoursesGivenByInstructor")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<ApiResponce>> GetAllCoursesByInstructorId (int Instructorid)
+        {
+            if (Instructorid <= 0)
+            {
+                responce.IsSuccess = false;
+                responce.StatusCode = HttpStatusCode.BadRequest;
+                responce.ErrorMassages = new List<string>() { "The Id is less or equal 0" };
+                return BadRequest(responce);
+            }
+            var courseFond = await unitOfWork.instructorRepositpry.GetAllCoursesGivenByInstructorIdAsync(Instructorid);
+            if (courseFond.Count() == 0)
+            {
+                responce.IsSuccess = false;
+                responce.StatusCode = HttpStatusCode.NotFound;
+                responce.ErrorMassages = new List<string>() { $"The Instructor Of Id = {Instructorid} Does Not Teach Any Courses " };
+                return NotFound(responce);
+            }
+            CommonClass.EditImageInFor(courseFond);
+            responce.StatusCode=HttpStatusCode.OK;
+            responce.IsSuccess = true;
+            responce.Result=courseFond;
+            return Ok(responce);
         }
+
+
+
+
+
+    }
 }

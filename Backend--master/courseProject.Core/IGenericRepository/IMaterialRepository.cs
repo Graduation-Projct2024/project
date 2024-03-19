@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace courseProject.Core.IGenericRepository
 {
-    public interface ICourseRepository<T> :IGenericRepository1<Course>
+    public interface IMaterialRepository :IGenericRepository1<CourseMaterial>
     {
-        public  Task<T> GetCourseByIdAsync(int id);
     }
 }
