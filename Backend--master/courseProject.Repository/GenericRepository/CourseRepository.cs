@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace courseProject.Repository.GenericRepository
 {
-    public class CourseRepository : GenericRepository1<Course>, ICourseRepository
+    public class CourseRepository : GenericRepository1<Course>, ICourseRepository<Course>
     {
         private readonly projectDbContext dbContext;
 
@@ -19,6 +19,11 @@ namespace courseProject.Repository.GenericRepository
             this.dbContext = dbContext;
         }
 
-        
+      
+
+        public async Task<Course> GetCourseByIdAsync(int id)
+        {
+           return  await dbContext.courses.FirstOrDefaultAsync(x => x.Id == id);
+        }
     }
 }

@@ -1,6 +1,8 @@
-﻿using courseProject.Core.IGenericRepository;
+﻿using courseProject.core.Models;
+using courseProject.Core.IGenericRepository;
 using courseProject.Core.Models;
 using courseProject.Repository.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +31,16 @@ namespace courseProject.Repository.GenericRepository
         public async Task EnrollCourse(StudentCourse studentCourse)
         {
            await dbContext.Set<StudentCourse>().AddAsync(studentCourse);
+        }
+
+        public async Task<IReadOnlyList<StudentCourse>> GetAllCoursesForStudentAsync(int Studentid)
+        {
+         return await  dbContext.studentCourses.Include(x=>x.Course).Where(x => x.StudentId == Studentid).ToListAsync();
+        }
+
+        public async Task SubmitTaskAsync(Student_Task_Submissions student_Task)
+        {
+            await dbContext.Set<Student_Task_Submissions>().AddAsync(student_Task);
         }
     }
 }

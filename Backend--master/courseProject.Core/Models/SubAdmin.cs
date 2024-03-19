@@ -17,7 +17,7 @@ namespace courseProject.Core.Models
         public string? LName { get; set; }
 
         //[ForeignKey("User")]
-        public string email { get; set; }
+       // public string email { get; set; }
 
         public DateTime? DateOfBirth { get; set; }
 

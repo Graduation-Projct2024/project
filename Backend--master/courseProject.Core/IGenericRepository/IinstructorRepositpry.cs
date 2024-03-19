@@ -12,6 +12,6 @@ namespace courseProject.Core.IGenericRepository
         public Task AddMaterial(CourseMaterial courseMaterial);
         public Task DeleteMaterial(int id);
         public Task EditMaterial ( CourseMaterial courseMaterial);
-        
+        public Task<IReadOnlyList<Course>> GetAllCoursesGivenByInstructorIdAsync(int Instructorid);
     }
 }

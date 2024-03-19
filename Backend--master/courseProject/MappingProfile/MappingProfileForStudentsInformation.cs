@@ -10,10 +10,13 @@ namespace courseProject.MappingProfile
 
          public  MappingProfileForStudentsInformation (){
                 CreateMap<Student, StudentsInformationDto>()
-                    .ForMember(x => x.userName, o => o.MapFrom(y => y.user.userName));
+                    .ForMember(x => x.userName, o => o.MapFrom(y => y.user.userName))
+                    .ForMember(x => x.email, o => o.MapFrom(y => y.user.email));
 
             CreateMap<Student, ContactDto>()
-                    .ForMember(x => x.userName, o => o.MapFrom(y => y.user.userName));
+                    .ForMember(x => x.userName, o => o.MapFrom(y => y.user.userName))
+                    .ForMember(x => x.email, o => o.MapFrom(y => y.user.email))
+                    .ForMember(x => x.ImageUrl, o => o.MapFrom(y => $"http://localhost:5134/{y.ImageUrl}"));
 
 
             CreateMap<RegistrationRequestDTO, Student>();

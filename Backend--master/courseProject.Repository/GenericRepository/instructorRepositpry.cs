@@ -35,8 +35,9 @@ namespace courseProject.Repository.GenericRepository
              dbContext.Set<CourseMaterial>().Update(courseMaterial);
         }
 
-
-        
-
+        public async Task<IReadOnlyList<Course>> GetAllCoursesGivenByInstructorIdAsync(int Instructorid)
+        {
+           return  await dbContext.courses.Where(x=>x.InstructorId== Instructorid).ToListAsync();
+        }
     }
 }

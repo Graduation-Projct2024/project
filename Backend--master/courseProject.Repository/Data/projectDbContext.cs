@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using courseProject.core.Models;
 
 namespace courseProject.Repository.Data
 {
@@ -56,6 +57,12 @@ namespace courseProject.Repository.Data
                     e.HasKey(x=> new {x.StudentId , x.courseId});
                 }
                 );
+            modelBuilder.Entity<Student_Task_Submissions>(
+               e =>
+               {
+                   e.HasKey(x => new { x.StudentId, x.TaskId });
+               }
+               );
             modelBuilder.Entity<Request>(entity =>
             {
                 entity.Property(e => e.StudentId)
@@ -112,6 +119,12 @@ namespace courseProject.Repository.Data
         public DbSet<Course> courses { get; set; }
         public DbSet<Event> events { get; set; }
         public DbSet<CourseMaterial> courseMaterials { get; set; }
+        public DbSet<StudentCourse> studentCourses { get; set; }
+        public DbSet<Consultation> consultations { get; set; }
+        public DbSet<Course_Feedback> course_Feedbacks { get; set; }
+        public DbSet<Instructor_Feedback> instructor_Feedbacks { get; set; }
+        public DbSet<General_Feedback> general_Feedbacks { get; set; }
+        public DbSet<Student_Task_Submissions> Student_Task_Submissions { get; set; }
 
-        }
+    }
 }

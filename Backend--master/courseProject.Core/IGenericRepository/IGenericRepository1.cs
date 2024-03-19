@@ -26,11 +26,13 @@ namespace courseProject.Core.IGenericRepository
         Task createSubAdminAccountAsync(T entity);
        public Task<int> saveAsync();
 
+
+      //  Task<T> GetUserInfoById(int id);
         Task createInstructorAccountAsync(T entity);
         Task updateSubAdminAsync(T entity);
         Task<IEnumerable<T>> GetAllMaterialInSameCourse(int CourseId);
         public Task<T> GetMaterialByIdAsync(int id);
-        public Task<T> EditProfile(int id, ProfileDTO profile);
+        public Task<T> ViewProfileAsync(int id, string role);
 
     }
 }

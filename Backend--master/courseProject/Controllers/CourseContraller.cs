@@ -52,11 +52,11 @@ namespace courseProject.Controllers
                 return NotFound();
             }
             var mapperCourse = mapper.Map<IReadOnlyList<Course>, IReadOnlyList<CourseInformationDto>>(courses);
-            var updatedCourses = mapperCourse.Select(course =>
-            {
-                course.ImageUrl = $"http://localhost:5134/{course.ImageUrl}";
-                return course;
-            }).ToList();
+            //var updatedCourses = mapperCourse.Select(course =>
+            //{
+            //    course.ImageUrl = $"http://localhost:5134/{course.ImageUrl}";
+            //    return course;
+            //}).ToList();
             return Ok(mapperCourse);
         }
 
@@ -74,11 +74,11 @@ namespace courseProject.Controllers
             }
 
             var mapperCourse = mapper.Map<IReadOnlyList<Course>, IReadOnlyList<CourseAccreditDTO>>(courses);
-            var updatedCourses = mapperCourse.Select(course =>
-            {
-                course.ImageUrl = $"http://localhost:5134/{course.ImageUrl}";
-                return course;
-            }).ToList();
+            //var updatedCourses = mapperCourse.Select(course =>
+            //{
+            //    course.ImageUrl = $"http://localhost:5134/{course.ImageUrl}";
+            //    return course;
+            //}).ToList();
             
             return Ok(mapperCourse);
         }
@@ -287,6 +287,47 @@ namespace courseProject.Controllers
             await unitOfWork.SubAdminRepository.saveAsync();
             return Ok(entity);
         }
+
+
+        [HttpGet("GetCourseById")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<ApiResponce>> GetCourseById(int id)
+        {
+            if (id <= 0)
+            {
+                responce.StatusCode = HttpStatusCode.BadRequest;
+                responce.IsSuccess = false;
+                responce.ErrorMassages.Add($"The Course Id = {id} is less or equal 0 ");
+                return BadRequest(responce);
+            }
+            var courseFound = await dbContext.courses.FirstOrDefaultAsync(x => x.Id == id);
+            if (courseFound == null)
+            {
+                responce.StatusCode = HttpStatusCode.NotFound;
+                responce.IsSuccess = false;
+                responce.ErrorMassages.Add($"The Course Id = {id} is Not Found ");
+                return NotFound(responce);
+            }
+           var coursee =   unitOfWork.CourseRepository.GetCourseByIdAsync(id);
+            if (coursee == null )
+            {
+                responce.IsSuccess = false;
+                responce.StatusCode = HttpStatusCode.NotFound;
+                responce.ErrorMassages = new List<string>() { $"The Course of Id = {id} does not exists" };
+                responce.Result = null;
+                return NotFound(responce);
+            }
+            responce.IsSuccess = true;
+            responce.StatusCode = HttpStatusCode.OK;
+            responce.Result = coursee.Result;
+            return Ok(responce);
+        }
+
+
+
+
 
         //[HttpPost("EditCourse")]
         //[ProducesResponseType(200)]
