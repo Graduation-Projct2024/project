@@ -22,6 +22,7 @@ import MenuBookIcon from '@mui/icons-material/MenuBook';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import AddIcCallIcon from '@mui/icons-material/AddIcCall';
 import { deepPurple ,purple} from '@mui/material/colors';
 import Link from '@mui/material/Link';
 import { useRouter } from 'next/navigation'
@@ -48,9 +49,9 @@ const sidebarItems = [
       icon: NotificationsIcon,
     },
     {
-      name: "My Lectures",
-      href: "/myLectures",
-      icon: LocalLibraryIcon,
+      name: "Contacts",
+      href: "/Contact",
+      icon: AddIcCallIcon,
     },
     {
       name: "Book a Lecture",

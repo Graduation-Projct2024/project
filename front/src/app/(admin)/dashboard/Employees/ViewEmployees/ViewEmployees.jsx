@@ -1,3 +1,4 @@
+'use client'
 import React, { useEffect, useState } from 'react'
 import CreateEmployee from '../CreateEmployee/CreateEmployee';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -128,7 +129,7 @@ export default function ViewEmployees() {
             </div>
         </nav>
         {/* <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"> */}
-        <div class="modal fade" id="staticBackdrop2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdrop2Label" aria-hidden="true">
+        <div className="modal fade" id="staticBackdrop2" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdrop2Label" aria-hidden="true">
           <div className="modal-dialog modal-dialog-centered modal-lg">
             <div className="modal-content row justify-content-center">
               <div className="modal-body text-center ">
@@ -170,7 +171,7 @@ export default function ViewEmployees() {
       <td className='d-flex gap-1'><button className='border-0 bg-white ' type="button" data-bs-toggle="modal" data-bs-target="#exampleModal2">
         <FontAwesomeIcon icon={faPen} className='edit-pen'/>
         </button>
-      <Link href={'/Profile'}>
+      <Link href={`/Profile/${employee.id}`}>
         <button  type="button" className='border-0 bg-white '>
         <FontAwesomeIcon icon={faEye}  className='edit-pen'/>
         </button>

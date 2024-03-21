@@ -13,7 +13,7 @@ export default function ViewEvents() {
 
     const fetchEvents = async () => {
       try{
-      const { data } = await axios.get(`http://localhost:5134/api/CourseContraller`);
+      const { data } = await axios.get(`http://localhost:5134/api/EventContraller/GetAllAccreditEvents`);
       console.log(data);
       setEvent(data);
     }
@@ -80,7 +80,7 @@ export default function ViewEvents() {
         </nav>
 
         {/* <div className="modal fade" id="exampleModal2" tabIndex="-1" aria-labelledby="exampleModal2Label" aria-hidden="true"> */}
-        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
           <div className="modal-dialog modal-dialog-centered modal-lg">
             <div className="modal-content row justify-content-center">
               <div className="modal-body text-center ">
@@ -100,10 +100,10 @@ export default function ViewEvents() {
     <tr>
       <th scope="col">ID</th>
       <th scope="col">Name</th>
-      <th scope="col">Price</th>
-      <th scope="col">Category</th>
-      <th scope="col">Status</th>
-      <th scope="col">Start Date</th>
+      <th scope="col">Content</th>
+      {/* <th scope="col">Category</th> */}
+      <th scope="col">Event Date</th>
+      <th scope="col">SubAdmin name</th>
       <th scope="col">Option</th>
     </tr>
   </thead>
@@ -114,15 +114,15 @@ export default function ViewEvents() {
         {console.log(event.id)}
       <th scope="row">{event.id}</th>
       <td>{event.name}</td>
-      <td>{event.price}</td>
-      <td>{event.category}</td>
-      <td>{event.status}</td>
-      <td>{event.startDate}</td>
+      <td>{event.content}</td>
+      {/* <td>{event.category}</td> */}
+      <td>{event.dateOfEvent}</td>
+      <td>{event.subAdminName}</td>
       <td className='d-flex gap-1'>
 
       <Link href={'/Profile'}>
-        <button  type="button">
-        <FontAwesomeIcon icon={faEye}  className='edit-pen border-0 bg-white '/>
+        <button  type="button" className='border-0 bg-white' >
+        <FontAwesomeIcon icon={faEye}  className='edit-pen '/>
         </button>
         </Link>
         </td>

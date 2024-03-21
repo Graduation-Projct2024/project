@@ -101,8 +101,8 @@ return matchesSearchTerm ;
       <td className='d-flex gap-1'>
 
       <Link href={'/Profile'}>
-        <button  type="button">
-        <FontAwesomeIcon icon={faEye}  className='edit-pen border-0 bg-white '/>
+        <button  type="button" className='edit-pen border-0 bg-white '>
+        <FontAwesomeIcon icon={faEye} />
         </button>
         </Link>
         </td>

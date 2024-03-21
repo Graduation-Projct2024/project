@@ -80,7 +80,7 @@ return matchesSearchTerm ;
         </nav>
 
         {/* <div className="modal fade" id="exampleModal1" tabIndex="-1" aria-labelledby="exampleModal1Label" aria-hidden="true"> */}
-        <div class="modal fade" id="staticBackdrop1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdrop1Label" aria-hidden="true">
+        <div className="modal fade" id="staticBackdrop1" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdrop1Label" aria-hidden="true">
           <div className="modal-dialog modal-dialog-centered modal-lg">
             <div className="modal-content row justify-content-center">
               <div className="modal-body text-center ">
@@ -94,7 +94,12 @@ return matchesSearchTerm ;
         </div>
         
       </div>
-
+{/* <>
+      {filteredCourses.length ? filteredCourses.map((course) =>(
+        <img src={course.imageUrl}/>
+        
+      )) : <p>no imgs</p>}
+</> */}
       <table className="table">
   <thead>
     <tr>
@@ -110,24 +115,28 @@ return matchesSearchTerm ;
   <tbody>
   {filteredCourses.length ? (
     filteredCourses.map((course) =>(
+      
       <tr key={course.id}>
         {console.log(course.id)}
+        {console.log(course.imageUrl)}
       <th scope="row">{course.id}</th>
       <td>{course.name}</td>
       <td>{course.price}</td>
       <td>{course.category}</td>
       <td>{course.status}</td>
       <td>{course.startDate}</td>
+      
       <td className='d-flex gap-1'>
 
       <Link href={'/Profile'}>
-        <button  type="button">
-        <FontAwesomeIcon icon={faEye}  className='edit-pen border-0 bg-white '/>
+        <button  type="button" className='border-0 bg-white '>
+        <FontAwesomeIcon icon={faEye}  className='edit-pen'/>
         </button>
         </Link>
         </td>
 
     </tr>
+    
       ))): (
         <tr>
           <td colSpan="7">No Courses</td>
@@ -137,6 +146,7 @@ return matchesSearchTerm ;
     
   </tbody>
 </table>
+
 
 
       </>
