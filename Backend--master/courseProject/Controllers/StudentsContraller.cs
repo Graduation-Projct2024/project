@@ -145,6 +145,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+
         public async Task<ActionResult<ApiResponce>> AddTaskByStudent(int Studentid , int taskid ,[FromForm] SubmissionsDTO submissions)
         {
             if (Studentid<=0 || taskid<=0)
@@ -199,6 +200,49 @@ namespace courseProject.Controllers
             return BadRequest(response);
         }
 
+
+        [HttpGet("GetCourseParticipants")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<ApiResponce>> GetCourseParticipants(int Courseid)
+        {
+            if (Courseid <= 0)
+            {
+                response.IsSuccess = false;
+                response.StatusCode = HttpStatusCode.BadRequest;
+                response.ErrorMassages = new List<string>() { "The Id is less or equal 0" };
+                return BadRequest(response);
+            }
+            var courseFound = await unitOfWork.CourseRepository.GetCourseByIdAsync(Courseid);
+            if(courseFound == null)
+            {
+                response.IsSuccess = false;
+                response.StatusCode = HttpStatusCode.NotFound;
+                response.ErrorMassages = new List<string>() { "The Course Id is Not Found" };
+                return NotFound(response);
+            }
+            if (courseFound.status.ToLower() == "accredit")
+            {
+                var GetStudents = await unitOfWork.StudentRepository.GetAllStudentsInTheSameCourseAsync(Courseid);
+                if(GetStudents == null)
+                {
+                    response.IsSuccess = false;
+                    response.StatusCode = HttpStatusCode.NotFound;
+                    response.ErrorMassages = new List<string>() { "This Course Does Not Has Any Student!" };
+                    return NotFound(response);
+                }
+                var StudentMapper = mapper.Map<IReadOnlyList< Student>,IReadOnlyList<StudentsInformationDto>>(GetStudents);
+                response.IsSuccess = true;
+                response.StatusCode = HttpStatusCode.OK;
+                response.Result = StudentMapper;
+                return Ok(response);
+            }
+            response.IsSuccess = false;
+            response.StatusCode = HttpStatusCode.BadRequest;
+            response.ErrorMassages = new List<string>() { "This Course Does Not Accredit Yet!" };
+            return BadRequest(response);
+        }
 
         ////[HttpPost("CreateStudent")]
         //[ProducesResponseType(200)]

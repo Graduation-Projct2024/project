@@ -10,6 +10,7 @@ using courseProject.Repository.Data;
 using System.Linq;
 using System.Collections;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.StaticFiles;
 
 namespace courseProject.Controllers
 {
@@ -528,6 +529,10 @@ namespace courseProject.Controllers
             return Ok(arrayList);
 
         }
+
+
+
+
 
     }
 }

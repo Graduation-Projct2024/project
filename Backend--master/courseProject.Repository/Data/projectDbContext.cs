@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using courseProject.core.Models;
+using System.Security.Claims;
 
 namespace courseProject.Repository.Data
 {
@@ -68,6 +69,8 @@ namespace courseProject.Repository.Data
                 entity.Property(e => e.StudentId)
                       .IsRequired(false);
             });
+
+            
 
             modelBuilder.Entity<SubAdmin>()
            .Property(c => c.DateOfBirth)

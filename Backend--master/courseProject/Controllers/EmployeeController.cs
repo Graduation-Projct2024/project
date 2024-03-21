@@ -239,7 +239,102 @@ namespace courseProject.Controllers
         }
 
 
-       
+        [HttpPut("UpdateEmployeeFromAdmin")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<ApiResponce>> updateEmployee(int id, EmployeeForUpdateDTO EmpolyeeModel)
+        {
+
+            if (id <= 0)
+            {
+                responce.IsSuccess = false;
+                responce.StatusCode = HttpStatusCode.BadRequest;
+                responce.ErrorMassages = new List<string>() { "The Id is less or equal 0" };
+                return BadRequest(responce);
+            }
+
+            if (EmpolyeeModel == null)
+            {
+                responce.IsSuccess = false;
+                responce.StatusCode = HttpStatusCode.NotFound;
+                responce.ErrorMassages = new List<string>() { "the subAdmin is not found" };
+                return NotFound(responce);
+            }
+            if (id != EmpolyeeModel.Id || !ModelState.IsValid) {
+                responce.IsSuccess = false;
+                responce.StatusCode = HttpStatusCode.BadRequest;
+                return BadRequest(responce);
+            }           
+            var subAdminToUpdate = await dbContext.subadmins.FirstOrDefaultAsync(x => x.SubAdminId == EmpolyeeModel.Id);
+            var instructorToUpdate = await dbContext.instructors.FirstOrDefaultAsync(x => x.InstructorId == EmpolyeeModel.Id);
+            var UserToUpdate = await dbContext.users.FirstOrDefaultAsync(x => x.UserId == EmpolyeeModel.Id);
+            if (subAdminToUpdate == null && UserToUpdate.role.ToLower() == "subadmin") {
+                responce.IsSuccess = false;
+                responce.StatusCode = HttpStatusCode.NotFound;
+                responce.ErrorMassages = new List<string>() { "the subAdmin is not found" };
+                return NotFound(responce);
+            }
+            if (instructorToUpdate == null && UserToUpdate.role.ToLower() == "instructor")
+            {
+                responce.IsSuccess = false;
+                responce.StatusCode = HttpStatusCode.NotFound;
+                responce.ErrorMassages = new List<string>() { "the instructor is not found" };
+                return NotFound(responce);
+            }
+            using (var transaction = await unitOfWork.SubAdminRepository.BeginTransactionAsync())
+            {
+                try
+                {
+
+                    var userMapper = mapper.Map<EmployeeForUpdateDTO, User>(EmpolyeeModel);
+                    userMapper.UserId = id;
+                    userMapper.role = UserToUpdate.role;
+                    userMapper.password = UserToUpdate.password;
+                    await unitOfWork.UserRepository.updateSubAdminAsync(userMapper);
+                    var success1 = await unitOfWork.UserRepository.saveAsync();
+                    var success2 = 0;
+                    SubAdmin Subadminmapper = null;
+                    Instructor Instructormapper = null;
+                    if (UserToUpdate.role.ToLower() == "subadmin")
+                    {
+                         Subadminmapper = mapper.Map<EmployeeForUpdateDTO, SubAdmin>(EmpolyeeModel);
+                         Subadminmapper.SubAdminId = subAdminToUpdate.SubAdminId;
+                         await subAdminRepo.updateSubAdminAsync(Subadminmapper);
+                        responce.Result = Subadminmapper;
+                    }
+
+                    if (UserToUpdate.role.ToLower() == "instructor")
+                    {
+                         Instructormapper = mapper.Map<EmployeeForUpdateDTO, Instructor>(EmpolyeeModel);
+                         Instructormapper.InstructorId = instructorToUpdate.InstructorId;
+                         await unitOfWork.instructorRepositpry.updateSubAdminAsync(Instructormapper);
+                        responce.Result = Instructormapper;
+                    }
+                    success2 = await unitOfWork.SubAdminRepository.saveAsync();
+                    if (success1 > 0 && success2 > 0)
+                    {
+                        await transaction.CommitAsync();
+                        responce.StatusCode = HttpStatusCode.OK;
+                        responce.IsSuccess = true;
+                        return Ok(responce);
+                    }
+                    responce.StatusCode = HttpStatusCode.BadRequest;
+                    responce.IsSuccess = false;
+                    responce.Result = null;
+                    return BadRequest(responce);
+                }  
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    responce.StatusCode = HttpStatusCode.BadRequest;
+                    responce.IsSuccess = false;
+                    responce.Result = null;
+                    return BadRequest(responce);
+                } 
+            }
+        }
+
 
         [HttpGet("GetAllCoursesGivenByInstructor")]
         [ProducesResponseType(200)]
