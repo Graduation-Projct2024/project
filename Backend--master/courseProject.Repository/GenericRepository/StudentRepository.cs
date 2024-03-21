@@ -38,7 +38,13 @@ namespace courseProject.Repository.GenericRepository
          return await  dbContext.studentCourses.Include(x=>x.Course).Where(x => x.StudentId == Studentid).ToListAsync();
         }
 
-        public async Task SubmitTaskAsync(Student_Task_Submissions student_Task)
+        public async Task<IReadOnlyList<Student>> GetAllStudentsInTheSameCourseAsync(int courseId)
+        {
+            return await dbContext.students.Include(x=>x.user)
+                          .Where(student => student.studentCourses.Any(sc => sc.courseId == courseId))
+                          .ToListAsync();
+        }
+            public async Task SubmitTaskAsync(Student_Task_Submissions student_Task)
         {
             await dbContext.Set<Student_Task_Submissions>().AddAsync(student_Task);
         }
