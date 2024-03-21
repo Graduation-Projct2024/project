@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using courseProject.Repository.Data;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.EntityFrameworkCore;
 
 namespace courseProject.Controllers
 {
@@ -8,11 +10,18 @@ namespace courseProject.Controllers
     [ApiController]
     public class GenaricController : ControllerBase
     {
+        private projectDbContext dbContext;
+
         [HttpGet("DownloadFile")]
         public async Task<IActionResult> DownloadFile(string filename)
         {
-            var filepath = Path.Combine(Directory.GetCurrentDirectory(), "Files", filename);
-
+           
+            var filepath = Path.Combine(Directory.GetCurrentDirectory(),  filename);
+            if(!System.IO.File.Exists(filepath))
+            {
+                return NotFound();
+            }
+            
             var provider = new FileExtensionContentTypeProvider();
             if (!provider.TryGetContentType(filepath, out var contenttype))
             {
