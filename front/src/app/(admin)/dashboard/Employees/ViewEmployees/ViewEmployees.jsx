@@ -1,3 +1,4 @@
+'use client'
 import React, { useEffect, useState } from 'react'
 import CreateEmployee from '../CreateEmployee/CreateEmployee';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -170,7 +171,7 @@ export default function ViewEmployees() {
       <td className='d-flex gap-1'><button className='border-0 bg-white ' type="button" data-bs-toggle="modal" data-bs-target="#exampleModal2">
         <FontAwesomeIcon icon={faPen} className='edit-pen'/>
         </button>
-      <Link href={'/Profile'}>
+      <Link href={`/Profile/${employee.id}`}>
         <button  type="button" className='border-0 bg-white '>
         <FontAwesomeIcon icon={faEye}  className='edit-pen'/>
         </button>

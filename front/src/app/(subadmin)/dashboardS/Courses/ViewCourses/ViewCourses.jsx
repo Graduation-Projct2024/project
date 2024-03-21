@@ -94,12 +94,12 @@ return matchesSearchTerm ;
         </div>
         
       </div>
-<>
+{/* <>
       {filteredCourses.length ? filteredCourses.map((course) =>(
         <img src={course.imageUrl}/>
         
       )) : <p>no imgs</p>}
-</>
+</> */}
       <table className="table">
   <thead>
     <tr>

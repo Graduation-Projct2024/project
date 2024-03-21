@@ -95,12 +95,12 @@ if(loader){
           </div>
         </nav>
       </div>
-      <>
+      {/* <>
       {filteredAccreditCourses.length ? filteredAccreditCourses.map((course) =>(
         <img src={course.imageUrl}/>
         
       )) : <p>no imgs</p>}
-</>
+</> */}
       <table className="table">
         <thead>
           <tr>
