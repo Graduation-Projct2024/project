@@ -1,0 +1,12 @@
+.EditTask{
+    position:absolute;
+    top:35%;
+    left:40%;
+}
+.EditTask .col-md-6{
+  width:100%
+}
+.EditTask .css-1xu2qw-MuiButtonBase-root-MuiButton-root {
+    background-color: #4c5372;
+
+}
