@@ -17,11 +17,11 @@ export default function page({params}) {
   const [loading, setLoading] = useState(false);
   // const {id} = useParams();
   // console.log(useParams());
-
+// console.log(params)
   const getUser =async ()=>{
     try {
       //setLoading(false)
-      const {data} = await axios.get(`http://localhost:5134/api/Employee/GetEmployeeById?id=${params.id}`,
+      const {data} = await axios.get(`http://localhost:5134/api/UserAuth/GetProfileInfo?id=${params.id}`,
       {
       //   headers: {
       //   'Content-Type': 'multipart/form-data','Content-Type': 'application/json',
@@ -42,6 +42,7 @@ export default function page({params}) {
   useEffect(()=>{
       getUser();
   },[])
+  
   return (
     <Layout>
         <div className="container pt-5">
@@ -57,7 +58,7 @@ export default function page({params}) {
         <div className="col-xl-8">
           <div className="row">
             <div className="col-xl-4 col-lg-12 pt-lg-3 pt-md-3 pt-sm-3 pt-3">
-              <p className='text-uppercase fw-bold  text-xl-end text-lg-center text-md-center text-sm-center text-center'><span className='name'>{user.fName} {user.lName}</span></p>
+              <p className='text-uppercase fw-bold  text-xl-end text-lg-center text-md-center text-sm-center text-center'><span className='name'>{user.userName} {user.lName}</span></p>
             
             </div>
             {/* <div className="col-xl-8 col-lg-12">
@@ -68,7 +69,7 @@ export default function page({params}) {
             </div> */}
              <div className="d-flex ps-xl-4 pt-3 gap-2 role justify-content-xl-start fs-5 fw-bold justify-content-lg-center justify-content-md-center justify-content-sm-center justify-content-center">
                 <FontAwesomeIcon icon={faUser} className='pt-1'/>
-                <p className='text-uppercase'>{user.type}</p>
+                <p className='text-uppercase'>{user.role}</p>
               </div>
           </div>
           <div className="row ps-1 pt-3">

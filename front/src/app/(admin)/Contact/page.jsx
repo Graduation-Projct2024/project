@@ -46,7 +46,7 @@ return matchesSearchTerm ;
 
   return (
     <Layout title="Contacts">
-       <div className="filter py-2 text-end border-top">
+       <div className="filter py-2 text-end border-top mt-4">
         <nav className="navbar">
           <div className="container justify-content-end">
                 <form className="d-flex" role="search">
