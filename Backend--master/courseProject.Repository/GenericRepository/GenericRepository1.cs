@@ -11,14 +11,14 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using courseProject.Core.Models.DTO;
 
 namespace courseProject.Repository.GenericRepository
 {
     public class GenericRepository1<T> : IGenericRepository1<T> where T : class
     {
         private readonly projectDbContext dbContext;
-        //SqlConnection connection;
-        //SqlCommand command;
+       
 
         public GenericRepository1(projectDbContext dbContext)
         {
@@ -26,19 +26,7 @@ namespace courseProject.Repository.GenericRepository
             this.dbContext = dbContext;
         }
 
-        //public void DBConnectionOpen()
-        //{
-        //    connection = new SqlConnection();
-        //   // connection.ConnectionString = ConfigurationManager.ConnectionStrings["con"].ConnectionString;
-
-        //    if (connection.State != ConnectionState.Open)
-        //        connection.Open();
-        //}
-        //public void DBConnectionClose()
-        //{
-        //    if (connection.State != ConnectionState.Closed)
-        //        connection.Close();
-        //}
+   
 
         public async Task<IEnumerable<T>> GetAllStudentsAsync()
         {
@@ -64,14 +52,14 @@ namespace courseProject.Repository.GenericRepository
             return await dbContext.Set<T>().ToListAsync();
         }
 
-
+        //edit status from On to Accredit 
         public async Task<IReadOnlyList<T>> GetAllCoursesAsync()
         {
             if (typeof(T) == typeof(Course))
             {
                 
                 return (IReadOnlyList<T>) await dbContext.courses
-                    .Where(x=>x.status=="On")
+                    .Where(x=>x.status== "accredit")
                     .Include(x=>x.Instructor.user).Include(x=>x.SubAdmin.user).ToListAsync();
             }
             return await dbContext.Set<T>().ToListAsync();
@@ -118,7 +106,7 @@ namespace courseProject.Repository.GenericRepository
             if(typeof(T) == typeof(Course))
             {
                 return (IReadOnlyList<T>) await dbContext.courses
-                    .Where(x => x.status == "undefined")
+                   
                     .Include(x => x.SubAdmin.user).Include(x => x.Instructor.user).ToListAsync();
             }
             return await dbContext.Set<T>().ToListAsync();
@@ -129,7 +117,7 @@ namespace courseProject.Repository.GenericRepository
             if(typeof(T) == typeof(Event))
             {
                 return (IReadOnlyList<T>)await dbContext.events
-                    .Where(x => x.status == "undefined")
+                    
                     .Include(x => x.SubAdmin.user).ToListAsync();
             }
             return await dbContext.Set<T>().ToListAsync();
@@ -158,16 +146,68 @@ namespace courseProject.Repository.GenericRepository
         {
             if (typeof(T) == typeof(SubAdmin))
             {
-                return (T)(object) await dbContext.subadmins.Include(x=>x.user).FirstOrDefaultAsync(a => a.Id==id);
+                return (T)(object) await dbContext.subadmins.Include(x=>x.user).FirstOrDefaultAsync(a => a.SubAdminId==id);
                
             }
             else if (typeof(T) == typeof(Instructor))
             {
-                return (T)(object) await dbContext.instructors.Include(x => x.user).FirstOrDefaultAsync(a => a.Id == id);
+                return (T)(object) await dbContext.instructors.Include(x => x.user).FirstOrDefaultAsync(a => a.InstructorId == id);
 
             }
             return await dbContext.Set<T>().FindAsync(id);
         }
+
+
+        public async Task<IEnumerable<T>> GetAllMaterialInSameCourse(int courseId)
+        {
+            if(typeof(T) == typeof(CourseMaterial))
+            {
+                return (IEnumerable<T>) await dbContext.courseMaterials
+                                                 .Where(a=>a.courseId==courseId).ToListAsync();
+            }
+            return await dbContext.Set<T>().ToListAsync();
+        }
+
+        public async Task<T> GetMaterialByIdAsync(int id)
+        {
+            if(typeof(T) == typeof(CourseMaterial))
+            {
+                return(T)(object) await dbContext.courseMaterials.FirstOrDefaultAsync(x => x.Id == id);
+            }
+            return await dbContext.Set<T>().FindAsync(id);
+        }
+
+
+        public async Task<T> ViewProfileAsync(int id ,string role)
+        {
+            if(role.ToLower() == "admin")
+            {
+              return (T)(object) await dbContext.users.Include(x => x.admin).FirstOrDefaultAsync(x => x.UserId == id);
+            }
+            if (role.ToLower() == "subadmin")
+            {
+                return (T)(object)await dbContext.users.Include(x => x.subadmin).FirstOrDefaultAsync(x => x.UserId == id);
+            }
+            if (role.ToLower() == "instructor")
+            {
+                return (T)(object)await dbContext.users.Include(x => x.instructor).FirstOrDefaultAsync(x => x.UserId == id);
+            }
+            if (role.ToLower() == "student")
+            {
+                return (T)(object)await dbContext.users.Include(x => x.student).FirstOrDefaultAsync(x => x.UserId == id);
+            }
+            return await dbContext.Set<T>().FindAsync(id);
+        }
+
+
+
+        //public async Task<T> GetUserInformationByIdAsync(int id)
+        //{
+        //    if(typeof(T) == typeof(Admin))
+        //    {
+        //        return 
+        //    }
+        //}
 
 
         //public async Task<IEnumerable<T>> createSubAdminAccountAsync(SubAdmin subadmin , User user)

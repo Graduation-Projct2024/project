@@ -15,8 +15,8 @@ namespace courseProject.Core.Models
 
         public DateTime dateOfAdded { get; set; }
         [ForeignKey("User")]
-        public string email {  get; set; }
-         public User User { get; set; }
+        public int UserId { get; set; }
+        public User User { get; set; }
 
 
          

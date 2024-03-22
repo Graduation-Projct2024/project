@@ -29,5 +29,15 @@ namespace courseProject.Repository.GenericRepository
             var materail= await dbContext.courseMaterials.FirstOrDefaultAsync(x => x.Id == id);
              dbContext.courseMaterials.Remove(materail);
         }
+
+        public async Task EditMaterial( CourseMaterial courseMaterial)
+        {
+             dbContext.Set<CourseMaterial>().Update(courseMaterial);
+        }
+
+        public async Task<IReadOnlyList<Course>> GetAllCoursesGivenByInstructorIdAsync(int Instructorid)
+        {
+           return  await dbContext.courses.Where(x=>x.InstructorId== Instructorid).ToListAsync();
+        }
     }
 }

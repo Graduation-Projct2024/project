@@ -20,7 +20,7 @@ namespace courseProject.Controllers
             this.mapper = mapper;
         }
 
-        [HttpGet]
+        [HttpGet("GetAllAccreditEvents")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
@@ -32,10 +32,15 @@ namespace courseProject.Controllers
                 return NotFound();
             }
             var mapperEvent = mapper.Map<IReadOnlyList<Event>, IReadOnlyList<EventDto>>(events);
+            //var updatedEvents = mapperEvent.Select(events =>
+            //{
+            //    events.ImageUrl = $"http://localhost:5134/{events.ImageUrl}";
+            //    return events;
+            //}).ToList();
             return Ok(mapperEvent);
         }
 
-        [HttpPost]
+        [HttpGet("GetAllUndefinedEvents")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
@@ -48,6 +53,7 @@ namespace courseProject.Controllers
             }
 
             var mapperEvents = mapper.Map<IReadOnlyList<Event>, IReadOnlyList<EventAccreditDto>>(events);
+            
             return Ok(mapperEvents);
         }
 

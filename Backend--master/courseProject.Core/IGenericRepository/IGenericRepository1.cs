@@ -1,4 +1,5 @@
 ﻿using courseProject.Core.Models;
+using courseProject.Core.Models.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,8 +26,13 @@ namespace courseProject.Core.IGenericRepository
         Task createSubAdminAccountAsync(T entity);
        public Task<int> saveAsync();
 
+
+      //  Task<T> GetUserInfoById(int id);
         Task createInstructorAccountAsync(T entity);
         Task updateSubAdminAsync(T entity);
-      //  void DBConnectionClose();
+        Task<IEnumerable<T>> GetAllMaterialInSameCourse(int CourseId);
+        public Task<T> GetMaterialByIdAsync(int id);
+        public Task<T> ViewProfileAsync(int id, string role);
+
     }
 }

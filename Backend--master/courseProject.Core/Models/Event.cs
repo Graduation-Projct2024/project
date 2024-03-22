@@ -16,13 +16,13 @@ namespace courseProject.Core.Models
 
         public DateTime dateOfAdded { get; set; } = DateTime.Today;
         
-        public DateTime? dateOfEvent {  get; set; }= DateTime.Today;
+        public DateTime? dateOfEvent {  get; set; }
         public string? ImageUrl { get; set; }
         public string category { get; set; }
-        public string status { get; set; } = "off";
+        public string status { get; set; } = "undefined";
 
         [ForeignKey("SubAdmin")]
-        public int subAdminId { get; set; }
+        public int SubAdminId { get; set; }
         [ForeignKey("Request")]
         public int requestId { get; set; }
 

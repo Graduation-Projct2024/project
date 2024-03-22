@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 
 namespace courseProject.Core.IGenericRepository
 {
-    public  interface IinstructorRepositpry :IGenericRepository1<Instructor>
+    public  interface IinstructorRepositpry :IGenericRepository1<Instructor> 
     {
         public Task AddMaterial(CourseMaterial courseMaterial);
         public Task DeleteMaterial(int id);
+        public Task EditMaterial ( CourseMaterial courseMaterial);
+        public Task<IReadOnlyList<Course>> GetAllCoursesGivenByInstructorIdAsync(int Instructorid);
     }
 }

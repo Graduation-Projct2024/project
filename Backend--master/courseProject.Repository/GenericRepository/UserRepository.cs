@@ -13,6 +13,8 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using BC= BCrypt.Net.BCrypt;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace courseProject.Repository.GenericRepository
 {
@@ -22,12 +24,14 @@ namespace courseProject.Repository.GenericRepository
         
         private readonly projectDbContext dbContext;
         private string secretKey;
-
+        private string token1 = "";
         public UserRepository( projectDbContext dbContext ,IConfiguration configuration):base(dbContext)
         {
             this.dbContext = dbContext;
             secretKey = configuration.GetSection("Authentication")["SecretKey"]; 
         }
+
+       
 
         public bool isUniqeUser(string email)
         {
@@ -62,6 +66,7 @@ namespace courseProject.Repository.GenericRepository
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
+                    new Claim("UserId",user.UserId.ToString()),
                     new Claim(ClaimTypes.Email ,user.email),
                     
                    new Claim(ClaimTypes.Role , user.role )
@@ -74,19 +79,16 @@ namespace courseProject.Repository.GenericRepository
             LoginResponseDTO loginResponseDTO = new LoginResponseDTO()
             {
                 User = user,
-                Token=tokenHandler.WriteToken(token)
+                Token = tokenHandler.WriteToken(token)
             
             };
-
+            token1 = loginResponseDTO.Token;
             return loginResponseDTO;
 
         }
 
-        //public Task LogOut()
-        //{
-            
-        //    LoginAsync().Token = "";
-        //}
+       
+     
 
         public async Task<User> RegisterAsync( RegistrationRequestDTO registerRequestDTO)
         {
@@ -97,15 +99,21 @@ namespace courseProject.Repository.GenericRepository
             var passHash = BC.HashPassword(registerRequestDTO.password);
             User user = new User()
             {
+               
                 userName = registerRequestDTO.userName,
                 email= registerRequestDTO.email,
                 password= passHash,
                 role= registerRequestDTO.role
             };
            await dbContext.users.AddAsync(user);
-           await dbContext.SaveChangesAsync();
+          // await dbContext.SaveChangesAsync();
           //  user.password = "";
             return  user;
         }
+
+
+
+
+
     }
 }

@@ -15,7 +15,7 @@ namespace courseProject.Core.Models.DTO
         public string description { get; set; }
         public string type { get; set; }  
         public string pdfUrl { get; set; }
-        public int instructorId { get; set; }
+        public int InstructorId { get; set; }
         public int courseId { get; set; }
     }
 }

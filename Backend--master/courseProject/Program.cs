@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
+using Microsoft.Extensions.FileProviders;
 namespace courseProject
 {
     public class Program
@@ -25,17 +26,24 @@ namespace courseProject
 
             //});
 
-             builder.Services.AddCors(a =>
- {
-     a.AddPolicy("AllowOrigin", builder =>
-     {
-         builder.AllowAnyOrigin()
-         .AllowAnyMethod()
-         .AllowAnyHeader();
-     });
- });
-            
-            builder.Services.AddControllers();
+
+
+            builder.Services.AddCors(a =>
+            {
+                a.AddPolicy("AllowOrigin", policyBuilder =>
+                {
+                    policyBuilder.WithOrigins("http://localhost:3000");
+                    
+                    policyBuilder.AllowAnyMethod();
+                    policyBuilder.AllowAnyHeader();
+                    policyBuilder.AllowCredentials();
+                });
+            });
+
+            builder.Services.AddControllers()
+                .AddNewtonsoftJson(options =>
+      options.SerializerSettings.ReferenceLoopHandling =
+        Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             builder.Services.AddDbContext<projectDbContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
@@ -45,6 +53,7 @@ namespace courseProject
             builder.Services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
             builder.Services.AddScoped(typeof(ISubAdminRepository), typeof(SubAdminRepository));
             builder.Services.AddScoped(typeof(IUserRepository), typeof(UserRepository));
+            builder.Services.AddScoped(typeof(IStudentRepository), typeof(StudentRepository));
             builder.Services.AddAutoMapper(typeof(MappingProfileForStudentsInformation));
             builder.Services.AddAutoMapper(typeof(MappingForCourseInformation));
             builder.Services.AddAutoMapper(typeof(MappingForEmployee));
@@ -70,8 +79,8 @@ namespace courseProject
                 };
             });
 
-
-
+            builder.Services.AddHttpClient();
+            
             builder.Services.AddAuthorization(options =>
             {
                 options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
@@ -101,6 +110,22 @@ namespace courseProject
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+            
+           
+            app.UseCors("AllowOrigin");
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "Files");
+
+            if (!Directory.Exists(filePath))
+            {
+                Directory.CreateDirectory(filePath);
+            }
+            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "Files")),
+                RequestPath = "/Files"
+            });
 
             app.UseHttpsRedirection();
 

@@ -37,6 +37,10 @@ namespace courseProject.Repository.GenericRepository
         {
              dbContext.Update(course);
         }
+        public async Task updateEvent(Event model)
+        {
+            dbContext.Update(model);
+        }
 
         public async Task<IDbContextTransaction> BeginTransactionAsync()
         {
@@ -89,7 +93,7 @@ namespace courseProject.Repository.GenericRepository
 
         public async Task GetIdForUpdateSubAdmin(int id)
         {
-            await dbContext.subadmins.FirstOrDefaultAsync(x => x.Id == id);
+            await dbContext.subadmins.FirstOrDefaultAsync(x => x.SubAdminId == id);
  
         }
     }

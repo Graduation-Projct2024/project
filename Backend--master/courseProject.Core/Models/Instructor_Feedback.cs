@@ -16,10 +16,10 @@ namespace courseProject.Core.Models
         public DateTime dateOfAdded { get; set; }
 
         [ForeignKey("Student")]
-        public int studentId { get; set; }
+        public int StudentId { get; set; }
 
         [ForeignKey("Instructor")]
-        public int instructorId { get; set; }
+        public int InstructorId { get; set; }
 
         public Student Student { get; set; }
         public Instructor Instructor { get; set; }

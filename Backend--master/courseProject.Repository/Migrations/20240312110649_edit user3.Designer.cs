@@ -12,8 +12,8 @@ using courseProject.Repository.Data;
 namespace courseProject.Repository.Migrations
 {
     [DbContext(typeof(projectDbContext))]
-    [Migration("20240305215546_addTables")]
-    partial class addTables
+    [Migration("20240312110649_edit user3")]
+    partial class edituser3
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -52,7 +52,6 @@ namespace courseProject.Repository.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("phoneNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -213,6 +212,9 @@ namespace courseProject.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<DateTime?>("DeadLine")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("courseId")
                         .HasColumnType("int");
 
@@ -220,18 +222,19 @@ namespace courseProject.Repository.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("instructorId")
                         .HasColumnType("int");
+
+                    b.Property<string>("linkUrl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("pdfUrl")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("type")
@@ -549,6 +552,12 @@ namespace courseProject.Repository.Migrations
                 {
                     b.Property<string>("email")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("UserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"), 1L, 1);
 
                     b.Property<string>("password")
                         .IsRequired()

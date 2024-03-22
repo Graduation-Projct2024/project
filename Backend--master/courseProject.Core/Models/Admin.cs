@@ -5,14 +5,15 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics.CodeAnalysis;
 
 namespace courseProject.Core.Models
 {
     public class Admin
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
-
+        [Key]
+        [ForeignKey("User")]
+        public int AdminId { get; set; }
         public string? LName { get; set; }
 
         [ForeignKey("User")]
@@ -21,7 +22,8 @@ namespace courseProject.Core.Models
         public DateTime? DateOfBirth { get; set; }
 
         [DataType(DataType.PhoneNumber)]
-        public string phoneNumber { get; set; }
+        [AllowNull]
+        public string? phoneNumber { get; set; }
 
         public string? gender { get; set; }
 
