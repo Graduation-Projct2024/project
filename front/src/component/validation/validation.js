@@ -26,6 +26,13 @@ export const createEmployee = yup.object({
    name:yup.string().required('Name is required').min(3,'Course Name must have at least 3 characters').max(30,'Course Name must have at most 30 characters'),
    content:yup.string().required('content is required').min(3,'Course content must have at least 6 characters').max(30,'Course content must have at most 30 characters'),
    category:yup.string().required('Category is required').min(3,'Course Category must have at least 6 characters').max(30,'Course Category must have at most 30 characters'),
-   startDate:yup.string().required('Start Date is required'),
+   dateOfEvent:yup.string().required('Start Date is required'),
    SubAdminId:yup.string().required('SubAdmin Id is required'),
+})
+export const updateEmployee = yup.object({
+   fName:yup.string().required('First Name is required'),
+   lName:yup.string().required('Last Name is required'),
+   email:yup.string().required('Email is required'),
+   address:yup.string().required('Address is required'),
+   phoneNumber:yup.string().required('Phone number is required'),
 })

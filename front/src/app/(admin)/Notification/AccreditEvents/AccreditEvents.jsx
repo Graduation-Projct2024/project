@@ -2,15 +2,20 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react'
 import { faArrowUpFromBracket, faEye, faFilter } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 export default function AccreditEvents() {
 
     const [accreditEvents, setAccreditEvents] = useState([]);
   let[loader,setLoader] = useState(false);
+  // const [processingEvent, setProcessingEvent] = useState(null); // State to track which event is being processed
+
   const fetchEventsForAccredit = async () => {
+    
     try{
     const { data } = await axios.get(`http://localhost:5134/api/EventContraller/GetAllUndefinedEvents`);
     console.log(data);
+    // setAccreditEvents(data);
     setAccreditEvents(data);
   }
     catch(error){
@@ -24,15 +29,36 @@ export default function AccreditEvents() {
     try{
     const { data } = await axios.patch(`http://localhost:5134/api/CourseContraller/accreditEvent?eventId=${eventId}&Status=${Status}`,
   );
-  if(data.isSuccess){
-    console.log(data);
-    //setLoader(false);
-    fetchEventsForAccredit();
+  console.log(data);
+  if(Status === 'accredit'){
+  Swal.fire({
+    title: `Event Accredited Successfully`,
+    text: "Check View Events page",
+    icon: "success"
+  });}
+  else if(Status === 'reject'){
+    Swal.fire({
+      icon: "error",
+      title: "Event Rejected ):",
+      text: "Opsss...",
+      
+    });
+
   }
+  
+  // if(data.isSuccess){
+  //   console.log(data);
+  //   //setLoader(false);
+  //   fetchEventsForAccredit();
+  // }
   }
     catch(error){
       console.log(error);
     }
+    // finally {
+    //   setProcessingEvent(null); // Reset the eventId being processed
+    //   fetchEventsForAccredit(); // Fetch events after processing
+    // }
   };
 
   useEffect(() => {
@@ -109,7 +135,8 @@ if(loader){
         <tbody>
           {filteredAccreditEvents.length ? (
             filteredAccreditEvents.map((event) => (
-              <tr key={event.id}>
+               <tr key={event.id} /*className={event.accredited ? "accredited-row" : ""}*/>
+              {/* <tr key={event.id} style={{ backgroundColor: accreditRow(event) ? 'green' : (rejectRow(event) ? 'red' : 'white') }}> */}
                 <th scope="row">{event.id}</th>
                 <td>{event.name}</td>
                 <td>{event.content}</td>
@@ -122,9 +149,9 @@ if(loader){
                       <FontAwesomeIcon icon={faEye} className="edit-pen" />
                     </button>
                   </Link> */}
-                  <button type="button" className="btn accredit" onClick={()=>accreditEvent(event.id,'accredit')}>Accredit</button>  
+                  <button type="button" className="btn accredit" onClick={()=>accreditEvent(event.id,'accredit')} /*disabled={event.accredited ||processingEvent === event.id}*/>Accredit</button>  
                 {/* <Link href='/dashboard' className='text-decoration-none acc'>Accredit </Link> */}
-                <button type="button" className="btn accredit" onClick={()=>accreditEvent(event.id,"reject")}>Reject</button>
+                <button type="button" className="btn accredit" onClick={()=>accreditEvent(event.id,"reject")} /*disabled={event.accredited ||processingEvent === event.id}*/>Reject</button>
 
                 </td>
               </tr>

@@ -100,7 +100,7 @@ return matchesSearchTerm ;
       <td>{student.address}</td>
       <td className='d-flex gap-1'>
 
-      <Link href={'/Profile'}>
+      <Link href={`/Profile/${student.id}`}>
         <button  type="button" className='edit-pen border-0 bg-white '>
         <FontAwesomeIcon icon={faEye} />
         </button>

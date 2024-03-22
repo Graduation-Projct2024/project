@@ -214,7 +214,7 @@ const renderInputs = inputs.map((input,index)=>
         CREATE ACCOUNT
       </button>
       </div>
-      <div className="col-md-12"><button type="button" class="btn btn-secondary createButton mt-3 fs-3 px-3 w-25" data-bs-dismiss="modal">Close</button></div>
+      <div className="col-md-12"><button type="button" className="btn btn-secondary createButton mt-3 fs-3 px-3 w-25" data-bs-dismiss="modal">Close</button></div>
     </form>
   );
 }

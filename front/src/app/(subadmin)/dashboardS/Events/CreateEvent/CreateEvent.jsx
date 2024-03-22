@@ -3,6 +3,8 @@ import { createEvent } from '@/component/validation/validation';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import React from 'react'
+import Swal from 'sweetalert2'
+
 
 export default function CreateEvent() {
 
@@ -37,10 +39,15 @@ const onSubmit = async (values) => {
     });
     
    if(data.isSuccess){
-   
+    
     console.log(data);
     console.log('tttt');
     formik.resetForm();
+    Swal.fire({
+      title: "Event Created Successfully",
+      text: "Wait for Admin accredit this Event",
+      icon: "success"
+    });
 }
 
     console.log('jhbgyvftrgybuhnjimkjhb');
