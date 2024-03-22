@@ -1,0 +1,15 @@
+
+body{
+    background-color: #f4eaf1 !important;
+}
+@media (max-width: 599px) {
+  .css-148h8wx-MuiStack-root {
+      width: 100%;
+    }
+  }
+  .css-1gfgq14-MuiDrawer-docked .MuiDrawer-paper {
+    background-color: #4c5372 !important;
+}
+.css-x00mp-MuiTypography-root {
+  color: #4c5372 !important ;
+}
