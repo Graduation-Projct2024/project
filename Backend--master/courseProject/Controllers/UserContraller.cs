@@ -208,7 +208,11 @@ namespace courseProject.Controllers
                     await unitOfWork.UserRepository.updateSubAdminAsync(profileToUpdate);
                     var success1 = await unitOfWork.UserRepository.saveAsync();
                     var success2 = 0;
-                    var imageUrl = "Files\\" + await unitOfWork.FileRepository.UploadFile1(profile.image);
+                    string imageUrl = "";
+                    if (profile.image != null)
+                    {
+                         imageUrl = "Files\\" + await unitOfWork.FileRepository.UploadFile1(profile.image);
+                    }
                     if (profileToUpdate.role.ToLower() == "admin")
                     {
                         var adminMapper = mapper.Map<ProfileDTO, Admin>(profile);
@@ -288,7 +292,7 @@ namespace courseProject.Controllers
                 return NotFound(response);
             }
             var GetUser =await  unitOfWork.UserRepository.ViewProfileAsync(id, UserFound.role);
-            UserInfoDTO usermapper = null;
+            UserInfoDTO usermapper =null;
             if (UserFound.role.ToLower() == "instructor")
             {
                 usermapper = mapper.Map<Instructor, UserInfoDTO>(GetUser.instructor);
@@ -305,6 +309,7 @@ namespace courseProject.Controllers
             {
                 usermapper = mapper.Map<Student, UserInfoDTO>(GetUser.student);
             }
+
             if (GetUser == null)
             {
                 response.IsSuccess = false;
@@ -315,10 +320,10 @@ namespace courseProject.Controllers
             if (usermapper.ImageUrl != null)
             {
                 CommonClass.ImageTOHttp(usermapper);
-            }
+            }           
             response.StatusCode=HttpStatusCode.OK;
             response.IsSuccess = true;
-            response.Result=usermapper;
+            response.Result= usermapper;
             return Ok(response);
 
         }

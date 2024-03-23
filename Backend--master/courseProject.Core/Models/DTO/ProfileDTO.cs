@@ -16,7 +16,7 @@ namespace courseProject.Core.Models.DTO
         public string? gender { get; set; }
         public string? phoneNumber { get; set; }
         [NotMapped] public IFormFile? image { get; set; }
-        public DateTime? DateOfBirth { get; set; }
+        public DateTime? DateOfBirth { get; set; } 
       //  public string? email { get; set; }
         public string? address { get; set; }
         

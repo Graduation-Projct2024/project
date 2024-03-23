@@ -39,5 +39,16 @@ namespace courseProject.Repository.GenericRepository
         {
            return  await dbContext.courses.Where(x=>x.InstructorId== Instructorid).ToListAsync();
         }
+
+
+        public async Task AddOfficeHoursAsync(Instructor_Working_Hours instructor_Working_Hours)
+        {
+            await dbContext.Set<Instructor_Working_Hours>().AddAsync(instructor_Working_Hours);
+        }
+
+        public async Task<IReadOnlyList<Instructor_Working_Hours>> GetOfficeHourByIdAsync(int instructorId)
+        {
+            return  await dbContext.Instructor_Working_Hours.Where(x=>x.InstructorId == instructorId).ToListAsync();
+        }
     }
 }

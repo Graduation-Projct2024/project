@@ -20,11 +20,7 @@ namespace courseProject.Core.Models
         [ForeignKey("User")]
         public int StudentId { get; set; }
 
-        public string? LName { get; set; }
-        
-        [ForeignKey("User")]
-        public string email {  get; set; }
-        
+        public string? LName { get; set; }       
         public DateTime? DateOfBirth { get; set; }
 
         [DataType(DataType.PhoneNumber)]

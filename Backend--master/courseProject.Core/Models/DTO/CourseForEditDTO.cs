@@ -8,7 +8,7 @@ namespace courseProject.Core.Models.DTO
 {
     public class CourseForEditDTO
     {
-        public int Id { get; set; }
+        //public int Id { get; set; }
         public string? name { get; set; }
         public double? price { get; set; }
         public string? category { get; set; }

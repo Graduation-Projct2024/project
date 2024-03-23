@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using courseProject.Core.Models;
 using courseProject.Core.Models.DTO;
+using Microsoft.OpenApi.Extensions;
 
 namespace courseProject.MappingProfile
 {
@@ -61,35 +62,7 @@ namespace courseProject.MappingProfile
 
             CreateMap<ProfileDTO, User>()
                 .ForMember(x => x.userName, o => o.MapFrom(y => y.FName));
-            // .ForMember(x=>x.email , o=>o.MapFrom(y=>y.email));
-
-            CreateMap<Instructor, UserInfoDTO>()
-                .ForMember(x => x.UserId, o => o.MapFrom(y => y.user.UserId))
-               .ForMember(x => x.userName, o => o.MapFrom(y => y.user.userName))
-               .ForMember(x => x.email, o => o.MapFrom(y => y.user.email))
-               .ForMember(x => x.role, o => o.MapFrom(y => y.user.role));
-
-
-
-            CreateMap<Admin, UserInfoDTO>()
-                .ForMember(x => x.UserId, o => o.MapFrom(y => y.user.UserId))
-                           .ForMember(x => x.userName, o => o.MapFrom(y => y.user.userName))
-                           .ForMember(x => x.email, o => o.MapFrom(y => y.user.email))
-                           .ForMember(x => x.role, o => o.MapFrom(y => y.user.role));
-
-
-            CreateMap<SubAdmin, UserInfoDTO>()
-                .ForMember(x => x.UserId, o => o.MapFrom(y => y.user.UserId))
-           .ForMember(x => x.userName, o => o.MapFrom(y => y.user.userName))
-           .ForMember(x => x.email, o => o.MapFrom(y => y.user.email))
-           .ForMember(x => x.role, o => o.MapFrom(y => y.user.role));
-
-
-            CreateMap<Student, UserInfoDTO>()
-                .ForMember(x => x.UserId, o => o.MapFrom(y => y.user.UserId))
-           .ForMember(x => x.userName, o => o.MapFrom(y => y.user.userName))
-           .ForMember(x => x.email, o => o.MapFrom(y => y.user.email))
-           .ForMember(x => x.role, o => o.MapFrom(y => y.user.role));
+               // .ForMember(x=>x.email , o=>o.MapFrom(y=>y.email));
 
             CreateMap<ProfileDTO, Admin>();
             CreateMap<ProfileDTO, SubAdmin>();
@@ -97,7 +70,42 @@ namespace courseProject.MappingProfile
             CreateMap<ProfileDTO, Student>();
 
             CreateMap<User, ProfileDTO>()
-                .ForMember(x=>x.FName , o=>o.MapFrom(y=>y.userName));
+                .ForMember(x => x.FName, o => o.MapFrom(y => y.userName));
+            //  .ForMember(x => x.LName, o => o.MapFrom(y => y.instructor.LName ));
+
+            CreateMap<Instructor, UserInfoDTO>()
+                .ForMember(x => x.userName, o => o.MapFrom(y => y.user.userName))
+                .ForMember(x => x.email, o => o.MapFrom(y => y.user.email))
+                .ForMember(x => x.role, o => o.MapFrom(y => y.user.role));
+
+
+
+            CreateMap<Admin, UserInfoDTO>()
+                           .ForMember(x => x.userName, o => o.MapFrom(y => y.user.userName))
+                           .ForMember(x => x.email, o => o.MapFrom(y => y.user.email))
+                           .ForMember(x => x.role, o => o.MapFrom(y => y.user.role));
+
+
+            CreateMap<SubAdmin, UserInfoDTO>()
+           .ForMember(x => x.userName, o => o.MapFrom(y => y.user.userName))
+           .ForMember(x => x.email, o => o.MapFrom(y => y.user.email))
+           .ForMember(x => x.role, o => o.MapFrom(y => y.user.role));
+
+
+            CreateMap<Student, UserInfoDTO>()
+           .ForMember(x => x.userName, o => o.MapFrom(y => y.user.userName))
+           .ForMember(x => x.email, o => o.MapFrom(y => y.user.email))
+           .ForMember(x => x.role, o => o.MapFrom(y => y.user.role));
+     
+
+            CreateMap<WorkingHourDTO, Instructor_Working_Hours>()
+                .ForMember(x=>x.startTime , o=>o.MapFrom(y=>y.startTime))
+                .ForMember(x => x.endTime, o => o.MapFrom(y => y.endTime));
+
+            CreateMap<Instructor_Working_Hours, GetWorkingHourDTO>()
+                .ForMember(x => x.startTime, o => o.MapFrom(y => y.startTime))
+                .ForMember(x => x.endTime, o => o.MapFrom(y => y.endTime))
+                .ForMember(x => x.day, o => o.MapFrom(y => y.day.GetDisplayName()));
         }
     }
 }

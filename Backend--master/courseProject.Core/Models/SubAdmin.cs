@@ -15,10 +15,6 @@ namespace courseProject.Core.Models
         [ForeignKey("User")]
         public int SubAdminId { get; set; }
         public string? LName { get; set; }
-
-        [ForeignKey("User")]
-        public string email { get; set; }
-
         public DateTime? DateOfBirth { get; set; }
 
         [DataType(DataType.PhoneNumber)]
