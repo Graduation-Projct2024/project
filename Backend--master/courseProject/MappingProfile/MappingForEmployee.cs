@@ -64,6 +64,7 @@ namespace courseProject.MappingProfile
             // .ForMember(x=>x.email , o=>o.MapFrom(y=>y.email));
 
             CreateMap<Instructor, UserInfoDTO>()
+                .ForMember(x => x.UserId, o => o.MapFrom(y => y.user.UserId))
                .ForMember(x => x.userName, o => o.MapFrom(y => y.user.userName))
                .ForMember(x => x.email, o => o.MapFrom(y => y.user.email))
                .ForMember(x => x.role, o => o.MapFrom(y => y.user.role));
@@ -71,18 +72,21 @@ namespace courseProject.MappingProfile
 
 
             CreateMap<Admin, UserInfoDTO>()
+                .ForMember(x => x.UserId, o => o.MapFrom(y => y.user.UserId))
                            .ForMember(x => x.userName, o => o.MapFrom(y => y.user.userName))
                            .ForMember(x => x.email, o => o.MapFrom(y => y.user.email))
                            .ForMember(x => x.role, o => o.MapFrom(y => y.user.role));
 
 
             CreateMap<SubAdmin, UserInfoDTO>()
+                .ForMember(x => x.UserId, o => o.MapFrom(y => y.user.UserId))
            .ForMember(x => x.userName, o => o.MapFrom(y => y.user.userName))
            .ForMember(x => x.email, o => o.MapFrom(y => y.user.email))
            .ForMember(x => x.role, o => o.MapFrom(y => y.user.role));
 
 
             CreateMap<Student, UserInfoDTO>()
+                .ForMember(x => x.UserId, o => o.MapFrom(y => y.user.UserId))
            .ForMember(x => x.userName, o => o.MapFrom(y => y.user.userName))
            .ForMember(x => x.email, o => o.MapFrom(y => y.user.email))
            .ForMember(x => x.role, o => o.MapFrom(y => y.user.role));
