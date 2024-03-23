@@ -33,6 +33,12 @@ import './Layout.css'
 import { UserContext } from '@/context/user/User';
 import AdminRoute from '@/app/(auth)/protectedRoute/AdminRoute';
 const drawerWidth = 240;
+
+
+function Layout(props) {
+  const { window } = props;
+  const { children, title } = props;
+  let { userToken, setUserToken ,userData,setUserData} = React.useContext(UserContext);
 const sidebarItems = [
   {
     name: "Dashboard",
@@ -42,7 +48,7 @@ const sidebarItems = [
   },
   {
     name: "Profile",
-    href: "/Profile",
+    href: `/Profile`,
     icon: AccountCircleIcon,
   },
   {
@@ -62,11 +68,6 @@ const sidebarItems = [
     },
  
 ];
-function Layout(props) {
-  const { window } = props;
-  const { children, title } = props;
-  let { userToken, setUserToken ,userData,setUserData} = React.useContext(UserContext);
-
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
   const router = useRouter();

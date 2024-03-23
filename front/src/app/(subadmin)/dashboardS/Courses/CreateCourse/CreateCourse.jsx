@@ -5,6 +5,7 @@ import { UserContext } from '@/context/user/User';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import React, { useContext } from 'react'
+import Swal from 'sweetalert2';
 
 export default function CreateCourse() {
   const {userToken, setUserToken, userData}=useContext(UserContext);
@@ -50,6 +51,12 @@ const onSubmit = async (values) => {
     console.log(data);
     console.log('course created');
     formik.resetForm();
+    Swal.fire({
+      title: "Course Created Successfully",
+      text: "Wait for Admin accredit this Course",
+      icon: "success"
+    });
+
     
 }
   } catch (error) {

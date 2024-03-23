@@ -114,6 +114,7 @@ return matchesSearchTerm ;
       <th scope="col">Category</th>
       <th scope="col">Status</th>
       <th scope="col">Start Date</th>
+      <th scope="col">Instructor</th>
       <th scope="col">Option</th>
     </tr>
   </thead>
@@ -130,6 +131,7 @@ return matchesSearchTerm ;
       <td>{course.category}</td>
       <td>{course.status}</td>
       <td>{course.startDate}</td>
+      <td>{course.instructorName}</td>
       
       <td className='d-flex gap-1'>
 
