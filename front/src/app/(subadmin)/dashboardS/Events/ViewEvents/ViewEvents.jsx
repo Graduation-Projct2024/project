@@ -1,17 +1,20 @@
 'use client'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { faArrowUpFromBracket, faEye, faFilter } from '@fortawesome/free-solid-svg-icons'
 import CreateEvent from '../CreateEvent/CreateEvent';
 import axios from 'axios';
 import Link from 'next/link';
+import { UserContext } from '@/context/user/User';
 
 export default function ViewEvents() {
 
     const [events, setEvent] = useState([]);
+    const {userToken, setUserToken, userData}=useContext(UserContext);
 
 
     const fetchEvents = async () => {
+      if(userData){
       try{
       const { data } = await axios.get(`http://localhost:5134/api/EventContraller/GetAllAccreditEvents`);
       console.log(data);
@@ -20,11 +23,12 @@ export default function ViewEvents() {
       catch(error){
         console.log(error);
       }
+    }
     };
   
     useEffect(() => {
       fetchEvents();
-    }, []);
+    }, [userData]);
   
     const [searchTerm, setSearchTerm] = useState('');
   

@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Profile from './Profile'
 import { useParams } from 'next/navigation.js';
 import axios from 'axios';
@@ -10,23 +10,23 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './Profile.css'
 import Layout from '../../AdminLayout/Layout';
 import '../../dashboard/dashboard.css'
+import { UserContext } from '@/context/user/User';
 
 
 export default function page({params}) {
+  const {userToken, setUserToken, userData}=useContext(UserContext);
+
   let [user,setUser] = useState({})
   const [loading, setLoading] = useState(false);
   // const {id} = useParams();
   // console.log(useParams());
 // console.log(params)
   const getUser =async ()=>{
+    if(userData){
     try {
       //setLoading(false)
       const {data} = await axios.get(`http://localhost:5134/api/UserAuth/GetProfileInfo?id=${params.id}`,
-      {
-      //   headers: {
-      //   'Content-Type': 'multipart/form-data','Content-Type': 'application/json',
-      // }
-    }
+     
       );
       if(data.isSuccess){
         console.log(data.result);
@@ -35,13 +35,13 @@ export default function page({params}) {
       }}
       catch (error) {
       console.log(error)
-      }
+      }}
       
   }
   console.log(user)
   useEffect(()=>{
       getUser();
-  },[])
+  },[userData])
   
   return (
     <Layout>

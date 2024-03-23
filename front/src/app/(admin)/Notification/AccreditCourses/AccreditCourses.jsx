@@ -1,16 +1,20 @@
 'use client'
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import '../../dashboard/dashboard.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUpFromBracket, faEye, faFilter } from '@fortawesome/free-solid-svg-icons'
 import Link from 'next/link';
+import { UserContext } from '@/context/user/User';
 
 
 export default function AccreditCourses() {
+  const {userToken, setUserToken, userData}=useContext(UserContext);
+
   const [accreditCourses, setAccreditCourses] = useState([]);
   let[loader,setLoader] = useState(false);
   const fetchCoursesForAccredit = async () => {
+    if(userData){
     try{
     const { data } = await axios.get(`http://localhost:5134/api/CourseContraller/GetAllCoursesForAccredit`);
     console.log(data);
@@ -19,11 +23,13 @@ export default function AccreditCourses() {
     catch(error){
       console.log(error);
     }
+  }
   };
 
   const accreditCourse = async (courseId , Status) => {
     //setLoader(true);
     console.log(courseId);
+    if(userData){
     try{
     const { data } = await axios.patch(`http://localhost:5134/api/CourseContraller/accreditCourse?courseId=${courseId}&Status=${Status}`,
   );
@@ -35,12 +41,12 @@ export default function AccreditCourses() {
   }
     catch(error){
       console.log(error);
-    }
+    }}
   };
 
   useEffect(() => {
     fetchCoursesForAccredit();
-  }, []);
+  }, [userData]);
 if(loader){
   return <p>Loading ...</p>
 }
@@ -131,9 +137,9 @@ if(loader){
                       <FontAwesomeIcon icon={faEye} className="edit-pen" />
                     </button>
                   </Link> */}
-                  <button type="button" className="btn accredit" onClick={()=>accreditCourse(course.id,'accredit')}>Accredit</button>  
+                  <button type="button" className="btn accredit" onClick={()=>accreditCourse(course.id,'accredit')} disabled = {event.status == 'accredit' || event.status == 'reject'} >Accredit</button>  
                 {/* <Link href='/dashboard' className='text-decoration-none acc'>Accredit </Link> */}
-                <button type="button" className="btn accredit" onClick={()=>accreditCourse(course.id,"reject")}>Reject</button>
+                <button type="button" className="btn accredit" onClick={()=>accreditCourse(course.id,"reject")} disabled = {event.status == 'accredit' || event.status == 'reject'} >Reject</button>
 
                 </td>
               </tr>

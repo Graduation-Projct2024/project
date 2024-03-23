@@ -1,14 +1,17 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUpFromBracket, faEye, faFilter } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Link from 'next/link';
+import { UserContext } from '@/context/user/User';
 
 export default function ViewStudents() {
+  const {userToken, setUserToken, userData}=useContext(UserContext);
 
   const [students, setStudents] = useState([]);
 
   const fetchStudents = async () => {
+    if(userData){
     try{
     const { data } = await axios.get(`http://localhost:5134/api/StudentsContraller`);
     console.log(data);
@@ -17,11 +20,12 @@ export default function ViewStudents() {
     catch(error){
       console.log(error);
     }
+  }
   };
 
   useEffect(() => {
     fetchStudents();
-  }, []);
+  }, [userData]);
 
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -81,26 +85,26 @@ return matchesSearchTerm ;
       <th scope="col">ID</th>
       <th scope="col">Name</th>
       <th scope="col">Email</th>
-      <th scope="col">Gender</th>
+      {/* <th scope="col">Gender</th>
       <th scope="col">Phone number</th>
-      <th scope="col">Address</th>
+      <th scope="col">Address</th> */}
       <th scope="col">Option</th>
     </tr>
   </thead>
   <tbody>
   {filteredStudents.length ? (
     filteredStudents.map((student) =>(
-      <tr key={student.id}>
-        {console.log(student.id)}
-      <th scope="row">{student.id}</th>
-      <td>{student.userName} {student.LName}</td>
+      <tr key={student.studentId}>
+        {console.log(student.studentId)}
+      <th scope="row">{student.studentId}</th>
+      <td>{student.userName}</td>
       <td>{student.email}</td>
-      <td>{student.gender}</td>
+      {/* <td>{student.gender}</td>
       <td>{student.phoneNumber}</td>
-      <td>{student.address}</td>
+      <td>{student.address}</td> */}
       <td className='d-flex gap-1'>
 
-      <Link href={`/Profile/${student.id}`}>
+      <Link href={`/Profile/${student.studentId}`}>
         <button  type="button" className='edit-pen border-0 bg-white '>
         <FontAwesomeIcon icon={faEye} />
         </button>

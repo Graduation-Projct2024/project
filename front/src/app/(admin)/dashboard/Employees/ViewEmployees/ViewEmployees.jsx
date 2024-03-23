@@ -1,20 +1,21 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import CreateEmployee from '../CreateEmployee/CreateEmployee';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUpFromBracket, faBook, faEye, faFilter, faPen } from '@fortawesome/free-solid-svg-icons'
 import Link from 'next/link';
 import axios from 'axios';
 import UpdateEmployee from '../UpdateEmployee/[id]/page';
+import { UserContext } from '@/context/user/User';
 
 export default function ViewEmployees() {
 
-
-    
+      const {userToken, setUserToken, userData}=useContext(UserContext);
       const [employees, setEmployees] = useState([]);
 
 
       const fetchEmployees = async () => {
+        if(userData){
         try{
         const { data } = await axios.get(`http://localhost:5134/api/Employee/GetAllEmployee`);
         console.log(data);
@@ -23,11 +24,12 @@ export default function ViewEmployees() {
         catch(error){
           console.log(error);
         }
+      }
       };
 
       useEffect(() => {
         fetchEmployees();
-      }, []);
+      }, [userData]);
 
       const [searchTerm, setSearchTerm] = useState('');
       const [selectedRole, setSelectedRole] = useState(null);

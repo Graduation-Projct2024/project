@@ -1,16 +1,19 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { faArrowUpFromBracket, faEye, faFilter } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import { UserContext } from '@/context/user/User';
 
 export default function AccreditEvents() {
 
     const [accreditEvents, setAccreditEvents] = useState([]);
   let[loader,setLoader] = useState(false);
   // const [processingEvent, setProcessingEvent] = useState(null); // State to track which event is being processed
+  const {userToken, setUserToken, userData}=useContext(UserContext);
 
   const fetchEventsForAccredit = async () => {
+    if(userData){
     
     try{
     const { data } = await axios.get(`http://localhost:5134/api/EventContraller/GetAllUndefinedEvents`);
@@ -20,12 +23,13 @@ export default function AccreditEvents() {
   }
     catch(error){
       console.log(error);
-    }
+    }}
   };
 
   const accreditEvent = async (eventId , Status) => {
     //setLoader(true);
     console.log(eventId);
+    if(userData){
     try{
     const { data } = await axios.patch(`http://localhost:5134/api/CourseContraller/accreditEvent?eventId=${eventId}&Status=${Status}`,
   );
@@ -59,11 +63,12 @@ export default function AccreditEvents() {
     //   setProcessingEvent(null); // Reset the eventId being processed
     //   fetchEventsForAccredit(); // Fetch events after processing
     // }
+  }
   };
 
   useEffect(() => {
     fetchEventsForAccredit();
-  }, []);
+  }, [userData]);
 if(loader){
   return <p>Loading ...</p>
 }
@@ -143,15 +148,16 @@ if(loader){
                 <td>{event.eventCategory}</td>
                 <td>{event.dateOfEvent}</td>
                 <td>{event.subAdminFName} {event.subAdminLName}</td>
+                {console.log (event.status)}
                 <td className="d-flex gap-1">
                   {/* <Link href={"/Profile"}>
                     <button type="button" className="border-0 bg-white ">
                       <FontAwesomeIcon icon={faEye} className="edit-pen" />
                     </button>
                   </Link> */}
-                  <button type="button" className="btn accredit" onClick={()=>accreditEvent(event.id,'accredit')} /*disabled={event.accredited ||processingEvent === event.id}*/>Accredit</button>  
+                  <button type="button" className="btn accredit" onClick={()=>accreditEvent(event.id,'accredit')} disabled = {event.status == 'accredit' || event.status == 'reject'} >Accredit</button>  
                 {/* <Link href='/dashboard' className='text-decoration-none acc'>Accredit </Link> */}
-                <button type="button" className="btn accredit" onClick={()=>accreditEvent(event.id,"reject")} /*disabled={event.accredited ||processingEvent === event.id}*/>Reject</button>
+                <button type="button" className="btn accredit" onClick={()=>accreditEvent(event.id,"reject")} disabled = {event.status == 'accredit' || event.status == 'reject'}>Reject</button>
 
                 </td>
               </tr>

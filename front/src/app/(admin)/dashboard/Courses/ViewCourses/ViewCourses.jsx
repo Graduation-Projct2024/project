@@ -1,17 +1,20 @@
 'use client'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { faArrowUpFromBracket, faEye, faFilter } from '@fortawesome/free-solid-svg-icons'
 import Link from 'next/link';
 import axios from 'axios';
+import { UserContext } from '@/context/user/User';
 
 export default function ViewCourses() {
 
+  const {userToken, setUserToken, userData}=useContext(UserContext);
 
   const [courses, setCourses] = useState([]);
 
 
   const fetchCourses = async () => {
+    if(userData){
     try{
     const { data } = await axios.get(`http://localhost:5134/api/CourseContraller`);
     console.log(data);
@@ -20,11 +23,12 @@ export default function ViewCourses() {
     catch(error){
       console.log(error);
     }
+  }
   };
 
   useEffect(() => {
     fetchCourses();
-  }, []);
+  }, [userData]);
 
   const [searchTerm, setSearchTerm] = useState('');
 

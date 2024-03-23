@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import './Contact.css'
 import Layout from '../AdminLayout/Layout'
 import '../dashboard/dashboard.css'
@@ -10,10 +10,14 @@ import { faPhone } from '@fortawesome/free-solid-svg-icons'
 import { faEnvelope } from '@fortawesome/free-regular-svg-icons'
 import '../Profile/[id]/Profile.css'
 import { faArrowUpFromBracket, faEye, faFilter } from '@fortawesome/free-solid-svg-icons'
+import { UserContext } from '@/context/user/User'
 
 export default function page() {
+  const {userToken, setUserToken, userData}=useContext(UserContext);
+
   let [contacts,setContact] = useState([]);
   const fetchContacts = async () => {
+    if(userData){
     try{
     const { data } = await axios.get(`http://localhost:5134/api/Employee/GetAllEmployeeForContact`);
     console.log(data);
@@ -22,11 +26,12 @@ export default function page() {
     catch(error){
       console.log(error);
     }
+  }
   };
 
   useEffect(() => {
     fetchContacts();
-  }, []);
+  }, [userData]);
 
   const [searchTerm, setSearchTerm] = useState('');
 

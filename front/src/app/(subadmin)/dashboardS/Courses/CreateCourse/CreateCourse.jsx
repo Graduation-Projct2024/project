@@ -1,11 +1,14 @@
 'use client'
 import Input from '@/component/input/Input';
 import { createCourse } from '@/component/validation/validation';
+import { UserContext } from '@/context/user/User';
 import axios from 'axios';
 import { useFormik } from 'formik';
-import React from 'react'
+import React, { useContext } from 'react'
 
 export default function CreateCourse() {
+  const {userToken, setUserToken, userData}=useContext(UserContext);
+
 
   const initialValues={
     name: '',
@@ -24,6 +27,7 @@ const handleFieldChange = (event) => {
 };
 
 const onSubmit = async (values) => {
+  if(userData){
 
   try {
     const formData = new FormData();
@@ -46,6 +50,7 @@ const onSubmit = async (values) => {
     console.log(data);
     console.log('course created');
     formik.resetForm();
+    
 }
   } catch (error) {
     if (error.isAxiosError) {
@@ -55,6 +60,7 @@ const onSubmit = async (values) => {
       console.error("Non-Axios error occurred:", error);
     }
   };
+}
 };
 
 const formik = useFormik({

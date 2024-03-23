@@ -1,12 +1,14 @@
 import Input from '@/component/input/Input';
 import { createEvent } from '@/component/validation/validation';
+import { UserContext } from '@/context/user/User';
 import axios from 'axios';
 import { useFormik } from 'formik';
-import React from 'react'
+import React, { useContext } from 'react'
 import Swal from 'sweetalert2'
 
 
 export default function CreateEvent() {
+  const {userToken, setUserToken, userData}=useContext(UserContext);
 
   const initialValues={
     name: '',
@@ -22,6 +24,7 @@ const handleFieldChange = (event) => {
 };
 
 const onSubmit = async (values) => {
+  if(userData){
   try {
     const formData = new FormData();
     formData.append('name', values.name);
@@ -33,10 +36,7 @@ const onSubmit = async (values) => {
       formData.append('image', values.image);
     }
 
-    const { data } = await axios.post('http://localhost:5134/api/CourseContraller/CreateEvent', formData,
-      {
-      
-    });
+    const { data } = await axios.post('http://localhost:5134/api/CourseContraller/CreateEvent', formData,);
     
    if(data.isSuccess){
     
@@ -56,7 +56,7 @@ const onSubmit = async (values) => {
     console.error('Error submitting form:', error);
     console.log('Error response:', error.response);
     // Optionally, you can show an error message to the user
-  }
+  }}
 };
 
 const formik = useFormik({

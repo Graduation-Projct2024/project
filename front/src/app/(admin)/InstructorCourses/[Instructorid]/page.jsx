@@ -4,11 +4,13 @@ import { faArrowUpFromBracket, faEye, faFilter } from '@fortawesome/free-solid-s
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from 'axios'
 import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import '../../dashboard/dashboard.css'
+import { UserContext } from '@/context/user/User'
 
 export default function InstructorCourses({params}) {
     console.log(params.Instructorid)
+    const {userToken, setUserToken, userData}=useContext(UserContext);
 
     const [instructorCourse,setInstructorCourse] = useState([])
     const [loading, setLoading] = useState(false);
@@ -16,6 +18,7 @@ export default function InstructorCourses({params}) {
   // console.log(useParams());
     let[ins,setIns] = useState('');
     const getInstructorCourses =async ()=>{
+      if(userData){
     try {
       //setLoading(false)
       const {data} = await axios.get(`http://localhost:5134/api/Employee/GetAllCoursesGivenByInstructor?Instructorid=${params.Instructorid}`,
@@ -30,12 +33,13 @@ export default function InstructorCourses({params}) {
       catch (error) {
       console.log(error)
       }
-      
-  }
+    }   
+  };
   const [employees, setEmployees] = useState([]);
 
 
       const fetchEmployees = async () => {
+        if(userData){
         try{
         const { data } = await axios.get(`http://localhost:5134/api/Employee/GetAllEmployee`);
         console.log(data);
@@ -43,12 +47,12 @@ export default function InstructorCourses({params}) {
       }
         catch(error){
           console.log(error);
-        }
+        }}
       };
   useEffect(()=>{
     getInstructorCourses();
     fetchEmployees();
-  },[])
+  },[userData])
 
 
   const [searchTerm, setSearchTerm] = useState('');

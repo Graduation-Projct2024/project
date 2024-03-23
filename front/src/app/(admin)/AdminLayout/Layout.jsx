@@ -30,6 +30,8 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { Avatar, Stack } from '@mui/material';
 import AdbIcon from '@mui/icons-material/Adb';
 import './Layout.css'
+import { UserContext } from '@/context/user/User';
+import AdminRoute from '@/app/(auth)/protectedRoute/AdminRoute';
 const drawerWidth = 240;
 const sidebarItems = [
   {
@@ -63,6 +65,7 @@ const sidebarItems = [
 function Layout(props) {
   const { window } = props;
   const { children, title } = props;
+  let { userToken, setUserToken ,userData,setUserData} = React.useContext(UserContext);
 
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
@@ -147,6 +150,7 @@ function Layout(props) {
   const container = window !== undefined ? () => window().document.body : undefined;
 
   return (
+    <AdminRoute>
     <div className='side-drawer2'>
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -220,6 +224,7 @@ function Layout(props) {
       </Box>
     </Box>
     </div>
+    </AdminRoute>
    );
 }
 
