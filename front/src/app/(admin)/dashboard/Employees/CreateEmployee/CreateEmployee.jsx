@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
+import Swal from 'sweetalert2';
 
 export default function CreateEmployee() {
   const router = useRouter();
@@ -67,6 +68,11 @@ const onSubmit = async (users) => {
       console.log('tttt');
       formik.resetForm();
       router.push('/dashboard');
+      Swal.fire({
+        title: "Account Created Successfully!",
+        text: "Check Dashboard to see it",
+        icon: "success"
+      });
   }
 
       console.log('jhbgyvftrgybuhnjimkjhb');

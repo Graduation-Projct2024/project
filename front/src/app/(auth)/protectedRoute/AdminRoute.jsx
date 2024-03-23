@@ -9,8 +9,8 @@ export default function AdminRoute({children}) {
   const AdminAuth=()=>{
     if(userData){
      
-  if(localStorage.getItem("userToken")==null||userData.role!='Admin'){
-    return router.push('/Login')
+  if(localStorage.getItem("userToken")==null||userData.role!='admin'){
+    return router.push('/login')
     
  }}
 }

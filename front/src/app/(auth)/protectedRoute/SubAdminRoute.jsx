@@ -10,7 +10,7 @@ export default function SubAdminRoute({children}) {
     if(userData){
      
   if(localStorage.getItem("userToken")==null||userData.role!='SubAdmin'){
-    return router.push('/Login')
+    return router.push('/login')
     
  }}
 }

@@ -64,10 +64,16 @@ export default function page() {
 
     if (data.isSuccess) {
       setOpen(true);
-       localStorage.setItem("userToken", data.result.token);
+      localStorage.setItem("userToken", data.result.token);
       setUserToken(data.result.token);
       setUserData(data.result.user);
       console.log(userToken);
+      if(data.result.user.role === "admin") {
+        router.push('/dashboard');
+        }
+        if(data.result.user.role === "SubAdmin") {
+          router.push('/dashboardS');
+          }
       if(data.result.user.role === "student") {
       router.push('/MyDashboard');
       }

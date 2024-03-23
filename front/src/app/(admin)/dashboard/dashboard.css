@@ -63,3 +63,11 @@ color: #4C5372!important;
 color: #4C5372 !important;        
 }
 
+.accredit-row {
+    background-color: green;
+  }
+  
+  .reject-row {
+    background-color: red;
+  }
+  

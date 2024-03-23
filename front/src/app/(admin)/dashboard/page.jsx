@@ -7,6 +7,7 @@ import Layout from '../AdminLayout/Layout'
 import ViewEmployees from './Employees/ViewEmployees/ViewEmployees'
 import ViewStudents from './Students/ViewStudents/ViewStudents'
 import ViewCourses from './Courses/ViewCourses/ViewCourses'
+import ViewEvents from './Events/ViewEvents/ViewEvents'
 
 export default function dashboard() {
  
@@ -19,6 +20,8 @@ export default function dashboard() {
       <button className="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Employees</button>
       <button className="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Students</button>
       <button className="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Courses</button>
+      <button className="nav-link" id="nav-event-tab" data-bs-toggle="tab" data-bs-target="#nav-event" type="button" role="tab" aria-controls="nav-event" aria-selected="false">Events</button>
+
     </div>
   </nav>
 
@@ -32,6 +35,9 @@ export default function dashboard() {
     </div>
     <div className="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab" tabIndex={0}>
       <ViewCourses/>
+    </div>
+    <div className="tab-pane fade" id="nav-event" role="tabpanel" aria-labelledby="nav-event-tab" tabIndex={0}>
+      <ViewEvents/>
     </div>
   </div>
 </div>

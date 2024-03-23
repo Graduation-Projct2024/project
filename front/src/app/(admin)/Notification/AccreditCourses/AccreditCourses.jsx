@@ -122,7 +122,7 @@ if(loader){
         <tbody>
           {filteredAccreditCourses.length ? (
             filteredAccreditCourses.map((course) => (
-              <tr key={course.id}>
+              <tr key={course.id} className={course.status === 'accredit' ? 'accredit-row' : course.status === 'reject' ? 'reject-row' : ''}>
                 {console.log(course.id)}
                 {console.log(course.imageUrl)}
                 <th scope="row">{course.id}</th>
@@ -137,9 +137,9 @@ if(loader){
                       <FontAwesomeIcon icon={faEye} className="edit-pen" />
                     </button>
                   </Link> */}
-                  <button type="button" className="btn accredit" onClick={()=>accreditCourse(course.id,'accredit')} disabled = {event.status == 'accredit' || event.status == 'reject'} >Accredit</button>  
+                  <button type="button" className="btn accredit" onClick={()=>accreditCourse(course.id,'accredit')} disabled = {course.status == 'accredit' || course.status == 'reject'} >Accredit</button>  
                 {/* <Link href='/dashboard' className='text-decoration-none acc'>Accredit </Link> */}
-                <button type="button" className="btn accredit" onClick={()=>accreditCourse(course.id,"reject")} disabled = {event.status == 'accredit' || event.status == 'reject'} >Reject</button>
+                <button type="button" className="btn accredit" onClick={()=>accreditCourse(course.id,"reject")} disabled = {course.status == 'accredit' || course.status == 'reject'} >Reject</button>
 
                 </td>
               </tr>
