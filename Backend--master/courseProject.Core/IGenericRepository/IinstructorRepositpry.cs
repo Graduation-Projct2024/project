@@ -13,5 +13,7 @@ namespace courseProject.Core.IGenericRepository
         public Task DeleteMaterial(int id);
         public Task EditMaterial ( CourseMaterial courseMaterial);
         public Task<IReadOnlyList<Course>> GetAllCoursesGivenByInstructorIdAsync(int Instructorid);
+        public Task AddOfficeHoursAsync(Instructor_Working_Hours instructor_Working_Hours);
+        public Task<IReadOnlyList<Instructor_Working_Hours>> GetOfficeHourByIdAsync(int instructorId);
     }
 }

@@ -16,9 +16,9 @@ namespace courseProject.Core.Models
         [Key]
         public DayOfWeek day {  get; set; }
         [Key]
-        public DateTime startTime { get; set; } = new DateTime().ToLocalTime(); 
+        public TimeSpan startTime { get; set; }  
         [Key]
-        public DateTime endTime { get; set; }
+        public TimeSpan endTime { get; set; }
 
 
         public Instructor instructor { get; set; }

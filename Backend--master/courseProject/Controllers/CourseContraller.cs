@@ -149,7 +149,7 @@ namespace courseProject.Controllers
             var requestMapped = mapper.Map<Request>(model);
             var admin = await dbContext.users.FirstOrDefaultAsync(x => x.role.ToLower() == "admin");
             requestMapped.AdminId = admin.UserId;
-            if (StudentId != null)
+            if(StudentId != null)
             {
                 requestMapped.StudentId = StudentId;
             }
@@ -337,13 +337,13 @@ namespace courseProject.Controllers
         //[ProducesResponseType(200)]
         //[ProducesResponseType(404)]
         //[ProducesResponseType(400)]
-        //public async Task<ActionResult<ApiResponce>> EditCourse(int id , CourseForEditDTO course)
+        //public async Task<ActionResult<ApiResponce>> EditCourse(int id, CourseForEditDTO course)
         //{
         //    if (id <= 0)
         //    {
         //        responce.IsSuccess = false;
         //        responce.StatusCode = HttpStatusCode.BadRequest;
-        //        responce.ErrorMassages = new List<string>() { "The Id is equal 0" };
+        //        responce.ErrorMassages = new List<string>() { "The Id is less or equal 0" };
         //        return BadRequest(responce);
         //    }
 
@@ -354,14 +354,14 @@ namespace courseProject.Controllers
         //        responce.ErrorMassages = new List<string>() { "No new data to updated" };
         //        return BadRequest(responce);
         //    }
-        //    if (id != course.Id || !ModelState.IsValid)
+        //    if ( !ModelState.IsValid)
         //    {
         //        responce.IsSuccess = false;
         //        responce.StatusCode = HttpStatusCode.BadRequest;
         //        return BadRequest(responce);
         //    }
 
-        //    var getCourse= await dbContext.courses.FirstOrDefaultAsync(x=>x.Id == course.Id);
+        //    var getCourse = await dbContext.courses.FirstOrDefaultAsync(x => x.Id == id);
         //    if (getCourse == null)
         //    {
         //        responce.IsSuccess = false;
@@ -369,6 +369,9 @@ namespace courseProject.Controllers
         //        responce.ErrorMassages = new List<string>() { "the course is not found" };
         //        return NotFound(responce);
         //    }
+        //    var courseMapper = mapper.Map<Course>(course);
+
+        //    return Ok(courseMapper);
         //}
 
     }
