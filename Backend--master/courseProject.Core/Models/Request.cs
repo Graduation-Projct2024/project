@@ -24,7 +24,7 @@ namespace courseProject.Core.Models
         public DateTime date { get; set; } = DateTime.Now;
 
         [ForeignKey("Admin")]
-        public int AdminId { get; set; } =1;
+        public int AdminId { get; set; } 
 
         [ForeignKey("Student")]
         [AllowNull]
