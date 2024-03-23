@@ -147,7 +147,9 @@ namespace courseProject.Controllers
             
             var courseMapped = mapper.Map<Course>(model);
             var requestMapped = mapper.Map<Request>(model);
-            if(StudentId != null)
+            var admin = await dbContext.users.FirstOrDefaultAsync(x => x.role.ToLower() == "admin");
+            requestMapped.AdminId = admin.UserId;
+            if (StudentId != null)
             {
                 requestMapped.StudentId = StudentId;
             }
@@ -202,6 +204,8 @@ namespace courseProject.Controllers
 
             var EventMapped = mapper.Map<Event>(model);
             var requestMapped = mapper.Map<Request>(model);
+            var admin = await dbContext.users.FirstOrDefaultAsync(x => x.role.ToLower() == "admin");
+            requestMapped.AdminId = admin.UserId;
             EventMapped.ImageUrl = "Files\\" + await unitOfWork.FileRepository.UploadFile1(model.image);
             using (var transaction = await unitOfWork.SubAdminRepository.BeginTransactionAsync())
             {
