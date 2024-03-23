@@ -288,17 +288,37 @@ namespace courseProject.Controllers
                 return NotFound(response);
             }
             var GetUser =await  unitOfWork.UserRepository.ViewProfileAsync(id, UserFound.role);
-            if(GetUser == null)
+            UserInfoDTO usermapper = null;
+            if (UserFound.role.ToLower() == "instructor")
+            {
+                usermapper = mapper.Map<Instructor, UserInfoDTO>(GetUser.instructor);
+            }
+            else if (UserFound.role.ToLower() == "admin")
+            {
+                usermapper = mapper.Map<Admin, UserInfoDTO>(GetUser.admin);
+            }
+            else if (UserFound.role.ToLower() == "subadmin")
+            {
+                usermapper = mapper.Map<SubAdmin, UserInfoDTO>(GetUser.subadmin);
+            }
+            else if (UserFound.role.ToLower() == "student")
+            {
+                usermapper = mapper.Map<Student, UserInfoDTO>(GetUser.student);
+            }
+            if (GetUser == null)
             {
                 response.IsSuccess = false;
                 response.StatusCode = HttpStatusCode.NotFound;
                 response.ErrorMassages = new List<string>() { "the user is not found" };
                 return NotFound(response);
             }
-            CommonClass.AddHttpToImage(GetUser , UserFound.role);
+            if (usermapper.ImageUrl != null)
+            {
+                CommonClass.ImageTOHttp(usermapper);
+            }
             response.StatusCode=HttpStatusCode.OK;
             response.IsSuccess = true;
-            response.Result=GetUser;
+            response.Result=usermapper;
             return Ok(response);
 
         }

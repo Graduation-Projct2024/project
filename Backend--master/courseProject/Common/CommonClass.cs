@@ -1,9 +1,16 @@
 ﻿using courseProject.Core.Models;
+using courseProject.Core.Models.DTO;
 
 namespace courseProject.Common
 {
     public class CommonClass
     {
+        public void ImageTOHttp(UserInfoDTO userInfoDTO)
+        {
+            string url = "http://localhost:5134/";
+            userInfoDTO.ImageUrl = url + userInfoDTO.ImageUrl;
+        }
+
         public void AddHttpToImage(User GetUser, string role)
         {
             string url = "http://localhost:5134/";
