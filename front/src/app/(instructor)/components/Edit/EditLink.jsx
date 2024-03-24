@@ -9,7 +9,11 @@ import Button from '@mui/material/Button';
 import Input from '../../../../component/input/Input.jsx';
 import './style.css'
 import { UserContext } from '../../../../context/user/User.jsx';
+import { useRouter } from 'next/navigation'
+
 export default function EditLink({materialID, name, linkURL, courseId }) {
+  const router = useRouter();
+
   const {userToken, setUserToken, userData}=useContext(UserContext);
 console.log(courseId)
   const handelFieldChang = (event) => {
@@ -52,6 +56,7 @@ const { data } = await axios.put(
   console.log(data);
  formik.resetForm();
  setAlertOpen(true);
+ router.back();
 
   }}
   catch (error) {

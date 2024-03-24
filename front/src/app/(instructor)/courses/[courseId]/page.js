@@ -184,9 +184,10 @@ const handleCloseViewTaskDialog = () => {
         getCourseMaterial();
         getCourses();
         getParticipants();
-      }, []);
+      }, [materials]);
   return (
     <Layout title={courseName}>
+      
     <div>
   <ul className="nav nav-tabs" id="myTab" role="tablist">
     <li className="nav-item" role="presentation">
@@ -229,10 +230,10 @@ const handleCloseViewTaskDialog = () => {
         <DialogTitle id="responsive-dialog-title">
           {"ADD NEW"}
         </DialogTitle>
-        <AddTask open={openTaskDialog} onClose={handleCloseTaskDialog} courseId={courseId}/>
-        <AddFile open={openFileDialog} onClose={handleCloseFileDialog} courseId={courseId} />
-        <AddLink open={openLinkDialog} onClose={handleCloseLinkDialog} courseId={courseId}/>
-        <AddAnnouncement open={openAnnouncementDialog} onClose={handleCloseAnnouncementDialog} courseId={courseId} />
+        <AddTask open={openTaskDialog} onClose={handleCloseTaskDialog} handleCloseAdd={handleClose} courseId={courseId}/>
+        <AddFile open={openFileDialog} onClose={handleCloseFileDialog} handleCloseAdd={handleClose} courseId={courseId} />
+        <AddLink open={openLinkDialog} onClose={handleCloseLinkDialog} handleCloseAdd={handleClose} courseId={courseId}/>
+        <AddAnnouncement open={openAnnouncementDialog} onClose={handleCloseAnnouncementDialog} handleCloseAdd={handleClose} courseId={courseId} />
 
         <DialogContent>
         <Stack

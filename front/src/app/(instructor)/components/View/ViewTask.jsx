@@ -25,8 +25,12 @@ import CircularProgress from "@mui/material/CircularProgress";
 import './style.css'
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+import { useRouter } from 'next/navigation'
 import EditTask from '../Edit/EditTask.jsx';
+
 export default function ViewTask({ materialID , courseId}) {
+
+  const router = useRouter();
  const [material, setMaterial]=useState(null);
  const [loading ,setLoading]=useState(true);
  const [isEditing, setIsEditing] = useState(false);
@@ -62,6 +66,8 @@ if(data.isSuccess==true){
  const deleteMaterial=async()=>{
   const {data}= await axios.delete(`http://localhost:5134/api/MaterialControllar/DeleteMaterial?id=${materialID}`)
   setOpenAlert(true);
+  setOpen(false);
+  router.back();
 
  }
  const handleEdit =()=>{

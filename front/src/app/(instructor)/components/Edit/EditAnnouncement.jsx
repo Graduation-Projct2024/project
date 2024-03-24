@@ -9,9 +9,12 @@ import Button from '@mui/material/Button';
 import Input from '../../../../component/input/Input.jsx';
 import './style.css'
 import { UserContext } from '../../../../context/user/User.jsx';
+import { useRouter } from 'next/navigation'
+
 export default function EditAnnouncement({materialID, name, description, courseId }) {
   const {userData}=useContext(UserContext);
 console.log(materialID)
+const router = useRouter();
 
   const [Alertopen, setAlertOpen] = React.useState(false);
   const handleClose = (event, reason) => {
@@ -50,6 +53,7 @@ const { data } = await axios.put(
   console.log(data);
  formik.resetForm();
  setAlertOpen(true);
+ router.back();
 
   }}
   catch (error) {

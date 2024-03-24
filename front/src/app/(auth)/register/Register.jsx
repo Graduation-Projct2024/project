@@ -33,7 +33,7 @@ formData.append("userName", users.userName);
 formData.append("email", users.email);
 formData.append("password", users.password);
 formData.append("confirmPassword", users.confirmPassword);
-formData.append("role", users.role);
+formData.append("role", 'student');
 
 const { data } = await axios.post(
   "http://localhost:5134/api/UserAuth/Register",
@@ -65,10 +65,7 @@ setOpen(true);
       .required("password is required")
       .min(3, "must be at least 3 character")
       .max(15, "must be at max 15 character"),
-      role: yup
-      .string()
-      .required("password is required")
-      
+   
   });
 
   const formik = useFormik({
@@ -105,13 +102,7 @@ setOpen(true);
       title: "confirm Password",
       value: formik.values.confirmPassword,
         },
-        {
-          id: "role",
-          type: "text",
-          name: "role",
-          title: "role",
-          value: formik.values.role,
-        },
+    
   ];
   const renderInputs = inputs.map((input, index) => (
     <Input

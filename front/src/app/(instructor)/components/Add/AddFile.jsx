@@ -13,7 +13,7 @@ import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import Input from '../../../../component/input/Input.jsx';
 import { UserContext } from '../../../../context/user/User.jsx';
-export default function AddFile({ open, onClose, courseId }) {
+export default function AddFile({ open, onClose,handleCloseAdd ,courseId }) {
   const {userToken, setUserToken, userData}=useContext(UserContext);
 
   const handelFieldChang = (event) => {
@@ -53,6 +53,8 @@ const { data } = await axios.post(
   console.log("test");
  formik.resetForm();
  setAlertOpen(true);
+ onClose(); 
+ handleCloseAdd();
 
   }
   };

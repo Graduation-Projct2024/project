@@ -26,8 +26,12 @@ import Snackbar from '@mui/material/Snackbar';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import EditAnnouncement from '../Edit/EditAnnouncement.jsx';
 import Alert from '@mui/material/Alert';
+import { useRouter } from 'next/navigation'
+
 export default function ViewAnnouncement({ materialID , courseId}) {
  const [material, setMaterial]=useState(null);
+ const router = useRouter();
+
  const [loading ,setLoading]=useState(true);
  const [isEditing, setIsEditing] = useState(false);
  const [open, setOpen] = React.useState(false);
@@ -62,7 +66,8 @@ if(data.isSuccess==true){
  const deleteMaterial=async()=>{
   const {data}= await axios.delete(`http://localhost:5134/api/MaterialControllar/DeleteMaterial?id=${materialID}`)
   setOpenAlert(true);
-
+  setOpen(false);
+  router.back();
  }
  const handleEdit =()=>{
   setIsEditing(!isEditing);

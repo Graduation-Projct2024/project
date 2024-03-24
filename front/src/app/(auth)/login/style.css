@@ -55,7 +55,7 @@ h2{
 }
 
 .logIncontainer button{
-    background-color: orange;
+    background-color: #4c5372;
     color: #fff;
     font-size: 12px;
     padding: 10px 45px;
@@ -70,7 +70,8 @@ h2{
 
 
 .logIncontainer button:hover{
-    background-color: #00a1ff;
+    background-color: #4c5372;
+    color: #fff;
 }
 
 .logIncontainer button.hidden{
@@ -165,9 +166,7 @@ h2{
 }
 
 .toggle{
-    background-color: linear-gradient(to left, #00a1ff, #00ff8f);
     height: 100%;
-    background: linear-gradient(to right, #C33764  , #1D2671);
     color: #fff;
     position: relative;
     left: -100%;
@@ -198,6 +197,8 @@ h2{
 
 .toggle-left{
     transform: translateX(-200%);
+    background-image:url('./image/bg.jpg') !important;
+
 }
 
 .logIncontainer.active .toggle-left{
@@ -205,10 +206,17 @@ h2{
 }
 
 .toggle-right{
-    right: 0;
-    transform: translateX(0);
+    /* right: 0;
+    transform: translateX(0); */
+    background-image:url('./image/bg.jpg') !important;
 }
 
 .logIncontainer.active .toggle-right{
     transform: translateX(200%);
 } 
+.sign-in .col-md-6{
+    width:100%;
+}
+.sign-in h1, .sign-in h2 {
+color:#4c5372;
+}
