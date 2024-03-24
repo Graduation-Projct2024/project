@@ -73,8 +73,9 @@ export default function page({params}) {
                         <div className="modal-body text-center ">
                           <h2>Edit Profile Info</h2>
                           <div className="row">
-                            <EditProfile id={params.id}  FName = {user.userName} LName= {user.lName}  gender = {user.gender} phoneNumber = {user.phoneNumber} DateOfBirth = {user.dateOfBirth} address= {user.address} image = {user.imageUrl}/>
-                          </div>
+                          {userData &&
+                            <EditProfile id={params.id}  FName = {userData.userName} LName= {userData.lName}  gender = {userData.gender} phoneNumber = {userData.phoneNumber} DateOfBirth = {userData.dateOfBirth} address= {userData.address} image = {userData.imageUrl}/>
+                          }</div>
                         </div>
                       </div>
                     </div>
