@@ -37,7 +37,7 @@ export default function UpdateEmployee({id , fName , lName , email, gender, phon
         // formData.append('role', users.role);
         formData.append('gender', selectedGender); // Use selectedGender from state
 
-        const {data} = await axios.put(`http://localhost:5134/api/Employee/UpdateEmployeeFromAdmin?id=${id}`, updatedData);
+        const {data} = await axios.put(`http://localhost:5134/api/Employee/UpdateEmployeeFromAdmin?id=${id}`, formData);
         if(data.isSuccess){
             formik.resetForm();
             Swal.fire({

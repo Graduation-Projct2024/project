@@ -1,18 +1,16 @@
 'use client'
 import React, { useContext, useEffect, useState } from 'react'
-import { useParams } from 'next/navigation.js';
 import axios from 'axios';
 import { faFacebookF, faGithub, faLinkedinIn } from '@fortawesome/free-brands-svg-icons'
 import { faUser } from '@fortawesome/free-regular-svg-icons';
 import { faEnvelope, faPen } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './Profile.css'
-import Layout from '../../AdminLayout/Layout';
-import '../../dashboard/dashboard.css'
-import { UserContext } from '@/context/user/User';
+import '../../../(admin)/dashboard/dashboard.css'
 import EditProfile from './EditProfile';
+import Layout from '../../SubAdminLayout/Layout';
 import '../../../../../node_modules/bootstrap/dist/js/bootstrap.bundle'
-
+import { UserContext } from '@/context/user/User';
 
 export default function page({params}) {
   const {userToken, setUserToken, userData,userId}=useContext(UserContext);
@@ -39,7 +37,7 @@ export default function page({params}) {
       }}
       
   }
-  console.log(userData)
+  console.log(user)
   useEffect(()=>{
       getUser();
   },[userData])
@@ -75,9 +73,8 @@ export default function page({params}) {
                         <div className="modal-body text-center ">
                           <h2>Edit Profile Info</h2>
                           <div className="row">
-                            {userData &&
-                            <EditProfile id={params.id}  FName = {userData.userName} LName= {userData.lName}  gender = {userData.gender} phoneNumber = {userData.phoneNumber} DateOfBirth = {userData.dateOfBirth} address= {userData.address} image = {userData.imageUrl}/>
-                           }</div>
+                            <EditProfile id={params.id}  FName = {user.userName} LName= {user.lName}  gender = {user.gender} phoneNumber = {user.phoneNumber} DateOfBirth = {user.dateOfBirth} address= {user.address} image = {user.imageUrl}/>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -108,11 +105,11 @@ export default function page({params}) {
               <div className="col-xl-10">
               <div className="d-flex justify-content-xl-start justify-content-lg-center justify-content-md-center justify-content-sm-center justify-content-center">
                     <p className='fw-bold labels'>Email:</p>
-                    <p className=' info ps-2'>{user.email}</p>
+                    <p className=' info ps-4'>{user.email}</p>
                   </div>
                   <div className="d-flex justify-content-xl-start justify-content-lg-center justify-content-md-center justify-content-sm-center justify-content-center">
                     <p className='fw-bold labels'>Address:</p>
-                    <p className=' info ps-2'>{user.address}</p>
+                    <p className=' info ps-4'>{user.address}</p>
                   </div>
               </div>
                 

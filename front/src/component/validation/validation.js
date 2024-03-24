@@ -37,7 +37,7 @@ export const updateEmployee = yup.object({
    phoneNumber:yup.string().required('Phone number is required'),
 })
 export const editProfile = yup.object({
-   fName:yup.string().required('First Name is required'),
-   lName:yup.string().required('Last Name is required'),
+   FName:yup.string().required('First Name is required'),
+   LName:yup.string().required('Last Name is required'),
    
 })
