@@ -9,7 +9,11 @@ import Button from '@mui/material/Button';
 import Input from '../../../../component/input/Input.jsx';
 import './style.css'
 import { UserContext } from '../../../../context/user/User.jsx';
+import { useRouter } from 'next/navigation'
+
 export default function EditFile({materialID, name, description, pdf, courseId }) {
+  const router = useRouter();
+console.log(description)
   const {userData}=useContext(UserContext);
 console.log(materialID)
   const handelFieldChang = (event) => {
@@ -53,6 +57,7 @@ const { data } = await axios.put(
   console.log(data);
  formik.resetForm();
  setAlertOpen(true);
+ router.back();
 
   }}
   catch (error) {

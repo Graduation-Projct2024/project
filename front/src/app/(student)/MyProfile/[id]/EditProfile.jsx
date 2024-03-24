@@ -56,6 +56,8 @@ useEffect(() => {
                 text: "You can see the data updated in your profile",
                 icon: "success"
               });
+              
+
             
         }
 

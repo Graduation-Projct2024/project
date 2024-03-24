@@ -79,7 +79,7 @@ const sidebarItems = [
     localStorage.removeItem("userToken");
     setUserToken(null);
     setUserData(null);
-    router.push("/");
+    router.push("/Login");
   };
   const handleDrawerTransitionEnd = () => {
     setIsClosing(false);

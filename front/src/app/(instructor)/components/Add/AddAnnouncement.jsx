@@ -13,7 +13,7 @@ import Button from '@mui/material/Button';
 import Input from '../../../../component/input/Input.jsx';
 import { UserContext } from '../../../../context/user/User.jsx';
 
-export default function AddAnnouncement({ open, onClose, courseId }) {
+export default function AddAnnouncement({ open, onClose,handleCloseAdd, courseId }) {
   const {userData}=useContext(UserContext);
 
   const [Alertopen, setAlertOpen] = React.useState(false);
@@ -47,6 +47,8 @@ const { data } = await axios.post(
  if(data.isSuccess){
   console.log("test");
  formik.resetForm();
+ onClose(); 
+ handleCloseAdd();
  setAlertOpen(true);
 
   }

@@ -135,7 +135,7 @@ export default function page() {
         <Register/>
   <div className="form-container sign-in">
     <form onSubmit={formik.handleSubmit}>
-      <h1>Sign In</h1>
+      <h1 className='pb-3'>Log In</h1>
       
         {renderInputs}
         <div className="text-center mt-3 loginActions">

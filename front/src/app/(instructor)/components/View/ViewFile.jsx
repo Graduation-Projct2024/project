@@ -27,11 +27,13 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import Alert from '@mui/material/Alert';
 import './style.css'
 import EditFile from '../Edit/EditFile.jsx';
+import { useRouter } from 'next/navigation'
 
 export default function ViewFile({ materialID ,courseId }) {
  const [material, setMaterial]=useState(null);
  const [loading ,setLoading]=useState(true);
  const [isEditing, setIsEditing] = useState(false);
+ const router = useRouter();
 
  const [open, setOpen] = React.useState(false);
  const theme = useTheme();
@@ -65,7 +67,8 @@ if(data.isSuccess==true){
  const deleteMaterial=async()=>{
   const {data}= await axios.delete(`http://localhost:5134/api/MaterialControllar/DeleteMaterial?id=${materialID}`)
   setOpenAlert(true);
-
+  setOpen(false);
+  router.back();
  }
  const handleEdit =()=>{
   setIsEditing(!isEditing);
@@ -156,7 +159,7 @@ if (loading) {
     </div>
   </Stack>
   {isEditing?(
-    <EditFile materialID={materialID} name={material.name} linkURL={material.linkUrl} courseId={courseId}/>
+    <EditFile materialID={materialID} name={material.name} description={material.description} courseId={courseId}/>
 
 ):(
     <List sx={{ ...style, width: '80%', maxWidth: 'none' }} aria-label="mailbox folders">

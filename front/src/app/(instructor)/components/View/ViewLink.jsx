@@ -26,11 +26,13 @@ import Snackbar from '@mui/material/Snackbar';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import Alert from '@mui/material/Alert';
 import EditLink from '../Edit/EditLink.jsx';
+import { useRouter } from 'next/navigation'
 
 export default function ViewLink({ materialID , courseId}) {
  const [material, setMaterial]=useState(null);
  const [loading ,setLoading]=useState(true);
  const [isEditing, setIsEditing] = useState(false);
+ const router = useRouter();
 
  const [open, setOpen] = React.useState(false);
  const theme = useTheme();
@@ -64,7 +66,8 @@ if(data.isSuccess==true){
  const deleteMaterial=async()=>{
   const {data}= await axios.delete(`http://localhost:5134/api/MaterialControllar/DeleteMaterial?id=${materialID}`)
   setOpenAlert(true);
-
+  setOpen(false);
+  router.back();
  }
  const handleEdit =()=>{
   setIsEditing(!isEditing);
@@ -166,11 +169,7 @@ if (loading) {
     <Typography>{material.name}</Typography>
   </ListItem>
   <Divider component="li" />
-  <ListItem sx={{p:4}} >
-    <Typography bold sx={{mr:3}}>Description :</Typography>
-    <Typography>{material.description}</Typography>
-  </ListItem>
-  <Divider component="li" />
+
   <ListItem sx={{p:4}} >
     <Typography bold sx={{mr:3}}>Link :</Typography>
     <Link download target='_blank'  href={`${material.linkUrl}`}>{material.name}</Link>

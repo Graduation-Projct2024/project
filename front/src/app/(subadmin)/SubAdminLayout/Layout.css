@@ -1,6 +1,7 @@
 .side-drawer{
     background-color: #4C5372 !important;
     color: #fffdf6;
+    height:100%;
 }
 .side-drawer span, .side-drawer a,.side-drawer svg{
     color: #fffdf6;

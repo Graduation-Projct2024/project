@@ -30,7 +30,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import './style.css'
 import { UserContext } from '../../../context/user/User.jsx';
 import StudentRoute from '../../(auth)/protectedRoute/StudentRoute.jsx';
-const drawerWidth = 240;
+const drawerWidth = 260;
 
 function Layout(props) {
   const { window } = props;
@@ -82,7 +82,7 @@ const sidebarItems = [
     localStorage.removeItem("userToken");
     setUserToken(null);
     setUserData(null);
-    router.push("/");
+    router.push("/Login");
   };
   const handleDrawerTransitionEnd = () => {
     setIsClosing(false);
@@ -138,9 +138,9 @@ const sidebarItems = [
                 )
                 })}
             </List>
-      <List sx={{my:'auto',pt:5}}>
+      <List sx={{my:'auto',pt:2}}>
                 <ListItem >
-                  <ListItemButton onClick={logout} sx={{color:deepPurple[50], alignSelf: 'flex-end',pt:2}}>
+                  <ListItemButton onClick={logout} sx={{color:deepPurple[50], alignSelf: 'flex-end'}}>
                     <ListItemIcon>
                     <LogoutIcon sx={{color:deepPurple[50]}}/>
                     </ListItemIcon>
@@ -178,7 +178,7 @@ const sidebarItems = [
           {title}
           </Typography>
           <Link  >
-             <Avatar alt="Remy Sharp" sx={{ width: 60, height: 60,mr:7 ,mt:3,}} />
+            {userData&&userData.imageUrl?(<Avatar alt="profile picture" src={userData.imageUrl} sx={{ width: 60, height: 60,mr:7 ,mt:3,}} />):(<Avatar alt="Remy Sharp" sx={{ width: 60, height: 60,mr:7 ,mt:3,}} />)} 
           </Link>
         </Toolbar>
       </Stack>
