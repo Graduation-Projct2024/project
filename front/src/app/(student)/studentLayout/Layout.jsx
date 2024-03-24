@@ -26,16 +26,28 @@ import { useRouter } from 'next/navigation'
 import LogoutIcon from '@mui/icons-material/Logout';
 import { Avatar, Stack } from '@mui/material';
 import AdbIcon from '@mui/icons-material/Adb';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import './style.css'
 import { UserContext } from '../../../context/user/User.jsx';
 import StudentRoute from '../../(auth)/protectedRoute/StudentRoute.jsx';
 const drawerWidth = 240;
+
+function Layout(props) {
+  const { window } = props;
+  const { children, title } = props;
+  
+  let { userToken, setUserToken ,userData,setUserData,userId} = React.useContext(UserContext);
 const sidebarItems = [
   {
     name: "Dashboard",
     href: "/MyDashboard",
     icon: DashboardIcon,
     
+  },
+  {
+    name: "Profile",
+    href: `/MyProfile/${userId}`,
+    icon: AccountCircleIcon,
   },
   {
     name: "My Courses",
@@ -59,12 +71,6 @@ const sidebarItems = [
     },
  
 ];
-function Layout(props) {
-  const { window } = props;
-  const { children, title } = props;
-  
-  let { userToken, setUserToken ,userData,setUserData} = React.useContext(UserContext);
-
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
   const router = useRouter();

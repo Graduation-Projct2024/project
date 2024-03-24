@@ -31,7 +31,17 @@ import './Layout.css'
 import { UserContext } from '@/context/user/User';
 import SubAdminRoute from '@/app/(auth)/protectedRoute/SubAdminRoute';
 const drawerWidth = 240;
-const sidebarItems = [
+
+function Layout(props) {
+  const { window } = props;
+  const { children, title } = props;
+  let { userToken, setUserToken ,userData,setUserData,userId} = React.useContext(UserContext);
+
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [isClosing, setIsClosing] = React.useState(false);
+  const router = useRouter();
+  
+  const sidebarItems = [
   {
     name: "Dashboard",
     href: "/dashboardS",
@@ -40,7 +50,7 @@ const sidebarItems = [
   },
   {
     name: "Profile",
-    href: "/Profile",
+    href: `/ProfileS/${userId}`,
     icon: AccountCircleIcon,
   },
   {
@@ -60,14 +70,6 @@ const sidebarItems = [
     },
  
 ];
-function Layout(props) {
-  const { window } = props;
-  const { children, title } = props;
-  let { userToken, setUserToken ,userData,setUserData} = React.useContext(UserContext);
-
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [isClosing, setIsClosing] = React.useState(false);
-  const router = useRouter();
   const handleDrawerClose = () => {
     setIsClosing(true);
     setMobileOpen(false);

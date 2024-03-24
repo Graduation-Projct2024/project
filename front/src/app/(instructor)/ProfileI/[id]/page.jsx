@@ -1,17 +1,16 @@
 'use client'
 import React, { useContext, useEffect, useState } from 'react'
-import { useParams } from 'next/navigation.js';
 import axios from 'axios';
 import { faFacebookF, faGithub, faLinkedinIn } from '@fortawesome/free-brands-svg-icons'
 import { faUser } from '@fortawesome/free-regular-svg-icons';
 import { faEnvelope, faPen } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './Profile.css'
-import Layout from '../../AdminLayout/Layout';
-import '../../dashboard/dashboard.css'
+import '../../../(admin)/dashboard/dashboard.css'
 import { UserContext } from '@/context/user/User';
 import EditProfile from './EditProfile';
 import '../../../../../node_modules/bootstrap/dist/js/bootstrap.bundle'
+import Layout from '../../instructorLayout/Layout';
 
 
 export default function page({params}) {
@@ -61,7 +60,7 @@ export default function page({params}) {
           <div className="row">
             <div className="col-xl-8 col-lg-12 pt-lg-3 pt-md-3 pt-sm-3 pt-3 d-flex gap-2">
               <p className='text-uppercase fw-bold pt-2 '><span className='name'>{user.userName} {user.lName}</span></p>
-              {userData && params.id == userId && <button className="border-0 bg-white" type="button" data-bs-toggle="modal" data-bs-target={`#exampleModal2-${params.id}`}>
+              {userData && params.id == userId && <button className="border-0 bg-transparent" type="button" data-bs-toggle="modal" data-bs-target={`#exampleModal2-${params.id}`}>
                       <FontAwesomeIcon icon={faPen} className="edit-pen" />
                 </button>} 
             </div>
