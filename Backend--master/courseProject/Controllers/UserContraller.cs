@@ -309,7 +309,7 @@ namespace courseProject.Controllers
             {
                 usermapper = mapper.Map<Student, UserInfoDTO>(GetUser.student);
             }
-
+            usermapper.UserId = id;
             if (GetUser == null)
             {
                 response.IsSuccess = false;
