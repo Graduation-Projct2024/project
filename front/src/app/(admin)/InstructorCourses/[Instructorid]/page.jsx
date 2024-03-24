@@ -13,6 +13,7 @@ export default function InstructorCourses({params}) {
     const {userToken, setUserToken, userData}=useContext(UserContext);
 
     const [instructorCourse,setInstructorCourse] = useState([])
+    const [employeeName, setEmployeeName] = useState('');
     const [loading, setLoading] = useState(false);
   // const {id} = useParams();
   // console.log(useParams());
@@ -35,6 +36,7 @@ export default function InstructorCourses({params}) {
       }
     }   
   };
+
   const [employees, setEmployees] = useState([]);
 
 
@@ -54,6 +56,13 @@ export default function InstructorCourses({params}) {
     fetchEmployees();
   },[userData])
 
+  useEffect(() => {
+    const employee = employees.find(employee => employee.id == params.Instructorid);
+    if(employee) {
+        setEmployeeName(`${employee.fName} ${employee.lName}`);
+    }
+}, [employees, params.Instructorid]);
+console.log(employeeName)
 
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -70,12 +79,14 @@ const matchesSearchTerm =
 
 
 return matchesSearchTerm ;
-});
 
  
+});
 
+  
   return (
-    <Layout title = "Courses for this Instructor">
+    
+    <Layout title = {`Courses "${employeeName}" Instructor`}>
         
     <div className="filter py-2 text-end">
         <nav className="navbar">

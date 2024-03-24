@@ -11,7 +11,7 @@ export default function InstuctorRoute({children}) {
     if(userData){
      
   if(localStorage.getItem("userToken")==null||userData.role!='Instructor'){
-    return router.push('/Login')
+    return router.push('/login')
     
  }}
 }

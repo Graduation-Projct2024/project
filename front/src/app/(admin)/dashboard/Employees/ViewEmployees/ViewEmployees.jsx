@@ -198,7 +198,7 @@ export default function ViewEmployees() {
                       <FontAwesomeIcon icon={faEye} className="edit-pen" />
                     </button>
                   </Link>
-                  {employee.type == "Instructor" && (
+                  {userData && employee.type == "Instructor" && (
                     <Link href={`/InstructorCourses/${employee.id}`}>
                       <button type="button" className="border-0 bg-white ">
                         <FontAwesomeIcon icon={faBook} className="edit-pen" />

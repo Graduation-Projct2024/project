@@ -11,7 +11,7 @@ export default function StudentRoute({children}) {
     if(userData){
      
   if(localStorage.getItem("userToken")==null||userData.role!='student'){
-    return router.push('/Login')
+    return router.push('/login')
     
  }}
 }
