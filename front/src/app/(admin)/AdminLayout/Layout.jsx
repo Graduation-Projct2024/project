@@ -38,7 +38,7 @@ const drawerWidth = 240;
 function Layout(props) {
   const { window } = props;
   const { children, title } = props;
-  let { userToken, setUserToken ,userData,setUserData} = React.useContext(UserContext);
+  let { userToken, setUserToken ,userData,setUserData,userId} = React.useContext(UserContext);
 const sidebarItems = [
   {
     name: "Dashboard",
@@ -48,7 +48,7 @@ const sidebarItems = [
   },
   {
     name: "Profile",
-    href: `/Profile`,
+    href: `/Profile/${userId}`,
     icon: AccountCircleIcon,
   },
   {
