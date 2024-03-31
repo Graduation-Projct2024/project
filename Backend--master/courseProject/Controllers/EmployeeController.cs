@@ -569,5 +569,26 @@ namespace courseProject.Controllers
         }
 
 
+        [HttpGet("GetAllInstructorsList")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<ApiResponce>> GetInstructorsForDropDownList()
+        {
+            var GetInstructors = await unitOfWork.instructorRepositpry.GetAllEmployeeAsync();
+            if (GetInstructors.Count() == 0)
+            {
+                responce.IsSuccess = false;
+                responce.StatusCode = HttpStatusCode.NotFound;
+                responce.ErrorMassages.Add("Not have any instructor account yet ");
+                return NotFound(responce);
+            }
+            var CustomCoursesMapper = mapper.Map<IEnumerable<Instructor>, IEnumerable<EmployeeListDTO>>(GetInstructors);
+
+            responce.IsSuccess = true;
+            responce.StatusCode = HttpStatusCode.OK;
+            responce.Result = CustomCoursesMapper;
+            return Ok(responce);
+        }
     }
 }
