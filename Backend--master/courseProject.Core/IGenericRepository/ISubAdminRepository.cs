@@ -22,7 +22,8 @@ namespace courseProject.Core.IGenericRepository
 
         public Task RollbackTransactionAsync();
         public Task GetIdForUpdateSubAdmin(int id);
+        public Task<IReadOnlyList<Request>> GerAllCoursesRequestAsync();
 
-       // public Task editCourse()
+
     }
 }

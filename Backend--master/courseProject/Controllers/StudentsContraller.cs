@@ -10,6 +10,9 @@ using System.Net;
 using Microsoft.AspNetCore.Authorization;
 using courseProject.Common;
 using courseProject.core.Models;
+using AutoMapper.Internal;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 
 namespace courseProject.Controllers
@@ -134,7 +137,7 @@ namespace courseProject.Controllers
                 return NotFound(response);
             }
             var courseFound =  Studentfound.Select(x => x.Course).ToList();
-            CommonClass.EditImageInFor(courseFound);
+            CommonClass.EditImageInFor(courseFound , null);
             response.IsSuccess = true;
             response.StatusCode = HttpStatusCode.OK;
             response.Result = Studentfound;
@@ -164,8 +167,11 @@ namespace courseProject.Controllers
                 response.ErrorMassages = new List<string>() { "The StudentId OR/AND TaskId Not Found" };
                 return NotFound(response);
             }
-
-            if(submissions == null)
+            if( ! submissions.GetType()
+                 .GetProperties() 
+                 .Select(pi => pi.GetValue(submissions)) 
+                 .Any(value => value != null) 
+              )
             {
                 response.IsSuccess = false;
                 response.StatusCode = HttpStatusCode.BadRequest;
@@ -173,15 +179,12 @@ namespace courseProject.Controllers
                 return BadRequest(response);
             }
             var student_Task = mapper.Map<SubmissionsDTO, Student_Task_Submissions>(submissions);
-          //  Student_Task_Submissions student_Task=null;
             student_Task.StudentId = Studentid;
             student_Task.TaskId=taskid;
-            // student_Task.description = submissions.description;
             if (student_Task.pdf != null)
             {
                 student_Task.pdfUrl = "Files\\" + await unitOfWork.FileRepository.UploadFile1(student_Task.pdf);
-            }
-            
+            }           
             await unitOfWork.StudentRepository.SubmitTaskAsync(student_Task);
             var success = await unitOfWork.StudentRepository.saveAsync();
             if (submissions.pdf != null)
@@ -244,48 +247,125 @@ namespace courseProject.Controllers
             return BadRequest(response);
         }
 
-        ////[HttpPost("CreateStudent")]
-        //[ProducesResponseType(200)]
-        //[ProducesResponseType(404)]
-        //[ProducesResponseType(400)]
-        //public async Task<ActionResult<Student>> CreateStudent(RegistrationRequestDTO model)
-        //{
 
-        //    var modelMapped = mapper.Map<Student>(model);
-        //    using (var transaction = await unitOfWork.SubAdminRepository.BeginTransactionAsync())
-        //    {
-        //        try
-        //        {
-        //           await unitOfWork.UserRepository.RegisterAsync(model);
-        //            var success1 = await unitOfWork.StudentRepository.saveAsync();
+        [HttpPost("RequestToCreateCustomCourse")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<ApiResponce>> RequestToCreateACustomCourse (int studentid  , [FromForm] StudentCustomCourseDTO studentCustomCourse)
+        {
+            if(studentid <=0 )
+            {
+                response.IsSuccess = false;
+                response.StatusCode = HttpStatusCode.BadRequest;
+                response.ErrorMassages.Add("the id is less or equal 0 ");
+                return BadRequest(response);    
+            }
+            if(!studentCustomCourse.GetType()
+                 .GetProperties()
+                 .Select(s => s.GetValue(studentCustomCourse))
+                 .Any(value => value != null))
+            {
+                response.IsSuccess = false;
+                response.StatusCode = HttpStatusCode.BadRequest;
+                response.ErrorMassages.Add("No input is added ");
+                return BadRequest(response);
+            }
+            var allStudents = await unitOfWork.StudentRepository.GetAllStudentsAsync();
+            if(! allStudents.Any(x=>x.StudentId == studentid))
+            {
+                response.IsSuccess = false;
+                response.StatusCode = HttpStatusCode.BadRequest;
+                response.ErrorMassages.Add($"The student with id ={studentid} is not found");
+                return BadRequest(response);
+            }
+            var customCourseMapper = mapper.Map< StudentCustomCourseDTO , Request>(studentCustomCourse);
+            customCourseMapper.satus = "custom-course";
+            customCourseMapper.StudentId = studentid;
+            var adminid = await  unitOfWork.UserRepository.GetAdminId();
+            customCourseMapper.AdminId = adminid.UserId;
+            await unitOfWork.SubAdminRepository.CreateRequest(customCourseMapper);
+            if(await unitOfWork.CourseRepository.saveAsync() > 0)
+            {
+                response.IsSuccess = true;
+                response.StatusCode = HttpStatusCode.Created;
+                response.Result = studentCustomCourse;
+                return Ok(response);
+            }
+            response.IsSuccess = false;
+            response.StatusCode = HttpStatusCode.BadRequest;
+            return BadRequest(response);
+        }
 
-        //            await unitOfWork.StudentRepository.CreateStudentAccountAsync(modelMapped);
-        //            var success2 = await unitOfWork.StudentRepository.saveAsync();
 
+        [HttpPost("BookALecture")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<ApiResponce>> BoolLectureByStudent(int studentId , DateTime date , string startTime , string endTime , [FromForm] BookALectureDTO bookALecture)
+        {  
+            
+            if(!ModelState.IsValid)
+            {
+                response.IsSuccess = false;
+                response.StatusCode = HttpStatusCode.BadRequest;
+                return BadRequest(response);
+            }
+            if(! bookALecture.GetType().GetProperties()
+                .Select(x => x.GetValue(bookALecture))
+                 .Any(value => value != null))
+            {
+                response.IsSuccess = false;
+                response.StatusCode = HttpStatusCode.BadRequest;
+                response.ErrorMassages.Add("No input is added ");
+                return BadRequest(response);
+            }
+            var allStudents = await unitOfWork.StudentRepository.GetAllStudentsAsync();
+            if (!allStudents.Any(x => x.StudentId == studentId))
+            {
+                response.IsSuccess = false;
+                response.StatusCode = HttpStatusCode.BadRequest;
+                response.ErrorMassages.Add($"The student with id ={studentId} is not found");
+                return BadRequest(response);
+            }
+            if (!CommonClass.IsValidTimeFormat(startTime) || !CommonClass.IsValidTimeFormat(endTime) || !CommonClass.IsValidTimeFormat(bookALecture.Duration))
+            {
+                response.IsSuccess = false;
+                response.StatusCode = HttpStatusCode.BadRequest;
+                response.ErrorMassages.Add("The Input Time Has An Error");
+                return BadRequest(response);
+            }
+            TimeSpan StartTime = CommonClass.ConvertToTimeSpan(startTime);
+            TimeSpan EndTime = CommonClass.ConvertToTimeSpan(endTime);
+            TimeSpan duration = CommonClass.ConvertToTimeSpan(bookALecture.Duration);
+            if ((EndTime- StartTime) < duration)
+            {
+                response.IsSuccess = false;
+                response.StatusCode = HttpStatusCode.BadRequest;
+                response.ErrorMassages.Add("The Duration Input Is Greater Than The Difference Between Start And End Time !, Edit It");
+                return BadRequest(response);
+            }
+            
+            var consultation = mapper.Map<BookALectureDTO , Consultation>(bookALecture);
+            consultation.StudentId = studentId;
+            consultation.startTime = StartTime;
+            consultation.endTime= EndTime;
+            consultation.date = date;
 
-        //            if (success1 > 0 && success2 > 0)
-        //            { 
-        //                await transaction.CommitAsync();
-        //                response.StatusCode = (HttpStatusCode)StatusCodes.Status201Created;
-        //                response.IsSuccess = true;
-        //                response.Result = model;
-        //                return Ok(response);
-        //            }
+            await unitOfWork.StudentRepository.BookLectureAsync(consultation);
+            if(await unitOfWork.StudentRepository.saveAsync() > 0)
+            {
+                response.IsSuccess = true;
+                response.StatusCode = HttpStatusCode.Created;
+                response.Result = bookALecture;
+                return Ok(response);
+            }
+            response.IsSuccess = false;
+            response.StatusCode=HttpStatusCode.BadRequest;
+            return BadRequest(response);
 
-        //            return BadRequest(response);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            await transaction.RollbackAsync();
+        }
 
-
-        //            response.StatusCode = (HttpStatusCode)StatusCodes.Status400BadRequest;
-        //            response.IsSuccess = false;
-
-        //            return BadRequest(response);
-        //        }
-
-        //    }
     }
 
 

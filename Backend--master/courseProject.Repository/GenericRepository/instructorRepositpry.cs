@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using courseProject.core.Models;
 
 namespace courseProject.Repository.GenericRepository
 {
@@ -49,6 +50,19 @@ namespace courseProject.Repository.GenericRepository
         public async Task<IReadOnlyList<Instructor_Working_Hours>> GetOfficeHourByIdAsync(int instructorId)
         {
             return  await dbContext.Instructor_Working_Hours.Where(x=>x.InstructorId == instructorId).ToListAsync();
+        }
+
+        public async Task<IReadOnlyList<Student_Task_Submissions>> GetAllSubmissionsByTaskIdAsync(int taskId)
+        {
+            return await dbContext.Student_Task_Submissions
+                .Include(x=>x.Student)
+                .Include(x=>x.Student.user)
+                .Where(x=>x.TaskId== taskId).ToListAsync();
+        }
+
+        public async Task<IReadOnlyList<Consultation>> GetAllConsultationRequestByInstructorIdAsync(int instructorId)
+        {
+           return await dbContext.consultations.Include(x=>x.student.user).Include(x => x.instructor.user).Where(x=>x.InstructorId == instructorId).ToListAsync();
         }
     }
 }

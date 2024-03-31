@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using courseProject.core.Models;
 using courseProject.Core.Models;
 using courseProject.Core.Models.DTO;
 
@@ -32,6 +33,18 @@ namespace courseProject.MappingProfile
             CreateMap<User, Admin>()
                 .ForMember(x => x.AdminId, o => o.MapFrom(y => y.UserId));
 
+
+            CreateMap<Student_Task_Submissions, StudentSubmissionDTO>()
+                .ForMember(x => x.userName, o => o.MapFrom(y => y.Student.user.userName))
+                .ForMember(x => x.LName, o => o.MapFrom(y => y.Student.LName))
+                .ForMember(x => x.email, o => o.MapFrom(y => y.Student.user.email))
+                .ForMember(x => x.pdfUrl, o => {
+                    o.PreCondition(src => src.pdfUrl != null);
+                    o.MapFrom(y => $"http://localhost:5134/{y.pdfUrl}");
+                    });
+
+
+            CreateMap<BookALectureDTO, Consultation>();
         }
 
 

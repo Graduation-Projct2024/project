@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace courseProject.Core.Models
 {
@@ -15,15 +16,14 @@ namespace courseProject.Core.Models
 
         public string type { get; set; }
 
-        public string status { get; set; }
+        public string status { get; set; } = "off";
 
-        public DateTime date { get; set; }
+        public DateTime date { get; set; } 
+        public TimeSpan startTime { get; set; }
 
-        public DateTime startTime { get; set; }
-
-        public DateTime endTime { get; set; }
-
-        public DateTime dateOfAdded { get; set; }
+        public TimeSpan endTime { get; set; }
+         public TimeSpan Duration { get; set; }
+        public DateTime dateOfAdded { get; set; } = DateTime.Now;
         [ForeignKey("Student")]
         public int StudentId { get; set; }
 

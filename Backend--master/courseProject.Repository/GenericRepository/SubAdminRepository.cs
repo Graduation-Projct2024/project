@@ -96,5 +96,10 @@ namespace courseProject.Repository.GenericRepository
             await dbContext.subadmins.FirstOrDefaultAsync(x => x.SubAdminId == id);
  
         }
+
+        public async Task<IReadOnlyList<Request>> GerAllCoursesRequestAsync()
+        {
+            return await dbContext.requests.Include(x => x.Student.user).Where(x => x.satus == "custom-course").ToListAsync(); 
+        }
     }
 }

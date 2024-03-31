@@ -1,4 +1,5 @@
-﻿using courseProject.Core.Models;
+﻿using courseProject.core.Models;
+using courseProject.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,5 +16,7 @@ namespace courseProject.Core.IGenericRepository
         public Task<IReadOnlyList<Course>> GetAllCoursesGivenByInstructorIdAsync(int Instructorid);
         public Task AddOfficeHoursAsync(Instructor_Working_Hours instructor_Working_Hours);
         public Task<IReadOnlyList<Instructor_Working_Hours>> GetOfficeHourByIdAsync(int instructorId);
+        public Task<IReadOnlyList<Student_Task_Submissions>> GetAllSubmissionsByTaskIdAsync(int taskId);
+        public Task<IReadOnlyList<Consultation>> GetAllConsultationRequestByInstructorIdAsync(int instructorId);
     }
 }
