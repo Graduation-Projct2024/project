@@ -1,24 +1,27 @@
 import Input from '@/component/input/Input';
 import { updateEmployee } from '@/component/validation/validation';
+import { UserContext } from '@/context/user/User';
 import axios from 'axios';
 import { useFormik } from 'formik';
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Swal from 'sweetalert2';
 
 export default function UpdateEmployee({id , fName , lName , email, gender, phoneNumber , address}) {
 
     const [employeeData, setEmployeeData] = useState(null);
     const [selectedGender, setSelectedGender] = useState('');
+    const {userToken, setUserToken, userData,userId}=useContext(UserContext);
 
     useEffect(() => {
       const fetchEmployeeData = async () => {
+        if(userData){
         try {
           const { data } = await axios.get(`http://localhost:5134/api/Employee/GetEmployeeById?id=${id}`);
           console.log(data.result);
           setEmployeeData(data.result);
         } catch (error) {
           console.error('Error fetching employee data:', error);
-        }
+        }}
       };
 
       fetchEmployeeData();
@@ -26,6 +29,7 @@ export default function UpdateEmployee({id , fName , lName , email, gender, phon
     console.log(employeeData)
 
     const onSubmit = async (updatedData) => {
+      if(userData){
       try {
         const formData = new FormData();
         formData.append('fName', updatedData.fName);
@@ -37,7 +41,7 @@ export default function UpdateEmployee({id , fName , lName , email, gender, phon
         // formData.append('role', users.role);
         formData.append('gender', selectedGender); // Use selectedGender from state
 
-        const {data} = await axios.put(`http://localhost:5134/api/Employee/UpdateEmployeeFromAdmin?id=${id}`, formData);
+        const {data} = await axios.put(`http://localhost:5134/api/Employee/UpdateEmployeeFromAdmin?id=${id}`, updatedData);
         if(data.isSuccess){
             formik.resetForm();
             Swal.fire({
@@ -50,7 +54,7 @@ export default function UpdateEmployee({id , fName , lName , email, gender, phon
 
       } catch (error) {
         console.error('Error updating employee:', error);
-      }
+      }}
     };
   
     const formik = useFormik({

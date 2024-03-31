@@ -28,7 +28,7 @@ export default function ViewEvents() {
   
     useEffect(() => {
       fetchEvents();
-    }, [userData]);
+    }, [events,userData]);
   
     const [searchTerm, setSearchTerm] = useState('');
   

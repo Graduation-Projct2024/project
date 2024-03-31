@@ -12,12 +12,13 @@ export default function ViewEmployees() {
 
       const {userToken, setUserToken, userData}=useContext(UserContext);
       const [employees, setEmployees] = useState([]);
-
+      // const [loading,setLoading] = useState(true);
 
       const fetchEmployees = async () => {
         if(userData){
         try{
         const { data } = await axios.get(`http://localhost:5134/api/Employee/GetAllEmployee`);
+        // setLoading(false)
         console.log(data);
         setEmployees(data);
       }
@@ -29,7 +30,7 @@ export default function ViewEmployees() {
 
       useEffect(() => {
         fetchEmployees();
-      }, [userData]);
+      }, [employees,userData]);
 
       const [searchTerm, setSearchTerm] = useState('');
       const [selectedRole, setSelectedRole] = useState(null);
@@ -54,7 +55,9 @@ export default function ViewEmployees() {
 
         return matchesSearchTerm && matchesRole;
   });
-
+// if(loading){
+//   return <h2>Loading....</h2>
+// }
   return (
     <>
       <div className="filter py-2 text-end">
