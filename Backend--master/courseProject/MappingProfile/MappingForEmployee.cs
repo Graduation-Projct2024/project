@@ -119,6 +119,10 @@ namespace courseProject.MappingProfile
                 .ForMember(x => x.StudentuserName, o => o.MapFrom(y => y.student.user.userName))
                 .ForMember(x => x.StudentLName, o => o.MapFrom(y => y.student.LName))
                 .ForMember(x => x.date, o => o.MapFrom(y =>y.date.ToString("dd/MM/yyyy")));
+
+            CreateMap<Instructor, EmployeeListDTO>()
+                .ForMember(x=>x.id , o=>o.MapFrom(y=>y.InstructorId))
+                .ForMember(x => x.name, o => o.MapFrom(y => y.user.userName+" "+ y.LName));
         }
     }
 }
