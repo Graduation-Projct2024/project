@@ -30,7 +30,7 @@ export default function ViewCourses() {
 
   useEffect(() => {
     fetchCourses();
-  }, [userData]);
+  }, [courses,userData]);
 
   const [searchTerm, setSearchTerm] = useState('');
 

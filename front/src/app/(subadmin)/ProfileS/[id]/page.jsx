@@ -40,7 +40,7 @@ export default function page({params}) {
   console.log(user)
   useEffect(()=>{
       getUser();
-  },[userData])
+  },[user,userData])
   
   return (
     <Layout>

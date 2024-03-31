@@ -4,7 +4,7 @@ import { createEmployee } from '@/component/validation/validation';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Swal from 'sweetalert2';
 
 export default function CreateEmployee() {
@@ -13,7 +13,8 @@ export default function CreateEmployee() {
     
   const [selectedGender, setSelectedGender] = useState('');
   const [selectedRole, setSelectedRole] = useState('');
-  
+  const [loading,setLoading] = useState(false);
+  const [pageLoading,setPageLoading] = useState(false);
 
   const initialValues={
     FName: '',
@@ -29,17 +30,9 @@ export default function CreateEmployee() {
 
 
 const onSubmit = async (users) => {
+  setLoading(true);
     try {
-      // formik.setValues({
-      //   fName: '',
-      //   lName: '',
-      //   email: '',
-      //   password: '',
-      //   phoneNumber: '',
-      //   address: '',
-      //   gender: '',
-      //   role: '',
-      // });
+
 
       const formData = new FormData();
       formData.append('FName', users.FName);
@@ -65,6 +58,7 @@ const onSubmit = async (users) => {
       
      if(data.isSuccess){
       console.log(data);
+      setPageLoading(true);
       console.log('tttt');
       formik.resetForm();
       router.push('/dashboard');
@@ -82,7 +76,22 @@ const onSubmit = async (users) => {
       console.log('Error response:', error.response);
       // Optionally, you can show an error message to the user
     }
+    finally {
+      setLoading(false); // Set loading back to false regardless of success or failure
+    }
   };
+
+
+  useEffect(() => {
+    // Check if page loading state is true, then set it back to false after a certain duration
+    if (pageLoading) {
+      const timer = setTimeout(() => {
+        setPageLoading(false);
+      }, 2000); // You can adjust the duration as needed
+      return () => clearTimeout(timer);
+    }
+  }, [pageLoading]);
+
 
 const formik = useFormik({
   initialValues : initialValues,
@@ -173,6 +182,10 @@ const renderInputs = inputs.map((input,index)=>
 
 
   return (
+    <>
+    {pageLoading ? ( // Show loading indicator while page is loading
+        <div>Loading...</div>
+      ) : (
     <form onSubmit={formik.handleSubmit} className="row justify-content-center">
       {renderInputs}
        <div className="col-md-6">
@@ -217,10 +230,15 @@ const renderInputs = inputs.map((input,index)=>
         disabled={formik.isSubmitting || Object.keys(formik.errors).length > 0 || Object.keys(formik.touched).length === 0||!selectedGender || 
         !selectedRole }
       >
-        CREATE ACCOUNT
+        {/* CREATE ACCOUNT */}
+        {loading ? 'Creating...' : 'CREATE ACCOUNT'}
       </button>
+      
       </div>
-      <div className="col-md-12"><button type="button" className="btn btn-secondary createButton mt-3 fs-3 px-3 w-25" data-bs-dismiss="modal">Close</button></div>
-    </form>
+      <div className="col-md-12"><button type="button" className="btn btn-secondary createButton mt-3 fs-3 px-3 w-25" data-bs-dismiss="modal">
+        Close
+        </button></div>
+    </form>)}
+    </>
   );
 }
