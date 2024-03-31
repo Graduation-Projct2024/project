@@ -62,7 +62,7 @@ namespace courseProject.MappingProfile
 
             CreateMap<ProfileDTO, User>()
                 .ForMember(x => x.userName, o => o.MapFrom(y => y.FName));
-               // .ForMember(x=>x.email , o=>o.MapFrom(y=>y.email));
+               
 
             CreateMap<ProfileDTO, Admin>();
             CreateMap<ProfileDTO, SubAdmin>();
@@ -76,36 +76,49 @@ namespace courseProject.MappingProfile
             CreateMap<Instructor, UserInfoDTO>()
                 .ForMember(x => x.userName, o => o.MapFrom(y => y.user.userName))
                 .ForMember(x => x.email, o => o.MapFrom(y => y.user.email))
-                .ForMember(x => x.role, o => o.MapFrom(y => y.user.role));
+                .ForMember(x => x.role, o => o.MapFrom(y => y.user.role))
+                .ForMember(x => x.DateOfBirth, o => o.MapFrom(y => y.DateOfBirth.HasValue ? y.DateOfBirth.Value.ToString("dd/MM/yyyy") : null));
 
 
 
             CreateMap<Admin, UserInfoDTO>()
-                           .ForMember(x => x.userName, o => o.MapFrom(y => y.user.userName))
-                           .ForMember(x => x.email, o => o.MapFrom(y => y.user.email))
-                           .ForMember(x => x.role, o => o.MapFrom(y => y.user.role));
+                .ForMember(x => x.userName, o => o.MapFrom(y => y.user.userName))
+                .ForMember(x => x.email, o => o.MapFrom(y => y.user.email))
+                .ForMember(x => x.role, o => o.MapFrom(y => y.user.role))
+                .ForMember(x => x.DateOfBirth, o => o.
+                                    MapFrom(y => y.DateOfBirth.HasValue ? y.DateOfBirth.Value.ToString("dd/MM/yyyy") : null));
 
 
             CreateMap<SubAdmin, UserInfoDTO>()
            .ForMember(x => x.userName, o => o.MapFrom(y => y.user.userName))
            .ForMember(x => x.email, o => o.MapFrom(y => y.user.email))
-           .ForMember(x => x.role, o => o.MapFrom(y => y.user.role));
+           .ForMember(x => x.role, o => o.MapFrom(y => y.user.role))
+           .ForMember(x => x.DateOfBirth, o => o.MapFrom(y => y.DateOfBirth.HasValue ? y.DateOfBirth.Value.ToString("dd/MM/yyyy") : null));
 
 
             CreateMap<Student, UserInfoDTO>()
            .ForMember(x => x.userName, o => o.MapFrom(y => y.user.userName))
            .ForMember(x => x.email, o => o.MapFrom(y => y.user.email))
-           .ForMember(x => x.role, o => o.MapFrom(y => y.user.role));
-     
+           .ForMember(x => x.role, o => o.MapFrom(y => y.user.role))
+           .ForMember(x => x.DateOfBirth, o => o.MapFrom(y => y.DateOfBirth.HasValue? y.DateOfBirth.Value.ToString("dd/MM/yyyy") :null)); 
+
 
             CreateMap<WorkingHourDTO, Instructor_Working_Hours>()
-                .ForMember(x=>x.startTime , o=>o.MapFrom(y=>y.startTime))
-                .ForMember(x => x.endTime, o => o.MapFrom(y => y.endTime));
+              .ForMember(x=>x.startTime , o=>o.MapFrom(y=>TimeSpan.Parse(y.startTime)))
+                .ForMember(x => x.endTime, o => o.MapFrom(y => TimeSpan.Parse(y.endTime)));
 
             CreateMap<Instructor_Working_Hours, GetWorkingHourDTO>()
                 .ForMember(x => x.startTime, o => o.MapFrom(y => y.startTime))
                 .ForMember(x => x.endTime, o => o.MapFrom(y => y.endTime))
                 .ForMember(x => x.day, o => o.MapFrom(y => y.day.GetDisplayName()));
+
+
+            CreateMap<Consultation, LecturesForRetriveDTO>()
+                .ForMember(x => x.InstructoruserName, o => o.MapFrom(y => y.instructor.user.userName))
+                .ForMember(x => x.InstructorLName, o => o.MapFrom(y => y.instructor.LName))
+                .ForMember(x => x.StudentuserName, o => o.MapFrom(y => y.student.user.userName))
+                .ForMember(x => x.StudentLName, o => o.MapFrom(y => y.student.LName))
+                .ForMember(x => x.date, o => o.MapFrom(y =>y.date.ToString("dd/MM/yyyy")));
         }
     }
 }

@@ -33,6 +33,6 @@ namespace courseProject.Core.IGenericRepository
         Task<IEnumerable<T>> GetAllMaterialInSameCourse(int CourseId);
         public Task<T> GetMaterialByIdAsync(int id);
         public Task<T> ViewProfileAsync(int id, string role);
-
+        public Task<User> GetAdminId();
     }
 }

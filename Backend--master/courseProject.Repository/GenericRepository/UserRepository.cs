@@ -103,7 +103,7 @@ namespace courseProject.Repository.GenericRepository
                 userName = registerRequestDTO.userName,
                 email= registerRequestDTO.email,
                 password= passHash,
-                role= registerRequestDTO.role
+                role= registerRequestDTO.role.ToLower()
             };
            await dbContext.users.AddAsync(user);
           // await dbContext.SaveChangesAsync();

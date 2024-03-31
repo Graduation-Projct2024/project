@@ -10,6 +10,7 @@ using courseProject.Core.Models.DTO;
 using courseProject.Repository.Data;
 using courseProject.Repository.GenericRepository;
 using System.Net;
+using courseProject.core.Models;
 
 namespace courseProject.Controllers
 {
@@ -357,13 +358,215 @@ namespace courseProject.Controllers
                 responce.ErrorMassages = new List<string>() { $"The Instructor Of Id = {Instructorid} Does Not Teach Any Courses " };
                 return NotFound(responce);
             }
-            CommonClass.EditImageInFor(courseFond);
+            CommonClass.EditImageInFor(courseFond, null);
             responce.StatusCode=HttpStatusCode.OK;
             responce.IsSuccess = true;
             responce.Result=courseFond;
             return Ok(responce);
         }
 
+
+        [HttpPost("AddInstructorOfficeHours")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<ApiResponce>> AddOfficeHours(int InstructorId ,[FromForm] WorkingHourDTO _Working_Hours)
+        {
+            if(InstructorId <= 0)
+            {
+                responce.IsSuccess = false;
+                responce.StatusCode = HttpStatusCode.BadRequest;
+                responce.ErrorMassages.Add("The Id is less or equal 0 ");
+                return BadRequest(responce);
+            }            
+            if(_Working_Hours == null)
+            {
+                responce.IsSuccess=false;
+                responce.StatusCode = HttpStatusCode.BadRequest;
+                responce.ErrorMassages.Add("The Input is null !");
+                return BadRequest(responce);
+            }
+            var instructorFound = await unitOfWork.instructorRepositpry.GetEmployeeById(InstructorId);
+            if(instructorFound == null)
+            {
+                responce.IsSuccess = false;
+                responce.StatusCode = HttpStatusCode.BadRequest;
+                responce.ErrorMassages.Add($"The Instructor Id = {InstructorId} is not found ");
+                return BadRequest(responce);
+            }
+            if(! CommonClass.IsValidTimeFormat(_Working_Hours.startTime) || !CommonClass.IsValidTimeFormat(_Working_Hours.endTime))
+            {
+                responce.IsSuccess = false;
+                responce.StatusCode = HttpStatusCode.BadRequest;
+                responce.ErrorMassages.Add("The Input Time Has An Error");
+                return BadRequest(responce);
+            }
+            var OfficeHourMapper = mapper.Map<WorkingHourDTO, Instructor_Working_Hours>(_Working_Hours);
+            if(!CommonClass.CheckStartAndEndTime(OfficeHourMapper.startTime , OfficeHourMapper.endTime))
+            {
+                responce.IsSuccess = false;
+                responce.StatusCode = HttpStatusCode.BadRequest;
+                responce.ErrorMassages.Add("Your Input of Start Time Is Greater Than End Time !");
+                return BadRequest(responce);
+            }
+            OfficeHourMapper.InstructorId = InstructorId;
+            await unitOfWork.instructorRepositpry.AddOfficeHoursAsync(OfficeHourMapper);
+            var success = await unitOfWork.instructorRepositpry.saveAsync();
+            if (success > 0)
+                {
+                    responce.IsSuccess = true;
+                    responce.StatusCode = HttpStatusCode.Created;
+                    responce.Result = _Working_Hours;
+                    return Ok(responce);
+                }
+            responce.IsSuccess = false;
+            responce.StatusCode = HttpStatusCode.BadRequest;
+            return BadRequest(responce);
+
+        }
+
+
+        [HttpGet("GetInstructorOfficeHours")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<ApiResponce>> GetInstructorOfficeHourById(int Instructorid)
+        {
+            if(Instructorid <= 0)
+            {
+                responce.IsSuccess = false;
+                responce.StatusCode = HttpStatusCode.BadRequest;
+                responce.ErrorMassages.Add("The Id is less or equal 0 ");
+                return BadRequest(responce);
+            }
+            var instructorFound = await unitOfWork.instructorRepositpry.GetEmployeeById(Instructorid);
+            if (instructorFound == null)
+            {
+                responce.IsSuccess = false;
+                responce.StatusCode = HttpStatusCode.BadRequest;
+                responce.ErrorMassages.Add($"The Instructor with Id = {Instructorid} is not found ");
+                return BadRequest(responce);
+            }
+            var InstructorOfficeHours = await unitOfWork.instructorRepositpry.GetOfficeHourByIdAsync(Instructorid);
+            var InstructorOfficeHoursMapper = mapper.Map<IReadOnlyList< Instructor_Working_Hours>,IReadOnlyList< GetWorkingHourDTO>>(InstructorOfficeHours);
+            if (InstructorOfficeHours.Count <= 0)
+            {
+                responce.IsSuccess = false;
+                responce.StatusCode = HttpStatusCode.NotFound;
+                responce.ErrorMassages.Add($"The Instructor with Id = {Instructorid} is not add his office hour ");
+                return NotFound(responce);
+            }
+            responce.StatusCode=HttpStatusCode.OK;
+            responce.IsSuccess=true;
+            responce.Result = InstructorOfficeHoursMapper;
+            return Ok(responce);
+
+        }
+
+
+        [HttpGet("GetAllSubmissionForTask")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<ApiResponce>> GetAllSubmissionUsingTaskId(int taskId)
+        {
+            if (taskId <= 0)
+            {
+                responce.IsSuccess = false;
+                responce.StatusCode= HttpStatusCode.BadRequest;
+                responce.ErrorMassages.Add($"The task id is less or equal 0");
+                return BadRequest(responce);
+            }
+            var taskFound = await unitOfWork.materialRepository.GetMaterialByIdAsync(taskId);
+            if (taskFound== null)
+            {
+                responce.IsSuccess = false;
+                responce.StatusCode=HttpStatusCode.NotFound;
+                responce.ErrorMassages.Add($"The task with id = {taskId} is not found ");
+                return NotFound(responce );
+            }
+            if(taskFound.type.ToLower() != "task")
+            {
+                responce.IsSuccess = false;
+                responce.StatusCode= HttpStatusCode.BadRequest;
+                responce.ErrorMassages.Add($"This material with id = {taskId} is not task , and it is not has a submissions");
+                return BadRequest(responce);
+            }
+            var GetSubmissions = await unitOfWork.instructorRepositpry.GetAllSubmissionsByTaskIdAsync(taskId);
+            if(GetSubmissions.Count() == 0)
+            {
+                responce.ErrorMassages.Add("Not submission added yet");
+                return NotFound(responce);
+            }
+            var submissionMapper = mapper.Map<IReadOnlyList<Student_Task_Submissions> , IReadOnlyList<StudentSubmissionDTO>>(GetSubmissions);
+            responce.IsSuccess= true;
+            responce.StatusCode = HttpStatusCode.OK;
+            responce.Result = submissionMapper;
+            return Ok( responce );
+        }
+
+
+        [HttpGet("GetAllCustomCourses")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<ApiResponce>> GetAllCustomCoursesToSubAdmin()
+        {
+           var GetCustomCourse =  await unitOfWork.SubAdminRepository.GerAllCoursesRequestAsync();
+            if(GetCustomCourse.Count() == 0)
+            {
+                responce.IsSuccess = false;
+                responce.StatusCode = HttpStatusCode.NotFound;
+                responce.ErrorMassages.Add("No Request To Custom Course Yet");
+                return NotFound(responce);
+            }       
+            var CustomCoursesMapper = mapper.Map<IReadOnlyList<Request> , IReadOnlyList<CustomCourseForRetriveDTO>>(GetCustomCourse);
+
+                responce.IsSuccess = true;
+                responce.StatusCode = HttpStatusCode.OK;
+                responce.Result= CustomCoursesMapper;
+                return Ok( responce );
+           
+        }
+
+
+        [HttpGet("GetAllLectureRequest")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<ApiResponce>> GetAllLecturesByInstructorId(int instructorId)
+        {
+            if (instructorId <= 0)
+            {
+                responce.IsSuccess = false;
+                responce.StatusCode = HttpStatusCode.BadRequest;
+                responce.ErrorMassages.Add("The Instructor Id Is Less Or Equal 0 ");
+                return BadRequest( responce );
+            }
+
+            var instructorFound = await unitOfWork.instructorRepositpry.GetEmployeeById(instructorId);
+            if(instructorFound == null)
+            {
+                responce.IsSuccess = false;
+                responce.StatusCode = HttpStatusCode.NotFound;
+                responce.ErrorMassages.Add($"The Instructor With Id ={instructorId} Is Not Found , Make Sure The Id");
+                return NotFound( responce );
+            }
+            var GetLectures = await unitOfWork.instructorRepositpry.GetAllConsultationRequestByInstructorIdAsync(instructorId);
+            if(GetLectures.Count() == 0)
+            {
+                responce.IsSuccess = false;
+                responce.StatusCode= HttpStatusCode.NotFound;
+                responce.ErrorMassages.Add("No Consultation Lectures For This Instructor");
+                return NotFound( responce );
+            }
+            var LecturesMapper = mapper.Map<IReadOnlyList<Consultation>, IReadOnlyList<LecturesForRetriveDTO>>(GetLectures);
+            responce.IsSuccess = true;
+            responce.StatusCode = HttpStatusCode.OK;
+            responce.Result = LecturesMapper;
+            return Ok(responce);
+
+        }
 
 
     }

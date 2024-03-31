@@ -21,6 +21,11 @@ namespace courseProject.Repository.GenericRepository
             
         }
 
+        public async Task BookLectureAsync(Consultation consultation)
+        {
+           await dbContext.Set<Consultation>().AddAsync(consultation);
+        }
+
         public async Task CreateStudentAccountAsync(Student student)
         {
           await  dbContext.Set<Student>().AddAsync(student);
@@ -44,7 +49,13 @@ namespace courseProject.Repository.GenericRepository
                           .Where(student => student.studentCourses.Any(sc => sc.courseId == courseId))
                           .ToListAsync();
         }
-            public async Task SubmitTaskAsync(Student_Task_Submissions student_Task)
+
+        //public async Task GetSubmissionById(int taskId)
+        //{
+        //    await dbContext.Student_Task_Submissions.Where(x=>x.TaskId==taskId).ToListAsync();
+        //}
+
+        public async Task SubmitTaskAsync(Student_Task_Submissions student_Task)
         {
             await dbContext.Set<Student_Task_Submissions>().AddAsync(student_Task);
         }

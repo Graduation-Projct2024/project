@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.JsonPatch;
 using System.Linq.Expressions;
 using System;
 using static System.Net.WebRequestMethods;
+using courseProject.Common;
 
 namespace courseProject.Controllers
 {
@@ -26,7 +27,7 @@ namespace courseProject.Controllers
         private readonly IGenericRepository1<Request> requestRepo;
         private readonly IMapper mapper;
         protected ApiResponce responce;
-
+        private Common.CommonClass CommonClass;
         //  private Request request;
 
         public CourseContraller(IUnitOfWork unitOfWork, projectDbContext dbContext, IGenericRepository1<Course> CourseRepo, IGenericRepository1<Request> RequestRepo, IMapper mapper)
@@ -37,6 +38,7 @@ namespace courseProject.Controllers
             requestRepo = RequestRepo;
             this.mapper = mapper;
             responce = new ApiResponce();
+            CommonClass = new Common.CommonClass();
         }
 
         [HttpGet]
@@ -47,17 +49,18 @@ namespace courseProject.Controllers
         {
             var courses = await courseRepo.GetAllCoursesAsync();
 
-            if (courses == null)
+            if (courses.Count() == 0)
             {
-                return NotFound();
+                responce.IsSuccess = false;
+                responce.StatusCode = HttpStatusCode.NotFound;
+                responce.ErrorMassages.Add("Not Has Any Accrefit Course Yet");
+                return NotFound(responce);
             }
             var mapperCourse = mapper.Map<IReadOnlyList<Course>, IReadOnlyList<CourseInformationDto>>(courses);
-            //var updatedCourses = mapperCourse.Select(course =>
-            //{
-            //    course.ImageUrl = $"http://localhost:5134/{course.ImageUrl}";
-            //    return course;
-            //}).ToList();
-            return Ok(mapperCourse);
+            responce.IsSuccess = true;
+            responce.StatusCode=HttpStatusCode.OK;
+            responce.Result = mapperCourse;
+            return Ok(responce);
         }
 
 
@@ -68,57 +71,21 @@ namespace courseProject.Controllers
         public async Task<ActionResult<IReadOnlyList<Course>>> GetAllCoursesForAccreditAsync()
         {
             var courses = await courseRepo.GetAllCoursesForAccreditAsync();
-            if (courses == null)
+            if (courses.Count() == 0)
             {
-                return NotFound();
+                responce.IsSuccess = false;
+                responce.StatusCode = HttpStatusCode.NotFound;
+                responce.ErrorMassages.Add("Not Has Any Course Yet");
+                return NotFound(responce);
             }
 
             var mapperCourse = mapper.Map<IReadOnlyList<Course>, IReadOnlyList<CourseAccreditDTO>>(courses);
-            //var updatedCourses = mapperCourse.Select(course =>
-            //{
-            //    course.ImageUrl = $"http://localhost:5134/{course.ImageUrl}";
-            //    return course;
-            //}).ToList();
-            
-            return Ok(mapperCourse);
+
+            responce.IsSuccess = true;
+            responce.StatusCode = HttpStatusCode.OK;
+            responce.Result = mapperCourse;
+            return Ok(responce);
         }
-
-
-        //[HttpPost("CreateCourse")]
-        //[ProducesResponseType(200)]
-        //[ProducesResponseType(404)]
-        //[ProducesResponseType(400)]
-        //public async Task<ActionResult<ApiResponce>> createCourse( CourseForCreateDTO model  )
-        //{
-
-        //   //request.name = model.name;
-        //    //request.satus = "off";
-        //    //request.date= DateTime.Now ;
-        //    //request.adminId = 1;
-        //    var courseMapped = mapper.Map<CourseForCreateDTO, Course>(model);
-        //    var requestMapped = mapper.Map<CourseForCreateDTO, Request>(model);
-        //    // var id = requestMapped.Id;
-        //   // model.Id = id;
-
-        //     unitOfWork.SubAdminRepository.CreateRequest(requestMapped);
-        //    var success2 = await unitOfWork.SubAdminRepository.saveAsync();
-
-        //   model.requestId = requestMapped.Id;
-        //     unitOfWork.SubAdminRepository.CreateCourse(courseMapped);
-        //    var success1 = await unitOfWork.SubAdminRepository.saveAsync();
-
-        //    if (success1 > 0 && success2>0)
-        //    {
-        //        responce.StatusCode = HttpStatusCode.Created;
-        //        responce.IsSuccess = true;
-        //        responce.Result = model;
-        //        return Ok(responce);
-        //    }
-        //    responce.StatusCode = HttpStatusCode.BadRequest;
-        //    responce.IsSuccess = false;
-        //    return BadRequest(responce);
-        //}
-
 
 
 
@@ -130,7 +97,9 @@ namespace courseProject.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<Course>> createCourse([FromForm] CourseForCreateDTO model , int? StudentId)
         {
-            if (model == null)
+            if (! model.GetType().GetProperties()
+                .Select(x=>x.GetValue(model))
+                .Any(Value =>Value !=null)  )
             {
                 responce.IsSuccess = false;
                 responce.StatusCode = HttpStatusCode.NotFound;
@@ -333,46 +302,50 @@ namespace courseProject.Controllers
 
 
 
-        //[HttpPost("EditCourse")]
-        //[ProducesResponseType(200)]
-        //[ProducesResponseType(404)]
-        //[ProducesResponseType(400)]
-        //public async Task<ActionResult<ApiResponce>> EditCourse(int id, CourseForEditDTO course)
-        //{
-        //    if (id <= 0)
-        //    {
-        //        responce.IsSuccess = false;
-        //        responce.StatusCode = HttpStatusCode.BadRequest;
-        //        responce.ErrorMassages = new List<string>() { "The Id is less or equal 0" };
-        //        return BadRequest(responce);
-        //    }
-
-        //    if (course == null)
-        //    {
-        //        responce.IsSuccess = false;
-        //        responce.StatusCode = HttpStatusCode.NotFound;
-        //        responce.ErrorMassages = new List<string>() { "No new data to updated" };
-        //        return BadRequest(responce);
-        //    }
-        //    if ( !ModelState.IsValid)
-        //    {
-        //        responce.IsSuccess = false;
-        //        responce.StatusCode = HttpStatusCode.BadRequest;
-        //        return BadRequest(responce);
-        //    }
-
-        //    var getCourse = await dbContext.courses.FirstOrDefaultAsync(x => x.Id == id);
-        //    if (getCourse == null)
-        //    {
-        //        responce.IsSuccess = false;
-        //        responce.StatusCode = HttpStatusCode.NotFound;
-        //        responce.ErrorMassages = new List<string>() { "the course is not found" };
-        //        return NotFound(responce);
-        //    }
-        //    var courseMapper = mapper.Map<Course>(course);
-
-        //    return Ok(courseMapper);
-        //}
+        [HttpPost("EditCourse")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<ApiResponce>> EditCourse(int id,[FromForm] CourseForEditDTO course)
+        {
+            if (id <= 0)
+            {
+                responce.IsSuccess = false;
+                responce.StatusCode = HttpStatusCode.BadRequest;
+                responce.ErrorMassages = new List<string>() { "The Id is less or equal 0" };
+                return BadRequest(responce);
+            }
+            if (!ModelState.IsValid)
+            {
+                responce.IsSuccess = false;
+                responce.StatusCode = HttpStatusCode.BadRequest;
+                return BadRequest(responce);
+            }
+            var getCourse = await unitOfWork.CourseRepository.GetCourseByIdAsync(id);
+            if (getCourse == null)
+            {
+                responce.IsSuccess = false;
+                responce.StatusCode = HttpStatusCode.NotFound;
+                responce.ErrorMassages = new List<string>() { $"the course with id = {id} is not found" };
+                return NotFound(responce);
+            }
+            mapper.Map(course, getCourse);
+            if (course.image != null)
+            {
+                getCourse.ImageUrl  = "Files\\" + await unitOfWork.FileRepository.UploadFile1(course.image);
+            }
+            await unitOfWork.SubAdminRepository.updateCourse(getCourse);
+            if (await unitOfWork.CourseRepository.saveAsync() > 0)
+            {
+                responce.IsSuccess = true;
+                responce.StatusCode = HttpStatusCode.OK;
+                responce.Result = getCourse;
+                return Ok(responce);
+            }
+            responce.IsSuccess = false;
+            responce.StatusCode = HttpStatusCode.BadRequest;
+            return BadRequest(responce);
+        }
 
     }
 }

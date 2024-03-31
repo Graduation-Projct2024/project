@@ -33,7 +33,25 @@ namespace courseProject.MappingProfile
 
             CreateMap<CourseMaterialDTO, CourseMaterial>();
 
-            CreateMap<CourseForEditDTO, Course>();
+            // CreateMap<CourseForEditDTO, Course>();
+
+            CreateMap<CourseForEditDTO, Course>()
+            //.ForAllMembers(opts => opts.Condition((src, dest, srcMember, destMember) => (srcMember != null || srcMember != 0)))
+            .ForAllMembers(opts => opts.Condition((src, dest, srcMember, destMember) =>
+            {
+                if (srcMember is int intValue)
+                {
+                    return intValue != default;
+                }
+                if (srcMember is double doubleValue)
+                {
+                    return doubleValue != default;
+                }
+                return srcMember != null;
+            }));
+            ;
+
+
             CreateMap<TaskDTO, CourseMaterial>();
 
             CreateMap<FileDTO, CourseMaterial>();
@@ -50,6 +68,16 @@ namespace courseProject.MappingProfile
 
             CreateMap<StudentCourseDTO, StudentCourse>();
             CreateMap<SubmissionsDTO, Student_Task_Submissions>();
+
+            CreateMap<StudentCustomCourseDTO, Request>();
+            CreateMap<Request, CustomCourseForRetriveDTO>()
+                .ForMember(x => x.StudentFName, o => o.MapFrom(y => y.Student.user.userName))
+                .ForMember(x => x.StudentLName, o => o.MapFrom(y => y.Student.LName))
+                .ForMember(x => x.startDate, o => o.MapFrom(y => y.startDate.HasValue ? y.startDate.Value.ToString("dd/MM/yyyy" ) :null))
+                .ForMember(x => x.endDate, o => o.MapFrom(y => y.endDate.HasValue ? y.endDate.Value.ToString("dd/MM/yyyy") : null));
+
+
+
         }
     }
 }

@@ -22,6 +22,8 @@ namespace courseProject.Core.Models
        // public string type { get; set; }
 
         public DateTime date { get; set; } = DateTime.Now;
+        public DateTime? startDate { get; set; }
+        public DateTime? endDate { get; set; }
 
         [ForeignKey("Admin")]
         public int AdminId { get; set; } 
@@ -30,7 +32,8 @@ namespace courseProject.Core.Models
         [AllowNull]
         public int? StudentId { get; set; }
         [ForeignKey("SubAdmin")]
-        public int SubAdminId { get; set; } 
+        [AllowNull]
+        public int? SubAdminId { get; set; } 
 
         public Admin Admin { get; set; }
         public SubAdmin SubAdmin { get; set; }  

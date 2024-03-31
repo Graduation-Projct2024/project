@@ -70,7 +70,12 @@ namespace courseProject.Repository.Data
                       .IsRequired(false);
             });
 
-            
+            modelBuilder.Entity<Request>(entity =>
+            {
+                entity.Property(e => e.SubAdminId)
+                      .IsRequired(false);
+            });
+
 
             modelBuilder.Entity<SubAdmin>()
            .Property(c => c.DateOfBirth)
@@ -100,6 +105,17 @@ namespace courseProject.Repository.Data
            .Property(c => c.endDate)
            .HasColumnType("date");
 
+            modelBuilder.Entity<Consultation>()
+           .Property(c => c.date)
+           .HasColumnType("date");
+
+            modelBuilder.Entity<Request>()
+           .Property(c => c.startDate)
+           .HasColumnType("date");
+
+            modelBuilder.Entity<Request>()
+           .Property(c => c.endDate)
+           .HasColumnType("date");
             // modelBuilder.Entity<Student>()
             //.Property(s => s.Id)
             //.ValueGeneratedOnAdd()

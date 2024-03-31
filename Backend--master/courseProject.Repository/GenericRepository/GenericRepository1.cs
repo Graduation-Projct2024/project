@@ -199,6 +199,11 @@ namespace courseProject.Repository.GenericRepository
             return await dbContext.Set<T>().FindAsync(id);
         }
 
+        public async Task<User> GetAdminId()
+        {
+            return await dbContext.users.FirstOrDefaultAsync(x=>x.role.ToLower()=="admin");
+        }
+
 
 
         //public async Task<T> GetUserInformationByIdAsync(int id)
