@@ -18,7 +18,7 @@ export default function AccreditCourses() {
     try{
     const { data } = await axios.get(`http://localhost:5134/api/CourseContraller/GetAllCoursesForAccredit`);
     console.log(data);
-    setAccreditCourses(data);
+    setAccreditCourses(data.result);
   }
     catch(error){
       console.log(error);
@@ -46,7 +46,7 @@ export default function AccreditCourses() {
 
   useEffect(() => {
     fetchCoursesForAccredit();
-  }, [userData]);
+  }, [accreditCourses,userData]);
 if(loader){
   return <p>Loading ...</p>
 }
@@ -55,16 +55,14 @@ if(loader){
     setSearchTerm(event.target.value);
   };
 
-  const filteredAccreditCourses = accreditCourses.filter((course) => {
-    const matchesSearchTerm =
-    Object.values(course).some(
-        (value) =>
-        typeof value === 'string' && value.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
-
-    return matchesSearchTerm ;
-});
+const filteredAccreditCourses = Array.isArray(accreditCourses) ? accreditCourses.filter((course) => {
+  const matchesSearchTerm = Object.values(course).some(
+    (value) =>
+      typeof value === "string" &&
+      value.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  return matchesSearchTerm;
+}) : [];
 
 
   return (

@@ -1,11 +1,12 @@
 'use client'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useContext, useEffect, useState } from 'react'
-import { faArrowUpFromBracket, faEye, faFilter } from '@fortawesome/free-solid-svg-icons'
+import { faArrowUpFromBracket, faEye, faFilter, faPen } from '@fortawesome/free-solid-svg-icons'
 import Link from 'next/link';
 import axios from 'axios';
 import CreateCourse from '../CreateCourse/CreateCourse';
 import { UserContext } from '@/context/user/User';
+import EditCourse from '../EditCourse/[id]/page';
 
 export default function ViewCourses() {
 
@@ -19,8 +20,8 @@ export default function ViewCourses() {
     if(userData){
     try{
     const { data } = await axios.get(`http://localhost:5134/api/CourseContraller`);
-    console.log(data);
-    setCourses(data);
+    console.log(data.result);
+    setCourses(data.result);
   }
     catch(error){
       console.log(error);
@@ -38,16 +39,14 @@ export default function ViewCourses() {
     setSearchTerm(event.target.value);
   };
 
-  const filteredCourses = courses.filter((course) => {
-const matchesSearchTerm =
-  Object.values(course).some(
-    (value) =>
-      typeof value === 'string' && value.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-
-return matchesSearchTerm ;
-});
+  const filteredCourses = Array.isArray(courses) ? courses.filter((course) => {
+    const matchesSearchTerm = Object.values(course).some(
+      (value) =>
+        typeof value === "string" &&
+        value.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    return matchesSearchTerm;
+  }) : [];
   return (
     <>
     <div className="filter py-2 text-end">
@@ -134,7 +133,22 @@ return matchesSearchTerm ;
       <td>{course.instructorName}</td>
       
       <td className='d-flex gap-1'>
+      <button className="border-0 bg-white " type="button" data-bs-toggle="modal" data-bs-target={`#exampleModal2-${course.id}`}>
+                    <FontAwesomeIcon icon={faPen} className="edit-pen" />
+                  </button>
 
+                  <div className="modal fade" id={`exampleModal2-${course.id}`} tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog modal-dialog-centered modal-lg">
+                      <div className="modal-content row justify-content-center">
+                        <div className="modal-body text-center ">
+                          <h2>Edit Course</h2>
+                          <div className="row">
+                            <EditCourse id = {course.id}  name = {course.name} price = {course.price} category ={course.category} description = {course.description} InstructorId = {course.instructorId} image = {course.imageUrl}/>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
       <Link href={'/Profile'}>
         <button  type="button" className='border-0 bg-white '>
         <FontAwesomeIcon icon={faEye}  className='edit-pen'/>

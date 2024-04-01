@@ -9,7 +9,7 @@ import '../../dashboard/dashboard.css'
 import { UserContext } from '@/context/user/User'
 
 export default function InstructorCourses({params}) {
-    console.log(params.Instructorid)
+    // console.log(params.Instructorid)
     const {userToken, setUserToken, userData}=useContext(UserContext);
 
     const [instructorCourse,setInstructorCourse] = useState([])
@@ -76,8 +76,6 @@ const matchesSearchTerm =
     (value) =>
       typeof value === 'string' && value.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
-
 return matchesSearchTerm ;
 
  
