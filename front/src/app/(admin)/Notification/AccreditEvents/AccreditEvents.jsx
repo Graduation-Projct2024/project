@@ -49,43 +49,35 @@ export default function AccreditEvents() {
     });
 
   }
-  
-  // if(data.isSuccess){
-  //   console.log(data);
-  //   //setLoader(false);
-  //   fetchEventsForAccredit();
-  // }
+
   }
     catch(error){
       console.log(error);
     }
-    // finally {
-    //   setProcessingEvent(null); // Reset the eventId being processed
-    //   fetchEventsForAccredit(); // Fetch events after processing
-    // }
+
   }
   };
 
   useEffect(() => {
     fetchEventsForAccredit();
-  }, [userData]);
+  }, [accreditEvents,userData]);
 if(loader){
   return <p>Loading ...</p>
 }
+console.log(accreditEvents);
   const [searchTerm, setSearchTerm] = useState('');
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
 
-  const filteredAccreditEvents = accreditEvents.filter((event) => {
-    const matchesSearchTerm =
-    Object.values(event).some(
-        (value) =>
-        typeof value === 'string' && value.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
-    return matchesSearchTerm ;
-});
+const  filteredAccreditEvents= Array.isArray(accreditEvents) ? accreditEvents.filter((event) => {
+  const matchesSearchTerm = Object.values(event).some(
+    (value) =>
+      typeof value === "string" &&
+      value.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  return matchesSearchTerm;
+}) : [];
 
 
   return (

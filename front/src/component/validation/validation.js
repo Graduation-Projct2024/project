@@ -41,3 +41,10 @@ export const editProfile = yup.object({
    LName:yup.string().required('Last Name is required'),
    
 })
+export const editCourse = yup.object({
+   name:yup.string().required('Name is required'),
+   price:yup.string().required('Price is required'),
+   category:yup.string().required('Category is required'),
+   description:yup.string().required('Description is required'),
+   InstructorId:yup.string().required('InstructorId is required'),
+})
