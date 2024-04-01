@@ -66,7 +66,7 @@ const sidebarItems = [
     },
     {
       name: "Book a Lecture",
-      href: "/Lectures",
+      href: "/calender",
       icon: CalendarMonthIcon,
     },
  

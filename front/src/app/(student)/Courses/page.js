@@ -25,7 +25,7 @@ const [role, setRole]=useState('student');
       );
     
       console.log(data);
-       setCourses(data.data);
+       setCourses(data.data.result);
     };
   
 
@@ -99,7 +99,7 @@ if (role=='student'){
            alignItems="center"
            >
          <Typography sx={{p:3}}> Choose specific topics to create your own course</Typography> 
-         <Button variant="contained">Create now!</Button>
+         <Button variant="contained"><Link href='/requestCourse' color='inherit' underline='none'>Create now!</Link></Button>
 
         </Box>
         <Box

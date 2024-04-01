@@ -48,7 +48,7 @@ namespace courseProject.Common
                 }
             }
             }
-            if(modelcourse.ImageUrl != null)
+            if(modelcourse?.ImageUrl != null)
             {
                 modelcourse.ImageUrl = url + modelcourse.ImageUrl;
             }

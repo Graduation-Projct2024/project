@@ -1,0 +1,171 @@
+'use client';
+import React, { useState } from 'react';
+import * as yup from "yup";
+import axios from "axios";
+import { useFormik } from "formik";
+import Link from '@mui/material/Link';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
+import Layout from '../studentLayout/Layout.jsx'
+import Typography from '@mui/material/Typography';
+import Stack from '@mui/material/Stack';
+import Input from '../../../component/input/Input.jsx';
+import { UserContext } from '../../../context/user/User.jsx';
+import Button from '@mui/material/Button';
+import './style.css'
+export default function page() {
+  let { userToken, setUserToken ,userData,setUserData,userId} = React.useContext(UserContext);
+
+  const [open, setOpen] = React.useState(false);
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+  const initialValues = {
+    name: "",
+    description: "",
+    startDate: "",
+    endDate: "",
+  };
+  const onSubmit = async (courses) => {
+console.log("test")
+const formData = new FormData();
+formData.append("name", courses.name);
+formData.append("description", courses.description);
+formData.append("startDate", courses.startDate);
+formData.append("endDate", courses.endDate);
+console.log( courses.name)
+console.log(  courses.description)
+console.log( courses.startDate)
+console.log( courses.endDate)
+
+const { data } = await axios.post(
+  `http://localhost:5134/api/StudentsContraller/RequestToCreateCustomCourse?studentid=${userId}`,
+ formData,
+ {headers: {
+  'Content-Type': 'application/json', 'Content-Type': 'charset=utf-8'}}
+);
+ if(data.isSuccess){
+  console.log("test");
+//   formik.resetForm();
+setOpen(true);
+
+  }
+  };
+  const validationSchema = yup.object({
+    name: yup
+      .string()
+      .required("course name is required"),
+      
+      description: yup
+      .string()
+      .required("description is required"),
+    
+      startDate: yup
+      .string()
+      .required("Start Date is required"),
+      endDate: yup
+      .string()
+      .required("End Date is required")
+
+  });
+
+  const formik = useFormik({
+    initialValues,
+    onSubmit,
+    validationSchema: validationSchema,
+  });
+  const inputs = [
+    {
+      id: "name",
+      type: "text",
+      name: "name",
+      title: "Course Name",
+      value: formik.values.name,
+    },
+    {
+      id: "description",
+      type: "text",
+      name: "description",
+      title: "Description",
+      value: formik.values.description,
+    },
+    {
+      id: "startDate",
+      type: "date",
+      name: "startDate",
+      title: "Start Date",
+      value: formik.values.startDate,
+    },
+    {
+      id: "endDate",
+      type: "date",
+      name: "endDate",
+      title: "End Date",
+      value: formik.values.endDate,
+        },
+    
+  ];
+  const renderInputs = inputs.map((input, index) => (
+    <Input
+      type={input.type}
+      id={input.id}
+      name={input.name}
+      value={input.value}
+      title={input.title}
+      onChange={input.onChange || formik.handleChange}
+      onBlur={formik.handleBlur}
+      touched={formik.touched}
+      errors={formik.errors}
+      key={index}
+    />
+  ));
+
+  return (
+    <Layout title='Request Course'>
+             <>
+    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert
+          onClose={handleClose}
+          severity="success"
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          You have successfully requested the course!
+        </Alert>
+      </Snackbar>
+      <Stack  direction="column"
+  justifyContent="center"
+  alignItems="center"
+  spacing={2}
+  mt='50px'
+  pt='30px'
+
+ >
+                <div className="form-container RequestCourse ms-5 ">
+      <form onSubmit={formik.handleSubmit} encType="multipart/form-data">        
+        {renderInputs}
+        <div className="text-center mt-3 w-75">
+        <Button sx={{px:2}} variant="contained"
+              className="m-2  "
+              type="submit"
+              disabled={!formik.isValid}
+            >
+              Submit
+            </Button>
+        </div>
+      </form>
+    </div>
+    </Stack> 
+    </>
+    </Layout>
+   
+  )
+}
+
+
+
+
