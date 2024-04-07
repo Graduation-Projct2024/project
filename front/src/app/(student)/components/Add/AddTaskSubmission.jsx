@@ -12,6 +12,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import Input from '../../../../component/input/Input.jsx';
+import TextArea from '../../../../component/input/TextArea.jsx';
+
 import { UserContext } from '../../../../context/user/User.jsx';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
@@ -66,13 +68,7 @@ const { data } = await axios.post(
   });
   const inputs = [
  
-    {
-      id: "description",
-      type: "text",
-      name: "description",
-      title: "description",
-      value: formik.values.description,
-    },
+
  
     {
       id: "pdf",
@@ -81,8 +77,15 @@ const { data } = await axios.post(
       title: "Upload File",
       onChange: handelFieldChang,
     },
+    {
+      id: "description",
+      type: "text",
+      name: "description",
+      title: "description",
+      value: formik.values.description,
+    },
   ];
-  const renderInputs = inputs.map((input, index) => (
+  const renderInputs = inputs.slice(0, -1).map((input, index) => (
     <Input
       type={input.type}
       id={input.id}
@@ -96,6 +99,22 @@ const { data } = await axios.post(
       key={index}
     />
   ));
+  const lastInput = inputs[inputs.length - 1];
+
+const textAraeInput = (
+  <TextArea
+    type={lastInput.type}
+    id={lastInput.id}
+    name={lastInput.name}
+    value={lastInput.value}
+    title={lastInput.title}
+    onChange={lastInput.onChange || formik.handleChange}
+    onBlur={formik.handleBlur}
+    touched={formik.touched}
+    errors={formik.errors}
+    key={inputs.length - 1}
+  />
+);
 
   return (
     <>
@@ -119,6 +138,7 @@ const { data } = await axios.post(
                 <div className="form-container AddSubmition">
       <form onSubmit={formik.handleSubmit} encType="multipart/form-data">        
         {renderInputs}
+        {textAraeInput}
         <div className="text-center mt-3">
         <Button sx={{px:2}} variant="contained"
               className="m-2  "

@@ -54,7 +54,7 @@ if (loading) {
   );
 }
   return (
-    <>
+    <div className='studentMaterial'>
     <List sx={{ ...style,  maxWidth: 'none' }} aria-label="mailbox folders">
     <ListItem sx={{p:6}} >
     <Typography bold sx={{mr:3}}>Announcement title :</Typography>
@@ -68,6 +68,6 @@ if (loading) {
  
 </List>
    
-  </>
+  </div>
   )
 }

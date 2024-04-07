@@ -126,7 +126,7 @@ const { data } = await axios.put(
           Link Edited successfully!
         </Alert>
       </Snackbar>
-          <div className="form-container EditTask">
+          <div className="form-container EditLink edit">
       <form onSubmit={formik.handleSubmit} encType="multipart/form-data">        
         {renderInputs}
         <div className="text-center mt-3">

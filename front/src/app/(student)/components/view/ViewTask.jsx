@@ -73,6 +73,8 @@ if (loading) {
 }
   return (
     <>
+        <div className='studentTask'>
+
     <List sx={{ ...style, width: '80%', maxWidth: 'none' }} aria-label="mailbox folders">
     <ListItem sx={{p:3}} >
     <Typography bold sx={{mr:3}}>Task title :</Typography>
@@ -80,8 +82,11 @@ if (loading) {
   </ListItem>
   <Divider component="li" />
   <ListItem sx={{p:3}} >
-    <Typography bold sx={{mr:3}}>Task Description :</Typography>
+  <div style={{ display: 'flex', alignItems: 'center' }}>
+
+    <Typography bold sx={{mr:3}}>Task Description:</Typography>
     <Typography>{material.description}</Typography>
+    </div>
   </ListItem>
   <Divider component="li" />
   <ListItem sx={{p:3}} >
@@ -97,8 +102,8 @@ if (loading) {
 </Button>
   </ListItem>
 </List>
+</div>
 <Box
-      height={290}
       width='85%'
       my={4}
       ml={7}

@@ -1,9 +1,9 @@
-.css-6dt1q3-MuiList-root {
+.studentMaterial .css-6dt1q3-MuiList-root,.studentMaterial .css-1qrdt9m-MuiList-root {
     background-color: transparent;
     border-width: 2px;
     border-color: #4c5372;
     margin-left: 50px;
     position: absolute;
-    bottom: 45%;
+    top: 28%;
     width: 70% !important;
 }

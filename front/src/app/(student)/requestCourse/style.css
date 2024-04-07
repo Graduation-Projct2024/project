@@ -4,7 +4,9 @@
 .RequestCourse .col-md-6{
     width:80% !important;
 }
-
+.css-dpjnhs-MuiInputBase-root-MuiOutlinedInput-root {
+    width:880px !important;
+}
 .RequestCourse .css-1xu2qw-MuiButtonBase-root-MuiButton-root {
     background-color: #4c5372 !important;
 }

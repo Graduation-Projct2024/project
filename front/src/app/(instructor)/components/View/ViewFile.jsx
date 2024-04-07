@@ -162,6 +162,8 @@ if (loading) {
     <EditFile materialID={materialID} name={material.name} description={material.description} courseId={courseId}/>
 
 ):(
+  <div className ='material'>
+
     <List sx={{ ...style, width: '80%', maxWidth: 'none' }} aria-label="mailbox folders">
     <ListItem sx={{p:4}} >
     <Typography bold sx={{mr:3}}>Title :</Typography>
@@ -169,8 +171,10 @@ if (loading) {
   </ListItem>
   <Divider component="li" />
   <ListItem sx={{p:4}} >
-    <Typography bold sx={{mr:3}}>Description :</Typography>
+  <div style={{ display: 'flex', alignItems: 'center' }}>
+    <Typography bold sx={{mr:5}}>Description:</Typography>
     <Typography>{material.description}</Typography>
+    </div>
   </ListItem>
   <Divider component="li" />
   <ListItem sx={{p:4}} >
@@ -178,6 +182,7 @@ if (loading) {
     <Link download target='_blank'  href={`${material.pdfUrl}`}>{material.name}</Link>
   </ListItem>
 </List>
+</div>
 )}
   </>
   )
