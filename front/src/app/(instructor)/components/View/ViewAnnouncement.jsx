@@ -168,8 +168,10 @@ if (loading) {
   </ListItem>
   <Divider component="li" />
   <ListItem sx={{p:6}} >
+  <div style={{ display: 'flex', alignItems: 'center' }}>
     <Typography bold sx={{mr:3}}>Announcement Description :</Typography>
     <Typography>{material.description}</Typography>
+    </div>
   </ListItem>
  
 </List>

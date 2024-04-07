@@ -10,6 +10,8 @@ import Layout from '../studentLayout/Layout.jsx'
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Input from '../../../component/input/Input.jsx';
+import TextArea from '../../../component/input/TextArea.jsx';
+
 import { UserContext } from '../../../context/user/User.jsx';
 import Button from '@mui/material/Button';
 import './style.css'
@@ -87,13 +89,6 @@ setOpen(true);
       value: formik.values.name,
     },
     {
-      id: "description",
-      type: "text",
-      name: "description",
-      title: "Description",
-      value: formik.values.description,
-    },
-    {
       id: "startDate",
       type: "date",
       name: "startDate",
@@ -107,9 +102,15 @@ setOpen(true);
       title: "End Date",
       value: formik.values.endDate,
         },
-    
+        {
+          id: "description",
+          type: "text",
+          name: "description",
+          title: "Description",
+          value: formik.values.description,
+        }
   ];
-  const renderInputs = inputs.map((input, index) => (
+  const renderInputs = inputs.slice(0, -1).map((input, index) => (
     <Input
       type={input.type}
       id={input.id}
@@ -123,7 +124,22 @@ setOpen(true);
       key={index}
     />
   ));
+  const lastInput = inputs[inputs.length - 1];
 
+const textAraeInput = (
+  <TextArea
+    type={lastInput.type}
+    id={lastInput.id}
+    name={lastInput.name}
+    value={lastInput.value}
+    title={lastInput.title}
+    onChange={lastInput.onChange || formik.handleChange}
+    onBlur={formik.handleBlur}
+    touched={formik.touched}
+    errors={formik.errors}
+    key={inputs.length - 1}
+  />
+);
   return (
     <Layout title='Request Course'>
              <>
@@ -148,6 +164,7 @@ setOpen(true);
                 <div className="form-container RequestCourse ms-5 ">
       <form onSubmit={formik.handleSubmit} encType="multipart/form-data">        
         {renderInputs}
+        {textAraeInput}
         <div className="text-center mt-3 w-75">
         <Button sx={{px:2}} variant="contained"
               className="m-2  "

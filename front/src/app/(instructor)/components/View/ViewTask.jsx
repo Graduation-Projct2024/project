@@ -27,11 +27,42 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import { useRouter } from 'next/navigation'
 import EditTask from '../Edit/EditTask.jsx';
+import { styled } from '@mui/material/styles';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: '#4c5372', // Change the background color here
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  '&:nth-of-type(odd)': {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  '&:last-child td, &:last-child th': {
+    border: 0,
+  },
+}));
+
 
 export default function ViewTask({ materialID , courseId}) {
 
   const router = useRouter();
  const [material, setMaterial]=useState(null);
+ const [submission, setSubmission]=useState(null);
+
  const [loading ,setLoading]=useState(true);
  const [isEditing, setIsEditing] = useState(false);
   const [open, setOpen] = React.useState(false);
@@ -63,6 +94,15 @@ if(data.isSuccess==true){
 }
 
  }
+ const getSubmission=async()=>{
+  const {data}= await axios.get(`http://localhost:5134/api/Employee/GetAllSubmissionForTask?taskId=${materialID}`)
+
+if(data.isSuccess==true){
+   setSubmission(data.result);
+  console.log(data)
+}
+
+ }
  const deleteMaterial=async()=>{
   const {data}= await axios.delete(`http://localhost:5134/api/MaterialControllar/DeleteMaterial?id=${materialID}`)
   setOpenAlert(true);
@@ -75,6 +115,7 @@ if(data.isSuccess==true){
  }
  useEffect(() => {
     getMaterial();
+    getSubmission();
   
 }, [materialID, isEditing]);
 
@@ -161,16 +202,20 @@ if (loading) {
     <EditTask materialID={materialID} name={material.name} description={material.description}  deadLine={material.deadLine} pdf={material.pdfUrl} courseId={courseId}/>
 
 ):(
+<div className='mt-5 pt-5 ms-5 task'>
 
-    <List sx={{ ...style, width: '80%', maxWidth: 'none' }} aria-label="mailbox folders">
+    <List sx={{ ...style, width: '80%', maxWidth: 'none', mt:7, mb:5 }} aria-label="mailbox folders">
     <ListItem sx={{p:3}} >
     <Typography bold sx={{mr:3}}>Task title :</Typography>
     <Typography>{material.name}</Typography>
   </ListItem>
   <Divider component="li" />
   <ListItem sx={{p:3}} >
-    <Typography bold sx={{mr:3}}>Task Description :</Typography>
-    <Typography>{material.description}</Typography>
+  <div style={{ display: 'flex', alignItems: 'center' }}>
+  <Typography bold sx={{ mr: 3 }}>Task Description:</Typography>
+  <Typography>{material.description}</Typography>
+</div>
+
   </ListItem>
   <Divider component="li" />
   <ListItem sx={{p:3}} >
@@ -183,6 +228,33 @@ if (loading) {
     <Link download target='_blank'  href={`${material.pdfUrl}`}>{material.name}</Link>
   </ListItem>
 </List>
+<TableContainer component={Paper} sx={{width:'80%'}}>
+      <Table sx={{ minWidth:700 }} aria-label="customized table">
+        <TableHead>
+          <TableRow>
+            <StyledTableCell>Student Name</StyledTableCell>
+            <StyledTableCell align="center">Submissions</StyledTableCell>
+        
+          </TableRow>
+        </TableHead>
+        <TableBody>
+
+          {submission?.length ?(
+          submission.map((subm) => (
+            <StyledTableRow key={subm.taskId}>
+              <StyledTableCell component="th" scope="row">
+                {subm.userName}
+              </StyledTableCell>
+              <StyledTableCell align="center"><Link target='_blank' href={subm.pdfUrl}>File</Link></StyledTableCell>
+            
+            </StyledTableRow>
+          ))):(
+            <p className='ps-3 pt-3'>No Submissions Yet.</p>
+          )}
+        </TableBody>
+      </Table>
+    </TableContainer>
+</div>
 )}
       
    

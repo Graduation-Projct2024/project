@@ -161,9 +161,8 @@ if (loading) {
     <EditLink materialID={materialID} name={material.name} linkURL={material.linkUrl} courseId={courseId}/>
 
 ):(
-
-  
-    <List sx={{ ...style, width: '80%', maxWidth: 'none' }} aria-label="mailbox folders">
+  <div className='link mt-5 pt-5 ms-5'> 
+    <List sx={{ ...style, width: '80%', maxWidth: 'none', mt:7, }} aria-label="mailbox folders">
     <ListItem sx={{p:4}} >
     <Typography bold sx={{mr:3}}>Title :</Typography>
     <Typography>{material.name}</Typography>
@@ -175,6 +174,7 @@ if (loading) {
     <Link download target='_blank'  href={`${material.linkUrl}`}>{material.name}</Link>
   </ListItem>
 </List>
+</div>
 )}
   </>
   )
