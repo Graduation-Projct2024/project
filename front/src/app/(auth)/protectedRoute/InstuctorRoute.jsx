@@ -10,7 +10,7 @@ export default function InstuctorRoute({children}) {
   const InstructorAuth=()=>{
     if(userData){
      
-  if(localStorage.getItem("userToken")==null||userData.role!='Instructor'){
+  if(localStorage.getItem("userToken")==null||userData.role!='instructor'){
     return router.push('/login')
     
  }}
