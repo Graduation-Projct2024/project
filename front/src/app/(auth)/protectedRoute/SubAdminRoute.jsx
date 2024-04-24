@@ -9,10 +9,11 @@ export default function SubAdminRoute({children}) {
   const SubAdminAuth=()=>{
     if(userData){
      
-  if(localStorage.getItem("userToken")==null||userData.role!='SubAdmin'){
+  if(localStorage.getItem("userToken")==null||!(userData.role=='subadmin')){
     return router.push('/login')
     
- }}
+ }
+}
 }
 
  useEffect(() => {

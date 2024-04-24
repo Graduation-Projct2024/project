@@ -71,13 +71,13 @@ export default function page() {
       if(data.result.user.role === "admin") {
         router.push('/dashboard');
         }
-        if(data.result.user.role === "SubAdmin") {
+        if(data.result.user.role == "subadmin") {
           router.push('/dashboardS');
           }
       if(data.result.user.role === "student") {
       router.push('/MyDashboard');
       }
-      if(data.result.user.role === "Instructor") {
+      if(data.result.user.role == "instructor") {
         router.push('/myDashboard');
         }
     }

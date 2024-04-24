@@ -219,8 +219,8 @@ const renderInputs = inputs.map((input,index)=>
           <option value="" disabled>
             Select Role
           </option>
-          <option value="SubAdmin">SubAdmin</option>
-          <option value="Instructor">Instructor</option>
+          <option value="subadmin">SubAdmin</option>
+          <option value="instructor">Instructor</option>
         </select>
       </div> 
       <div className="col-md-12">
