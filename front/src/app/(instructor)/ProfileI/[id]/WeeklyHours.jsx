@@ -341,6 +341,7 @@
 'use client'
 import Input from '@/component/input/Input';
 import InputTime from '@/component/input/InputTime';
+import { addWeeklyHours } from '@/component/validation/validation';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react'
@@ -393,6 +394,7 @@ const onSubmit = async (hours) => {
 const formik = useFormik({
   initialValues : initialValues,
   onSubmit,
+  validationSchema:addWeeklyHours
 })
 
 const inputs =[
@@ -433,7 +435,7 @@ const renderInputs = inputs.map((input,index)=>
 
   return (
     <div className='p-5'>
-<h2 className='pr '>Weekly Hours</h2>
+<h2 className='pr '>Add Weekly Hours</h2>
     <form onSubmit={formik.handleSubmit} className="row justify-content-center">
         <div className="col-md-6 w-25">
         <select
@@ -467,6 +469,7 @@ Select Day          </option>
       <button
         type="submit"
         className="btn btn-primary createButton mt-3 fs-3 px-3 w-25"
+        disabled = {!selectedDay ||Object.keys(formik.touched).length === 0||formik.isSubmitting || Object.keys(formik.errors).length > 0}
       >
        Submit
       </button>

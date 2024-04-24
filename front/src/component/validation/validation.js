@@ -48,3 +48,8 @@ export const editCourse = yup.object({
    description:yup.string().required('Description is required'),
    InstructorId:yup.string().required('InstructorId is required'),
 })
+
+export const addWeeklyHours = yup.object({
+   startTime:yup.string().required('Start time is Required'),
+   endTime:yup.string().required('End time is Required'),
+})

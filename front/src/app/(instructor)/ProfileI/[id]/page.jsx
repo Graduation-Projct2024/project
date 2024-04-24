@@ -12,6 +12,7 @@ import EditProfile from './EditProfile';
 import '../../../../../node_modules/bootstrap/dist/js/bootstrap.bundle'
 import Layout from '../../instructorLayout/Layout';
 import WeeklyHours from './WeeklyHours';
+import ViewWeeklyHours from './ViewWeeklyHours';
 
 
 export default function page({params}) {
@@ -129,6 +130,7 @@ export default function page({params}) {
           
         </div>
       </div>
+      <ViewWeeklyHours id={params.id}/>
       <WeeklyHours id = {params.id}/>
     </div>
     </Layout>
