@@ -11,6 +11,7 @@ import { UserContext } from '@/context/user/User';
 import EditProfile from './EditProfile';
 import '../../../../../node_modules/bootstrap/dist/js/bootstrap.bundle'
 import Layout from '../../instructorLayout/Layout';
+import WeeklyHours from './WeeklyHours';
 
 
 export default function page({params}) {
@@ -128,6 +129,7 @@ export default function page({params}) {
           
         </div>
       </div>
+      <WeeklyHours id = {params.id}/>
     </div>
     </Layout>
   )
