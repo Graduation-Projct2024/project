@@ -21,6 +21,7 @@ import LocalLibraryIcon from '@mui/icons-material/LocalLibrary';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import { deepPurple ,purple} from '@mui/material/colors';
 import Link from '@mui/material/Link';
 import { useRouter } from 'next/navigation'
@@ -59,15 +60,20 @@ function Layout(props) {
       icon: LibraryBooksIcon,
     },
     {
-      name: "My Lectures",
-      href: "/myLectures",
-      icon: LocalLibraryIcon,
+      name: "Notification",
+      href: "/NotificationS",
+      icon: NotificationsIcon,
     },
-    {
-      name: "Book a Lecture",
-      href: "/Lectures",
-      icon: CalendarMonthIcon,
-    },
+    // {
+    //   name: "My Lectures",
+    //   href: "/myLectures",
+    //   icon: LocalLibraryIcon,
+    // },
+    // {
+    //   name: "Book a Lecture",
+    //   href: "/Lectures",
+    //   icon: CalendarMonthIcon,
+    // },
  
 ];
   const handleDrawerClose = () => {
@@ -78,7 +84,7 @@ function Layout(props) {
     localStorage.removeItem("userToken");
     setUserToken(null);
     setUserData(null);
-    router.push("/Login");
+    router.push("/login");
   };
   const handleDrawerTransitionEnd = () => {
     setIsClosing(false);

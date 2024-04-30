@@ -61,11 +61,11 @@ const sidebarItems = [
       href: "/Contact",
       icon: AddIcCallIcon,
     },
-    {
-      name: "Book a Lecture",
-      href: "/Lectures",
-      icon: CalendarMonthIcon,
-    },
+    // {
+    //   name: "Book a Lecture",
+    //   href: "/Lectures",
+    //   icon: CalendarMonthIcon,
+    // },
  
 ];
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -79,7 +79,7 @@ const sidebarItems = [
     localStorage.removeItem("userToken");
     setUserToken(null);
     setUserData(null);
-    router.push("/Login");
+    router.push("/login");
   };
   const handleDrawerTransitionEnd = () => {
     setIsClosing(false);
