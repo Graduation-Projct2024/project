@@ -14,7 +14,7 @@ export default function Header() {
       <div className="col-md-5 d-flex align-items-center ms-5 ">
         <div className="text-center"> 
         <h1>Time to grow your creative level up with us</h1>
-      <Link className="btn btn-purple mt-3 px-3 py-2" href='Login'  color="inherit"  underline='none'>Start Now!</Link>
+      <Link className="btn btn-purple mt-3 px-3 py-2" href='login'  color="inherit"  underline='none'>Start Now!</Link>
         </div>
       
      

@@ -86,11 +86,18 @@ return matchesSearchTerm ;
 
       <div className="row">
         {filteredContacts ? filteredContacts.map((contact)=>(
-          <div className="col-md-4">
+          <div key={contact.id} className="col-md-4">
                     <div className="card text-center mb-3" style={{ width: "18rem" }}>
                       <div className="card-body m-3">
-                        {!userData ?<img src="./user1.png" className="pho pb-3 img-fluid" />:<img src={`${contact.imageUrl}`} className="pho pb-3 img-fluid" />}
-                        <h4 className="card-title contactName">{contact.userName} {contact.lName}</h4>
+                      <img src={contact.imageUrl ? contact.imageUrl : "./user1.png"} 
+           className="pho pb-3 img-fluid" 
+           alt="Profile" 
+           onError={(e) => { 
+             console.error("Error loading image:", contact.imageUrl); 
+             e.target.onerror = null; // prevents looping
+             e.target.src = "./user1.png"; // default image if error
+           }} />                    
+                      <h4 className="card-title contactName">{contact.userName} {contact.lName}</h4>
                         
                         <div className="d-flex justify-content-center gap-3 pt-3">
                           <Link className='social' href={`tel:${contact.phone}`}><FontAwesomeIcon icon={faPhone} /></Link>
@@ -99,7 +106,7 @@ return matchesSearchTerm ;
                       </div>
                     </div>
                   </div>
-        )) : <p>No Data</p>}
+        )) : <h1>No Data</h1>}
        
       </div>
     </Layout>
