@@ -534,6 +534,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
         public async Task<ActionResult<ApiResponce>> GetAllLecturesByInstructorId(int instructorId)
         {
             if (instructorId <= 0)
@@ -556,9 +557,10 @@ namespace courseProject.Controllers
             if(GetLectures.Count() == 0)
             {
                 responce.IsSuccess = false;
-                responce.StatusCode= HttpStatusCode.NotFound;
-                responce.ErrorMassages.Add("No Consultation Lectures For This Instructor");
-                return NotFound( responce );
+                responce.StatusCode= HttpStatusCode.NoContent;
+               // responce.ErrorMassages.Add("No Consultation Lectures For This Instructor");
+                Response.Headers.Add("Message", "No Consultation Lectures For This Instructor");
+                return NoContent();
             }
             var LecturesMapper = mapper.Map<IReadOnlyList<Consultation>, IReadOnlyList<LecturesForRetriveDTO>>(GetLectures);
             responce.IsSuccess = true;
