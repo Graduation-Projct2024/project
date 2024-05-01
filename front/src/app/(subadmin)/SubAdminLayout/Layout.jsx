@@ -78,7 +78,7 @@ function Layout(props) {
     localStorage.removeItem("userToken");
     setUserToken(null);
     setUserData(null);
-    router.push("/Login");
+    router.push("/login");
   };
   const handleDrawerTransitionEnd = () => {
     setIsClosing(false);

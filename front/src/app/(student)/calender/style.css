@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Acme&family=Bebas+Neue&display=swap');
+
+.calendar-container a{
+    color:#4c5372 !important ;
+    text-decoration: none;
+
+}
+.css-tqj0yt-MuiTypography-root-MuiDialogTitle-root{
+    font-family: "Acme", sans-serif;
+    font-weight: 400 !important;
+    font-style: normal !important;
+    font-size:30px;
+    color:#4c5372 !important ;
+
+}
+.fc .fc-toolbar-title{
+    font-family: "Acme", sans-serif;
+    font-weight: 400 !important;
+    font-style: normal !important;
+    font-size:30px;
+    color:#4c5372 !important ;
+}
+.MuiDialogTitle-root+.css-ypiqx9-MuiDialogContent-root .col-md-6, .css-1u3bzj6-MuiFormControl-root-MuiTextField-root{
+    width:100% !important;
+}
+.css-1u3bzj6-MuiFormControl-root-MuiTextField-root{
+    margin-top:20px;
+}
