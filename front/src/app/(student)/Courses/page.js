@@ -99,7 +99,7 @@ if (role=='student'){
            alignItems="center"
            >
          <Typography sx={{p:3}}> Choose specific topics to create your own course</Typography> 
-         <Button variant="contained"><Link href='/requestCourse' color='inherit' underline='none'>Create now!</Link></Button>
+         <Button variant="contained"><Link href='/requestCourse' color='inherit' underline='none'>Create Now!</Link></Button>
 
         </Box>
         <Box
@@ -107,7 +107,7 @@ if (role=='student'){
            alignItems="center"
            >
          <Typography sx={{p:3}}> If you have questions about a specific topic Book a lecture now!</Typography> 
-         <Button variant="contained">Book Now!</Button>
+         <Button variant="contained"><Link href='/calender' color='inherit' underline='none'>Book Now!</Link></Button>
 
         </Box>
         </Box>
