@@ -29,7 +29,18 @@ namespace courseProject.Repository.Data
                    
                 }
                 );
-            
+
+
+            modelBuilder.Entity<User>()
+       .HasMany(u => u.feedbacks)  // User has many Feedbacks
+       .WithOne(f => f.User)       // Each Feedback belongs to one User
+       .HasForeignKey(f => f.InstructorId);
+
+            modelBuilder.Entity<User>()
+        .HasMany(u => u.feedbacks)  // User has many Feedbacks
+        .WithOne(f => f.User)       // Each Feedback belongs to one User
+        .HasForeignKey(f => f.StudentId);
+
             modelBuilder.Entity<User>()
                 .HasOne(x => x.instructor)
                 .WithOne(u => u.user)
@@ -144,6 +155,6 @@ namespace courseProject.Repository.Data
         public DbSet<Instructor_Feedback> instructor_Feedbacks { get; set; }
         public DbSet<General_Feedback> general_Feedbacks { get; set; }
         public DbSet<Student_Task_Submissions> Student_Task_Submissions { get; set; }
-
+        public DbSet<Feedback> feedbacks { get; set; }
     }
 }

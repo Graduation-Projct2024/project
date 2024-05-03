@@ -8,14 +8,14 @@ namespace courseProject.Core.Models.DTO
 {
     public class EmployeeForUpdateDTO
     {
-        public int Id { get; set; }
-        public string FName { get; set; }
+        public int? Id { get; set; }
+        public string? FName { get; set; }
 
         public string? LName { get; set; }
 
-        public string email { get; set; }
+        public string? email { get; set; }
 
-        public string phoneNumber { get; set; }
+        public string? phoneNumber { get; set; }
 
         public string? gender { get; set; }
 

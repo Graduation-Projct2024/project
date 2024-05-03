@@ -19,7 +19,9 @@ namespace courseProject.MappingProfile
                 .ForMember(x => x.requestId, o => o.MapFrom(y => y.Id));
 
             CreateMap<Event, EventAccreditDto>()
-                .ForMember(x => x.subAdminFName, o => o.MapFrom(y => y.SubAdmin.user.userName)); ;
+                .ForMember(x => x.subAdminFName, o => o.MapFrom(y => y.SubAdmin.user.userName));
+
+            CreateMap<EventForEditDTO, Event>();
         }
     }
 }

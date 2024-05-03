@@ -32,7 +32,8 @@ namespace courseProject.Repository.GenericRepository
         {
             if(typeof(T) == typeof(Student))
             {
-                return (IEnumerable<T>)await dbContext.students.Include(x => x.user).ToListAsync();
+                return (IEnumerable<T>)await  dbContext.students.Include(x => x.user).ToListAsync();
+                
             }
             return await dbContext.Set<T>().ToListAsync();
 
@@ -158,24 +159,9 @@ namespace courseProject.Repository.GenericRepository
         }
 
 
-        public async Task<IEnumerable<T>> GetAllMaterialInSameCourse(int courseId)
-        {
-            if(typeof(T) == typeof(CourseMaterial))
-            {
-                return (IEnumerable<T>) await dbContext.courseMaterials
-                                                 .Where(a=>a.courseId==courseId).ToListAsync();
-            }
-            return await dbContext.Set<T>().ToListAsync();
-        }
+    
 
-        public async Task<T> GetMaterialByIdAsync(int id)
-        {
-            if(typeof(T) == typeof(CourseMaterial))
-            {
-                return(T)(object) await dbContext.courseMaterials.FirstOrDefaultAsync(x => x.Id == id);
-            }
-            return await dbContext.Set<T>().FindAsync(id);
-        }
+      
 
 
         public async Task<T> ViewProfileAsync(int id ,string role)

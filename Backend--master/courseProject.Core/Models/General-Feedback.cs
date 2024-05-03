@@ -13,7 +13,7 @@ namespace courseProject.Core.Models
 
         public string content {  get; set; }
 
-        public DateTime dateOfAdded { get; set; }
+        public DateTime dateOfAdded { get; set; }=DateTime.Now;
         [ForeignKey("User")]
         public int UserId { get; set; }
         public User User { get; set; }

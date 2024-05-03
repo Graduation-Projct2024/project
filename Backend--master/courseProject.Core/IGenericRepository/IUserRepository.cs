@@ -17,7 +17,8 @@ namespace courseProject.Core.IGenericRepository
 
        bool isUniqeUser(string email);
 
-
+        public Task<User> GetUserByRoleAsync(string role);
+        public Task<User> getUserByIdAsync(int UserId);
         
 
         // void LogOut();

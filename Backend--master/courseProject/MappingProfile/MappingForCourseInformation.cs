@@ -8,9 +8,10 @@ namespace courseProject.MappingProfile
 {
     public class MappingForCourseInformation : Profile
     {
+        private Common.IsNotDefaultClassForMapping IsNotDefaultClass;
         public MappingForCourseInformation()
         {
-           
+            IsNotDefaultClass = new Common.IsNotDefaultClassForMapping();
 
             CreateMap<Course, CourseInformationDto>()
                 .ForMember(x => x.InstructorName  , o=>o.MapFrom(y=>y.Instructor.user.userName))
@@ -38,17 +39,7 @@ namespace courseProject.MappingProfile
             CreateMap<CourseForEditDTO, Course>()
             //.ForAllMembers(opts => opts.Condition((src, dest, srcMember, destMember) => (srcMember != null || srcMember != 0)))
             .ForAllMembers(opts => opts.Condition((src, dest, srcMember, destMember) =>
-            {
-                if (srcMember is int intValue)
-                {
-                    return intValue != default;
-                }
-                if (srcMember is double doubleValue)
-                {
-                    return doubleValue != default;
-                }
-                return srcMember != null;
-            }));
+            IsNotDefaultClass.IsNotDefault(srcMember)));
             ;
 
 
@@ -73,6 +64,7 @@ namespace courseProject.MappingProfile
             CreateMap<Request, CustomCourseForRetriveDTO>()
                 .ForMember(x => x.StudentFName, o => o.MapFrom(y => y.Student.user.userName))
                 .ForMember(x => x.StudentLName, o => o.MapFrom(y => y.Student.LName))
+              //  .ForMember(x => x.description, o => o.MapFrom(y => y.Student.Consultation.ToString()))
                 .ForMember(x => x.startDate, o => o.MapFrom(y => y.startDate.HasValue ? y.startDate.Value.ToString("dd/MM/yyyy" ) :null))
                 .ForMember(x => x.endDate, o => o.MapFrom(y => y.endDate.HasValue ? y.endDate.Value.ToString("dd/MM/yyyy") : null));
 

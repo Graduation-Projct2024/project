@@ -2,9 +2,11 @@
 using courseProject.Core.IGenericRepository;
 using courseProject.Core.Models;
 using courseProject.Repository.Data;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -59,5 +61,15 @@ namespace courseProject.Repository.GenericRepository
         {
             await dbContext.Set<Student_Task_Submissions>().AddAsync(student_Task);
         }
+
+       
+
+        
+
+        public async Task<Student> getStudentByIdAsync(int id )
+        {          
+            return await dbContext.students.FirstOrDefaultAsync(x => x.StudentId == id);
+        }
+        
     }
 }

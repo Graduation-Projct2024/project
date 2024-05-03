@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using courseProject.Common;
 using courseProject.Core.Models;
 using courseProject.Core.Models.DTO;
 using Microsoft.OpenApi.Extensions;
@@ -7,8 +8,15 @@ namespace courseProject.MappingProfile
 {
     public class MappingForEmployee : Profile
     {
+        private Common.IsNotDefaultClassForMapping isNotDefault;
+
         public MappingForEmployee()
         {
+            isNotDefault = new Common.IsNotDefaultClassForMapping();
+        
+
+    
+        
 
             CreateMap<SubAdmin , EmployeeDto>()
                 .ForMember(x=>x.FName , o=>o.MapFrom(y=>y.user.userName))
@@ -35,10 +43,17 @@ namespace courseProject.MappingProfile
                 .ForMember(x => x.userName, o => o.MapFrom(y => y.FName));
             CreateMap<EmployeeDto, Instructor>();
             CreateMap<EmployeeDto, SubAdmin>();
-            CreateMap<EmployeeForUpdateDTO, Instructor>();
-            CreateMap<EmployeeForUpdateDTO, SubAdmin>();
+            CreateMap<EmployeeForUpdateDTO, Instructor>()
+                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember, destMember) =>
+                isNotDefault.IsNotDefault(srcMember)));
+            CreateMap<EmployeeForUpdateDTO, SubAdmin>()
+                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember, destMember) =>
+                 isNotDefault.IsNotDefault(srcMember)));
             CreateMap<EmployeeForUpdateDTO, User>()
-                .ForMember(x=>x.userName , o=>o.MapFrom(y => y.FName));
+                .ForMember(x=>x.userName , o=>o.MapFrom(y => y.FName))
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember, destMember) =>
+                isNotDefault.IsNotDefault(srcMember)));
+            
             CreateMap<updateEmployeeDTO, SubAdmin>()
                 .ForMember(x=>x.SubAdminId , o=>o.MapFrom(y=>y.Id));
             CreateMap<EmployeeForCreate, SubAdmin>();
@@ -61,14 +76,28 @@ namespace courseProject.MappingProfile
 
 
             CreateMap<ProfileDTO, User>()
-                .ForMember(x => x.userName, o => o.MapFrom(y => y.FName));
-               
+                .ForMember(x => x.userName, o => o.MapFrom(y => y.FName))
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember, destMember) =>
+                isNotDefault.IsNotDefault(srcMember)));
 
-            CreateMap<ProfileDTO, Admin>();
-            CreateMap<ProfileDTO, SubAdmin>();
-            CreateMap<ProfileDTO, Instructor>();
-            CreateMap<ProfileDTO, Student>();
 
+            CreateMap<ProfileDTO, Admin>()
+
+               .ForAllMembers(opts => opts.Condition((src, dest, srcMember, destMember) => isNotDefault.IsNotDefault(srcMember)));
+
+            CreateMap<ProfileDTO, SubAdmin>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember, destMember) =>
+               isNotDefault.IsNotDefault(srcMember)));
+            CreateMap<ProfileDTO, Instructor>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember, destMember) =>
+                isNotDefault.IsNotDefault(srcMember)));
+            CreateMap<ProfileDTO, Student>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember, destMember) =>
+                isNotDefault.IsNotDefault(srcMember)));
+            CreateMap<Admin, ProfileDTO>();
+            CreateMap<SubAdmin, ProfileDTO>();
+            CreateMap<Instructor, ProfileDTO>();
+            CreateMap<Student, ProfileDTO>();
             CreateMap<User, ProfileDTO>()
                 .ForMember(x => x.FName, o => o.MapFrom(y => y.userName));
             //  .ForMember(x => x.LName, o => o.MapFrom(y => y.instructor.LName ));
@@ -123,6 +152,12 @@ namespace courseProject.MappingProfile
             CreateMap<Instructor, EmployeeListDTO>()
                 .ForMember(x=>x.id , o=>o.MapFrom(y=>y.InstructorId))
                 .ForMember(x => x.name, o => o.MapFrom(y => y.user.userName+" "+ y.LName));
+
+
+            CreateMap<Instructor_Working_Hours, Instructor_OfficeHoursDTO>()
+                .ForMember(x => x.userName, o => o.MapFrom(y => y.instructor.user.userName))
+                .ForMember(x => x.LName, o => o.MapFrom(y => y.instructor.LName));
+
         }
     }
 }

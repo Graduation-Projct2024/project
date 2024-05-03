@@ -10,23 +10,18 @@ using System.Threading.Tasks;
 
 namespace courseProject.Repository.GenericRepository
 {
-    public class AdminRepository : GenericRepository1<Admin>, IAdminRepository
+    public class EventRepository : GenericRepository1<Event>, IEventRepository
     {
         private readonly projectDbContext dbContext;
 
-        public AdminRepository(projectDbContext dbContext) : base(dbContext)
+        public EventRepository(projectDbContext dbContext) : base(dbContext)
         {
             this.dbContext = dbContext;
         }
 
-        public async Task CreateAdminAccountAsync(Admin admin)
+        public async Task<Event> GetEventByIdAsync(int eventId)
         {
-            await dbContext.Set<Admin>().AddAsync(admin);
-        }
-
-        public async Task<Admin> GetAdminByIdAsync(int id)
-        {
-            return await dbContext.admins.FirstOrDefaultAsync(x => x.AdminId == id);
+            return await dbContext.events.FirstOrDefaultAsync(x => x.Id == eventId);
         }
     }
 }

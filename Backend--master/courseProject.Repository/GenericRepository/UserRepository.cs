@@ -48,9 +48,13 @@ namespace courseProject.Repository.GenericRepository
 
         public async Task<LoginResponseDTO> LoginAsync(LoginRequestDTO loginRequestDTO)
         { 
-            var user = dbContext.users.FirstOrDefault(x => x.email == loginRequestDTO.email );
-           bool pass=BC.Verify(loginRequestDTO.password, user.password);
-            
+           var user =await dbContext.users.FirstOrDefaultAsync(x => x.email == loginRequestDTO.email );
+            bool pass = false;
+            if (user != null)
+            { 
+                 pass=BC.Verify(loginRequestDTO.password, user.password);
+            }
+                      
            if(user == null || pass==false)
             {
                 return new LoginResponseDTO(){
@@ -112,8 +116,14 @@ namespace courseProject.Repository.GenericRepository
         }
 
 
+        public async Task<User> GetUserByRoleAsync(string role)
+        {
+           return await dbContext.users.FirstOrDefaultAsync(x=>x.role.ToLower()==role.ToLower());
+        }
 
-
-
+        public async Task<User> getUserByIdAsync(int UserId)
+        {
+            return await dbContext.users.FirstOrDefaultAsync(x => x.UserId == UserId);
+        }
     }
 }

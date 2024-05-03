@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace courseProject.Core.IGenericRepository
 {
     public interface IGenericRepository1<T> where T : class
@@ -30,8 +31,8 @@ namespace courseProject.Core.IGenericRepository
       //  Task<T> GetUserInfoById(int id);
         Task createInstructorAccountAsync(T entity);
         Task updateSubAdminAsync(T entity);
-        Task<IEnumerable<T>> GetAllMaterialInSameCourse(int CourseId);
-        public Task<T> GetMaterialByIdAsync(int id);
+       
+       // public Task<T> GetMaterialByIdAsync(int id);
         public Task<T> ViewProfileAsync(int id, string role);
         public Task<User> GetAdminId();
     }

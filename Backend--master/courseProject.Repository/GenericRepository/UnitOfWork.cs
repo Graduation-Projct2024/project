@@ -29,6 +29,8 @@ namespace courseProject.Repository.GenericRepository
             FileRepository = new FileRepository();
             CourseRepository = new CourseRepository(dbContext);
             materialRepository = new MaterialRepository(dbContext);
+            eventRepository = new EventRepository(dbContext);
+           
         }
 
         public ISubAdminRepository SubAdminRepository { get; set; }
@@ -39,6 +41,8 @@ namespace courseProject.Repository.GenericRepository
         public IFileRepository FileRepository { get; set; }
         public ICourseRepository<Course> CourseRepository { get; set ; }
         public IMaterialRepository materialRepository { get; set ; }
+        public IEventRepository eventRepository { get; set ; }
+       
       //  Core.IGenericRepository.ICourseRepository<Course> IUnitOfWork.CourseRepository { get ; set; }
     }
 }
