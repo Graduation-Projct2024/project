@@ -116,7 +116,7 @@ namespace courseProject.Controllers
             
             var courseMapped = mapper.Map<Course>(model);
             var requestMapped = mapper.Map<Request>(model);
-            var admin = await dbContext.users.FirstOrDefaultAsync(x => x.role.ToLower() == "admin");
+            var admin = await unitOfWork.UserRepository.GetUserByRoleAsync("admin");
             requestMapped.AdminId = admin.UserId;
             if(StudentId != null)
             {
@@ -173,7 +173,7 @@ namespace courseProject.Controllers
 
             var EventMapped = mapper.Map<Event>(model);
             var requestMapped = mapper.Map<Request>(model);
-            var admin = await dbContext.users.FirstOrDefaultAsync(x => x.role.ToLower() == "admin");
+            var admin = await unitOfWork.UserRepository.GetUserByRoleAsync("admin");
             requestMapped.AdminId = admin.UserId;
             EventMapped.ImageUrl = "Files\\" + await unitOfWork.FileRepository.UploadFile1(model.image);
             using (var transaction = await unitOfWork.SubAdminRepository.BeginTransactionAsync())
@@ -214,7 +214,7 @@ namespace courseProject.Controllers
             }
 
         }
-      //  JsonPatchDocument<Course> jsonPatch;
+
 
         [HttpPatch("accreditCourse")]
         [ProducesResponseType(200)]
@@ -222,7 +222,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(400)]
         public async Task<ActionResult<ApiResponce>> EditCourseStatus( int courseId , string Status )
         {            
-            var entity = await dbContext.courses.FirstOrDefaultAsync(x => x.Id == courseId);
+            var entity = await unitOfWork.CourseRepository.GetCourseByIdAsync(courseId);
             if (entity == null)
             {
                 return NotFound();
@@ -244,7 +244,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(400)]
         public async Task<ActionResult<ApiResponce>> EditEventStatus(int eventId, string Status)
         {
-            var entity = await dbContext.events.FirstOrDefaultAsync(x => x.Id == eventId);
+            var entity = await unitOfWork.eventRepository.GetEventByIdAsync( eventId);
 
             if (entity == null)
             {
@@ -275,7 +275,7 @@ namespace courseProject.Controllers
                 responce.ErrorMassages.Add($"The Course Id = {id} is less or equal 0 ");
                 return BadRequest(responce);
             }
-            var courseFound = await dbContext.courses.FirstOrDefaultAsync(x => x.Id == id);
+            var courseFound = await unitOfWork.CourseRepository.GetCourseByIdAsync(id);
             if (courseFound == null)
             {
                 responce.StatusCode = HttpStatusCode.NotFound;

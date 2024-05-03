@@ -20,6 +20,7 @@ namespace courseProject.Controllers
     {
         private readonly projectDbContext dbContext;
         private readonly IUnitOfWork unitOfWork;
+      //  private readonly IPagenation<T> pagenation;
         private readonly IGenericRepository1<SubAdmin> subAdminRepo;
         private readonly IGenericRepository1<Instructor> instructorRepo;
         private readonly IGenericRepository1<User> userRepo;
@@ -28,12 +29,11 @@ namespace courseProject.Controllers
         private Common.CommonClass CommonClass;
 
 
-        public EmployeeController(projectDbContext dbContext, IUnitOfWork unitOfWork, IGenericRepository1<SubAdmin> SubAdminRepo, IGenericRepository1<Instructor> InstructorRepo, IGenericRepository1<User> userRepo, IMapper mapper)
+        public EmployeeController(projectDbContext dbContext, IUnitOfWork unitOfWork,  IMapper mapper)
         {
             this.dbContext = dbContext;
             this.unitOfWork = unitOfWork;
-            subAdminRepo = SubAdminRepo;
-            instructorRepo = InstructorRepo;
+         //   this.pagenation = pagenation;
             this.userRepo = userRepo;
             this.mapper = mapper;
             responce = new ApiResponce();
@@ -46,11 +46,12 @@ namespace courseProject.Controllers
         [ProducesResponseType(400)]
         // [Authorize(Policy = "Admin")]
        // [Authorize(Policy = "Admin&subAdmin")]
-        public async Task<ActionResult<IEnumerable<SubAdmin>>> GetAllEmployeeAsync()
+        public async Task<ActionResult<IEnumerable<SubAdmin>>> GetAllEmployeeAsync(int pageNumber , int pageSize)
         {
-            var SubAdmins = await subAdminRepo.GetAllEmployeeAsync();
+           // pagenation.PageSize = pageSize ?? pagenation.PageSize;
+            var SubAdmins = await unitOfWork.SubAdminRepository.GetAllEmployeeAsync();
             
-            var instructors = await instructorRepo.GetAllEmployeeAsync();
+            var instructors = await unitOfWork.instructorRepositpry.GetAllEmployeeAsync();
             if (SubAdmins == null && instructors == null)
             {
                 return NotFound();
@@ -65,9 +66,9 @@ namespace courseProject.Controllers
             {
                 instructor.type = "Instructor";
             }
-            var allEmployees = mapperSubAdmin.Concat(mapperInstructor);
-           
-            return Ok(allEmployees.OrderBy(x=>x.Id));
+            var allEmployees = (mapperSubAdmin.Concat(mapperInstructor));
+           return Ok( Pagenation<EmployeeDto>.CreateAsync(allEmployees , pageNumber , pageSize));
+          //  return Ok(allEmployees.OrderBy(x=>x.Id));
             
 
 
@@ -80,8 +81,8 @@ namespace courseProject.Controllers
         [ProducesResponseType(400)]
         public async Task<ActionResult<IReadOnlyList<SubAdmin>>> GetAllEmployeeForContactAsync()
         {
-            var subAdmins = await subAdminRepo.GetAllEmployeeForContactAsync();
-            var instructors = await instructorRepo.GetAllEmployeeForContactAsync();
+            var subAdmins = await unitOfWork.SubAdminRepository.GetAllEmployeeForContactAsync();
+            var instructors = await unitOfWork.instructorRepositpry.GetAllEmployeeForContactAsync();
 
             if (subAdmins == null && instructors == null)
             {
@@ -185,9 +186,9 @@ namespace courseProject.Controllers
                 responce.StatusCode = HttpStatusCode.BadRequest;
                 return BadRequest(responce);
             }
-            var subAdminToGet = await dbContext.subadmins.FirstOrDefaultAsync(x => x.SubAdminId == id);
-            var instructorToGet = await dbContext.instructors.FirstOrDefaultAsync(x => x.InstructorId == id);
-            var UserToGet = await dbContext.users.FirstOrDefaultAsync(x => x.UserId == id);
+            var subAdminToGet = await unitOfWork.SubAdminRepository.GetSubAdminByIdAsync(id);
+            var instructorToGet = await unitOfWork.instructorRepositpry.getInstructorByIdAsync(id);
+            var UserToGet = await unitOfWork.UserRepository.getUserByIdAsync( id);
             if (UserToGet == null )
             {
                 responce.IsSuccess = false;
@@ -244,7 +245,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<ApiResponce>> updateEmployee(int id, EmployeeForUpdateDTO EmpolyeeModel)
+        public async Task<ActionResult<ApiResponce>> updateEmployee(int id,[FromForm] EmployeeForUpdateDTO EmpolyeeModel)
         {
 
             if (id <= 0)
@@ -267,9 +268,9 @@ namespace courseProject.Controllers
                 responce.StatusCode = HttpStatusCode.BadRequest;
                 return BadRequest(responce);
             }           
-            var subAdminToUpdate = await dbContext.subadmins.FirstOrDefaultAsync(x => x.SubAdminId == EmpolyeeModel.Id);
-            var instructorToUpdate = await dbContext.instructors.FirstOrDefaultAsync(x => x.InstructorId == EmpolyeeModel.Id);
-            var UserToUpdate = await dbContext.users.FirstOrDefaultAsync(x => x.UserId == EmpolyeeModel.Id);
+            var subAdminToUpdate = await unitOfWork.SubAdminRepository.getSubAdminByIdAsync(id);
+            var instructorToUpdate = await unitOfWork.instructorRepositpry.getInstructorByIdAsync(id);
+            var UserToUpdate = await unitOfWork.UserRepository.getUserByIdAsync(id);
             if (subAdminToUpdate == null && UserToUpdate.role.ToLower() == "subadmin") {
                 responce.IsSuccess = false;
                 responce.StatusCode = HttpStatusCode.NotFound;
@@ -288,15 +289,15 @@ namespace courseProject.Controllers
                 try
                 {
 
-                    var userMapper = mapper.Map<EmployeeForUpdateDTO, User>(EmpolyeeModel);
+                    var userMapper = mapper.Map(EmpolyeeModel, UserToUpdate);
                     userMapper.UserId = id;
                     userMapper.role = UserToUpdate.role;
                     userMapper.password = UserToUpdate.password;
                     await unitOfWork.UserRepository.updateSubAdminAsync(userMapper);
                     var success1 = await unitOfWork.UserRepository.saveAsync();
                     var success2 = 0;
-                    SubAdmin Subadminmapper = null;
-                    Instructor Instructormapper = null;
+                    SubAdmin? Subadminmapper = null;
+                    Instructor? Instructormapper = null;
                     if (UserToUpdate.role.ToLower() == "subadmin")
                     {
                          Subadminmapper = mapper.Map<EmployeeForUpdateDTO, SubAdmin>(EmpolyeeModel);
@@ -307,8 +308,8 @@ namespace courseProject.Controllers
 
                     if (UserToUpdate.role.ToLower() == "instructor")
                     {
-                         Instructormapper = mapper.Map<EmployeeForUpdateDTO, Instructor>(EmpolyeeModel);
-                         Instructormapper.InstructorId = instructorToUpdate.InstructorId;
+                         Instructormapper = mapper.Map(EmpolyeeModel, instructorToUpdate);
+                        Instructormapper.InstructorId = instructorToUpdate.InstructorId;
                          await unitOfWork.instructorRepositpry.updateSubAdminAsync(Instructormapper);
                         responce.Result = Instructormapper;
                     }
@@ -495,8 +496,9 @@ namespace courseProject.Controllers
             var GetSubmissions = await unitOfWork.instructorRepositpry.GetAllSubmissionsByTaskIdAsync(taskId);
             if(GetSubmissions.Count() == 0)
             {
+                responce.IsSuccess = false;
                 responce.ErrorMassages.Add("Not submission added yet");
-                return NotFound(responce);
+                return Ok(responce);
             }
             var submissionMapper = mapper.Map<IReadOnlyList<Student_Task_Submissions> , IReadOnlyList<StudentSubmissionDTO>>(GetSubmissions);
             responce.IsSuccess= true;
@@ -530,6 +532,36 @@ namespace courseProject.Controllers
         }
 
 
+        [HttpGet("GetCustomCoursesById")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<ApiResponce>> GetCustomCourseById(int id)
+        {
+            if (id <= 0)
+            {
+                responce.IsSuccess = false;
+                responce.StatusCode = HttpStatusCode.NotFound;
+                responce.ErrorMassages.Add("The Custom COurse id is less or equal 0");
+                return NotFound(responce);
+            }
+            var GetCustomCourse = await unitOfWork.SubAdminRepository.GerCourseRequestByIdAsync(id);
+            if (GetCustomCourse == null)
+            {
+                responce.IsSuccess = false;
+                responce.StatusCode = HttpStatusCode.NotFound;
+                responce.ErrorMassages.Add($"The custom course with id = {id} is Not found");
+                return NotFound(responce);
+            }
+            var CustomCoursesMapper = mapper.Map<Request, CustomCourseForRetriveDTO>(GetCustomCourse);
+
+            responce.IsSuccess = true;
+            responce.StatusCode = HttpStatusCode.OK;
+            responce.Result = CustomCoursesMapper;
+            return Ok(responce);
+
+        }
+
         [HttpGet("GetAllLectureRequest")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -558,9 +590,9 @@ namespace courseProject.Controllers
             {
                 responce.IsSuccess = false;
                 responce.StatusCode= HttpStatusCode.NoContent;
-               // responce.ErrorMassages.Add("No Consultation Lectures For This Instructor");
+              //  responce.ErrorMassages.Add("No Consultation Lectures For This Instructor");
                 Response.Headers.Add("Message", "No Consultation Lectures For This Instructor");
-                return NoContent();
+                return  NoContent();
             }
             var LecturesMapper = mapper.Map<IReadOnlyList<Consultation>, IReadOnlyList<LecturesForRetriveDTO>>(GetLectures);
             responce.IsSuccess = true;
@@ -590,6 +622,30 @@ namespace courseProject.Controllers
             responce.IsSuccess = true;
             responce.StatusCode = HttpStatusCode.OK;
             responce.Result = CustomCoursesMapper;
+            return Ok(responce);
+        }
+
+
+        [HttpGet("GetAllInstructorsOfficeHours")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<ApiResponce>> GetAllIinstructorsWithAllOfficeHours()
+        {
+            var AllOfficeHours = await unitOfWork.instructorRepositpry.getAllInstructorsOfficeHoursAsync();
+            if (AllOfficeHours.Count() == 0)
+            {
+                responce.IsSuccess = false;
+                responce.StatusCode = HttpStatusCode.NoContent;
+                var message = "Not have any instructor account yet ";
+                responce.ErrorMassages.Add(message);
+                Response.Headers.Add("Message", message);
+                return NoContent();
+            }
+            var InstrctorOfficeHoursMapper = mapper.Map<IReadOnlyList<Instructor_Working_Hours>, IReadOnlyList<Instructor_OfficeHoursDTO>>(AllOfficeHours);
+            responce.IsSuccess = true;
+            responce.StatusCode = HttpStatusCode.OK;
+            responce.Result = InstrctorOfficeHoursMapper;
             return Ok(responce);
         }
     }

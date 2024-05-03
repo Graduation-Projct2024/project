@@ -44,7 +44,7 @@ namespace courseProject.Controllers
        
         public async Task <ActionResult<IEnumerable<Student>>> GetAllStudentsAsync()
         {
-            var Students = await studentRepo.GetAllStudentsAsync();
+            var Students = await unitOfWork.StudentRepository.GetAllStudentsAsync();
 
             if(Students == null)
             {
@@ -63,7 +63,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(400)]
         public async Task<ActionResult<IReadOnlyList<Student>>> GetAllStudentsForContactAsync()
         {
-            var students = await studentRepo.GetAllStudentsForContactAsync();
+            var students = await unitOfWork.StudentRepository.GetAllStudentsForContactAsync();
             if (students == null)
             {
                 return NotFound();
@@ -302,7 +302,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<ApiResponce>> BoolLectureByStudent(int studentId , DateTime date , string startTime , string endTime , [FromForm] BookALectureDTO bookALecture)
+        public async Task<ActionResult<ApiResponce>> BooKLectureByStudent(int studentId , DateTime date , string startTime , string endTime , [FromForm] BookALectureDTO bookALecture)
         {  
             
             if(!ModelState.IsValid)
@@ -365,6 +365,10 @@ namespace courseProject.Controllers
             return BadRequest(response);
 
         }
+
+
+
+       
 
     }
 

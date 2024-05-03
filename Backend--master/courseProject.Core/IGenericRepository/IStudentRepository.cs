@@ -17,6 +17,8 @@ namespace courseProject.Core.IGenericRepository
         public Task SubmitTaskAsync(Student_Task_Submissions student_Task);
         public Task<IReadOnlyList<Student>> GetAllStudentsInTheSameCourseAsync(int courseId);
         public Task BookLectureAsync(Consultation consultation);
-      //  public Task RequestToCreateCustomCourseAsync ()
+       
+        public Task<Student> getStudentByIdAsync(int id);
+        //  public Task RequestToCreateCustomCourseAsync ()
     }
 }

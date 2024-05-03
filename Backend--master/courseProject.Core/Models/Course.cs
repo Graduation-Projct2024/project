@@ -47,6 +47,7 @@ namespace courseProject.Core.Models
 
         public List<Course_Feedback> course_Feedbacks { get; set; }
         public Request Request { get; set; }
+        public List<Feedback> Feedbacks { get; set; }
 
     }
 }

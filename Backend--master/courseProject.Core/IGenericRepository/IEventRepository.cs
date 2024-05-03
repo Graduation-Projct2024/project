@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace courseProject.Core.IGenericRepository
 {
-    public interface IAdminRepository :IGenericRepository1<Admin>
+    public interface IEventRepository :IGenericRepository1<Event>
     {
-        public Task CreateAdminAccountAsync(Admin admin);
-
-        public Task<Admin> GetAdminByIdAsync(int id);
+        public Task<Event> GetEventByIdAsync(int eventId);
     }
 }

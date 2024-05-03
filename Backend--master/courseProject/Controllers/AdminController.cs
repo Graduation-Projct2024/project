@@ -7,6 +7,12 @@ using courseProject.Core.Models;
 using courseProject.Repository.Data;
 using Microsoft.EntityFrameworkCore;
 using courseProject.Repository.GenericRepository;
+using Microsoft.Data.SqlClient;
+
+
+using System.Configuration;
+using System.Data.SqlClient;
+
 
 namespace courseProject.Controllers
 {
@@ -22,7 +28,10 @@ namespace courseProject.Controllers
             this.dbContext = dbContext;
         }
 
-    
+
+        //string connStr = ConfigurationManager.ConnectionStrings["DBCS"].ConnectionString;
+        //SqlConnection conn = new SqlConnection(connStr);
+
 
     }
 }

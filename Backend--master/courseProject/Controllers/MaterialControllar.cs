@@ -11,6 +11,7 @@ using System.Linq;
 using System.Collections;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.AspNetCore.Authorization;
 
 namespace courseProject.Controllers
 {
@@ -41,11 +42,12 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<ApiResponce>> AddTask([FromForm] TaskDTO taskDTO)
+        public async Task<ActionResult<ApiResponce>> AddTask( [FromForm] TaskDTO taskDTO)
         {
             await unitOfWork.FileRepository.UploadFile1(taskDTO.pdf);
             var taskMapped = mapper.Map<TaskDTO, CourseMaterial>(taskDTO);
             taskMapped.type = "Task";
+            taskMapped.courseId = taskDTO.courseId;
             taskMapped.pdfUrl = "Files\\" + await unitOfWork.FileRepository.UploadFile1(taskDTO.pdf);
             await unitOfWork.instructorRepositpry.AddMaterial(taskMapped);
             var success = await unitOfWork.instructorRepositpry.saveAsync();
@@ -175,7 +177,7 @@ namespace courseProject.Controllers
                 response.StatusCode = HttpStatusCode.BadRequest;
                 return BadRequest(response);
             }
-            var TaskToUpdate = await dbContext.courseMaterials.FirstOrDefaultAsync(x => x.Id == id);
+            var TaskToUpdate = await unitOfWork.materialRepository.GetMaterialByIdAsync( id);
             if (TaskToUpdate == null)
             {
                 response.IsSuccess = false;
@@ -183,8 +185,8 @@ namespace courseProject.Controllers
                 response.ErrorMassages = new List<string>() { "the Task is not found" };
                 return NotFound(response);
             }
-            
-            var Taskmapper = mapper.Map<TaskDTO, CourseMaterial>(taskDTO);
+
+            var Taskmapper = mapper.Map(taskDTO, TaskToUpdate);
             Taskmapper.Id = id;
             Taskmapper.type = "Task";
             Taskmapper.pdfUrl = "Files\\" + await unitOfWork.FileRepository.UploadFile1(taskDTO.pdf);
@@ -233,7 +235,7 @@ namespace courseProject.Controllers
                 response.StatusCode = HttpStatusCode.BadRequest;
                 return BadRequest(response);
             }
-            var FileToUpdate = await dbContext.courseMaterials.FirstOrDefaultAsync(x => x.Id == id);
+            var FileToUpdate = await unitOfWork.materialRepository.GetMaterialByIdAsync(id);
             if (FileToUpdate == null)
             {
                 response.IsSuccess = false;
@@ -242,7 +244,7 @@ namespace courseProject.Controllers
                 return NotFound(response);
             }
 
-            var filemapper = mapper.Map<FileDTO, CourseMaterial>(fileDTO);
+            var filemapper = mapper.Map(fileDTO, FileToUpdate );
             filemapper.Id = id;
             filemapper.type = "File";
             filemapper.pdfUrl = "Files\\" + await unitOfWork.FileRepository.UploadFile1(fileDTO.pdf);
@@ -291,7 +293,7 @@ namespace courseProject.Controllers
                 response.StatusCode = HttpStatusCode.BadRequest;
                 return BadRequest(response);
             }
-            var AnnouncementToUpdate = await dbContext.courseMaterials.FirstOrDefaultAsync(x => x.Id == id);
+            var AnnouncementToUpdate = await unitOfWork.materialRepository.GetMaterialByIdAsync(id);
             if (AnnouncementToUpdate == null)
             {
                 response.IsSuccess = false;
@@ -300,7 +302,7 @@ namespace courseProject.Controllers
                 return NotFound(response);
             }
 
-            var Announcementmapper = mapper.Map<AnnouncementDTO, CourseMaterial>(AnnouncementDTO);
+            var Announcementmapper = mapper.Map(AnnouncementDTO, AnnouncementToUpdate);
             Announcementmapper.Id = id;
             Announcementmapper.type = "Announcement";
             await unitOfWork.instructorRepositpry.EditMaterial(Announcementmapper);
@@ -348,7 +350,7 @@ namespace courseProject.Controllers
                 response.StatusCode = HttpStatusCode.BadRequest;
                 return BadRequest(response);
             }
-            var LinkToUpdate = await dbContext.courseMaterials.FirstOrDefaultAsync(x => x.Id == id);
+            var LinkToUpdate =  await unitOfWork.materialRepository.GetMaterialByIdAsync(id);
             if (LinkToUpdate == null)
             {
                 response.IsSuccess = false;
@@ -357,7 +359,7 @@ namespace courseProject.Controllers
                 return NotFound(response);
             }
 
-            var Linkmapper = mapper.Map<LinkDTO, CourseMaterial>(linkDTO);
+            var Linkmapper = mapper.Map(linkDTO, LinkToUpdate);
             Linkmapper.Id = id;
             Linkmapper.type = "Link";
             await unitOfWork.instructorRepositpry.EditMaterial(Linkmapper);
@@ -390,7 +392,7 @@ namespace courseProject.Controllers
                 response.ErrorMassages = new List<string>() { "The Id is less or equal 0" };
                 return BadRequest(response);
             }
-            var materail = await dbContext.courseMaterials.FirstOrDefaultAsync(x => x.Id == id);
+            var materail = await unitOfWork.materialRepository.GetMaterialByIdAsync(id);
             if (materail == null)
             {
                 response.IsSuccess = false;
@@ -419,7 +421,8 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<ApiResponce>> GetMaterialByIdAsync(int id)
+        
+        public async Task<ActionResult<ApiResponce>> GetMaterialByIdAsync( int id)
         {
             if (id <= 0)
             {
@@ -429,7 +432,7 @@ namespace courseProject.Controllers
                 return BadRequest(response);
             }
 
-            var material =await materialRepo.GetMaterialByIdAsync(id);
+            var material =await unitOfWork.materialRepository.GetMaterialByIdAsync(id);
             if (material == null)
             {
                 response.IsSuccess = false;
@@ -473,7 +476,8 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<ApiResponce>> GetAllMaterialInTheCourseAsync(int CourseId)
+        
+        public async Task<ActionResult<ApiResponce>> GetAllMaterialInTheCourseAsync([FromQuery]int CourseId)
         {
             if (CourseId == 0)
             {
@@ -483,7 +487,7 @@ namespace courseProject.Controllers
                 return BadRequest(response);
             }
 
-           var material= await materialRepo.GetAllMaterialInSameCourse(CourseId);
+           var material= await unitOfWork.materialRepository.GetAllMaterialInSameCourse(CourseId);
             
             if(material == null)
             {

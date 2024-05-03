@@ -38,7 +38,7 @@ namespace courseProject.Repository.GenericRepository
 
         public async Task<IReadOnlyList<Course>> GetAllCoursesGivenByInstructorIdAsync(int Instructorid)
         {
-           return  await dbContext.courses.Where(x=>x.InstructorId== Instructorid).ToListAsync();
+           return  await dbContext.courses.Where(x=>x.InstructorId== Instructorid && x.status.ToLower()== "accredit").ToListAsync();
         }
 
 
@@ -63,6 +63,16 @@ namespace courseProject.Repository.GenericRepository
         public async Task<IReadOnlyList<Consultation>> GetAllConsultationRequestByInstructorIdAsync(int instructorId)
         {
            return await dbContext.consultations.Include(x=>x.student.user).Include(x => x.instructor.user).Where(x=>x.InstructorId == instructorId).ToListAsync();
+        }
+
+        public async Task<Instructor> getInstructorByIdAsync(int id)
+        {
+            return await dbContext.instructors.FirstOrDefaultAsync(x => x.InstructorId == id);
+        }
+
+        public async Task<IReadOnlyList<Instructor_Working_Hours>> getAllInstructorsOfficeHoursAsync()
+        {
+           return await dbContext.Instructor_Working_Hours.Include(x=>x.instructor).Include(x=>x.instructor.user).ToListAsync();
         }
     }
 }

@@ -30,7 +30,7 @@ namespace courseProject.Core.Models
         public SubAdmin subadmin { get; set; }
 
         public List<General_Feedback> general_feedback { get; set; }
-
+        public List<Feedback> feedbacks { get; set; }
 
     }
 }

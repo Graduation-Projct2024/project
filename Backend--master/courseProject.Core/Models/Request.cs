@@ -19,7 +19,7 @@ namespace courseProject.Core.Models
 
         public string satus { get; set; } = "off";
 
-       // public string type { get; set; }
+        public string? description { get; set; }
 
         public DateTime date { get; set; } = DateTime.Now;
         public DateTime? startDate { get; set; }

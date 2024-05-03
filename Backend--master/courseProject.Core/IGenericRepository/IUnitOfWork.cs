@@ -18,5 +18,7 @@ namespace courseProject.Core.IGenericRepository
         public IFileRepository FileRepository { get; set; }
         public ICourseRepository<Course> CourseRepository { get; set; }
         public IMaterialRepository materialRepository { get; set; }
+        public IEventRepository eventRepository {  get; set; }
+       
     }
 }
