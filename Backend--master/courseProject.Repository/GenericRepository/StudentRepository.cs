@@ -147,5 +147,11 @@ namespace courseProject.Repository.GenericRepository
                 .Where(x => x.consultation.type.ToLower() == "public")
                 .Include(x=>x.Student).ThenInclude(x=>x.user).ToListAsync();
         }
+
+        public async Task<Consultation> GetConsultationById(int consultationId)
+        {
+           return await dbContext.consultations.Include(x=>x.student).ThenInclude(x=>x.user)
+                .Include(x=>x.instructor).ThenInclude(x=>x.user).FirstOrDefaultAsync(x=>x.Id==consultationId);
+        }
     }
 }

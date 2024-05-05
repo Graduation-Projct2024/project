@@ -421,7 +421,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        
+       
         public async Task<ActionResult<ApiResponce>> GetMaterialByIdAsync( int id)
         {
             if (id <= 0)
@@ -476,7 +476,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        
+       
         public async Task<ActionResult<ApiResponce>> GetAllMaterialInTheCourseAsync([FromQuery]int CourseId)
         {
             if (CourseId == 0)

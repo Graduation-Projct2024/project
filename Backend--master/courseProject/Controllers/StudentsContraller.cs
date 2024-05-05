@@ -505,6 +505,46 @@ namespace courseProject.Controllers
             return Ok(response);
         }
 
+
+        [HttpPost("GetConsultationById")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<ApiResponce>> GetAConsultationById(int consultationId)
+        {
+            if (consultationId <= 0)
+            {
+                response.IsSuccess = false;
+                response.StatusCode=HttpStatusCode.BadRequest;
+                response.ErrorMassages.Add("The lecture Id is less or equal 0");
+                return BadRequest(response);
+            }
+            var getConsultation = await unitOfWork.StudentRepository.GetConsultationById(consultationId);
+            if (getConsultation == null)
+            {
+                response.IsSuccess = false;
+                response.StatusCode=HttpStatusCode.BadRequest;
+                response.ErrorMassages.Add($"The lecture with id = {consultationId} is not found ");
+                return NotFound(response);
+            }
+            try
+            {
+                var consultationMapper = mapper.Map<Consultation, LecturesForRetriveDTO>(getConsultation);
+                response.IsSuccess = true;
+                response.StatusCode = HttpStatusCode.OK;
+                response.Result = consultationMapper;
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.StatusCode = HttpStatusCode.BadRequest;
+                response.ErrorMassages.Add("An error has occured ");
+                return BadRequest(response);
+            }
+        }
+
+
         [HttpPost("AddInstructorFeedback")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
