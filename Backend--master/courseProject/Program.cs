@@ -12,7 +12,6 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using Microsoft.Extensions.FileProviders;
 
-using Microsoft.AspNetCore.Authorization;
 namespace courseProject
 {
     public class Program
@@ -105,7 +104,7 @@ namespace courseProject
                 //    policy.RequireAuthenticatedUser();
                 //    policy.Requirements.Add(new EnrolledInCourseRequirement());
                 //});
-               
+                
             });
 
             builder.Services.AddHttpContextAccessor();

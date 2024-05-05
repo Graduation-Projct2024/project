@@ -20,7 +20,8 @@ namespace courseProject.Core.IGenericRepository
         public  Task AddInStudentConsulationAsync(StudentConsultations consultation);
         public Task<IReadOnlyList<StudentConsultations>> GetAllConsultations();
         public Task<List<StudentConsultations>> GetAllStudentsInPublicConsulations(int consultationId);
-     //   public Task<List<StudentConsultations>> GetStudentInPrivateConsulations(int consultationId);
+        //   public Task<List<StudentConsultations>> GetStudentInPrivateConsulations(int consultationId);
+        public Task<Consultation> GetConsultationById(int consultationId);
         public Task<IReadOnlyList<StudentConsultations>> GetAllOtherPrivateConsultationsAsync(int studentId);
         public Task<IReadOnlyList<StudentConsultations>> GetAllBookedPrivateConsultationsAsync(int studentId);
         public Task addFeedbackAsync(Feedback feedback);

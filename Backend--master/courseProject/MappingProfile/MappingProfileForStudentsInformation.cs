@@ -72,6 +72,12 @@ namespace courseProject.MappingProfile
 
             CreateMap<StudentConsultations, UserNameDTO>()
                 .ForMember(x => x.Name, o => o.MapFrom(y => y.Student.user.userName + " " + y.Student.LName));
+
+            CreateMap<Consultation, LecturesForRetriveDTO>()
+                .ForMember(x => x.InstructoruserName, o => o.MapFrom(y => y.instructor.user.userName))
+                .ForMember(x => x.InstructorLName, o => o.MapFrom(y => y.instructor.LName))
+                .ForMember(x => x.StudentuserName, o => o.MapFrom(y => y.student.user.userName))
+                .ForMember(x => x.StudentLName, o => o.MapFrom(y => y.student.LName));
         }
 
 
