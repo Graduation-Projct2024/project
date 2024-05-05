@@ -11,7 +11,7 @@ using System.Text;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using Microsoft.Extensions.FileProviders;
-using courseProject.Authentication;
+
 using Microsoft.AspNetCore.Authorization;
 namespace courseProject
 {
@@ -105,20 +105,11 @@ namespace courseProject
                 //    policy.RequireAuthenticatedUser();
                 //    policy.Requirements.Add(new EnrolledInCourseRequirement());
                 //});
-                options.AddPolicy("EnrolledInCourse", policy =>
-                policy.Requirements.Add(new EnrolledInCourseRequirement()));
-
-                options.AddPolicy("MaterialInEnrolledCourse", policy =>
-                policy.Requirements.Add(new EnrolledInCourseRequirement()));
-
-                options.AddPolicy("InstructorGiveTheCourse", policy =>
-                policy.Requirements.Add(new GiveTheCourseRequirements()));
+               
             });
 
             builder.Services.AddHttpContextAccessor();
-            builder.Services.AddScoped<IAuthorizationHandler, EnrolledInCourseHandler>();
-            builder.Services.AddScoped<IAuthorizationHandler, GetMaterialForEnrolledCourseHandler>();
-            builder.Services.AddScoped<IAuthorizationHandler, GiveTheCourseHandler>();
+            
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
