@@ -105,7 +105,7 @@ namespace courseProject
                 //    policy.RequireAuthenticatedUser();
                 //    policy.Requirements.Add(new EnrolledInCourseRequirement());
                 //});
-                
+               
             });
 
             builder.Services.AddHttpContextAccessor();

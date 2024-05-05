@@ -51,6 +51,27 @@ namespace courseProject.MappingProfile
 
             CreateMap<Feedback, AllFeedbackForRetriveDTO>()
                 .ForMember(x => x.name, o => o.MapFrom(y => y.User.userName + " " + y.User.student.LName));
+
+            CreateMap<Consultation, StudentConsultations>()
+                .ForMember(x=>x.consultationId , o=>o.MapFrom(y=>y.Id));
+
+            CreateMap<StudentConsultations, PublicLectureForRetriveDTO>()
+                .ForMember(x => x.name, o => o.MapFrom(y => y.consultation.name))
+                //.ForMember(dest => dest.StudentLName, opt => opt.MapFrom(src => new List<string> { src.Student.LName }))
+               // .ForMember(dest => dest.StudentuserName, opt => opt.MapFrom(src => new List<string> { src.Student.user.userName }))
+                .ForMember(x => x.InstructoruserName, o => o.MapFrom(y => y.consultation.instructor.user.userName))
+                .ForMember(x => x.InstructorLName, o => o.MapFrom(y => y.consultation.instructor.LName))
+                .ForMember(x=>x.endTime , o=>o.MapFrom(y=>y.consultation.endTime))
+                .ForMember(x => x.startTime, o => o.MapFrom(y => y.consultation.startTime))
+                .ForMember(x => x.Duration, o => o.MapFrom(y => y.consultation.Duration))
+                .ForMember(x => x.description, o => o.MapFrom(y => y.consultation.description))
+                .ForMember(x => x.type, o => o.MapFrom(y => y.consultation.type))
+                .ForMember(x => x.InstructorId, o => o.MapFrom(y => y.consultation.InstructorId))               
+                .ForMember(x => x.date, o => o.MapFrom(y => y.consultation.date.ToString("dd/MM/yyyy")));
+
+
+            CreateMap<StudentConsultations, UserNameDTO>()
+                .ForMember(x => x.Name, o => o.MapFrom(y => y.Student.user.userName + " " + y.Student.LName));
         }
 
 

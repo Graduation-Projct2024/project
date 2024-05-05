@@ -69,6 +69,12 @@ namespace courseProject.Repository.Data
                     e.HasKey(x=> new {x.StudentId , x.courseId});
                 }
                 );
+            modelBuilder.Entity<StudentConsultations>(
+               e =>
+               {
+                   e.HasKey(x => new { x.StudentId, x.consultationId });
+               }
+               );
             modelBuilder.Entity<Student_Task_Submissions>(
                e =>
                {
@@ -156,5 +162,6 @@ namespace courseProject.Repository.Data
         public DbSet<General_Feedback> general_Feedbacks { get; set; }
         public DbSet<Student_Task_Submissions> Student_Task_Submissions { get; set; }
         public DbSet<Feedback> feedbacks { get; set; }
+        public DbSet<StudentConsultations> StudentConsultations { get; set; }
     }
 }

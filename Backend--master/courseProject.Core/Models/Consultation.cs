@@ -32,6 +32,6 @@ namespace courseProject.Core.Models
 
         public Student student { get; set; }
          public Instructor instructor { get; set; }
-
+        public List<StudentConsultations> studentConsultations { get; set; }
     }
 }

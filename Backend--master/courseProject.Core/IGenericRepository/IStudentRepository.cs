@@ -17,8 +17,19 @@ namespace courseProject.Core.IGenericRepository
         public Task SubmitTaskAsync(Student_Task_Submissions student_Task);
         public Task<IReadOnlyList<Student>> GetAllStudentsInTheSameCourseAsync(int courseId);
         public Task BookLectureAsync(Consultation consultation);
-       
+        public  Task AddInStudentConsulationAsync(StudentConsultations consultation);
+        public Task<IReadOnlyList<StudentConsultations>> GetAllConsultations();
+        public Task<List<StudentConsultations>> GetAllStudentsInPublicConsulations(int consultationId);
+     //   public Task<List<StudentConsultations>> GetStudentInPrivateConsulations(int consultationId);
+        public Task<IReadOnlyList<StudentConsultations>> GetAllOtherPrivateConsultationsAsync(int studentId);
+        public Task<IReadOnlyList<StudentConsultations>> GetAllBookedPrivateConsultationsAsync(int studentId);
+        public Task addFeedbackAsync(Feedback feedback);
+        public Task <IReadOnlyList<Feedback>> GetAllFeedbacksAsync();
+        public Task<IReadOnlyList<Feedback>> GetFeedbacksByTypeAsync(string type);
+        public Task<Feedback> GetFeedbackByIdAsync(int id);
         public Task<Student> getStudentByIdAsync(int id);
+        public Task<IReadOnlyList<StudentConsultations>> GetAllLectureByStudentIdAsync(int StudentId);
+        public Task<IReadOnlyList<Consultation>> GetAllPublicConsultationsAsync();
         //  public Task RequestToCreateCustomCourseAsync ()
     }
 }
