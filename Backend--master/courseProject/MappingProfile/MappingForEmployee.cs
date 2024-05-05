@@ -142,12 +142,12 @@ namespace courseProject.MappingProfile
                 .ForMember(x => x.day, o => o.MapFrom(y => y.day.GetDisplayName()));
 
 
-            CreateMap<Consultation, LecturesForRetriveDTO>()
-                .ForMember(x => x.InstructoruserName, o => o.MapFrom(y => y.instructor.user.userName))
-                .ForMember(x => x.InstructorLName, o => o.MapFrom(y => y.instructor.LName))
-                .ForMember(x => x.StudentuserName, o => o.MapFrom(y => y.student.user.userName))
-                .ForMember(x => x.StudentLName, o => o.MapFrom(y => y.student.LName))
-                .ForMember(x => x.date, o => o.MapFrom(y =>y.date.ToString("dd/MM/yyyy")));
+            CreateMap<StudentConsultations, LecturesForRetriveDTO>()
+                .ForMember(x => x.InstructoruserName, o => o.MapFrom(y => y.consultation.instructor.user.userName))
+                .ForMember(x => x.InstructorLName, o => o.MapFrom(y => y.consultation.instructor.LName))
+                .ForMember(x => x.StudentuserName, o => o.MapFrom(y => y.Student.user.userName))
+                .ForMember(x => x.StudentLName, o => o.MapFrom(y => y.Student.LName))
+                .ForMember(x => x.date, o => o.MapFrom(y =>y.consultation.date.ToString("dd/MM/yyyy")));
 
             CreateMap<Instructor, EmployeeListDTO>()
                 .ForMember(x=>x.id , o=>o.MapFrom(y=>y.InstructorId))

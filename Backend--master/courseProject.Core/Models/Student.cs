@@ -37,12 +37,12 @@ namespace courseProject.Core.Models
 
         public List<StudentCourse> studentCourses { get; set; }
 
-        public List<Consultation> Consultations { get; set; }
+       // public List<Consultation> Consultations { get; set; }
 
         public List<Instructor_Feedback> instructor_Feedbacks { get; set; }
 
         public List<Course_Feedback> course_Feedbacks { get; set;}
         public List<Student_Task_Submissions> Student_Task_Submissions { get; set; }
-
+        public List<StudentConsultations> studentConsultations { get; set; }
     }
 }

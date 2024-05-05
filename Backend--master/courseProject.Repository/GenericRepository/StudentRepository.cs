@@ -6,6 +6,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Data.SqlTypes;
 using System.Linq;
 using System.Text;
@@ -26,6 +27,11 @@ namespace courseProject.Repository.GenericRepository
         public async Task BookLectureAsync(Consultation consultation)
         {
            await dbContext.Set<Consultation>().AddAsync(consultation);
+        }
+
+        public async Task AddInStudentConsulationAsync(StudentConsultations consultation)
+        {
+            await dbContext.Set<StudentConsultations>().AddAsync(consultation);
         }
 
         public async Task CreateStudentAccountAsync(Student student)
@@ -62,14 +68,84 @@ namespace courseProject.Repository.GenericRepository
             await dbContext.Set<Student_Task_Submissions>().AddAsync(student_Task);
         }
 
-       
+        public async Task addFeedbackAsync(Feedback feedback)
+        {
+            await dbContext.feedbacks.AddAsync(feedback);
+        }
 
-        
+        public async Task<IReadOnlyList<Feedback>> GetAllFeedbacksAsync()
+        {
+            return await dbContext.feedbacks.Include(x => x.User).Include(x => x.User.student).ToListAsync();
+        }
+
+        public async Task<IReadOnlyList<Feedback>> GetFeedbacksByTypeAsync(string type)
+        {
+            return await dbContext.feedbacks.Include(x=>x.User).Include(x=>x.User.student).Where(x=>x.type==type).ToListAsync();
+        }
+
+        public async Task<Feedback> GetFeedbackByIdAsync(int id)
+        {
+           return await dbContext.feedbacks.FirstOrDefaultAsync(x => x.Id == id);
+        }
 
         public async Task<Student> getStudentByIdAsync(int id )
         {          
             return await dbContext.students.FirstOrDefaultAsync(x => x.StudentId == id);
         }
-        
+
+        public async Task<IReadOnlyList<StudentConsultations>> GetAllLectureByStudentIdAsync(int StudentId)
+        {
+            return await dbContext.StudentConsultations.Include(x => x.consultation.instructor)
+                                                       .Include(x=>x.consultation.instructor)
+                                                       .Include(x=>x.Student.user)
+                                                       .Where(x => x.StudentId == StudentId).ToListAsync();
+        }
+
+        public async Task<IReadOnlyList<Consultation>> GetAllPublicConsultationsAsync()
+        {
+            return await dbContext.consultations.Where(x=>x.type.ToLower()=="public").ToListAsync();
+        }
+
+        public async Task<IReadOnlyList<StudentConsultations>> GetAllConsultations()
+        {
+            return await dbContext.StudentConsultations
+                .Where(x => x.consultation.type.ToLower() == "public")
+                                                       .Include(x => x.consultation)
+                                                       .Include(x=>x.consultation.instructor)
+                                                       .Include(x=>x.consultation.instructor.user)
+                                                       .Include(x=>x.Student)
+                                                       .Include(x=>x.Student.user)
+                                                      // .DistinctBy(x=>x.consultationId)
+                                                       .ToListAsync();
+        }
+
+        public async Task<IReadOnlyList<StudentConsultations>> GetAllOtherPrivateConsultationsAsync(int studentId)
+        {
+            return await dbContext.StudentConsultations.Where(x=>x.consultation.type.ToLower()=="private")
+                                                       .Where(x=>x.StudentId!=studentId)
+                                                       .Include(x => x.consultation)
+                                                       .Include(x => x.consultation.instructor)
+                                                       .Include(x => x.consultation.instructor.user)
+                                                       .Include(x => x.Student)
+                                                       .Include(x => x.Student.user).ToListAsync();
+        }
+
+        public async Task<IReadOnlyList<StudentConsultations>> GetAllBookedPrivateConsultationsAsync(int studentId)
+        {
+            return await dbContext.StudentConsultations.Where(x => x.consultation.type.ToLower() == "private")
+                                                       .Where(x => x.StudentId == studentId)
+                                                       .Include(x => x.consultation)
+                                                       .Include(x => x.consultation.instructor)
+                                                       .Include(x => x.consultation.instructor.user)
+                                                       .Include(x => x.Student)
+                                                       .Include(x => x.Student.user).ToListAsync();
+        }
+
+        public async Task<List<StudentConsultations>> GetAllStudentsInPublicConsulations(int consultationId)
+        {
+            return await dbContext.StudentConsultations.Where(x=>x.consultationId== consultationId)
+                .Where(x => x.consultation.type.ToLower() == "public")
+                .Include(x=>x.Student).ThenInclude(x=>x.user).ToListAsync();
+        }
     }
 }
