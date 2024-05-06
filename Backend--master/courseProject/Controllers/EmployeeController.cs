@@ -44,11 +44,10 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        // [Authorize(Policy = "Admin")]
-       // [Authorize(Policy = "Admin&subAdmin")]
-        public async Task<ActionResult<IEnumerable<SubAdmin>>> GetAllEmployeeAsync(int pageNumber , int pageSize)
+        
+        public async Task<ActionResult<IEnumerable<SubAdmin>>> GetAllEmployeeAsync()
         {
-           // pagenation.PageSize = pageSize ?? pagenation.PageSize;
+          
             var SubAdmins = await unitOfWork.SubAdminRepository.GetAllEmployeeAsync();
             
             var instructors = await unitOfWork.instructorRepositpry.GetAllEmployeeAsync();
@@ -67,8 +66,8 @@ namespace courseProject.Controllers
                 instructor.type = "Instructor";
             }
             var allEmployees = (mapperSubAdmin.Concat(mapperInstructor));
-           return Ok( Pagenation<EmployeeDto>.CreateAsync(allEmployees , pageNumber , pageSize));
-          //  return Ok(allEmployees.OrderBy(x=>x.Id));
+          
+            return Ok(allEmployees.OrderBy(x=>x.Id));
             
 
 
