@@ -23,7 +23,9 @@ namespace courseProject.Repository.GenericRepository
 
         public async Task<Course> GetCourseByIdAsync(int id)
         {
-           return  await dbContext.courses.FirstOrDefaultAsync(x => x.Id == id);
+           return  await dbContext.courses.Include(x=>x.Instructor).ThenInclude(x=>x.user)
+                .Include(x=>x.SubAdmin).ThenInclude(x=>x.user)
+                .FirstOrDefaultAsync(x => x.Id == id);
         }
     }
 }

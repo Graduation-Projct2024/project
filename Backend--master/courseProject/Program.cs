@@ -11,7 +11,7 @@ using System.Text;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using Microsoft.Extensions.FileProviders;
-
+using courseProject.Configuration;
 namespace courseProject
 {
     public class Program
@@ -20,12 +20,7 @@ namespace courseProject
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-            //builder.Services.AddDbContext<AppContext>(options =>
-            //{
-            //    options.UseSqlServer(connectionString);
-
-            //});
+     
 
 
 
@@ -41,74 +36,53 @@ namespace courseProject
                 });
             });
 
-            builder.Services.AddControllers()
-                .AddNewtonsoftJson(options =>
-      options.SerializerSettings.ReferenceLoopHandling =
-        Newtonsoft.Json.ReferenceLoopHandling.Ignore);
-            builder.Services.AddDbContext<projectDbContext>(options =>
-            {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-                options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-            });
-            builder.Services.AddScoped(typeof(IGenericRepository1<>), typeof(GenericRepository1<>));
-            builder.Services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
-            builder.Services.AddScoped(typeof(ISubAdminRepository), typeof(SubAdminRepository));
-            builder.Services.AddScoped(typeof(IUserRepository), typeof(UserRepository));
-            builder.Services.AddScoped(typeof(IStudentRepository), typeof(StudentRepository));
-            builder.Services.AddAutoMapper(typeof(MappingProfileForStudentsInformation));
-            builder.Services.AddAutoMapper(typeof(MappingForCourseInformation));
-            builder.Services.AddAutoMapper(typeof(MappingForEmployee));
-            builder.Services.AddAutoMapper(typeof(MappingForEvents));
-            
+    
 
-            var Key = builder.Configuration.GetValue<string>("Authentication:SecretKey");
 
-            builder.Services.AddAuthentication(x =>
-            {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(a =>
-            {
-                a.RequireHttpsMetadata = false;
-                a.SaveToken = true;
-                a.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Key)),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                };
-            });
+            builder.Services
+                   .AddApplication()
+                   .AddInfrastucture(builder.Configuration)
+                   .AddAuthenticationAndAuthorization(builder.Configuration);
+
 
             builder.Services.AddHttpClient();
             
-            builder.Services.AddAuthorization(options =>
-            {
-                options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
-                options.AddPolicy("subAdmin", policy => policy.RequireRole("subAdmin"));
-                options.AddPolicy("Admin&subAdmin", policy =>
-                {
-                    policy.RequireAssertion(a =>
+            //builder.Services.AddAuthorization(options =>
+            //{
+            //    options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
+            //    options.AddPolicy("subAdmin", policy => policy.RequireRole("subAdmin"));
+            //    options.AddPolicy("Admin&subAdmin", policy =>
+            //    {
+            //        policy.RequireAssertion(a =>
 
-                        a.User.IsInRole("Admin") ||
-                        a.User.IsInRole("subAdmin")
+            //            a.User.IsInRole("Admin") ||
+            //            a.User.IsInRole("subAdmin")
 
-                    );
+            //        );
 
-                });
-                options.AddPolicy("Instructor", policy => policy.RequireRole("Instructor"));
-                options.AddPolicy("Student", policy => policy.RequireRole("Student"));
-                //options.AddPolicy("EnrolledInCourse", policy =>
-                //{
-                //    policy.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
-                //    policy.RequireAuthenticatedUser();
-                //    policy.Requirements.Add(new EnrolledInCourseRequirement());
-                //});
-                
-            });
+            //    });
+            //    options.AddPolicy("Instructor", policy => policy.RequireRole("Instructor"));
+            //    options.AddPolicy("Student", policy => policy.RequireRole("Student"));
+            //    //options.AddPolicy("EnrolledInCourse", policy =>
+            //    //{
+            //    //    policy.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
+            //    //    policy.RequireAuthenticatedUser();
+            //    //    policy.Requirements.Add(new EnrolledInCourseRequirement());
+            //    //});
+            //    //options.AddPolicy("EnrolledInCourse", policy =>
+            //    //policy.Requirements.Add(new EnrolledInCourseRequirement()));
+
+            //    //options.AddPolicy("MaterialInEnrolledCourse", policy =>
+            //    //policy.Requirements.Add(new EnrolledInCourseRequirement()));
+
+            //    //options.AddPolicy("InstructorGiveTheCourse", policy =>
+            //    //policy.Requirements.Add(new GiveTheCourseRequirements()));
+            //});
 
             builder.Services.AddHttpContextAccessor();
-            
+            //builder.Services.AddScoped<IAuthorizationHandler, EnrolledInCourseHandler>();
+            //builder.Services.AddScoped<IAuthorizationHandler, GetMaterialForEnrolledCourseHandler>();
+            //builder.Services.AddScoped<IAuthorizationHandler, GiveTheCourseHandler>();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();

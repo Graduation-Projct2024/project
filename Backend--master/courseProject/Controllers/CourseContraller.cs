@@ -275,15 +275,15 @@ namespace courseProject.Controllers
                 responce.ErrorMassages.Add($"The Course Id = {id} is less or equal 0 ");
                 return BadRequest(responce);
             }
-            var courseFound = await unitOfWork.CourseRepository.GetCourseByIdAsync(id);
-            if (courseFound == null)
-            {
-                responce.StatusCode = HttpStatusCode.NotFound;
-                responce.IsSuccess = false;
-                responce.ErrorMassages.Add($"The Course Id = {id} is Not Found ");
-                return NotFound(responce);
-            }
-           var coursee =   unitOfWork.CourseRepository.GetCourseByIdAsync(id);
+            //var courseFound = await unitOfWork.CourseRepository.GetCourseByIdAsync(id);
+            //if (courseFound == null)
+            //{
+            //    responce.StatusCode = HttpStatusCode.NotFound;
+            //    responce.IsSuccess = false;
+            //    responce.ErrorMassages.Add($"The Course Id = {id} is Not Found ");
+            //    return NotFound(responce);
+            //}
+           var coursee = await  unitOfWork.CourseRepository.GetCourseByIdAsync(id);
             if (coursee == null )
             {
                 responce.IsSuccess = false;
@@ -292,9 +292,10 @@ namespace courseProject.Controllers
                 responce.Result = null;
                 return NotFound(responce);
             }
+            var courseMapper = mapper.Map<Course, CourseInformationDto>(coursee);
             responce.IsSuccess = true;
             responce.StatusCode = HttpStatusCode.OK;
-            responce.Result = coursee.Result;
+            responce.Result = courseMapper;
             return Ok(responce);
         }
 

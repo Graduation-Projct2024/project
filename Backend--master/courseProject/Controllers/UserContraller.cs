@@ -206,10 +206,6 @@ namespace courseProject.Controllers
                 try
                 {
                     mapper.Map(profile, profileToUpdate);
-                    // var userMapper = mapper.Map<ProfileDTO, User>(profile);
-                   // profileToUpdate.userName = profile.FName;
-                  //  profileToUpdate.email = profile.email;
-                    // userMapper.UserId = id;
                     await unitOfWork.UserRepository.updateSubAdminAsync(profileToUpdate);
                     var success1 = await unitOfWork.UserRepository.saveAsync();
                     var success2 = 0;
@@ -222,9 +218,8 @@ namespace courseProject.Controllers
                     if (profileToUpdate.role.ToLower() == "admin")
                     {
                         Admin adminToUpdate = await unitOfWork.AdminRepository.GetAdminByIdAsync(id);
+                        adminToUpdate.ImageUrl = imageUrl;
                         var adminMapper = mapper.Map(profile, adminToUpdate );
-                     //   adminMapper.AdminId = id;
-                    //    adminMapper.ImageUrl = imageUrl;
                         await unitOfWork.AdminRepository.updateSubAdminAsync(adminMapper);                        
                         success2 = await unitOfWork.AdminRepository.saveAsync();
                         profileResult = mapper.Map<Admin, ProfileDTO>(adminToUpdate);
@@ -232,10 +227,8 @@ namespace courseProject.Controllers
                     else if (profileToUpdate.role.ToLower() == "subadmin")
                     {
                         SubAdmin subAdminToUpdate = await unitOfWork.SubAdminRepository.GetSubAdminByIdAsync(id);
+                        subAdminToUpdate.ImageUrl = imageUrl;
                         var subAdminMapper = mapper.Map(profile, subAdminToUpdate);
-                        //var subAdminMapper = mapper.Map<ProfileDTO, SubAdmin>(profile);
-                        //subAdminMapper.SubAdminId = id;
-                        //subAdminMapper.ImageUrl = imageUrl;
                         await unitOfWork.SubAdminRepository.updateSubAdminAsync(subAdminMapper);
 
                         success2 = await unitOfWork.SubAdminRepository.saveAsync();
@@ -244,10 +237,8 @@ namespace courseProject.Controllers
                     else if (profileToUpdate.role.ToLower() == "instructor")
                     {
                         Instructor instructorToUpdate = await unitOfWork.instructorRepositpry.getInstructorByIdAsync(id);
+                        instructorToUpdate.ImageUrl = imageUrl;
                         var instructorMapper = mapper.Map(profile, instructorToUpdate);
-                        //var instructorMapper = mapper.Map<ProfileDTO, Instructor>(profile);
-                        //instructorMapper.InstructorId = id;
-                        //instructorMapper.ImageUrl = imageUrl;
                         await unitOfWork.instructorRepositpry.updateSubAdminAsync(instructorMapper);
                         success2 = await unitOfWork.instructorRepositpry.saveAsync();
                         profileResult = mapper.Map<Instructor, ProfileDTO>(instructorToUpdate);
@@ -255,10 +246,8 @@ namespace courseProject.Controllers
                     else if (profileToUpdate.role.ToLower() == "student")
                     {
                         Student StudentToUpdate = await unitOfWork.StudentRepository.getStudentByIdAsync(id);
+                        StudentToUpdate.ImageUrl = imageUrl;
                         var studentMapper = mapper.Map(profile, StudentToUpdate);
-                        //var studentMapper = mapper.Map<ProfileDTO, Student>(profile);
-                        //studentMapper.StudentId = id;
-                        //studentMapper.ImageUrl = imageUrl;
                         await unitOfWork.StudentRepository.updateSubAdminAsync(studentMapper);                        
                         success2 = await unitOfWork.StudentRepository.saveAsync();
                         profileResult = mapper.Map<Student, ProfileDTO>(StudentToUpdate);
@@ -273,7 +262,6 @@ namespace courseProject.Controllers
                         response.Result = profileResult;
                         return Ok(response);
                     }
-
                     return BadRequest(response);
                 }
                 catch (Exception ex)

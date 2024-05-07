@@ -14,8 +14,8 @@ namespace courseProject.MappingProfile
             IsNotDefaultClass = new Common.IsNotDefaultClassForMapping();
 
             CreateMap<Course, CourseInformationDto>()
-                .ForMember(x => x.InstructorName  , o=>o.MapFrom(y=>y.Instructor.user.userName))
-                .ForMember(x => x.SubAdminName, o => o.MapFrom(y => y.SubAdmin.user.userName))
+                .ForMember(x => x.InstructorName  , o=>o.MapFrom(y=>y.Instructor.user.userName+" " +y.Instructor.LName))
+                .ForMember(x => x.SubAdminName, o => o.MapFrom(y => y.SubAdmin.user.userName+ " " + y.Instructor.LName))
                 .ForMember(x => x.ImageUrl, o => o.MapFrom(y => $"http://localhost:5134/{ y.ImageUrl}"));
 
             CreateMap<Course, CourseAccreditDTO>()
