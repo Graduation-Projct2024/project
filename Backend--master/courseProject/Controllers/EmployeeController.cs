@@ -356,7 +356,7 @@ namespace courseProject.Controllers
                 responce.IsSuccess = false;
                 responce.StatusCode = HttpStatusCode.NotFound;
                 responce.ErrorMassages = new List<string>() { $"The Instructor Of Id = {Instructorid} Does Not Teach Any Courses " };
-                return NotFound(responce);
+                return Ok(responce);
             }
             CommonClass.EditImageInFor(courseFond, null);
             responce.StatusCode=HttpStatusCode.OK;
