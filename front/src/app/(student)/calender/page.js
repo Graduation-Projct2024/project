@@ -28,15 +28,20 @@ import Switch from '@mui/material/Switch';
 import { styled } from '@mui/material/styles';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import FormControlLabel from '@mui/material/FormControlLabel';
-
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 export default function CalendarPage() {
-  const {userToken, setUserToken, userData,userId}=useContext(UserContext);
+const {userToken, setUserToken, userData,userId}=useContext(UserContext);
+const [date, setDate]=React.useState();
+const [lecture, setLecture]=React.useState();
+
+const [status, setStatus] = React.useState('private');
+const [selectedInstructor,setSelectedInstructor]=React.useState();
+const [open, setOpen] = React.useState(false);
+const [alertOpen, setAlertOpen] = React.useState(false);
 
   const initialValues = {
     name: "",
-    InstructorId: "",
-    Duration:"",
-    type:"",
     description:"",
     startTime:"",
     endTime:""
@@ -51,24 +56,59 @@ export default function CalendarPage() {
     console.log(data);
     setInstructors(data.data.result);
   };
+  const getLectures = async () => {
+    if(userId){
+    const {data} = await axios.post(
+      `http://localhost:5134/api/StudentsContraller/GetAllConsultations?studentId=${userId}
+      `
+    );
+    if(data.isSuccess){
+    console.log(data.result);
+
+    setLecture(data.result);
+    }
+    }
+  
+  };
+  console.log(lecture);
+
   const onSubmit = async (lectures) => {
-console.log("test")
-const formData = new FormData();
-formData.append("name", tasks.name);
-formData.append("linkUrl", tasks.linkUrl);
-formData.append("courseId", courseId);
-formData.append("InstructorId",userData.userId);
+    const [startHour, startMinute] = lectures.startTime.split(':').map(Number);
+    const [endHour, endMinute] = lectures.endTime.split(':').map(Number);
+
+    let durationMinutes = (endHour * 60 + endMinute) - (startHour * 60 + startMinute);
+
+    if (durationMinutes < 0) {
+        durationMinutes += 24 * 60; 
+    }
+
+    const hours = Math.floor(durationMinutes / 60);
+    const minutes = durationMinutes % 60;
+
+    const formattedHours = String(hours).padStart(2, '0');
+    const formattedMinutes = String(minutes).padStart(2, '0');
+
+    const duration=`${formattedHours}:${formattedMinutes}`;
+    const formData = new FormData();
+formData.append("name", lectures.name);
+formData.append("description", lectures.description);
+formData.append("type", status);
+formData.append("InstructorId", selectedInstructor);
+formData.append("Duration",duration);
+
 
 const { data } = await axios.post(
-  `http://localhost:5134/api/StudentsContraller/BookALecture?studentId=${userId}&date=2024%2F04%2F28&startTime=15%3A00%3A00%20GMT&endTime=16%3A00%3A00%20GMT`,
+  `http://localhost:5134/api/StudentsContraller/BookALecture?studentId=${userId}&date=${date}&startTime=${lectures.startTime}&endTime=${lectures.endTime}`,
   formData,
-  // {headers: {
-  //   'Content-Type': 'multipart/form-data','Content-Type': 'application/json',
-  // }}
+  {headers: {
+    'Content-Type': 'application/problem+json; charset=utf-8'
+  }}
 
 );
  if(data.isSuccess){
-  console.log("test");
+  setAlertOpen(true);
+  setOpen(false);
+  console.log(data);
  formik.resetForm();
  //setAlertOpen(true);
 
@@ -152,12 +192,11 @@ const textAraeInput = (
   />
 );
 
-const [selectedInstructor,setSelectedInstructor]=React.useState();
-  const [open, setOpen] = React.useState(false);
+ 
+
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
   const [isChecked, setIsChecked] = React.useState(false);
-  const [status, setStatus] = React.useState('private');
   const longText = `
   When "Public" is activated, anyone can book the lecture with you.
   `;
@@ -230,22 +269,38 @@ const [selectedInstructor,setSelectedInstructor]=React.useState();
 
     if(date2.getDate()>today.getDate()){
       setOpen(true);
+      setDate(arg.dateStr);
 
     }
   };
+  console.log(date);
   const handleClose = () => {
     setOpen(false);
+  };
+  const handleCloseAlert = () => {
+    setAlertOpen(false);
   };
   const calendarRef = useRef(null);
 
   useEffect(() => {
     getInstructors();
+    getLectures();
     if (calendarRef.current) {
       calendarRef.current.getApi().setOption('dayMaxEventRows', 3);
     }
-  }, [status]);
+  }, [status, date, selectedInstructor]);
   return (
     <Layout title='Book a Lecture'>
+       <Snackbar open={alertOpen} autoHideDuration={6000} onClose={handleCloseAlert}>
+        <Alert
+          onClose={handleClose}
+          severity="success"
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          Lecture Booked succssfully!
+        </Alert>
+      </Snackbar>
       <div className='calendar-container '>
       <FullCalendar
       height={'100vh'}
@@ -279,6 +334,8 @@ const [selectedInstructor,setSelectedInstructor]=React.useState();
         //initialDate={new Date()}
         events={[{ title: 'nice event', start: new Date(), resourceId: 'a' }, { title: 'nice event', start: new Date(), resourceId: 'a' }, { title: 'nice event', start: new Date(), resourceId: 'a' }, { title: 'nice event', start: new Date(), resourceId: 'a' },  { title: 'event 1', start: '2024-04-30T12:30:00Z', resourceId: 'a' },
         { title: 'event 2', start: '2024-04-02T12:30:00Z', resourceId: 'a' }]}
+        
+
         dateClick={handleDateClick} // Bind handleDateClick function to dateClick event
         timeZone="Asia/Hebron"
       />
@@ -314,18 +371,21 @@ const [selectedInstructor,setSelectedInstructor]=React.useState();
 
 
         <DialogContent>
-       {renderInputs}
-       <div className="col-md-12">
+        <form onSubmit={formik.handleSubmit} encType="multipart/form-data">        
+        {renderInputs}
+        <div className="col-md-12">
        <select
         className="form-select p-3"
         aria-label="Default select example"
         value={selectedInstructor}
         onChange={(e) => {
           formik.handleChange(e);
+          console.log(e.target.value);
           setSelectedInstructor(e.target.value);
+          
         }}
       >
-        <option value="" disabled>
+        <option value="" >
           Select instructor
         </option>
         {instructors?.length ? (
@@ -340,7 +400,18 @@ const [selectedInstructor,setSelectedInstructor]=React.useState();
       </select>
       </div>
       
-      {textAraeInput}
+        {textAraeInput}
+        <div className="text-center mt-3">
+        <Button sx={{px:2}} variant="contained"
+              className="m-2 btn "
+              type="submit"
+              disabled={!formik.isValid}
+            >
+              Add
+            </Button>
+        </div>
+      </form>
+      
         </DialogContent>
         <DialogActions>
          

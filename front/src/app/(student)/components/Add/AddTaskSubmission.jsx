@@ -13,12 +13,15 @@ import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import Input from '../../../../component/input/Input.jsx';
 import TextArea from '../../../../component/input/TextArea.jsx';
+import { useRouter } from 'next/navigation'
 
 import { UserContext } from '../../../../context/user/User.jsx';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import './style.css'
 export default function AddTaskSubmission({materialID}) {
+  const router = useRouter();
+
   const {userToken, setUserToken, userData}=useContext(UserContext);
   const [Alertopen, setAlertOpen] = React.useState(false);
   const handleClose = (event, reason) => {
@@ -53,6 +56,7 @@ const { data } = await axios.post(
   console.log("test");
  formik.resetForm();
  setAlertOpen(true);
+ router.back();
 
   }
   };

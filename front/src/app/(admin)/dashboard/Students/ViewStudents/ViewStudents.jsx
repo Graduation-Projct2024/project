@@ -14,7 +14,7 @@ export default function ViewStudents() {
     if(userData){
     try{
     const { data } = await axios.get(`http://localhost:5134/api/StudentsContraller`);
-    console.log(data);
+    //console.log(data);
     setStudents(data);
   }
     catch(error){

@@ -10,7 +10,7 @@ export default function TextArea({type='text',name,id,value,title,onChange,error
           label={title}
           multiline
           defaultValue={value}
-          minRows={6}
+          minRows={3}
           onChange={onChange} onBlur={onBlur}
         />
 

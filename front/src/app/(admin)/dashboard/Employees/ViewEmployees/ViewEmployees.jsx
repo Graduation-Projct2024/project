@@ -19,11 +19,11 @@ export default function ViewEmployees() {
         try{
         const { data } = await axios.get(`http://localhost:5134/api/Employee/GetAllEmployee`);
         // setLoading(false)
-        console.log(data);
+      //  console.log(data);
         setEmployees(data);
       }
         catch(error){
-          console.log(error);
+       //   console.log(error);
         }
       }
       };
@@ -165,7 +165,6 @@ export default function ViewEmployees() {
           {filteredEmployees.length ? (
             filteredEmployees.map((employee) => (
               <tr key={employee.id}>
-                {console.log(employee.type)}
                 <th scope="row">{employee.id}</th>
                 <td>
                   {employee.fName} {employee.lName}

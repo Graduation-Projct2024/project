@@ -16,7 +16,7 @@ export default function ViewEvents() {
       if(userData){
       try{
       const { data } = await axios.get(`http://localhost:5134/api/EventContraller/GetAllAccreditEvents`);
-      console.log(data);
+      //console.log(data);
       setEvent(data);
     }
       catch(error){
