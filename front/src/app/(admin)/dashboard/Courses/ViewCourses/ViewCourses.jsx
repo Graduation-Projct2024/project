@@ -21,7 +21,7 @@ export default function ViewCourses() {
         const { data } = await axios.get(
           `http://localhost:5134/api/CourseContraller`
         );
-        console.log(data);
+        //console.log(data);
         setCourses(data.result);
       } catch (error) {
         console.log(error);
@@ -32,7 +32,7 @@ export default function ViewCourses() {
   useEffect(() => {
     fetchCourses();
   }, [courses,userData]);
-  console.log(courses)
+//  console.log(courses)
 
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -98,7 +98,6 @@ export default function ViewCourses() {
           {filteredCourses.length ? (
             filteredCourses.map((course) => (
               <tr key={course.id}>
-                {console.log(course.id)}
                 <th scope="row">{course.id}</th>
                 <td>{course.name}</td>
                 <td>{course.price}</td>

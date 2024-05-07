@@ -54,11 +54,6 @@ function Layout(props) {
     href: `/ProfileS/${userId}`,
     icon: AccountCircleIcon,
   },
-  {
-      name: "Courses",
-      href: "/courses",
-      icon: LibraryBooksIcon,
-    },
     {
       name: "Notification",
       href: "/NotificationS",

@@ -57,9 +57,9 @@ const onSubmit = async (users) => {
       });
       
      if(data.isSuccess){
-      console.log(data);
+      //console.log(data);
       setPageLoading(true);
-      console.log('tttt');
+      //console.log('tttt');
       formik.resetForm();
       router.push('/dashboard');
       Swal.fire({
@@ -69,7 +69,6 @@ const onSubmit = async (users) => {
       });
   }
 
-      console.log('jhbgyvftrgybuhnjimkjhb');
     } catch (error) {
       // Handle the error here
       console.error('Error submitting form:', error);

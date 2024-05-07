@@ -17,7 +17,7 @@ export default function UpdateEmployee({id , fName , lName , email, gender, phon
         if(userData){
         try {
           const { data } = await axios.get(`http://localhost:5134/api/Employee/GetEmployeeById?id=${id}`);
-          console.log(data.result);
+         // console.log(data.result);
           setEmployeeData(data.result);
         } catch (error) {
           console.error('Error fetching employee data:', error);
@@ -26,7 +26,6 @@ export default function UpdateEmployee({id , fName , lName , email, gender, phon
 
       fetchEmployeeData();
     }, [id]);
-    console.log(employeeData)
 
     const onSubmit = async (updatedData) => {
       if(userData){
