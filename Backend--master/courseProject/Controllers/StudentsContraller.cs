@@ -448,26 +448,16 @@ namespace courseProject.Controllers
                 return NotFound(response);
             }
             var allPublicConsultations = await unitOfWork.StudentRepository.GetAllConsultations();
-           var publicConsulations= allPublicConsultations.DistinctBy(x => x.consultationId).ToList(); 
-           // allPublicConsultations.GroupBy(StudentConsultations => StudentConsultations.consultationId);
-            var itsPrivateConsultations = await unitOfWork.StudentRepository.GetAllBookedPrivateConsultationsAsync(studentId);
-          // var allStudent = await unitOfWork.StudentRepository.GetAllStudentsInPublicConsulations(3);
+           var publicConsulations= allPublicConsultations.DistinctBy(x => x.consultationId).ToList();          
+            var itsPrivateConsultations = await unitOfWork.StudentRepository.GetAllBookedPrivateConsultationsAsync(studentId);        
             if (allPublicConsultations.Count() == 0 && itsPrivateConsultations.Count()==0)
             {
                 response.IsSuccess = true;
                 response.StatusCode=HttpStatusCode.NoContent;
                 response.ErrorMassages.Add("There is not have any consultaion yet");
                 return Ok(response);
-            }
-            //IReadOnlyList<PublicLectureForRetriveDTO>? allLectures =new List<PublicLectureForRetriveDTO>();
-            IReadOnlyList< PublicLectureForRetriveDTO>? lectureForRetrive=new List<PublicLectureForRetriveDTO>() ;
-            //foreach (var consultation in allPublicConsultations)
-            //{
-            //    allLectures = mapper.Map<StudentConsultations, PublicLectureForRetriveDTO>(consultation);
-            //    allLectures.StudentuserName.Add(consultation.Student.user.userName);
-            //    allLectures.StudentLName.Add(consultation.Student.LName);
-            //    allLectures.Add(lectureForRetrive);
-            //}
+            }           
+            IReadOnlyList< PublicLectureForRetriveDTO>? lectureForRetrive=new List<PublicLectureForRetriveDTO>() ;           
             lectureForRetrive = mapper.Map<IReadOnlyList< StudentConsultations>,IReadOnlyList< PublicLectureForRetriveDTO>>(publicConsulations);
             List<StudentConsultations>? allStudent=null;
             List<UserNameDTO>? allPublicStudents = null;
@@ -482,7 +472,6 @@ namespace courseProject.Controllers
                 }
                 
             }
-           // lectureForRetrive= lectureForRetrive.Concat(
              var privateLectures=   mapper.Map<IReadOnlyList<StudentConsultations>, IReadOnlyList<PublicLectureForRetriveDTO>>(itsPrivateConsultations) ;
             foreach (var lecture in privateLectures)
             {
@@ -496,7 +485,6 @@ namespace courseProject.Controllers
                     }
                     lecture.Students.Add ( studentmapper);
                 }
-
             }
             lectureForRetrive = lectureForRetrive.Concat(privateLectures).ToList();
             response.IsSuccess = true;

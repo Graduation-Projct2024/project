@@ -47,49 +47,52 @@ namespace courseProject.Repository.GenericRepository
         }
 
         public async Task<LoginResponseDTO> LoginAsync(LoginRequestDTO loginRequestDTO)
-        { 
-           var user =await dbContext.users.FirstOrDefaultAsync(x => x.email == loginRequestDTO.email );
+        {
+            var user = await dbContext.users.FirstOrDefaultAsync(x => x.email == loginRequestDTO.email);
             bool pass = false;
             if (user != null)
-            { 
-                 pass=BC.Verify(loginRequestDTO.password, user.password);
-            }
-                      
-           if(user == null || pass==false)
             {
-                return new LoginResponseDTO(){
-                    User=null,
-                    Token=""
-                    
+                pass = BC.Verify(loginRequestDTO.password, user.password);
+            }
+
+            if (user == null || pass == false)
+            {
+                return new LoginResponseDTO() {
+                    User = null,
+                    Token = ""
+
                 };
             }
-           
+           return generateToken(user);
+        }
+        public LoginResponseDTO generateToken(User? user)
+        {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = new SymmetricSecurityKey( Encoding.ASCII.GetBytes(secretKey));
+            var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey));
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
                     new Claim("UserId",user.UserId.ToString()),
                     new Claim(ClaimTypes.Email ,user.email),
-                    
+
                    new Claim(ClaimTypes.Role , user.role )
 
                 }),
-                Expires= DateTime.UtcNow.AddDays(1),
-                SigningCredentials= new SigningCredentials (key , SecurityAlgorithms.HmacSha256)
+                Expires = DateTime.UtcNow.AddDays(1),
+                SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             LoginResponseDTO loginResponseDTO = new LoginResponseDTO()
             {
                 User = user,
                 Token = tokenHandler.WriteToken(token)
-            
+
             };
             token1 = loginResponseDTO.Token;
             return loginResponseDTO;
-
         }
+        
 
        
      
