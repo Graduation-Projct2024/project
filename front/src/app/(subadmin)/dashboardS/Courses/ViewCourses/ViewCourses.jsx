@@ -7,13 +7,26 @@ import axios from 'axios';
 import CreateCourse from '../CreateCourse/CreateCourse';
 import { UserContext } from '@/context/user/User';
 import EditCourse from '../EditCourse/[id]/page';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, useMediaQuery, useTheme } from '@mui/material';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+
 
 export default function ViewCourses() {
 
 
   const [courses, setCourses] = useState([]);
   const {userToken, setUserToken, userData}=useContext(UserContext);
+  const [open, setOpen] = React.useState(false);
 
+
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
 
 
   const fetchCourses = async () => {
@@ -75,16 +88,29 @@ export default function ViewCourses() {
                     
                 </div>
                 </form>
-                <button type="button" className="btn btn-primary ms-2 addEmp" data-bs-toggle="modal" data-bs-target="#staticBackdrop1">
+                {/* <button type="button" className="btn btn-primary ms-2 addEmp" data-bs-toggle="modal" data-bs-target="#staticBackdrop1">
                     <span>+ Add new</span> 
-                </button>
+                </button> */}
+
+<Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'flex-end',
+          p: 1,
+          mr: 6,
+        }}
+      >
+<Button sx={{px:2,m:0.5}} variant="contained" className='primaryBg' startIcon={<AddCircleOutlineIcon />} onClick={handleClickOpen}>
+  Add New
+</Button>
+      </Box>
                
 
             </div>
         </nav>
 
         {/* <div className="modal fade" id="exampleModal1" tabIndex="-1" aria-labelledby="exampleModal1Label" aria-hidden="true"> */}
-        <div className="modal fade" id="staticBackdrop1" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdrop1Label" aria-hidden="true">
+        {/* <div className="modal fade" id="staticBackdrop1" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdrop1Label" aria-hidden="true">
           <div className="modal-dialog modal-dialog-centered modal-lg">
             <div className="modal-content row justify-content-center">
               <div className="modal-body text-center ">
@@ -95,8 +121,38 @@ export default function ViewCourses() {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
         
+        <Dialog
+        fullScreen={fullScreen}
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="responsive-dialog-title"
+        sx={{
+          "& .MuiDialog-container": {
+            "& .MuiPaper-root": {
+              width: "100%",
+              maxWidth: "600px!important",  
+              height: "500px!important",            },
+          },
+          
+        }}
+        >
+          <DialogTitle id="responsive-dialog-title" className='primaryColor fw-bold' >
+          {"Add New Course"}
+        </DialogTitle>
+
+        <DialogContent >
+        
+      <CreateCourse/>
+        </DialogContent>
+        <DialogActions>
+         
+         <Button onClick={handleClose} autoFocus>
+           Cancle
+         </Button>
+       </DialogActions>
+        </Dialog>
       </div>
 {/* <>
       {filteredCourses.length ? filteredCourses.map((course) =>(

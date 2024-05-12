@@ -1,6 +1,7 @@
 'use client'
 import Input from '@/component/input/Input';
 import { createEmployee } from '@/component/validation/validation';
+import { Button } from '@mui/material';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
@@ -185,11 +186,12 @@ const renderInputs = inputs.map((input,index)=>
     {pageLoading ? ( // Show loading indicator while page is loading
         <div>Loading...</div>
       ) : (
+
     <form onSubmit={formik.handleSubmit} className="row justify-content-center">
       {renderInputs}
-       <div className="col-md-6">
+       <div className="col-md-10 pb-2">
         <select
-          className="form-select p-3"
+          className="form-select p-3 primaryColor"
           aria-label="Default select example"
           value={selectedGender}
          onChange={(e) => {
@@ -204,9 +206,9 @@ const renderInputs = inputs.map((input,index)=>
           <option value="Female">Female</option>
         </select>
       </div>
-      <div className="col-md-6">
+      <div className="col-md-10">
         <select
-          className="form-select p-3"
+          className="form-select p-3 primaryColor"
           aria-label="Default select example"
           value={selectedRole}
           
@@ -222,21 +224,25 @@ const renderInputs = inputs.map((input,index)=>
           <option value="instructor">Instructor</option>
         </select>
       </div> 
-      <div className="col-md-12">
-      <button
+      {/* <button
         type="submit"
-        className="btn btn-primary createButton mt-3 fs-3 px-3 w-50"
+        className="btn btn-primary createButton "
         disabled={formik.isSubmitting || Object.keys(formik.errors).length > 0 || Object.keys(formik.touched).length === 0||!selectedGender || 
         !selectedRole }
-      >
+      > */}
         {/* CREATE ACCOUNT */}
-        {loading ? 'Creating...' : 'CREATE ACCOUNT'}
-      </button>
-      
+        {/* {loading ? 'Creating...' : 'CREATE ACCOUNT'}
+      </button> */}
+      <div className='text-center mt-3'>
+      <Button sx={{px:2}} variant="contained"
+              className="m-2 btn primaryBg"
+              type="submit"
+              disabled={formik.isSubmitting || Object.keys(formik.errors).length > 0 || Object.keys(formik.touched).length === 0||!selectedGender || 
+                !selectedRole }
+            >
+              Add
+            </Button>
       </div>
-      <div className="col-md-12"><button type="button" className="btn btn-secondary createButton mt-3 fs-3 px-3 w-25" data-bs-dismiss="modal">
-        Close
-        </button></div>
     </form>)}
     </>
   );

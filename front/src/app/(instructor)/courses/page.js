@@ -19,7 +19,7 @@ console.log(userToken);
       `http://localhost:5134/api/Employee/GetAllCoursesGivenByInstructor?Instructorid=${userData.userId}`
     );
     setCourses(data.data.result);
-    console.log(data)
+    console.log(data.result)
     }
     
   };
@@ -31,8 +31,8 @@ console.log(userToken);
 
   return (
     <Layout title='Courses'>
-      {courses.length ? (
-          courses.map((course) => (
+      {courses?(
+          courses?.map((course) => (
     <Box
       height={150}
       width={1000}
