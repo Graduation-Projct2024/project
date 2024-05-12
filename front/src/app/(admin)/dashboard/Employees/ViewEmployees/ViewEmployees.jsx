@@ -7,13 +7,38 @@ import Link from 'next/link';
 import axios from 'axios';
 import UpdateEmployee from '../UpdateEmployee/[id]/page';
 import { UserContext } from '@/context/user/User';
+import Button from '@mui/material/Button';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import { Box, Dialog, DialogActions, DialogContent, DialogTitle, Stack, useMediaQuery, useTheme } from '@mui/material';
+import '../../../dashboard/dashboard.css'
 
 export default function ViewEmployees() {
 
       const {userToken, setUserToken, userData}=useContext(UserContext);
       const [employees, setEmployees] = useState([]);
       // const [loading,setLoading] = useState(true);
+      const [open, setOpen] = React.useState(false);
+      const [openUpdate, setOpenUpdate] = React.useState(false);
 
+      const theme = useTheme();
+      const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+      const [employeeId, setEmployeeId] = useState(null);
+
+    const handleClickOpenUpdate = (id) => {
+        setEmployeeId(id);
+        console.log(id)
+        setOpenUpdate(true);
+    };
+    const handleCloseUpdate = () => {
+      setOpenUpdate(false);
+    };
+
+      const handleClickOpen = () => {
+        setOpen(true);
+      };
+      const handleClose = () => {
+        setOpen(false);
+      };
       const fetchEmployees = async () => {
         if(userData){
         try{
@@ -115,18 +140,28 @@ export default function ViewEmployees() {
                 <FontAwesomeIcon icon={faArrowUpFromBracket} />
               </div>
             </form>
-            <button
-              type="button"
-              className="btn btn-primary ms-2 addEmp"
-              data-bs-toggle="modal"
-              data-bs-target="#staticBackdrop2"
-            >
+
+            {/* <button type="button" className="btn btn-primary ms-2 addEmp" data-bs-toggle="modal" data-bs-target="#staticBackdrop2">
               <span>+ Add new</span>
-            </button>
+            </button> */}
+               <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'flex-end',
+          p: 1,
+          mr: 6,
+        }}
+      >
+<Button sx={{px:2,m:0.5}} variant="contained" className='primaryBg' startIcon={<AddCircleOutlineIcon />} onClick={handleClickOpen}>
+  Add New
+</Button>
+      </Box>
+
+
           </div>
         </nav>
         {/* <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"> */}
-        <div
+        {/* <div
           className="modal fade"
           id="staticBackdrop2"
           data-bs-backdrop="static"
@@ -145,7 +180,43 @@ export default function ViewEmployees() {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
+      <Dialog
+        fullScreen={fullScreen}
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="responsive-dialog-title"
+        sx={{
+          "& .MuiDialog-container": {
+            "& .MuiPaper-root": {
+              width: "100%",
+              maxWidth: "600px!important",  
+              height: "500px!important",            },
+          },
+          
+        }}
+        >
+          <DialogTitle id="responsive-dialog-title" className='primaryColor fw-bold' >
+          {"Add New Employee"}
+        </DialogTitle>
+
+        <DialogContent>
+        <Stack
+   direction="row"
+   spacing={1}
+   sx={{ justifyContent: 'center',  alignContent: 'center'}}
+    >
+      <CreateEmployee/>
+     </Stack>
+        </DialogContent>
+        <DialogActions>
+         
+         <Button onClick={handleClose} autoFocus>
+           Cancle
+         </Button>
+       </DialogActions>
+        </Dialog>
+
       </div>
 
       <table className="table">
@@ -178,11 +249,48 @@ export default function ViewEmployees() {
                 <td className="d-flex gap-1">
 
 
-                  <button className="border-0 bg-white " type="button" data-bs-toggle="modal" data-bs-target={`#exampleModal2-${employee.id}`}>
-                    <FontAwesomeIcon icon={faPen} className="edit-pen" />
-                  </button>
+                <button className="border-0 bg-white" type="button" onClick={() => handleClickOpenUpdate(employee.id)}>
+                <FontAwesomeIcon icon={faPen} className="edit-pen" />
+            </button>
+                  {/* <Button sx={{px:2,m:0.5}} variant="contained" className='bg-transparent border-0 '  onClick={handleClickOpen}>
+                  <FontAwesomeIcon icon={faPen} className="edit-pen" />
+                  </Button> */}
+                 <Dialog
+        fullScreen={fullScreen}
+        open={openUpdate}
+        onClose={handleCloseUpdate}
+        aria-labelledby="responsive-dialog-title"
+        sx={{
+          "& .MuiDialog-container": {
+            "& .MuiPaper-root": {
+              width: "100%",
+              maxWidth: "600px!important",  
+              height: "400px!important",            },
+          },
+          
+        }}
+        >
+          <DialogTitle id="responsive-dialog-title" className='primaryColor fw-bold' >
+          {"Update Employee"}
+        </DialogTitle>
 
-                  <div className="modal fade" id={`exampleModal2-${employee.id}`} tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <DialogContent>
+        <Stack
+   direction="row"
+   spacing={1}
+   sx={{ justifyContent: 'center',  alignContent: 'center'}}
+    >
+      <UpdateEmployee id = {employee.id}  fName = {employee.fName} lName = {employee.lName} email = {employee.email} gender = {employee.gender} phoneNumber = {employee.phoneNumber} address = {employee.address}/>
+     </Stack>
+        </DialogContent>
+        <DialogActions>
+         
+         <Button onClick={handleCloseUpdate} autoFocus>
+           Cancle
+         </Button>
+       </DialogActions>
+        </Dialog>
+                  {/* <div className="modal fade" id={`exampleModal2-${employee.id}`} tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div className="modal-dialog modal-dialog-centered modal-lg">
                       <div className="modal-content row justify-content-center">
                         <div className="modal-body text-center ">
@@ -193,7 +301,7 @@ export default function ViewEmployees() {
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
 
                   <Link href={`/Profile/${employee.id}`}>
                     <button type="button" className="border-0 bg-white ">

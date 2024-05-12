@@ -1,6 +1,7 @@
 import Input from '@/component/input/Input';
 import { updateEmployee } from '@/component/validation/validation';
 import { UserContext } from '@/context/user/User';
+import { Button } from '@mui/material';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import React, { useContext, useEffect, useState } from 'react'
@@ -168,16 +169,23 @@ export default function UpdateEmployee({id , fName , lName , email, gender, phon
         </select>
       </div>
       
-      <div className="col-md-12">
-      <button
+      {/* <button
         type="submit"
         className="btn btn-primary createButton mt-3 fs-3 px-3 w-50"
         disabled={formik.isSubmitting || Object.keys(formik.errors).length > 0 || Object.keys(formik.touched).length === 0||!selectedGender }
       >
         UPDATE ACCOUNT
-      </button>
+      </button> */}
+    <div className='text-center mt-3'>
+      <Button sx={{px:2}} variant="contained"
+              className="m-2 btn primaryBg"
+              type="submit"
+              disabled={formik.isSubmitting || Object.keys(formik.errors).length > 0 || Object.keys(formik.touched).length === 0||!selectedGender || 
+                !selectedRole }
+            >
+              Update
+            </Button>
       </div>
-      <div className="col-md-12"><button type="button" class="btn btn-secondary createButton mt-3 fs-3 px-3 w-25" data-bs-dismiss="modal">Close</button></div>
     </form>
   )
 }

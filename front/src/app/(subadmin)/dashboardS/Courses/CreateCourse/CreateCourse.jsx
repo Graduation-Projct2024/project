@@ -1,7 +1,9 @@
 'use client'
 import Input from '@/component/input/Input';
+import TextArea from '@/component/input/TextArea';
 import { createCourse } from '@/component/validation/validation';
 import { UserContext } from '@/context/user/User';
+import { Button } from '@mui/material';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import React, { useContext } from 'react'
@@ -82,7 +84,7 @@ const inputs =[
     type : 'text',
       id:'name',
       name:'name',
-      title:'Course Name',
+      title:'Course name',
       value:formik.values.name,
 },
 
@@ -98,14 +100,14 @@ const inputs =[
         type : 'text',
         id:'category',
         name:'category',
-        title:'Course Category',
+        title:'Course category',
         value:formik.values.category,
     },
     {
       type : 'date',
       id:'startDate',
       name:'startDate',
-      title:'Course start Date',
+      title:'Course start date',
       value:formik.values.startDate,
   },
   
@@ -123,23 +125,24 @@ const inputs =[
     title:'Instructor Id',
     value:formik.values.InstructorId,
 },
-{
-  type : 'text',
-  id:'description',
-  name:'description',
-  title:'description',
-  value:formik.values.description,
-},
+
     {
         type:'file',
         id:'image',
         name:'image',
         title:'image',
         onChange:handleFieldChange,
-    }
+    },
+    {
+      type : 'text',
+      id:'description',
+      name:'description',
+      title:'Description',
+      value:formik.values.description,
+    },
 ];
 
-const renderInputs = inputs.map((input,index)=>
+const renderInputs =  inputs.slice(0, -1).map((input,index)=>
   <Input type={input.type} 
         id={input.id}
          name={input.name}
@@ -151,20 +154,52 @@ const renderInputs = inputs.map((input,index)=>
             touched={formik.touched}
             />  
     );
+    const lastInput = inputs[inputs.length - 1];
+
+    const textAraeInput = (
+      <TextArea
+        type={lastInput.type}
+        id={lastInput.id}
+        name={lastInput.name}
+        value={lastInput.value}
+        title={lastInput.title}
+        onChange={lastInput.onChange || formik.handleChange}
+        onBlur={formik.handleBlur}
+        touched={formik.touched}
+        errors={formik.errors}
+        key={inputs.length - 1}
+      />
+    );
   return (
-    <form onSubmit={formik.handleSubmit} className="row justify-content-center">
-      {renderInputs}
-      <div className="col-md-12">
-      <button
+    <form onSubmit={formik.handleSubmit} encType="multipart/form-data" >
+      <div className="row justify-content-center">
+          {renderInputs}
+        {textAraeInput}
+        
+      </div>
+      
+
+              
+              
+      
+
+      {/* <button
         type="submit"
         className="btn btn-primary createButton mt-3 fs-3 px-3 w-50"
         disabled={formik.isSubmitting || Object.keys(formik.errors).length > 0 || Object.keys(formik.touched).length === 0}
       >
         CREATE COURSE
-      </button>
-      
+      </button> */}
+      <div className='text-center mt-3'>
+      <Button sx={{px:2}} variant="contained"
+              className="m-2 btn primaryBg"
+              type="submit"
+              disabled={formik.isSubmitting || Object.keys(formik.errors).length > 0 || Object.keys(formik.touched).length === 0 }
+            >
+              Add
+            </Button>
       </div>
-      <div className="col-md-12"><button type="button" className="btn btn-secondary createButton mt-3 fs-3 px-3 w-25" data-bs-dismiss="modal">Close</button></div>
+      
     </form>
   )
 }

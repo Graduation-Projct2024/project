@@ -65,7 +65,7 @@ export default function page() {
 
     <Typography gutterBottom variant="h5" component="div">
           Your Courses         </Typography>
-        {courses.length ? (
+        {courses?.length ? (
           courses.map((course) => (
             <Link href={`courses/${course.id}`}>
 <Card sx={{ maxWidth: 200 , borderRadius: 3, height:270 , display:'inline-block', m:2}}  key={course.id}>

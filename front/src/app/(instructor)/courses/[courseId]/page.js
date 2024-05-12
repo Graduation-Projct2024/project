@@ -185,6 +185,9 @@ const handleCloseViewTaskDialog = () => {
         getCourses();
         getParticipants();
       }, [materials]);
+
+
+      
   return (
     <Layout title={courseName}>
       
@@ -230,6 +233,7 @@ const handleCloseViewTaskDialog = () => {
         <DialogTitle id="responsive-dialog-title">
           {"ADD NEW"}
         </DialogTitle>
+        
         <AddTask open={openTaskDialog} onClose={handleCloseTaskDialog} handleCloseAdd={handleClose} courseId={courseId}/>
         <AddFile open={openFileDialog} onClose={handleCloseFileDialog} handleCloseAdd={handleClose} courseId={courseId} />
         <AddLink open={openLinkDialog} onClose={handleCloseLinkDialog} handleCloseAdd={handleClose} courseId={courseId}/>

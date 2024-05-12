@@ -176,7 +176,7 @@ function Layout(props) {
           {title}
           </Typography>
           <Link  >
-             <Avatar alt="Remy Sharp" sx={{ width: 60, height: 60,mr:7 ,mt:3,}} />
+          {userData&&userData.imageUrl?(<Avatar alt="profile picture" src={userData.imageUrl} sx={{ width: 60, height: 60,mr:7 ,mt:3,}} />):(<Avatar alt="Remy Sharp" sx={{ width: 60, height: 60,mr:7 ,mt:3,}} />)} 
           </Link>
         </Toolbar>
       </Stack>

@@ -1,6 +1,8 @@
 import Input from '@/component/input/Input';
+import TextArea from '@/component/input/TextArea';
 import { createEvent } from '@/component/validation/validation';
 import { UserContext } from '@/context/user/User';
+import { Button } from '@mui/material';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import React, { useContext } from 'react'
@@ -75,13 +77,7 @@ const inputs =[
       value:formik.values.name,
 },
 
-  {
-      type : 'text',
-      id:'content',
-      name:'content',
-      title:'Content',
-      value:formik.values.content,
-  },
+  
  
     {
         type : 'category',
@@ -111,11 +107,17 @@ const inputs =[
     name:'image',
     title:'image',
     onChange:handleFieldChange,
-},
+},{
+      type : 'text',
+      id:'content',
+      name:'content',
+      title:'Content',
+      value:formik.values.content,
+  },
 ];
 
 
-const renderInputs = inputs.map((input,index)=>
+const renderInputs = inputs.slice(0, -1).map((input,index)=>
   <Input type={input.type} 
         id={input.id}
          name={input.name}
@@ -128,19 +130,42 @@ const renderInputs = inputs.map((input,index)=>
             />
         
     )
+    const lastInput = inputs[inputs.length - 1];
+
+    const textAraeInput = (
+      <TextArea
+        type={lastInput.type}
+        id={lastInput.id}
+        name={lastInput.name}
+        value={lastInput.value}
+        title={lastInput.title}
+        onChange={lastInput.onChange || formik.handleChange}
+        onBlur={formik.handleBlur}
+        touched={formik.touched}
+        errors={formik.errors}
+        key={inputs.length - 1}
+      />
+    );
   return (
     <form onSubmit={formik.handleSubmit} className="row justify-content-center">
       {renderInputs}
-<div className="col-md-12">
-      <button
+      {textAraeInput}
+      {/* <button
         type="submit"
         className="btn btn-primary createButton mt-3 fs-3 px-3 w-50"
         disabled={formik.isSubmitting || Object.keys(formik.errors).length > 0 || Object.keys(formik.touched).length === 0}
       >
         CREATE Event
-      </button>
+      </button> */}
+     <div className='text-center mt-3'>
+      <Button sx={{px:2}} variant="contained"
+              className="m-2 btn primaryBg"
+              type="submit"
+              disabled={formik.isSubmitting || Object.keys(formik.errors).length > 0 || Object.keys(formik.touched).length === 0 }
+            >
+              Add
+            </Button>
       </div>
-      <div className="col-md-12"><button type="button" className="btn btn-secondary createButton mt-3 fs-3 px-3 w-25" data-bs-dismiss="modal">Close</button></div>
     </form>
   )
 }
