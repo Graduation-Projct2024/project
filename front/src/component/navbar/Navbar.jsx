@@ -15,7 +15,7 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import Link from '@mui/material/Link';
 import { useRouter } from 'next/navigation'
-const pages = ['About','Courses', 'Contact'];
+const pages = ['About','AllCourses', 'Contact'];
 const settings = ['Login', 'Register'];
 
 export default function Navbar() {
