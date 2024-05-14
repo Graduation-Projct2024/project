@@ -27,6 +27,7 @@ namespace courseProject.Core.Models
         public string? address { get; set; }
         public string? ImageUrl { get; set; }
 
+        public string? skillDescription { get; set; }
         public User user { get; set; }
 
         public List<Instructor_Working_Hours> Instructor_Working_Hours { get; set; }
@@ -35,7 +36,7 @@ namespace courseProject.Core.Models
         public List<Consultation> Consultations { get; set;}
 
         public List<Instructor_Feedback> instructor_Feedbacks { get; set; }
-
+        public List<InstructorSkills> instructorSkills { get; set; }
 
     }
 }

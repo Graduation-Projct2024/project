@@ -12,6 +12,8 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using Microsoft.Extensions.FileProviders;
 using courseProject.Configuration;
+using Microsoft.AspNetCore.Authorization;
+
 namespace courseProject
 {
     public class Program
@@ -46,38 +48,39 @@ namespace courseProject
 
 
             builder.Services.AddHttpClient();
-            
-            //builder.Services.AddAuthorization(options =>
-            //{
-            //    options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
-            //    options.AddPolicy("subAdmin", policy => policy.RequireRole("subAdmin"));
-            //    options.AddPolicy("Admin&subAdmin", policy =>
-            //    {
-            //        policy.RequireAssertion(a =>
 
-            //            a.User.IsInRole("Admin") ||
-            //            a.User.IsInRole("subAdmin")
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Admin", policy => policy.RequireRole("admin"));
+                options.AddPolicy("subAdmin", policy => policy.RequireRole("subadmin"));
+                options.AddPolicy("Admin&subAdmin", policy =>
+                {
+                    policy.RequireAssertion(a =>
 
-            //        );
+                        a.User.IsInRole("admin") ||
+                        a.User.IsInRole("subadmin")
 
-            //    });
-            //    options.AddPolicy("Instructor", policy => policy.RequireRole("Instructor"));
-            //    options.AddPolicy("Student", policy => policy.RequireRole("Student"));
-            //    //options.AddPolicy("EnrolledInCourse", policy =>
-            //    //{
-            //    //    policy.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
-            //    //    policy.RequireAuthenticatedUser();
-            //    //    policy.Requirements.Add(new EnrolledInCourseRequirement());
-            //    //});
-            //    //options.AddPolicy("EnrolledInCourse", policy =>
-            //    //policy.Requirements.Add(new EnrolledInCourseRequirement()));
+                    );
 
-            //    //options.AddPolicy("MaterialInEnrolledCourse", policy =>
-            //    //policy.Requirements.Add(new EnrolledInCourseRequirement()));
+                });
+                options.AddPolicy("Instructor", policy => policy.RequireRole("instructor"));
+                options.AddPolicy("Student", policy => policy.RequireRole("student"));
+                options.AddPolicy("MainSubAdmin", policy => policy.RequireRole("main-subadmin"));
+                //options.AddPolicy("EnrolledInCourse", policy =>
+                //{
+                //    policy.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
+                //    policy.RequireAuthenticatedUser();
+                //    policy.Requirements.Add(new EnrolledInCourseRequirement());
+                //});
+                //options.AddPolicy("EnrolledInCourse", policy =>
+                //policy.Requirements.Add(new EnrolledInCourseRequirement()));
 
-            //    //options.AddPolicy("InstructorGiveTheCourse", policy =>
-            //    //policy.Requirements.Add(new GiveTheCourseRequirements()));
-            //});
+                //options.AddPolicy("MaterialInEnrolledCourse", policy =>
+                //policy.Requirements.Add(new EnrolledInCourseRequirement()));
+
+                //options.AddPolicy("InstructorGiveTheCourse", policy =>
+                //policy.Requirements.Add(new GiveTheCourseRequirements()));
+            });
 
             builder.Services.AddHttpContextAccessor();
             //builder.Services.AddScoped<IAuthorizationHandler, EnrolledInCourseHandler>();

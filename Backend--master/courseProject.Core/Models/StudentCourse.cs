@@ -18,6 +18,8 @@ namespace courseProject.Core.Models
         public int courseId { get; set; }
 
         public DateTime EnrollDate { get; set; }= DateTime.Now;
+        public string status { get; set; } = "waiting";
+        [NotMapped] public bool isEnrolled { get; set; }= false;
 
         public Student Student { get; set; }
 

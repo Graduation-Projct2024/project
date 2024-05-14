@@ -12,5 +12,7 @@ namespace courseProject.Core.IGenericRepository
         public Task CreateAdminAccountAsync(Admin admin);
 
         public Task<Admin> GetAdminByIdAsync(int id);
+        public Task addSkillOptionsAsync(Skills skill);
+        public Task<IReadOnlyList< Skills>> GetAllSkillsAsync();
     }
 }

@@ -22,11 +22,13 @@ namespace courseProject.Core.Models
         public string category { get; set; }
         [NotMapped] public IFormFile? image { get; set; }
         public string? ImageUrl { get; set; }
-
         public DateTime? dateOfAdded { get; set; } = DateTime.Now;
-
         public DateTime? startDate { get; set;} 
         public DateTime? endDate { get; set;}
+        public DateTime? dateOfUpdated { get; set; } 
+        public DateTime? Deadline { get; set; }
+        public int? limitNumberOfStudnet { get; set; }
+        
 
         [ForeignKey("Instructor")]
         public int InstructorId { get; set; } 

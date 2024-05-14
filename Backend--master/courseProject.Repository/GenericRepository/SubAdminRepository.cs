@@ -111,6 +111,15 @@ namespace courseProject.Repository.GenericRepository
             return await dbContext.subadmins.FirstOrDefaultAsync(x => x.SubAdminId == subAdminId);
         }
 
+        public async Task<IReadOnlyList<StudentCourse>> getAllRequestToJoindCourseAsync()
+        {
+            return await dbContext.studentCourses.Include(x => x.Student)
+                                                      .ThenInclude(x => x.user)
+                                                 .Include(x => x.Course)
+                                                 .Where(x => x.status.ToLower() == "waiting")
+                                                 .ToListAsync();
+        }
+
         //public async Task<Event> GetEventById(int id)
         //{
         //   return await dbContext.events.FirstOrDefaultAsync(x => x.Id == id);

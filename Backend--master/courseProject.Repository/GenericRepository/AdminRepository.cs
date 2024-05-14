@@ -19,6 +19,11 @@ namespace courseProject.Repository.GenericRepository
             this.dbContext = dbContext;
         }
 
+        public async Task addSkillOptionsAsync(Skills skill)
+        {
+            await dbContext.Set<Skills>().AddAsync(skill);  
+        }
+
         public async Task CreateAdminAccountAsync(Admin admin)
         {
             await dbContext.Set<Admin>().AddAsync(admin);
@@ -27,6 +32,11 @@ namespace courseProject.Repository.GenericRepository
         public async Task<Admin> GetAdminByIdAsync(int id)
         {
             return await dbContext.admins.FirstOrDefaultAsync(x => x.AdminId == id);
+        }
+
+        public async Task<IReadOnlyList< Skills>> GetAllSkillsAsync()
+        {
+            return await dbContext.Skills.ToListAsync();
         }
     }
 }

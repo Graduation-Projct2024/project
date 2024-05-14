@@ -158,6 +158,9 @@ namespace courseProject.MappingProfile
                 .ForMember(x => x.userName, o => o.MapFrom(y => y.instructor.user.userName))
                 .ForMember(x => x.LName, o => o.MapFrom(y => y.instructor.LName));
 
+            CreateMap<Instructor_Working_Hours, EmployeeListDTO>()
+                .ForMember(x => x.name, o => o.MapFrom(y => y.instructor.user.userName + " " + y.instructor.LName))
+                .ForMember(x=>x.id , o=>o.MapFrom(y=>y.InstructorId));
         }
     }
 }

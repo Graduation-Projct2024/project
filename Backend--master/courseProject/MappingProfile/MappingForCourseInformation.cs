@@ -14,9 +14,20 @@ namespace courseProject.MappingProfile
             IsNotDefaultClass = new Common.IsNotDefaultClassForMapping();
 
             CreateMap<Course, CourseInformationDto>()
-                .ForMember(x => x.InstructorName  , o=>o.MapFrom(y=>y.Instructor.user.userName+" " +y.Instructor.LName))
-                .ForMember(x => x.SubAdminName, o => o.MapFrom(y => y.SubAdmin.user.userName+ " " + y.Instructor.LName))
-                .ForMember(x => x.ImageUrl, o => o.MapFrom(y => $"http://localhost:5134/{ y.ImageUrl}"));
+                .ForMember(x => x.InstructorName, o => o.MapFrom(y => y.Instructor.user.userName + " " + y.Instructor.LName))
+                .ForMember(x => x.SubAdminName, o => o.MapFrom(y => y.SubAdmin.user.userName + " " + y.Instructor.LName))
+                .ForMember(x => x.startDate, o => o.MapFrom(y => y.startDate.HasValue ? y.startDate.Value.ToString("dd/MM/yyyy") : null))
+                .ForMember(x => x.endDate, o => o.MapFrom(y => y.endDate.HasValue ? y.endDate.Value.ToString("dd/MM/yyyy") : null))
+                .ForMember(x => x.ImageUrl, o => o.MapFrom(y => $"http://localhost:5134/{y.ImageUrl}"));
+                
+
+            CreateMap<Course, CourseInfoForStudentsDTO>()
+                .ForMember(x => x.InstructorName, o => o.MapFrom(y => y.Instructor.user.userName + " " + y.Instructor.LName))
+                .ForMember(x => x.SubAdminName, o => o.MapFrom(y => y.SubAdmin.user.userName + " " + y.Instructor.LName))
+                .ForMember(x => x.startDate, o => o.MapFrom(y => y.startDate.HasValue ? y.startDate.Value.ToString("dd/MM/yyyy") : null))
+                .ForMember(x => x.endDate, o => o.MapFrom(y => y.endDate.HasValue ? y.endDate.Value.ToString("dd/MM/yyyy") : null))
+                .ForMember(x => x.ImageUrl, o => o.MapFrom(y => $"http://localhost:5134/{y.ImageUrl}"))
+                .ForMember(x => x.isEnrolled, o => o.MapFrom(y => y.studentCourses.Any(x => x.isEnrolled)));
 
             CreateMap<Course, CourseAccreditDTO>()
                 .ForMember(x => x.SubAdminFName, o => o.MapFrom(y => y.SubAdmin.user.userName))
@@ -68,7 +79,10 @@ namespace courseProject.MappingProfile
                 .ForMember(x => x.startDate, o => o.MapFrom(y => y.startDate.HasValue ? y.startDate.Value.ToString("dd/MM/yyyy" ) :null))
                 .ForMember(x => x.endDate, o => o.MapFrom(y => y.endDate.HasValue ? y.endDate.Value.ToString("dd/MM/yyyy") : null));
 
-
+            CreateMap<EditCourseAfterAccreditDTO, Course>()          
+           .ForAllMembers(opts => opts.Condition((src, dest, srcMember, destMember) =>
+           IsNotDefaultClass.IsNotDefault(srcMember)));
+            ;
 
         }
     }

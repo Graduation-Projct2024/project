@@ -25,6 +25,7 @@ namespace courseProject.Core.IGenericRepository
         public Task<IReadOnlyList<Request>> GerAllCoursesRequestAsync();
         public Task<Request> GerCourseRequestByIdAsync(int id);
         public Task<SubAdmin> getSubAdminByIdAsync(int subAdminId);
+        public Task<IReadOnlyList<StudentCourse>> getAllRequestToJoindCourseAsync();
        // public Task<Event> GetEventById(int id);
 
     }

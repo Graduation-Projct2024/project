@@ -14,6 +14,8 @@ using System.Linq.Expressions;
 using System;
 using static System.Net.WebRequestMethods;
 using courseProject.Common;
+using System.Net.NetworkInformation;
+using Microsoft.AspNetCore.Authorization;
 
 namespace courseProject.Controllers
 {
@@ -63,6 +65,39 @@ namespace courseProject.Controllers
             return Ok(responce);
         }
 
+        [HttpGet("GetAllCoursesToStudent")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<IReadOnlyList<Course>>> GetAllCourses(int studentId)
+        {
+            try
+            {
+
+
+                var courses = await unitOfWork.StudentRepository.GetAllCoursesAsync(studentId);
+
+                if (courses.Count() == 0)
+                {
+                    responce.IsSuccess = false;
+                    responce.StatusCode = HttpStatusCode.NotFound;
+                    responce.ErrorMassages.Add("Not Has Any Accrefit Course Yet");
+                    return NotFound(responce);
+                }
+                var mapperCourse = mapper.Map<IReadOnlyList<Course>, IReadOnlyList<CourseInfoForStudentsDTO>>(courses);
+                responce.IsSuccess = true;
+                responce.StatusCode = HttpStatusCode.OK;
+                responce.Result = mapperCourse;
+                return Ok(responce);
+            }
+            catch (Exception ex)
+            {
+                responce.IsSuccess = false;
+                responce.StatusCode = HttpStatusCode.BadRequest;
+                responce.ErrorMassages.Add($"{ex.Message}");
+                return BadRequest(responce);
+            }
+        }
 
         [HttpGet("GetAllCoursesForAccredit")]
         [ProducesResponseType(200)]
@@ -84,6 +119,7 @@ namespace courseProject.Controllers
             responce.IsSuccess = true;
             responce.StatusCode = HttpStatusCode.OK;
             responce.Result = mapperCourse;
+            
             return Ok(responce);
         }
 
@@ -237,6 +273,7 @@ namespace courseProject.Controllers
            await unitOfWork.SubAdminRepository.saveAsync();
             return Ok(entity);
         }
+        
 
         [HttpPatch("accreditEvent")]
         [ProducesResponseType(200)]
@@ -275,14 +312,7 @@ namespace courseProject.Controllers
                 responce.ErrorMassages.Add($"The Course Id = {id} is less or equal 0 ");
                 return BadRequest(responce);
             }
-            //var courseFound = await unitOfWork.CourseRepository.GetCourseByIdAsync(id);
-            //if (courseFound == null)
-            //{
-            //    responce.StatusCode = HttpStatusCode.NotFound;
-            //    responce.IsSuccess = false;
-            //    responce.ErrorMassages.Add($"The Course Id = {id} is Not Found ");
-            //    return NotFound(responce);
-            //}
+           
            var coursee = await  unitOfWork.CourseRepository.GetCourseByIdAsync(id);
             if (coursee == null )
             {
@@ -307,7 +337,8 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<ApiResponce>> EditCourse(int id,[FromForm] CourseForEditDTO course)
+        //[Authorize(Policy = "subAdmin")]
+        public async Task<ActionResult<ApiResponce>> EditCourseBeforeAccredit(int id,[FromForm] CourseForEditDTO course)
         {
             if (id <= 0)
             {
@@ -348,5 +379,40 @@ namespace courseProject.Controllers
             return BadRequest(responce);
         }
 
+
+
+        [HttpGet("GetallUndefinedCoursesToSubAdmin")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<ApiResponce>> GetALlUndefinedCoursesForSubAdmins(int subAdminId)
+        {
+            try
+            {
+
+                var allUndefinedCourses = await unitOfWork.CourseRepository.GetAllUndefinedCoursesBySubAdminIdAsync(subAdminId);
+                if (allUndefinedCourses.Count() == 0)
+                {
+                    responce.IsSuccess = true;
+                    responce.StatusCode = HttpStatusCode.NoContent;
+                    responce.ErrorMassages.Add("There is no Course whose status has not yet been determined ");
+                    return responce;
+                }
+
+                var mapperCourse = mapper.Map<IReadOnlyList<Course>, IReadOnlyList<CourseInformationDto>>(allUndefinedCourses);
+                responce.IsSuccess = true;
+                responce.StatusCode = HttpStatusCode.OK;
+                responce.Result = mapperCourse;
+                return Ok(responce);
+
+            }
+            catch (Exception ex)
+            {
+                responce.IsSuccess = false;
+                responce.StatusCode=HttpStatusCode.BadRequest;
+                responce.ErrorMassages.Add("The error is :" + ex.Message);
+                return BadRequest(responce);
+            }
+        }
     }
 }

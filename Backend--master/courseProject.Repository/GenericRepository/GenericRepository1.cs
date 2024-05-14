@@ -170,7 +170,7 @@ namespace courseProject.Repository.GenericRepository
             {
               return (T)(object) await dbContext.users.Include(x => x.admin).FirstOrDefaultAsync(x => x.UserId == id);
             }
-            if (role.ToLower() == "subadmin")
+            if (role.ToLower() == "subadmin" || role.ToLower() == "main-subadmin")
             {
                 return (T)(object)await dbContext.users.Include(x => x.subadmin).FirstOrDefaultAsync(x => x.UserId == id);
             }
