@@ -14,6 +14,8 @@ using AutoMapper.Internal;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.VisualBasic;
+using Microsoft.AspNetCore.JsonPatch;
+using System.Linq.Expressions;
 
 
 namespace courseProject.Controllers
@@ -90,15 +92,24 @@ namespace courseProject.Controllers
             {
                 response.IsSuccess = false;
                 response.StatusCode = HttpStatusCode.NotFound;
-                response.ErrorMassages = new List<string>() { "the inputs is null" };
+                response.ErrorMassages.Add( "the inputs is null" );
                 return NotFound(response);
             }
-           // var studentFound = d
+           
             if ( !ModelState.IsValid)
             {
                 response.IsSuccess = false;
                 response.StatusCode = HttpStatusCode.BadRequest;
                 return BadRequest(response);
+            }
+            var course = await unitOfWork.CourseRepository.GetCourseByIdAsync(studentCourseDTO.courseId);
+            var studnetNumber = await unitOfWork.CourseRepository.GetNumberOfStudentsInTHeCourseAsync(studentCourseDTO.courseId);
+            if(studnetNumber >= course.limitNumberOfStudnet)
+            {
+                response.IsSuccess = false;
+                response.StatusCode = HttpStatusCode.BadRequest;
+                response.ErrorMassages.Add("You can't join the course, it is full");
+                return (response);
             }
             var mapped = mapper.Map<StudentCourseDTO, StudentCourse>(studentCourseDTO);
             await unitOfWork.StudentRepository.EnrollCourse(mapped);
@@ -137,7 +148,7 @@ namespace courseProject.Controllers
                 response.ErrorMassages = new List<string>() { $"The Student Of Id = { studentid} Does Not Enroll Any Course " };
                 return NotFound(response);
             }
-            var courseFound =  Studentfound.Select(x => x.Course).ToList();
+            var courseFound =   Studentfound.Select(x => x.Course).ToList();
             CommonClass.EditImageInFor(courseFound , null);
             response.IsSuccess = true;
             response.StatusCode = HttpStatusCode.OK;
@@ -304,70 +315,93 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         public async Task<ActionResult<ApiResponce>> BooKLectureByStudent(int studentId , DateTime date , string startTime , string endTime , [FromForm] BookALectureDTO bookALecture)
-        {  
-            
-            if(!ModelState.IsValid)
+        {
+            try
             {
-                response.IsSuccess = false;
-                response.StatusCode = HttpStatusCode.BadRequest;
-                return BadRequest(response);
-            }
-            if(! bookALecture.GetType().GetProperties()
-                .Select(x => x.GetValue(bookALecture))
-                 .Any(value => value != null))
-            {
-                response.IsSuccess = false;
-                response.StatusCode = HttpStatusCode.BadRequest;
-                response.ErrorMassages.Add("No input is added ");
-                return BadRequest(response);
-            }
-            var allStudents = await unitOfWork.StudentRepository.GetAllStudentsAsync();
-            if (!allStudents.Any(x => x.StudentId == studentId))
-            {
-                response.IsSuccess = false;
-                response.StatusCode = HttpStatusCode.BadRequest;
-                response.ErrorMassages.Add($"The student with id ={studentId} is not found");
-                return BadRequest(response);
-            }
-            if (!CommonClass.IsValidTimeFormat(startTime) || !CommonClass.IsValidTimeFormat(endTime) || !CommonClass.IsValidTimeFormat(bookALecture.Duration))
-            {
-                response.IsSuccess = false;
-                response.StatusCode = HttpStatusCode.BadRequest;
-                response.ErrorMassages.Add("The Input Time Has An Error");
-                return BadRequest(response);
-            }
-            TimeSpan StartTime = CommonClass.ConvertToTimeSpan(startTime);
-            TimeSpan EndTime = CommonClass.ConvertToTimeSpan(endTime);
-            TimeSpan duration = CommonClass.ConvertToTimeSpan(bookALecture.Duration);
-            if ((EndTime- StartTime) < duration)
-            {
-                response.IsSuccess = false;
-                response.StatusCode = HttpStatusCode.BadRequest;
-                response.ErrorMassages.Add("The Duration Input Is Greater Than The Difference Between Start And End Time !, Edit It");
-                return BadRequest(response);
-            }
-            
-            var consultation = mapper.Map<BookALectureDTO , Consultation>(bookALecture);
-            consultation.StudentId = studentId;
-            consultation.startTime = StartTime;
-            consultation.endTime= EndTime;
-            consultation.date = date;
+                if (!ModelState.IsValid)
+                {
+                    response.IsSuccess = false;
+                    response.StatusCode = HttpStatusCode.BadRequest;
+                    return BadRequest(response);
+                }
+                if (!bookALecture.GetType().GetProperties()
+                    .Select(x => x.GetValue(bookALecture))
+                     .Any(value => value != null))
+                {
+                    response.IsSuccess = false;
+                    response.StatusCode = HttpStatusCode.BadRequest;
+                    response.ErrorMassages.Add("No input is added ");
+                    return BadRequest(response);
+                }
+                var allStudents = await unitOfWork.StudentRepository.GetAllStudentsAsync();
+                if (!allStudents.Any(x => x.StudentId == studentId))
+                {
+                    response.IsSuccess = false;
+                    response.StatusCode = HttpStatusCode.BadRequest;
+                    response.ErrorMassages.Add($"The student with id ={studentId} is not found");
+                    return BadRequest(response);
+                }
+                if (!CommonClass.IsValidTimeFormat(startTime) || !CommonClass.IsValidTimeFormat(endTime) /*|| !CommonClass.IsValidTimeFormat(bookALecture.Duration)*/)
+                {
+                    response.IsSuccess = false;
+                    response.StatusCode = HttpStatusCode.BadRequest;
+                    response.ErrorMassages.Add("The Input Time Has An Error");
+                    return BadRequest(response);
+                }
+                TimeSpan StartTime = CommonClass.ConvertToTimeSpan(startTime);
+                TimeSpan EndTime = CommonClass.ConvertToTimeSpan(endTime);
+                //  TimeSpan duration = CommonClass.ConvertToTimeSpan(bookALecture.Duration);
 
-            await unitOfWork.StudentRepository.BookLectureAsync(consultation);
-            var success1 = await unitOfWork.StudentRepository.saveAsync();
-            var studentConsulation = mapper.Map<Consultation , StudentConsultations>(consultation);
-            await unitOfWork.StudentRepository.AddInStudentConsulationAsync(studentConsulation);
-            var success2 =await unitOfWork.StudentRepository.saveAsync();
-            if(success1 > 0 && success2 > 0)
-            {
-                response.IsSuccess = true;
-                response.StatusCode = HttpStatusCode.Created;
-                response.Result = bookALecture;
-                return Ok(response);
+                if ((EndTime - StartTime) > TimeSpan.Parse("02:00") || (EndTime - StartTime) < TimeSpan.Parse("00:30"))
+                {
+                    response.IsSuccess = false;
+                    response.StatusCode = HttpStatusCode.BadRequest;
+                    response.ErrorMassages.Add("The period entered is greater or less than the permissible period. The permissible period is from 30 minutes to 2 hours");
+                    return (response);
+                }
+                var CheckTime = await unitOfWork.instructorRepositpry.showifSelectedTimeIsAvilable(StartTime, EndTime , date);
+
+                if (CheckTime.Count() == 0)
+                {
+                    response.IsSuccess = false;
+                    response.StatusCode = HttpStatusCode.BadRequest;
+                    response.ErrorMassages.Add("There is no instructor available at this time");
+                    return response;
+                }
+
+
+
+                var consultation = mapper.Map<BookALectureDTO, Consultation>(bookALecture);
+                consultation.StudentId = studentId;
+                consultation.startTime = StartTime;
+                consultation.endTime = EndTime;
+                consultation.date = date;
+                consultation.Duration = EndTime - StartTime;
+
+                await unitOfWork.StudentRepository.BookLectureAsync(consultation);
+                var success1 = await unitOfWork.StudentRepository.saveAsync();
+                var studentConsulation = mapper.Map<Consultation, StudentConsultations>(consultation);
+                await unitOfWork.StudentRepository.AddInStudentConsulationAsync(studentConsulation);
+                var success2 = await unitOfWork.StudentRepository.saveAsync();
+                if (success1 > 0 && success2 > 0)
+                {
+                    response.IsSuccess = true;
+                    response.StatusCode = HttpStatusCode.Created;
+                    response.Result = bookALecture;
+                    return Ok(response);
+                }
+                response.IsSuccess = false;
+                response.StatusCode = HttpStatusCode.BadRequest;
+                return BadRequest(response);
             }
-            response.IsSuccess = false;
-            response.StatusCode=HttpStatusCode.BadRequest;
-            return BadRequest(response);
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.StatusCode = HttpStatusCode.BadRequest;
+                response.ErrorMassages.Add($"{ex.Message}");
+                return BadRequest(response);
+            }
+            
 
         }
 
@@ -763,6 +797,63 @@ namespace courseProject.Controllers
             response.StatusCode = HttpStatusCode.OK;
             response.Result = feedbackMapper;
             return Ok(response);
+        }
+
+
+        [HttpPatch("ApprovelToJoin")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<ApiResponce>> ApprovalForTheStudentToJoinTheCourse(int courseId, int studentId, string status)
+        {
+            if (courseId <= 0)
+            {
+                response.IsSuccess = false;
+                response.StatusCode = HttpStatusCode.BadRequest;
+                response.ErrorMassages.Add("The course Id is less or equal 0");
+                return BadRequest(response);
+            }
+            if (studentId <= 0)
+            {
+                response.IsSuccess = false;
+                response.StatusCode = HttpStatusCode.BadRequest;
+                response.ErrorMassages.Add("The Student Id is less or equal 0");
+                return BadRequest(response);
+            }
+            try
+            {
+                var getStudentCourse = await unitOfWork.StudentRepository.GetFromStudentCourse(courseId, studentId);
+                if (getStudentCourse == null)
+                {
+                    response.IsSuccess = false;
+                    response.StatusCode = HttpStatusCode.NotFound;
+                    response.ErrorMassages.Add($"The student with id = {studentId}  and course with id = {courseId} does not exist");
+                    return response;
+                }
+                Expression<Func<StudentCourse, string>> path = x => x.status;
+                var patchDocument = new JsonPatchDocument<StudentCourse>();
+                patchDocument.Replace(path, status);
+                getStudentCourse.status = status;
+                await unitOfWork.CourseRepository.UpdateStudentCourse(getStudentCourse);
+                if (await unitOfWork.CourseRepository.saveAsync() > 0)
+                {
+                    response.IsSuccess = true;
+                    response.StatusCode = HttpStatusCode.OK;
+                    response.Result = getStudentCourse;
+                    return Ok(response);
+                }
+                response.IsSuccess = false;
+                response.StatusCode = HttpStatusCode.BadRequest;
+                response.ErrorMassages.Add("Some error an occured");
+                return BadRequest(response);
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccess = false;
+                response.StatusCode = HttpStatusCode.BadRequest;
+                response.ErrorMassages.Add("The error is : " + ex + ex.Message);
+                return BadRequest(response);
+            }
         }
 
         //[HttpGet("GetAllLecturesByStudentId")]

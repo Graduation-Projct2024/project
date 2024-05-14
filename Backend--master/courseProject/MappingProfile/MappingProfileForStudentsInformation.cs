@@ -78,6 +78,12 @@ namespace courseProject.MappingProfile
                 .ForMember(x => x.InstructorLName, o => o.MapFrom(y => y.instructor.LName))
                 .ForMember(x => x.StudentuserName, o => o.MapFrom(y => y.student.user.userName))
                 .ForMember(x => x.StudentLName, o => o.MapFrom(y => y.student.LName));
+
+
+            CreateMap<StudentCourse, ViewTheRequestOfJoindCourseDTO>()
+                .ForMember(x => x.StudentName, o => o.MapFrom(y => y.Student.user.userName + " " + y.Student.LName))
+                .ForMember(x => x.CourseName, o => o.MapFrom(y => y.Course.name))
+                .ForMember(x => x.EnrollDate, o => o.MapFrom(y => y.EnrollDate.Date.ToString("dd/MM/yyyy")));
         }
 
 

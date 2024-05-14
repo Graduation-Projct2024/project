@@ -81,6 +81,11 @@ namespace courseProject.Repository.Data
                    e.HasKey(x => new { x.StudentId, x.TaskId });
                }
                );
+            modelBuilder.Entity<InstructorSkills>(
+                e =>
+                {
+                    e.HasKey(x => new {  x.skillId , x.InstructorId });
+                });
             modelBuilder.Entity<Request>(entity =>
             {
                 entity.Property(e => e.StudentId)
@@ -93,6 +98,7 @@ namespace courseProject.Repository.Data
                       .IsRequired(false);
             });
 
+         
 
             modelBuilder.Entity<SubAdmin>()
            .Property(c => c.DateOfBirth)
@@ -120,6 +126,10 @@ namespace courseProject.Repository.Data
 
             modelBuilder.Entity<Course>()
            .Property(c => c.endDate)
+           .HasColumnType("date");
+
+            modelBuilder.Entity<Course>()
+           .Property(c => c.Deadline)
            .HasColumnType("date");
 
             modelBuilder.Entity<Consultation>()
@@ -163,5 +173,8 @@ namespace courseProject.Repository.Data
         public DbSet<Student_Task_Submissions> Student_Task_Submissions { get; set; }
         public DbSet<Feedback> feedbacks { get; set; }
         public DbSet<StudentConsultations> StudentConsultations { get; set; }
+        public DbSet<Skills> Skills { get; set; }
+        public DbSet<InstructorSkills> InstructorSkills { get; set;}
+        
     }
 }

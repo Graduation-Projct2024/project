@@ -19,7 +19,10 @@ namespace courseProject.Core.Models
             public string content { get; set; }
             public DateTime dateOfAdded { get; set; } = DateTime.Now;
             public string type { get; set; }
-            [ForeignKey("Course")]
+
+            [Range(0,5)]
+            public int? range { get; set; }
+        [ForeignKey("Course")]
             [AllowNull]
             public int? CourseId { get; set; }
 

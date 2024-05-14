@@ -10,5 +10,9 @@ namespace courseProject.Core.IGenericRepository
     public interface ICourseRepository<T> :IGenericRepository1<Course>
     {
         public  Task<T> GetCourseByIdAsync(int id);
+        public Task<int> GetNumberOfStudentsInTHeCourseAsync(int courseId);
+        public Task EditCourseAfterAccreditAsync(int courseId);
+        public Task UpdateStudentCourse(StudentCourse studentCourse);
+        public Task<IReadOnlyList<Course>> GetAllUndefinedCoursesBySubAdminIdAsync(int subAdminId);
     }
 }

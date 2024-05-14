@@ -11,6 +11,7 @@ using courseProject.Repository.Data;
 using courseProject.Repository.GenericRepository;
 using System.Net;
 using courseProject.core.Models;
+using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace courseProject.Controllers
 {
@@ -33,7 +34,7 @@ namespace courseProject.Controllers
         {
             this.dbContext = dbContext;
             this.unitOfWork = unitOfWork;
-         //   this.pagenation = pagenation;
+          //  this.pagenation = pagenation;
             this.userRepo = userRepo;
             this.mapper = mapper;
             responce = new ApiResponce();
@@ -44,32 +45,47 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        
-        public async Task<ActionResult<IEnumerable<SubAdmin>>> GetAllEmployeeAsync()
+        // [Authorize(Policy = "Admin")]
+       // [Authorize(Policy = "Admin&subAdmin")]
+        public async Task<ActionResult<IEnumerable<SubAdmin>>> GetAllEmployeeAsync(int pageNumber , int pageSize)
         {
-          
-            var SubAdmins = await unitOfWork.SubAdminRepository.GetAllEmployeeAsync();
-            
-            var instructors = await unitOfWork.instructorRepositpry.GetAllEmployeeAsync();
-            if (SubAdmins == null && instructors == null)
+            // pagenation.PageSize = pageSize ?? pagenation.PageSize;
+            try
             {
-                return NotFound();
-            }
-            var mapperSubAdmin = mapper.Map<IEnumerable<SubAdmin>, IEnumerable<EmployeeDto>>(SubAdmins);
-            foreach (var SubAdmin in mapperSubAdmin)
-            {
-                SubAdmin.type = "SubAdmin";
-            }
-            var mapperInstructor = mapper.Map<IEnumerable<Instructor>, IEnumerable<EmployeeDto>>(instructors);
-            foreach (var instructor in mapperInstructor)
-            {
-                instructor.type = "Instructor";
-            }
-            var allEmployees = (mapperSubAdmin.Concat(mapperInstructor));
-          
-            return Ok(allEmployees.OrderBy(x=>x.Id));
-            
 
+
+                var SubAdmins = await unitOfWork.SubAdminRepository.GetAllEmployeeAsync();
+
+                var instructors = await unitOfWork.instructorRepositpry.GetAllEmployeeAsync();
+                if (SubAdmins == null && instructors == null)
+                {
+                    return NotFound();
+                }
+                var mapperSubAdmin = mapper.Map<IEnumerable<SubAdmin>, IEnumerable<EmployeeDto>>(SubAdmins);
+                foreach (var SubAdmin in mapperSubAdmin)
+                {
+                    SubAdmin.type = "SubAdmin";
+                }
+                var mapperInstructor = mapper.Map<IEnumerable<Instructor>, IEnumerable<EmployeeDto>>(instructors);
+                foreach (var instructor in mapperInstructor)
+                {
+                    instructor.type = "Instructor";
+                }
+                var allEmployees = mapperSubAdmin.Concat(mapperInstructor);
+                allEmployees = allEmployees.OrderBy(x => x.Id);
+                responce.Result = (Pagenation<EmployeeDto>.CreateAsync(allEmployees, pageNumber, pageSize));
+                responce.IsSuccess = true;
+                responce.StatusCode = HttpStatusCode.OK;
+                return Ok(responce);
+
+            }
+            catch (Exception ex)
+            {
+                responce.IsSuccess = false;
+                responce.StatusCode=HttpStatusCode.BadRequest;
+                responce.ErrorMassages.Add("the error occured is :"+ex + "" + ex.Message);
+                return BadRequest(responce);
+            }
 
         }
 
@@ -127,14 +143,14 @@ namespace courseProject.Controllers
                 {
                     var Usermapp=await unitOfWork.UserRepository.RegisterAsync(userMapped);
                     var success1 = await unitOfWork.SubAdminRepository.saveAsync();
-                    if (model.role.ToLower() == "subadmin")
+                    if (model.role.ToLower() == "subadmin" || model.role.ToLower()=="main-subadmin")
                     {
                         var modelMapped = mapper.Map<SubAdmin>(model);
                         var userMap = mapper.Map<User, SubAdmin>(Usermapp);
                         modelMapped.SubAdminId = userMap.SubAdminId;
                         await unitOfWork.SubAdminRepository.createSubAdminAccountAsync(modelMapped);
                     } 
-                    else 
+                    else if(model.role.ToLower() == "instructor")
                     {
                         var modelMapped = mapper.Map<Instructor>(model);
                         var userMap = mapper.Map<User, Instructor>(Usermapp);
@@ -354,9 +370,9 @@ namespace courseProject.Controllers
             if (courseFond.Count() == 0)
             {
                 responce.IsSuccess = false;
-                responce.StatusCode = HttpStatusCode.NotFound;
+                responce.StatusCode = HttpStatusCode.NoContent;              
                 responce.ErrorMassages = new List<string>() { $"The Instructor Of Id = {Instructorid} Does Not Teach Any Courses " };
-                return Ok(responce);
+                return  Ok(responce);
             }
             CommonClass.EditImageInFor(courseFond, null);
             responce.StatusCode=HttpStatusCode.OK;
@@ -511,23 +527,35 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<ApiResponce>> GetAllCustomCoursesToSubAdmin()
+        //[Authorize(Policy ="MainSubAdmin")]
+        public async Task<ActionResult<ApiResponce>> GetAllCustomCoursesToMainSubAdmin()
         {
-           var GetCustomCourse =  await unitOfWork.SubAdminRepository.GerAllCoursesRequestAsync();
-            if(GetCustomCourse.Count() == 0)
+            try
             {
-                responce.IsSuccess = false;
-                responce.StatusCode = HttpStatusCode.NotFound;
-                responce.ErrorMassages.Add("No Request To Custom Course Yet");
-                return NotFound(responce);
-            }       
-            var CustomCoursesMapper = mapper.Map<IReadOnlyList<Request> , IReadOnlyList<CustomCourseForRetriveDTO>>(GetCustomCourse);
+
+
+                var GetCustomCourse = await unitOfWork.SubAdminRepository.GerAllCoursesRequestAsync();
+                if (GetCustomCourse.Count() == 0)
+                {
+                    responce.IsSuccess = false;
+                    responce.StatusCode = HttpStatusCode.NotFound;
+                    responce.ErrorMassages.Add("No Request To Custom Course Yet");
+                    return NotFound(responce);
+                }
+                var CustomCoursesMapper = mapper.Map<IReadOnlyList<Request>, IReadOnlyList<CustomCourseForRetriveDTO>>(GetCustomCourse);
 
                 responce.IsSuccess = true;
                 responce.StatusCode = HttpStatusCode.OK;
-                responce.Result= CustomCoursesMapper;
-                return Ok( responce );
-           
+                responce.Result = CustomCoursesMapper;
+                return Ok(responce);
+            }
+            catch (Exception ex)
+            {
+                responce.IsSuccess = false;
+                responce.StatusCode=HttpStatusCode.BadRequest;
+                responce.ErrorMassages.Add("the error is :" + ex.Message);
+                return BadRequest(responce);
+            }
         }
 
 
@@ -646,6 +674,290 @@ namespace courseProject.Controllers
             responce.StatusCode = HttpStatusCode.OK;
             responce.Result = InstrctorOfficeHoursMapper;
             return Ok(responce);
+        }
+
+        [HttpGet("GetAllRequestToJoinCourses")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+       // [Authorize(Policy ="MainSubAdmin")]
+        public async Task<ActionResult<ApiResponce>> GetAllRequestFromStudentsToJoinCourses()
+        {
+            try
+            {
+                var getRequests = await unitOfWork.SubAdminRepository.getAllRequestToJoindCourseAsync();
+                if (getRequests.Count() == 0)
+                {
+                    responce.IsSuccess = false;
+                    responce.StatusCode = HttpStatusCode.NoContent;
+                    responce.ErrorMassages.Add("There is no new request");
+                    return responce;
+                }
+                var requestMapper = mapper.Map<IReadOnlyList<StudentCourse>, IReadOnlyList<ViewTheRequestOfJoindCourseDTO>>(getRequests);
+                responce.IsSuccess = true;
+                responce.StatusCode= HttpStatusCode.OK;
+                responce.Result= requestMapper;
+                return Ok(responce);
+            }
+            catch (Exception ex)
+            {
+                responce.IsSuccess = false;
+                responce.StatusCode = HttpStatusCode.BadRequest;
+                responce.ErrorMassages.Add("The error is :" + ex +ex.Message);
+                return BadRequest( responce) ;
+            }
+        }
+
+
+        [HttpGet("GetAllSkillOptions")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<ApiResponce>> GetAllOptions()
+        {
+            try
+            {
+                var allSkills = await unitOfWork.AdminRepository.GetAllSkillsAsync();
+                if (allSkills.Count() == 0)
+                {
+                    responce.IsSuccess = true;
+                    responce.StatusCode = HttpStatusCode.NoContent;
+                    responce.ErrorMassages.Add("There is no skills yet");
+                    return Ok(responce);
+                }
+                responce.IsSuccess= true;
+                responce.StatusCode=HttpStatusCode.OK;
+                responce.Result = allSkills;
+                return Ok(responce);
+            }
+            catch (Exception ex)
+            {
+                responce.IsSuccess = false;
+                responce.StatusCode=HttpStatusCode.BadRequest;
+                responce.ErrorMassages.Add($"The error is : " + ex.Message);
+                return BadRequest(responce);
+            }
+        }
+
+        [HttpGet("GetAllSkillOptionsToInstructor")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<ApiResponce>> GetAllOptionsToInstructorDropdown(int instructorId)
+        {
+            try
+            {
+                var allSkills = await unitOfWork.instructorRepositpry.getAllUnregisteredSkillsOfTheInstructor(instructorId);
+                if (allSkills.Count() == 0)
+                {
+                    responce.IsSuccess = true;
+                    responce.StatusCode = HttpStatusCode.NoContent;
+                    responce.ErrorMassages.Add("There is no skills yet");
+                    return Ok(responce);
+                }
+                responce.IsSuccess = true;
+                responce.StatusCode = HttpStatusCode.OK;
+                responce.Result = allSkills;
+                return Ok(responce);
+            }
+            catch (Exception ex)
+            {
+                responce.IsSuccess = false;
+                responce.StatusCode = HttpStatusCode.BadRequest;
+                responce.ErrorMassages.Add($"The error is : " + ex.Message);
+                return BadRequest(responce);
+            }
+        }
+
+        [HttpPost("selectAnInstructorSkills")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+      //  [Authorize(Policy ="Instructor")]
+        public async Task<ActionResult<ApiResponce>> SelectASkillsByInstructor(int instructorId ,[FromForm] ListIntegerDTO array)
+        {
+            try
+            {
+                if (instructorId <= 0)
+                {
+                    responce.IsSuccess = false;
+                    responce.StatusCode = HttpStatusCode.BadRequest;
+                    responce.ErrorMassages.Add("The instructor id is less or equal 0");
+                    return BadRequest(responce);
+                }
+                var FoundInstrutor = await unitOfWork.instructorRepositpry.getInstructorByIdAsync(instructorId);
+                if (FoundInstrutor == null)
+                {
+                    responce.IsSuccess = false;
+                    responce.StatusCode = HttpStatusCode.NotFound;
+                    responce.ErrorMassages.Add($"The instructor with id = {instructorId} is not foud");
+                    return NotFound(responce);
+                }
+                if (array == null || array.skills.Count()==0)
+                {
+                    responce.IsSuccess = false;
+                    responce.StatusCode = HttpStatusCode.NoContent;
+                    responce.ErrorMassages.Add("there is no added skills");
+                    return (responce);
+                }
+                await unitOfWork.instructorRepositpry.AddListOfSkillsAsync(instructorId, array.skills);
+               // var success = await unitOfWork.instructorRepositpry.saveAsync();
+                var getAllSkills = await unitOfWork.instructorRepositpry.GetAllSkillsNameToInstructorAsync(array.skills);
+                //if (success > 0)
+                //{
+                    responce.IsSuccess = true;
+                    responce.StatusCode = HttpStatusCode.Created;
+                    responce.Result = getAllSkills;
+                    return Ok(responce);
+            //}
+            //    responce.IsSuccess = false;
+            //responce.StatusCode = HttpStatusCode.BadRequest;
+            //return BadRequest(responce);
+        }
+            catch(Exception ex)
+            {
+                responce.IsSuccess = false;
+                responce.StatusCode = HttpStatusCode.BadRequest;
+                responce.ErrorMassages.Add($"The error is : " + ex.Message);
+                return BadRequest(responce);
+            }
+        }
+
+
+        [HttpPost("GetListOfInstructorForLectures")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<ApiResponce>> GetAListOfInstrcutorsForBookALectures(int skillId , string startTime , string endTime , DateTime date)
+        {
+            try
+            {
+                if (!CommonClass.IsValidTimeFormat(startTime) || !CommonClass.IsValidTimeFormat(endTime) /*|| !CommonClass.IsValidTimeFormat(bookALecture.Duration)*/)
+                {
+                    responce.IsSuccess = false;
+                    responce.StatusCode = HttpStatusCode.BadRequest;
+                    responce.ErrorMassages.Add("The Input Time Has An Error");
+                    return BadRequest(responce);
+                }
+                TimeSpan StartTime = CommonClass.ConvertToTimeSpan(startTime);
+                TimeSpan EndTime = CommonClass.ConvertToTimeSpan(endTime);
+                if (StartTime >= EndTime)
+                {
+                    responce.IsSuccess = false;
+                    responce.StatusCode = HttpStatusCode.BadRequest;
+                    responce.ErrorMassages.Add("The start time is greater then end time , edit it ");
+                    return (responce);
+                }
+                if ((EndTime - StartTime) > TimeSpan.Parse("02:00") || (EndTime - StartTime) < TimeSpan.Parse("00:30"))
+                {
+                    responce.IsSuccess = false;
+                    responce.StatusCode = HttpStatusCode.BadRequest;
+                    responce.ErrorMassages.Add("The period entered is greater or less than the permissible period. The permissible period is from 30 minutes to 2 hours");
+                    return (responce);
+                }
+                var getAllSkills = await unitOfWork.AdminRepository.GetAllSkillsAsync();
+                if (getAllSkills.Count()==0 || !getAllSkills.Any(x=>x.Id==skillId))
+                {
+                    responce.IsSuccess = false;
+                    responce.StatusCode = HttpStatusCode.NotFound;
+                    responce.ErrorMassages.Add($"The skill with id = {skillId} is not found ");
+                    return BadRequest(responce);
+                }
+                var getInstructors = await unitOfWork.instructorRepositpry.getAListOfInstructorDependOnSkillsAndOfficeTime(skillId, StartTime, EndTime, date);
+                if (getInstructors.Count() == 0)
+                {
+                    responce.IsSuccess = false;
+                    responce.StatusCode = HttpStatusCode.NoContent;
+                    responce.Result = "No any instructor is available depends in your inputs";
+                    return (responce);
+                }
+                var instructorMapper = mapper.Map<IReadOnlyList< Instructor_Working_Hours>,IReadOnlyList< EmployeeListDTO>>(getInstructors);
+                responce.IsSuccess = true;
+                responce.StatusCode = HttpStatusCode.OK;
+                responce.Result = instructorMapper;
+                return Ok(responce);
+
+            }
+            catch (Exception ex)
+            {
+                responce.IsSuccess = false;
+                responce.StatusCode = HttpStatusCode.BadRequest;
+                responce.ErrorMassages.Add(ex.Message);
+                return BadRequest(responce);
+            }
+        }
+
+        [HttpDelete("DeleteAnInstructorSkill")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<ApiResponce>> DeleteAnInstructorSkillFromSelected (int InstructorId , int SkillId)
+        {
+            try
+            {
+                if (InstructorId <= 0)
+                {
+                    responce.IsSuccess = false;
+                    responce.StatusCode = HttpStatusCode.BadRequest;
+                    responce.ErrorMassages.Add("The instructor id is less or equal 0");
+                    return BadRequest(responce);
+                }
+                if (SkillId <= 0)
+                {
+                    responce.IsSuccess = false;
+                    responce.StatusCode = HttpStatusCode.BadRequest;
+                    responce.ErrorMassages.Add("The skill id is less or equal 0");
+                    return BadRequest(responce);
+                }
+                var getAllSkills = await unitOfWork.AdminRepository.GetAllSkillsAsync();
+                if (!getAllSkills.Any(x => x.Id == SkillId))
+                {
+                    responce.IsSuccess = false;
+                    responce.StatusCode = HttpStatusCode.NotFound;
+                    responce.ErrorMassages.Add($"The skill with id ={SkillId} is not found");
+                    return NotFound(responce);
+                }
+                var instructorFound = await unitOfWork.UserRepository.ViewProfileAsync(InstructorId, "instructor");
+                if (instructorFound == null)
+                {
+                    responce.IsSuccess = false;
+                    responce.StatusCode = HttpStatusCode.NotFound;
+                    responce.ErrorMassages.Add($"The instructor with id ={InstructorId} is not found");
+                    return NotFound(responce);
+                }
+                var getInstructorSkillsRecords = await unitOfWork.instructorRepositpry.GetAllInstructorSkillsRecoredsAsync();
+                if(! getInstructorSkillsRecords.Any(x=>x.InstructorId==InstructorId && x.skillId== SkillId))
+                {
+                    responce.IsSuccess = false;
+                    responce.StatusCode = HttpStatusCode.NotFound;
+                    responce.ErrorMassages.Add($"The instructor with id ={InstructorId} is not has the skill with id = {SkillId}");
+                    return NotFound(responce);
+                }
+                var name = getAllSkills.FirstOrDefault(x => x.Id == SkillId).name;
+                InstructorSkills instructorSkills = new InstructorSkills();
+                instructorSkills.InstructorId = InstructorId;
+                instructorSkills.skillId = SkillId;
+                await unitOfWork.instructorRepositpry.RemoveASkill(instructorSkills);
+                if(await unitOfWork.instructorRepositpry.saveAsync() > 0)
+                {
+                    responce.IsSuccess=true;
+                    responce.StatusCode=HttpStatusCode.OK;
+                    responce.Result = $"The skill {name} is removed";
+                    return Ok(responce);
+                }
+                responce.IsSuccess = false;
+                responce.StatusCode = HttpStatusCode.BadRequest;
+                responce.ErrorMassages.Add("some error an occurred " );
+                return BadRequest(responce);
+
+            }
+            catch (Exception ex)
+            {
+                responce.IsSuccess = false;
+                responce.StatusCode = HttpStatusCode.BadRequest;
+                responce.ErrorMassages.Add($"The error is : " + ex.Message);
+                return BadRequest(responce);
+            }
         }
     }
 }

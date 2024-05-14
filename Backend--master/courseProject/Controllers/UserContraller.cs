@@ -289,7 +289,7 @@ namespace courseProject.Controllers
                 return BadRequest(response);
             }
 
-            var UserFound =await dbContext.users.FirstOrDefaultAsync(x=>x.UserId ==id);
+            var UserFound = await unitOfWork.UserRepository.getUserByIdAsync(id); 
             if (UserFound == null)
             {
                 response.IsSuccess = false;
@@ -307,7 +307,7 @@ namespace courseProject.Controllers
             {
                 usermapper = mapper.Map<Admin, UserInfoDTO>(GetUser.admin);
             }
-            else if (UserFound.role.ToLower() == "subadmin")
+            else if (UserFound.role.ToLower() == "subadmin" || UserFound.role.ToLower() =="main-subadmin")
             {
                 usermapper = mapper.Map<SubAdmin, UserInfoDTO>(GetUser.subadmin);
             }

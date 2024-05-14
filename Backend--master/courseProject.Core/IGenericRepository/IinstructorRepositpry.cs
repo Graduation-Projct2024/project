@@ -20,5 +20,12 @@ namespace courseProject.Core.IGenericRepository
         public Task<IReadOnlyList<Consultation>> GetAllConsultationRequestByInstructorIdAsync(int instructorId);
         public Task<Instructor> getInstructorByIdAsync(int id);
         public Task<IReadOnlyList<Instructor_Working_Hours>> getAllInstructorsOfficeHoursAsync();
+        public Task AddListOfSkillsAsync(int instructorId, List<int> skills);
+        public Task<IReadOnlyList<string>> GetAllSkillsNameToInstructorAsync(List<int> skills);
+        public Task<IReadOnlyList<Instructor_Working_Hours>> showifSelectedTimeIsAvilable(TimeSpan startTime, TimeSpan endTime , DateTime date);
+        public Task RemoveASkill(InstructorSkills instructorSkills);
+        public Task<IReadOnlyList<InstructorSkills>> GetAllInstructorSkillsRecoredsAsync();
+        public Task<IReadOnlyList<Skills>> getAllUnregisteredSkillsOfTheInstructor(int instructorId);
+        public Task<IReadOnlyList<Instructor_Working_Hours>> getAListOfInstructorDependOnSkillsAndOfficeTime( int skillID, TimeSpan startTime, TimeSpan endTime, DateTime date );
     }
 }

@@ -1,12 +1,13 @@
 ﻿using courseProject.Core.Models;
 using courseProject.Core.Models.DTO;
+using Microsoft.Extensions.Configuration;
 using System.Text.RegularExpressions;
 
 namespace courseProject.Common
 {
     public class CommonClass
     {
-
+        IConfiguration configuration;
 
         public void ImageTOHttp(UserInfoDTO userInfoDTO)
         {
@@ -35,8 +36,9 @@ namespace courseProject.Common
         }
 
 
-        public void EditImageInFor (IReadOnlyList<Course>? model , Course? modelcourse)
+        public async void EditImageInFor (IReadOnlyList<Course>? model , Course? modelcourse)
         {
+            //string secretKey = configuration.GetSection("profiles")["applicationUrl"];
             string url = "http://localhost:5134/";
             if(model != null)
             {

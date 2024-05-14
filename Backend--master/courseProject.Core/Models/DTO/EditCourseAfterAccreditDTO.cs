@@ -8,16 +8,13 @@ using System.Threading.Tasks;
 
 namespace courseProject.Core.Models.DTO
 {
-    public class CourseForEditDTO
+    public class EditCourseAfterAccreditDTO
     {
-        public string? name { get; set; }
-        public double? price { get; set; }
-        public string? category { get; set; }
         public string? description { get; set; }
         [NotMapped] public IFormFile? image { get; set; }
-        public int? InstructorId { get; set; }
+        public DateTime? startDate { get; set; }
         public DateTime? Deadline { get; set; }
         public int? limitNumberOfStudnet { get; set; }
-
+        public int? InstructorId { get; set; }
     }
 }
