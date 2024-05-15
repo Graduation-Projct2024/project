@@ -53,24 +53,42 @@ const [alertOpen, setAlertOpen] = React.useState(false);
       `
     );
   
-    console.log(data);
     setInstructors(data.data.result);
   };
+  function convertDateFormat(dateString) {
+    // Split the date string into date and time parts
+    const [datePart, timePart] = dateString.split(' ');
+    // Split the date part into day, month, and year
+    const [day, month, year] = datePart.split('/');
+    // Split the time part into hours, minutes, and seconds
+    const [hours, minutes, seconds] = timePart.split(':');
+    // Construct the new date string in the desired format
+    const newDateString = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}Z`;
+    return newDateString;
+}
   const getLectures = async () => {
-    if(userId){
-    const {data} = await axios.post(
-      `http://localhost:5134/api/StudentsContraller/GetAllConsultations?studentId=${userId}
-      `
-    );
-    if(data.isSuccess){
-    console.log(data.result);
-
-    setLecture(data.result);
+    try {
+      if (userId) {
+        const response = await axios.post(
+          `http://localhost:5134/api/StudentsContraller/GetAllConsultations?studentId=${userId}`
+        );
+        if (response.data.isSuccess) {
+          const parsedEvents = response.data.result.map(event => ({
+            title: event.name,
+            
+            start: convertDateFormat(`${event.date} ${event.startTime}`),
+            end: convertDateFormat(`${event.date} ${event.endTime}`),
+            // Additional event properties if needed
+          }));
+          setLecture(parsedEvents);
+          //console.log(`yut${response.data.result[0].date} ${response.data.result[0].startTime}`)
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching lectures:', error);
     }
-    }
-  
   };
-  console.log(lecture);
+ // console.log(lecture);
 
   const onSubmit = async (lectures) => {
     const [startHour, startMinute] = lectures.startTime.split(':').map(Number);
@@ -264,31 +282,41 @@ const textAraeInput = (
     setOpen(true);
   };
   const handleDateClick = (arg) => {
+
     let today=new Date();
     let date2 = new Date(arg.dateStr);
 
-    if(date2.getDate()>today.getDate()){
+    if(today.getTime() < date2.getTime()){
       setOpen(true);
       setDate(arg.dateStr);
 
     }
   };
-  console.log(date);
   const handleClose = () => {
     setOpen(false);
   };
   const handleCloseAlert = () => {
     setAlertOpen(false);
   };
-  const calendarRef = useRef(null);
+  //const [calevents, setCalvents] =React.useState([]);
 
+  const calendarRef = useRef(null);
+  // const parsedEvents = lecture?.map(event => ({
+  //   title: event.name,
+  //   start: new Date(event.date + 'T' + event.startTime),
+  //   end: new Date(event.date + 'T' + event.endTime),
+  //   // Additional event properties if needed
+  // }));
+  //setCalvents(parsedEvents);
+
+  //console.log("events"+parsedEvents);
   useEffect(() => {
     getInstructors();
     getLectures();
     if (calendarRef.current) {
       calendarRef.current.getApi().setOption('dayMaxEventRows', 3);
     }
-  }, [status, date, selectedInstructor]);
+  }, [status, date, selectedInstructor, lecture]);
   return (
     <Layout title='Book a Lecture'>
        <Snackbar open={alertOpen} autoHideDuration={6000} onClose={handleCloseAlert}>
@@ -317,7 +345,7 @@ const textAraeInput = (
           center: 'title',
           right: 'dayGridMonth,timeGridWeek,listWeek',
         }}
-        initialView="dayGridMonth" // Initial view can be customized as needed
+        initialView="dayGridMonth" 
         nowIndicator={true}
         //editable= {true}
         //events={{}}
@@ -332,11 +360,12 @@ const textAraeInput = (
 
         //views= {views}
         //initialDate={new Date()}
-        events={[{ title: 'nice event', start: new Date(), resourceId: 'a' }, { title: 'nice event', start: new Date(), resourceId: 'a' }, { title: 'nice event', start: new Date(), resourceId: 'a' }, { title: 'nice event', start: new Date(), resourceId: 'a' },  { title: 'event 1', start: '2024-04-30T12:30:00Z', resourceId: 'a' },
-        { title: 'event 2', start: '2024-04-02T12:30:00Z', resourceId: 'a' }]}
-        
+        // events={[{ title: 'nice event', start: new Date(), resourceId: 'a' }, { title: 'nice event', start: new Date(), resourceId: 'a' }, { title: 'nice event', start: new Date(), resourceId: 'a' }, { title: 'nice event', start: new Date(), resourceId: 'a' },  { title: 'event 1', start: '2024-04-30T12:30:00Z', resourceId: 'a' },
+        // { title: 'event 2', start: '2024-04-02T12:30:00Z', resourceId: 'a' }]}
+      events={lecture}
+      // eventRender={lecture}
 
-        dateClick={handleDateClick} // Bind handleDateClick function to dateClick event
+        dateClick={handleDateClick} 
         timeZone="Asia/Hebron"
       />
            <Dialog
@@ -357,16 +386,14 @@ const textAraeInput = (
         <DialogTitle id="responsive-dialog-title" sx={{ display: 'flex', alignItems: 'center' }}>
   <span className='mt-4 mb-2'>Lecture Information</span>
   <Tooltip title={longText} arrow placement="bottom-start">
-    <div style={{ marginLeft: 'auto' }}>
-      <FormControlLabel
-      
-        value="Public"
-        control={<IOSSwitch checked={isChecked} onChange={handleChange} inputProps={{ 'aria-label': 'controlled' }} />}
-        label="Public"
-        labelPlacement="top"
-      />
-    </div>
-  </Tooltip>
+      <div style={{ marginLeft: 'auto' }}>
+        <FormControlLabel
+          control={<Switch checked={isChecked} onChange={handleChange} inputProps={{ 'aria-label': 'controlled' }} />}
+          label="Public"
+          labelPlacement="top"
+        />
+      </div>
+    </Tooltip>
 </DialogTitle>
 
 
@@ -407,7 +434,7 @@ const textAraeInput = (
               type="submit"
               disabled={!formik.isValid}
             >
-              Add
+              Book
             </Button>
         </div>
       </form>
