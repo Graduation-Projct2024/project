@@ -50,6 +50,7 @@ export default function Navbar() {
             noWrap
             component="a"
             href="#app-bar-with-responsive-menu"
+            className='pe-5'
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
@@ -125,7 +126,7 @@ export default function Navbar() {
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
-                 <Link href={page} color="inherit" underline='none' >{page}</Link>
+                 <Link href={`/${page}`} color="inherit" underline='none' >{page}</Link>
                 
               </Button>
             ))}

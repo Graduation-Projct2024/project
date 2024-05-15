@@ -12,6 +12,7 @@ import Input from '../../../component/input/Input.jsx';
 import { UserContext } from '../../../context/user/User.jsx';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+import Layout from '@/app/(pages)/Layout/Layout';
 
 export default function page() {
   const [open, setOpen] = React.useState(false);
@@ -120,6 +121,7 @@ export default function page() {
   ));
   return (
     <>
+    <Layout>
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert
           onClose={handleClose}
@@ -168,6 +170,7 @@ export default function page() {
 
  
     </div>
+    </Layout>
     </>
   )
 }
