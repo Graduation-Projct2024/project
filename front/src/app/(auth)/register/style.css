@@ -9,8 +9,8 @@
 
 
 .Body{
-    /* background-color: #e2d4e0; */
-    background: linear-gradient(to right, #e2e2e2, #e2d4e0);
+     background-color: #fff; 
+     background: linear-gradient(to right, #fff, #fff); 
     display: flex;
     align-items: center;
     justify-content: center;

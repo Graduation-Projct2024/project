@@ -3,12 +3,16 @@ import styles from "./page.module.css";
 import Header from "../component/header/Header.jsx";
 import Navbar from "../component/navbar/Navbar.jsx";
 import AllCourses from "./(pages)/AllCourses/AllCourses";
+import Footer from "@/component/footer/Footer";
+import Testimonials from "./(pages)/Testimonials/page";
+import Layout from "./(pages)/Layout/Layout";
 
 export default function Home() {
   return (
-    <main className={styles.main}>
-      <Navbar/>
+    
+      <Layout>
       <Header/>
-    </main>
+      <Testimonials/>
+      </Layout>   
   );
 }
