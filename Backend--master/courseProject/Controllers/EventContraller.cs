@@ -30,7 +30,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult< IReadOnlyList<Event>>> GetAllEventsAsync()
+        public async Task<ActionResult< ApiResponce>> GetAllEventsAsync([FromQuery] PaginationRequest paginationRequest)
         {
             var events = await eventRepo.GetAllEventsAsync();
             if (events == null)
@@ -43,14 +43,16 @@ namespace courseProject.Controllers
             //    events.ImageUrl = $"http://localhost:5134/{events.ImageUrl}";
             //    return events;
             //}).ToList();
-            return Ok(mapperEvent);
+            responce.IsSuccess = true;
+            responce.Result = (Pagination<EventDto>.CreateAsync(mapperEvent, paginationRequest.pageNumber, paginationRequest.pageSize)).Result;
+            return Ok(responce);
         }
 
         [HttpGet("GetAllUndefinedEvents")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<IReadOnlyList<Event>>> GetAllEventsForAccreditAsync()
+        public async Task<ActionResult<ApiResponce>> GetAllEventsForAccreditAsync([FromQuery] PaginationRequest paginationRequest)
         {
             var events = await eventRepo.GetAllEventsForAccreditAsync();
             if(events == null)
@@ -59,8 +61,9 @@ namespace courseProject.Controllers
             }
 
             var mapperEvents = mapper.Map<IReadOnlyList<Event>, IReadOnlyList<EventAccreditDto>>(events);
-            
-            return Ok(mapperEvents);
+            responce.IsSuccess = true;
+            responce.Result = (Pagination<EventAccreditDto>.CreateAsync(mapperEvents, paginationRequest.pageNumber, paginationRequest.pageSize)).Result;
+            return Ok(responce);
         }
 
 

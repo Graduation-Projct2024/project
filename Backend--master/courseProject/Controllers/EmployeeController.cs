@@ -21,7 +21,7 @@ namespace courseProject.Controllers
     {
         private readonly projectDbContext dbContext;
         private readonly IUnitOfWork unitOfWork;
-      //  private readonly IPagenation<T> pagenation;
+        //private readonly IPagenation<T> pagenation;
         private readonly IGenericRepository1<SubAdmin> subAdminRepo;
         private readonly IGenericRepository1<Instructor> instructorRepo;
         private readonly IGenericRepository1<User> userRepo;
@@ -34,7 +34,7 @@ namespace courseProject.Controllers
         {
             this.dbContext = dbContext;
             this.unitOfWork = unitOfWork;
-          //  this.pagenation = pagenation;
+           // this.pagenation = pagenation;
             this.userRepo = userRepo;
             this.mapper = mapper;
             responce = new ApiResponce();
@@ -47,7 +47,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(400)]
         // [Authorize(Policy = "Admin")]
        // [Authorize(Policy = "Admin&subAdmin")]
-        public async Task<ActionResult<IEnumerable<SubAdmin>>> GetAllEmployeeAsync(int pageNumber , int pageSize)
+        public async Task<ActionResult<IReadOnlyList<SubAdmin>>> GetAllEmployeeAsync([FromQuery] PaginationRequest paginationRequest)
         {
             // pagenation.PageSize = pageSize ?? pagenation.PageSize;
             try
@@ -61,23 +61,22 @@ namespace courseProject.Controllers
                 {
                     return NotFound();
                 }
-                var mapperSubAdmin = mapper.Map<IEnumerable<SubAdmin>, IEnumerable<EmployeeDto>>(SubAdmins);
-                foreach (var SubAdmin in mapperSubAdmin)
-                {
-                    SubAdmin.type = "SubAdmin";
-                }
-                var mapperInstructor = mapper.Map<IEnumerable<Instructor>, IEnumerable<EmployeeDto>>(instructors);
-                foreach (var instructor in mapperInstructor)
-                {
-                    instructor.type = "Instructor";
-                }
-                var allEmployees = mapperSubAdmin.Concat(mapperInstructor);
-                allEmployees = allEmployees.OrderBy(x => x.Id);
-                responce.Result = (Pagenation<EmployeeDto>.CreateAsync(allEmployees, pageNumber, pageSize));
+                var mapperSubAdmin = mapper.Map<IReadOnlyList<SubAdmin>, IReadOnlyList<EmployeeDto>>(SubAdmins);
+                //foreach (var SubAdmin in mapperSubAdmin)
+                //{
+                //    SubAdmin.type = "SubAdmin";
+                //}
+                var mapperInstructor = mapper.Map<IReadOnlyList<Instructor>, IReadOnlyList<EmployeeDto>>(instructors);
+                //foreach (var instructor in mapperInstructor)
+                //{
+                //    instructor.type = "Instructor";
+                //}
+                var allEmployees = (mapperSubAdmin.Concat(mapperInstructor)).OrderBy(x=>x.Id).ToList();
+           //     allEmployees = allEmployees.OrderBy(x => x.Id);
+                responce.Result = (Pagination<EmployeeDto>.CreateAsync(allEmployees, paginationRequest.pageNumber, paginationRequest.pageSize)).Result;
                 responce.IsSuccess = true;
                 responce.StatusCode = HttpStatusCode.OK;
                 return Ok(responce);
-
             }
             catch (Exception ex)
             {
@@ -94,7 +93,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<IReadOnlyList<SubAdmin>>> GetAllEmployeeForContactAsync()
+        public async Task<ActionResult<ApiResponce>> GetAllEmployeeForContactAsync([FromQuery] PaginationRequest paginationRequest)
         {
             var subAdmins = await unitOfWork.SubAdminRepository.GetAllEmployeeForContactAsync();
             var instructors = await unitOfWork.instructorRepositpry.GetAllEmployeeForContactAsync();
@@ -105,9 +104,10 @@ namespace courseProject.Controllers
             }
             var mapperSubAdmin = mapper.Map<IReadOnlyList<SubAdmin>, IReadOnlyList<ContactDto>>(subAdmins);
             var mapperInstructor = mapper.Map<IReadOnlyList<Instructor>, IReadOnlyList<ContactDto>>(instructors);
-            var allEmployees = mapperSubAdmin.Concat(mapperInstructor);
-
-            return Ok(allEmployees);
+            var allEmployees = (mapperSubAdmin.Concat(mapperInstructor)).ToList();
+            responce.IsSuccess = true;
+            responce.Result = (Pagination<ContactDto>.CreateAsync(allEmployees, paginationRequest.pageNumber, paginationRequest.pageSize)).Result;
+            return Ok(responce);
         }
 
 
@@ -357,7 +357,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<ApiResponce>> GetAllCoursesByInstructorId (int Instructorid)
+        public async Task<ActionResult<ApiResponce>> GetAllCoursesByInstructorId (int Instructorid , [FromQuery] PaginationRequest paginationRequest)
         {
             if (Instructorid <= 0)
             {
@@ -377,7 +377,7 @@ namespace courseProject.Controllers
             CommonClass.EditImageInFor(courseFond, null);
             responce.StatusCode=HttpStatusCode.OK;
             responce.IsSuccess = true;
-            responce.Result=courseFond;
+            responce.Result=(Pagination<Course>.CreateAsync(courseFond , paginationRequest.pageNumber , paginationRequest.pageSize)).Result;
             return Ok(responce);
         }
 
@@ -484,7 +484,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<ApiResponce>> GetAllSubmissionUsingTaskId(int taskId)
+        public async Task<ActionResult<ApiResponce>> GetAllSubmissionUsingTaskId(int taskId , [FromQuery] PaginationRequest paginationRequest)
         {
             if (taskId <= 0)
             {
@@ -518,7 +518,7 @@ namespace courseProject.Controllers
             var submissionMapper = mapper.Map<IReadOnlyList<Student_Task_Submissions> , IReadOnlyList<StudentSubmissionDTO>>(GetSubmissions);
             responce.IsSuccess= true;
             responce.StatusCode = HttpStatusCode.OK;
-            responce.Result = submissionMapper;
+            responce.Result =  (Pagination<StudentSubmissionDTO>.CreateAsync(submissionMapper , paginationRequest.pageNumber , paginationRequest.pageSize)).Result;
             return Ok( responce );
         }
 
@@ -528,7 +528,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         //[Authorize(Policy ="MainSubAdmin")]
-        public async Task<ActionResult<ApiResponce>> GetAllCustomCoursesToMainSubAdmin()
+        public async Task<ActionResult<ApiResponce>> GetAllCustomCoursesToMainSubAdmin([FromQuery] PaginationRequest paginationRequest)
         {
             try
             {
@@ -546,7 +546,7 @@ namespace courseProject.Controllers
 
                 responce.IsSuccess = true;
                 responce.StatusCode = HttpStatusCode.OK;
-                responce.Result = CustomCoursesMapper;
+                responce.Result = (Pagination<CustomCourseForRetriveDTO>.CreateAsync(CustomCoursesMapper, paginationRequest.pageNumber, paginationRequest.pageSize)).Result;
                 return Ok(responce);
             }
             catch (Exception ex)
@@ -594,7 +594,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
-        public async Task<ActionResult<ApiResponce>> GetAllLecturesByInstructorId(int instructorId)
+        public async Task<ActionResult<ApiResponce>> GetAllLecturesByInstructorId(int instructorId , [FromQuery] PaginationRequest paginationRequest)
         {
             if (instructorId <= 0)
             {
@@ -624,7 +624,7 @@ namespace courseProject.Controllers
             var LecturesMapper = mapper.Map<IReadOnlyList<Consultation>, IReadOnlyList<LecturesForRetriveDTO>>(GetLectures);
             responce.IsSuccess = true;
             responce.StatusCode = HttpStatusCode.OK;
-            responce.Result = LecturesMapper;
+            responce.Result = (Pagination<LecturesForRetriveDTO>.CreateAsync(LecturesMapper, paginationRequest.pageNumber, paginationRequest.pageSize)).Result;
             return Ok(responce);
 
         }
@@ -681,7 +681,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
        // [Authorize(Policy ="MainSubAdmin")]
-        public async Task<ActionResult<ApiResponce>> GetAllRequestFromStudentsToJoinCourses()
+        public async Task<ActionResult<ApiResponce>> GetAllRequestFromStudentsToJoinCourses([FromQuery] PaginationRequest paginationRequest)
         {
             try
             {
@@ -696,7 +696,7 @@ namespace courseProject.Controllers
                 var requestMapper = mapper.Map<IReadOnlyList<StudentCourse>, IReadOnlyList<ViewTheRequestOfJoindCourseDTO>>(getRequests);
                 responce.IsSuccess = true;
                 responce.StatusCode= HttpStatusCode.OK;
-                responce.Result= requestMapper;
+                responce.Result= (Pagination<ViewTheRequestOfJoindCourseDTO>.CreateAsync(requestMapper, paginationRequest.pageNumber, paginationRequest.pageSize)).Result;
                 return Ok(responce);
             }
             catch (Exception ex)
@@ -959,5 +959,26 @@ namespace courseProject.Controllers
                 return BadRequest(responce);
             }
         }
+
+
+
+        [HttpGet("GetAllInstructorSkills")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<ApiResponce>> GetAllInstructorSkills(int instructorId)
+        {
+            if (instructorId <= 0)
+            {
+                responce.StatusCode = HttpStatusCode.BadRequest;
+                responce.ErrorMassages.Add("the instructor id is less or equal 0");
+                return BadRequest(responce);
+            }
+            var getAllHisSkills = await unitOfWork.instructorRepositpry.getAllInstructorSkills(instructorId);
+            responce.Result = getAllHisSkills;
+            return Ok(responce);
+        }
+
+
     }
 }

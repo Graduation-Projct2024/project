@@ -170,6 +170,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [Authorize]
         public async Task<ActionResult<ApiResponce>> EditProfileAsync(int id,[FromForm] ProfileDTO profile)
         {
             if (id <= 0)
@@ -224,7 +225,7 @@ namespace courseProject.Controllers
                         success2 = await unitOfWork.AdminRepository.saveAsync();
                         profileResult = mapper.Map<Admin, ProfileDTO>(adminToUpdate);
                     }
-                    else if (profileToUpdate.role.ToLower() == "subadmin")
+                    else if (profileToUpdate.role.ToLower() == "subadmin" || profileToUpdate.role.ToLower() == "main-subadmin")
                     {
                         SubAdmin subAdminToUpdate = await unitOfWork.SubAdminRepository.GetSubAdminByIdAsync(id);
                         subAdminToUpdate.ImageUrl = imageUrl;
@@ -279,6 +280,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [Authorize]
         public async Task<ActionResult<ApiResponce>> GetUserInfo(int id)
         {
             if (id <= 0)

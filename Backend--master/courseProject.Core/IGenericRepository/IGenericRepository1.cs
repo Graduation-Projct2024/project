@@ -12,8 +12,8 @@ namespace courseProject.Core.IGenericRepository
     public interface IGenericRepository1<T> where T : class
     {
 
-        Task<IEnumerable<T>> GetAllStudentsAsync();
-        Task<IEnumerable<T>> GetAllEmployeeAsync();
+        Task<IReadOnlyList<T>> GetAllStudentsAsync();
+        Task<IReadOnlyList<T>> GetAllEmployeeAsync();
         Task<IReadOnlyList<T>> GetAllCoursesAsync();
         Task<IReadOnlyList<T>> GetAllEventsAsync();
 

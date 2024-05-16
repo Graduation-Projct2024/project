@@ -28,7 +28,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-      //  [Authorize(Policy ="Admin")]
+        [Authorize(Policy ="Admin")]
         public async Task<ActionResult<ApiResponce>> EditOnCourseAfterAccreditByAdmin(int courseId, [FromForm] EditCourseAfterAccreditDTO editedCourse)
         {
             if(courseId == null)
@@ -97,7 +97,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-       // [Authorize(Policy = "Admin")]
+        [Authorize(Policy = "Admin")]
         public async Task<ActionResult<ApiResponce>> AddSkillOptionsByAdmin(string skillName)
         {
             if (skillName == null)

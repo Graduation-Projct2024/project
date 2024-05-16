@@ -28,11 +28,11 @@ namespace courseProject.Repository.GenericRepository
 
    
 
-        public async Task<IEnumerable<T>> GetAllStudentsAsync()
+        public async Task<IReadOnlyList<T>> GetAllStudentsAsync()
         {
             if(typeof(T) == typeof(Student))
             {
-                return (IEnumerable<T>)await  dbContext.students.Include(x => x.user).ToListAsync();
+                return (IReadOnlyList<T>)await  dbContext.students.Include(x => x.user).ToListAsync();
                 
             }
             return await dbContext.Set<T>().ToListAsync();
@@ -40,15 +40,15 @@ namespace courseProject.Repository.GenericRepository
         }
 
 
-        public async Task<IEnumerable<T>> GetAllEmployeeAsync()
+        public async Task<IReadOnlyList<T>> GetAllEmployeeAsync()
         {
             if(typeof(T) == typeof(SubAdmin))
             {
-                return (IEnumerable<T>)await dbContext.subadmins.Include(x => x.user).ToListAsync();
+                return (IReadOnlyList<T>)await dbContext.subadmins.Include(x => x.user).ToListAsync();
             }
             else if (typeof(T) == typeof(Instructor))
             {
-                return (IEnumerable<T>)await dbContext.instructors.Include(x => x.user).ToListAsync();
+                return (IReadOnlyList<T>)await dbContext.instructors.Include(x => x.user).ToListAsync();
             }
             return await dbContext.Set<T>().ToListAsync();
         }

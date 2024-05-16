@@ -27,5 +27,6 @@ namespace courseProject.Core.IGenericRepository
         public Task<IReadOnlyList<InstructorSkills>> GetAllInstructorSkillsRecoredsAsync();
         public Task<IReadOnlyList<Skills>> getAllUnregisteredSkillsOfTheInstructor(int instructorId);
         public Task<IReadOnlyList<Instructor_Working_Hours>> getAListOfInstructorDependOnSkillsAndOfficeTime( int skillID, TimeSpan startTime, TimeSpan endTime, DateTime date );
+        public Task<IReadOnlyList<Skills>> getAllInstructorSkills(int instructorId);
     }
 }

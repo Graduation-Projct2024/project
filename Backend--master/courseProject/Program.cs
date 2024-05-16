@@ -13,7 +13,7 @@ using System;
 using Microsoft.Extensions.FileProviders;
 using courseProject.Configuration;
 using Microsoft.AspNetCore.Authorization;
-
+using courseProject.Authentication;
 namespace courseProject
 {
     public class Program

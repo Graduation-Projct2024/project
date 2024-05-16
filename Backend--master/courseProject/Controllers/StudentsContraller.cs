@@ -45,18 +45,20 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
        
-        public async Task <ActionResult<IEnumerable<Student>>> GetAllStudentsAsync()
+        public async Task <ActionResult<IEnumerable<Student>>> GetAllStudentsAsync([FromQuery] PaginationRequest paginationRequest)
         {
             var Students = await unitOfWork.StudentRepository.GetAllStudentsAsync();
 
             if(Students == null)
             {
-                return NotFound();
+               
+                return  NotFound();
             }
             
-            var mappedStudentDTO = mapper.Map<IEnumerable<Student>, IEnumerable<StudentsInformationDto>>(Students);
-
-            return Ok(mappedStudentDTO);
+            var mappedStudentDTO = mapper.Map<IReadOnlyList<Student>, IReadOnlyList<StudentsInformationDto>>(Students);
+            response.IsSuccess = true;
+            response.Result = (Pagination<StudentsInformationDto>.CreateAsync(mappedStudentDTO, paginationRequest.pageNumber, paginationRequest.pageSize)).Result;
+            return Ok(response);
         }
 
 
@@ -64,7 +66,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<IReadOnlyList<Student>>> GetAllStudentsForContactAsync()
+        public async Task<ActionResult<IReadOnlyList<Student>>> GetAllStudentsForContactAsync([FromQuery] PaginationRequest? paginationRequest)
         {
             var students = await unitOfWork.StudentRepository.GetAllStudentsForContactAsync();
             if (students == null)
@@ -77,7 +79,9 @@ namespace courseProject.Controllers
                 model.ImageUrl = $"http://localhost:5134/{model.ImageUrl}";
                 return model;
             }).ToList();
-            return Ok(mapperStudents);
+            response.IsSuccess = true;
+            response.Result = (Pagination<ContactDto>.CreateAsync(mapperStudents, paginationRequest.pageNumber , paginationRequest.pageSize)).Result;
+            return Ok(response);
 
         }
 
@@ -131,7 +135,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<ApiResponce>> GetEnrolledCourses(int studentid)
+        public async Task<ActionResult<ApiResponce>> GetEnrolledCourses(int studentid , [FromQuery] PaginationRequest paginationRequest)
         {
             if (studentid <= 0)
             {
@@ -152,7 +156,7 @@ namespace courseProject.Controllers
             CommonClass.EditImageInFor(courseFound , null);
             response.IsSuccess = true;
             response.StatusCode = HttpStatusCode.OK;
-            response.Result = Studentfound;
+            response.Result = (Pagination<StudentCourse>.CreateAsync(Studentfound, paginationRequest.pageNumber, paginationRequest.pageSize)).Result; ;
             return Ok(response);
         }
 
@@ -220,7 +224,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<ApiResponce>> GetCourseParticipants(int Courseid)
+        public async Task<ActionResult<ApiResponce>> GetCourseParticipants(int Courseid , [FromQuery] PaginationRequest paginationRequest)
         {
             if (Courseid <= 0)
             {
@@ -250,7 +254,7 @@ namespace courseProject.Controllers
                 var StudentMapper = mapper.Map<IReadOnlyList< Student>,IReadOnlyList<StudentsInformationDto>>(GetStudents);
                 response.IsSuccess = true;
                 response.StatusCode = HttpStatusCode.OK;
-                response.Result = StudentMapper;
+                response.Result = (Pagination<StudentsInformationDto>.CreateAsync(StudentMapper, paginationRequest.pageNumber, paginationRequest.pageSize)).Result;
                 return Ok(response);
             }
             response.IsSuccess = false;
@@ -464,7 +468,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<ApiResponce>> GetAllConsultation(int studentId)
+        public async Task<ActionResult<ApiResponce>> GetAllConsultation(int studentId, [FromQuery] PaginationRequest paginationRequest)
         {
             if (studentId <= 0)
             {
@@ -523,7 +527,7 @@ namespace courseProject.Controllers
             lectureForRetrive = lectureForRetrive.Concat(privateLectures).ToList();
             response.IsSuccess = true;
             response.StatusCode = HttpStatusCode.OK;
-            response.Result = lectureForRetrive;
+            response.Result = (Pagination<PublicLectureForRetriveDTO>.CreateAsync(lectureForRetrive, paginationRequest.pageNumber, paginationRequest.pageSize)).Result; 
             return Ok(response);
         }
 
@@ -691,7 +695,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<ApiResponce>> GetAllGeneralFeedback()
+        public async Task<ActionResult<ApiResponce>> GetAllGeneralFeedback([FromQuery] PaginationRequest paginationRequest)
         {
             var getFeedback = await unitOfWork.StudentRepository.GetFeedbacksByTypeAsync("general - feedback");
             if (getFeedback.Count() == 0)
@@ -703,7 +707,7 @@ namespace courseProject.Controllers
             var feedbackMapper= mapper.Map<IReadOnlyList<Feedback> ,IReadOnlyList<FeedbackForRetriveDTO>> (getFeedback);
             response.IsSuccess = true;
             response.StatusCode= HttpStatusCode.OK;
-            response.Result=feedbackMapper;
+            response.Result=(Pagination<FeedbackForRetriveDTO>.CreateAsync(feedbackMapper, paginationRequest.pageNumber, paginationRequest.pageSize)).Result; 
             return Ok(response);
         }
 
@@ -712,7 +716,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<ApiResponce>> GetAllInstructorFeedback()
+        public async Task<ActionResult<ApiResponce>> GetAllInstructorFeedback([FromQuery] PaginationRequest paginationRequest )
         {
             var getFeedback = await unitOfWork.StudentRepository.GetFeedbacksByTypeAsync("instructor - feedback");
             if (getFeedback.Count() == 0)
@@ -724,7 +728,7 @@ namespace courseProject.Controllers
             var feedbackMapper = mapper.Map<IReadOnlyList<Feedback>, IReadOnlyList<FeedbackForRetriveDTO>>(getFeedback);
             response.IsSuccess = true;
             response.StatusCode = HttpStatusCode.OK;
-            response.Result = feedbackMapper;
+            response.Result = (Pagination<FeedbackForRetriveDTO>.CreateAsync(feedbackMapper, paginationRequest.pageNumber, paginationRequest.pageSize)).Result;
             return Ok(response);
         }
 
@@ -732,7 +736,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<ApiResponce>> GetAllCourseFeedback()
+        public async Task<ActionResult<ApiResponce>> GetAllCourseFeedback([FromQuery] PaginationRequest paginationRequest)
         {
             var getFeedback = await unitOfWork.StudentRepository.GetFeedbacksByTypeAsync("course - feedback");
             if (getFeedback.Count() == 0)
@@ -744,7 +748,7 @@ namespace courseProject.Controllers
             var feedbackMapper = mapper.Map<IReadOnlyList<Feedback>, IReadOnlyList<FeedbackForRetriveDTO>>(getFeedback);
             response.IsSuccess = true;
             response.StatusCode = HttpStatusCode.OK;
-            response.Result = feedbackMapper;
+            response.Result = (Pagination<FeedbackForRetriveDTO>.CreateAsync(feedbackMapper, paginationRequest.pageNumber, paginationRequest.pageSize)).Result;
             return Ok(response);
         }
 
@@ -753,7 +757,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<ApiResponce>> GetAllFeedback()
+        public async Task<ActionResult<ApiResponce>> GetAllFeedback([FromQuery] PaginationRequest paginationRequest)
         {
             var getFeedback = await unitOfWork.StudentRepository.GetAllFeedbacksAsync();
             if (getFeedback.Count() == 0)
@@ -765,7 +769,7 @@ namespace courseProject.Controllers
             var feedbackMapper = mapper.Map<IReadOnlyList<Feedback>, IReadOnlyList<AllFeedbackForRetriveDTO>>(getFeedback);
             response.IsSuccess = true;
             response.StatusCode = HttpStatusCode.OK;
-            response.Result = feedbackMapper;
+            response.Result = (Pagination<AllFeedbackForRetriveDTO>.CreateAsync(feedbackMapper, paginationRequest.pageNumber, paginationRequest.pageSize)).Result;
             return Ok(response);
         }
 

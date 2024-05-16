@@ -12,6 +12,7 @@ using System.Collections;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.AspNetCore.Authorization;
+using courseProject.Repository.GenericRepository;
 
 namespace courseProject.Controllers
 {
@@ -477,7 +478,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         //[Authorize(Policy = "EnrolledInCourse")]
-        public async Task<ActionResult<ApiResponce>> GetAllMaterialInTheCourseAsync([FromQuery]int CourseId)
+        public async Task<ActionResult<ApiResponce>> GetAllMaterialInTheCourseAsync([FromQuery]int CourseId , [FromQuery] PaginationRequest paginationRequest)
         {
             if (CourseId == 0)
             {
@@ -529,7 +530,8 @@ namespace courseProject.Controllers
 
                 }
             }
-
+            //response.IsSuccess = true;
+            //response.Result = arrayList;
             return Ok(arrayList);
 
         }
