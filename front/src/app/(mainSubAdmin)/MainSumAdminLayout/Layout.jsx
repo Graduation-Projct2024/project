@@ -22,6 +22,7 @@ import MenuBookIcon from '@mui/icons-material/MenuBook';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import FeedOutlinedIcon from '@mui/icons-material/FeedOutlined';
 import { deepPurple ,purple} from '@mui/material/colors';
 import Link from '@mui/material/Link';
 import { useRouter } from 'next/navigation'
@@ -30,7 +31,7 @@ import { Avatar, Stack } from '@mui/material';
 import AdbIcon from '@mui/icons-material/Adb';
 import './Layout.css'
 import { UserContext } from '@/context/user/User';
-import SubAdminRoute from '@/app/(auth)/protectedRoute/SubAdminRoute';
+import MainSubAdminRoute from '@/app/(auth)/protectedRoute/MainSubAdminRoute';
 const drawerWidth = 240;
 
 function Layout(props) {
@@ -45,20 +46,20 @@ function Layout(props) {
   const sidebarItems = [
   {
     name: "Dashboard",
-    href: "/dashboardS",
+    href: "/dashboardM",
     icon: DashboardIcon,
     
   },
   {
     name: "Profile",
-    href: `/ProfileS/${userId}`,
+    href: `/ProfileM/${userId}`,
     icon: AccountCircleIcon,
   },
-    // {
-    //   name: "Notification",
-    //   href: "/NotificationS",
-    //   icon: NotificationsIcon,
-    // },
+    {
+      name: "Requests",
+      href: "/Requests",
+      icon: FeedOutlinedIcon,
+    },
     // {
     //   name: "My Lectures",
     //   href: "/myLectures",
@@ -151,7 +152,7 @@ function Layout(props) {
   const container = window !== undefined ? () => window().document.body : undefined;
 
   return (
-    <SubAdminRoute>
+    <MainSubAdminRoute>
     <div className='side-drawer2'>
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -225,7 +226,7 @@ function Layout(props) {
       </Box>
     </Box>
     </div>
-    </SubAdminRoute>
+    </MainSubAdminRoute>
    );
 }
 

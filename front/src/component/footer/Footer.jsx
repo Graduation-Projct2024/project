@@ -15,8 +15,8 @@ export default function Footer() {
   <div className="container">
     <div className="footer-top">
       <div className="row">
-        <div className="col-xl-4 col-lg-4 col-md-6">
-          <div className="footer-widget">
+        <div className="col-xl-4 col-lg-12 col-md-12 ">
+          <div className="footer-widget text-center">
             <div className="footer-logo">
             <AdbIcon className='academyIcon'/>
             </div>
@@ -24,7 +24,7 @@ export default function Footer() {
             <div className="footer-social">
               <span>Follow Us</span>
               <div className="footer-social-icon">
-                <ul className="d-flex">
+                <ul className="d-flex justify-content-center text-md-center text-sm-center">
                   <li className="list-unstyled"><FontAwesomeIcon icon={faFacebookF} className='iconFoter'/></li>
                   <li className="list-unstyled"><FontAwesomeIcon icon={faXTwitter} className='iconFoter'/></li>
                   <li className="list-unstyled"><FontAwesomeIcon icon={faGooglePlusG} className='iconFoter'/></li>
@@ -35,7 +35,7 @@ export default function Footer() {
             </div>
           </div>
         </div>
-        <div className="col-xl-4 col-lg-4 col-md-6">
+        <div className="col-xl-4 col-lg-12 col-md-12">
           <div className="footer-widget">
             <div className="footer-heading">
               <h4 className='text-center'>Quick Links</h4>
@@ -55,21 +55,21 @@ export default function Footer() {
           </div>
         </div>
         
-        <div className="col-xl-4 col-lg-4 col-md-6">
-          <div className="footer-widget">
+        <div className="col-xl-4 col-lg-12 col-md-12">
+          <div className="footer-widget text-center">
             <div className="footer-heading">
               <h4>Contact Us</h4>
             </div>
-            <div className="footer-contact-list">
-              <div className="single-footer-contact-info d-flex">
+            <div className="footer-contact-list text-center">
+              <div className="single-footer-contact-info d-flex justify-content-center">
               <FontAwesomeIcon icon={faHeadphones} className='contactIconn'/>
                 <span className="footer-contact-list-text">+970593925818</span>
               </div>
-              <div className="single-footer-contact-info d-flex">
+              <div className="single-footer-contact-info d-flex justify-content-center">
               <FontAwesomeIcon icon={faEnvelope} className='contactIconn'/>
                 <span className="footer-contact-list-text">tala.ismail.kafa@gmail.com</span>
               </div>
-              <div className="single-footer-contact-info d-flex">
+              <div className="single-footer-contact-info d-flex justify-content-center">
               <FontAwesomeIcon icon={faLocationDot} className='contactIconn'/>
                 <span className="footer-contact-list-text">Tulkarm, Palestine</span>
               </div>

@@ -1,4 +1,3 @@
-'use client'
 import Input from '@/component/input/Input';
 import { editProfile } from '@/component/validation/validation';
 import { UserContext } from '@/context/user/User';
@@ -10,22 +9,11 @@ import Swal from 'sweetalert2';
 
 export default function EditProfile({id , FName , LName  , gender,phoneNumber,DateOfBirth  , address , image}) {
   const {userToken, setUserToken, userData,userId}=useContext(UserContext);
-    const [employeeData, setEmployeeData] = useState({});
-    const [selectedGender, setSelectedGender] = useState('');
-    // const info = useState({
-    //   UId : id,
-    //   UFName : `${FName}`,
-    //   ULName : LName,
-    //   UGender : gender,
-    //   UPhoneNumber : phoneNumber,
-    //   UDOB : DateOfBirth,
-    //   UAddress : address,
-    // })
-      
 
-    // console.log(info);
+    const [employeeData, setEmployeeData] = useState('');
+    const [selectedGender, setSelectedGender] = useState('');
 console.log(id, FName,LName, gender, phoneNumber, DateOfBirth, address, image)
-    console.log(userData);
+    
       const fetchUserData = async () => {
         if(userData){
         try {
@@ -39,13 +27,13 @@ console.log(id, FName,LName, gender, phoneNumber, DateOfBirth, address, image)
 
 useEffect(() => {
       fetchUserData();
-    }, []);
+    }, [id]);
 
     const handleFieldChange = (event) => {
         formik.setFieldValue('image', event.target.files[0]); // Set the file directly to image
       };
 
-     const onSubmit = async (updatedData) => {
+    const onSubmit = async (updatedData) => {
       if(userData){
       try {
         const formData = new FormData();
@@ -76,13 +64,6 @@ useEffect(() => {
         console.error('Error updating employee:', error);
       }}
     };
-    //  useEffect(() => {
-    //   if (employeeData) {
-    //     formik.setValues(employeeData);
-    //   }
-    // }, [employeeData]);
-
-    // console.log(employeeData)
   
     const formik = useFormik({
       initialValues: {
@@ -92,14 +73,19 @@ useEffect(() => {
         address: `${address}`,
         DateOfBirth: `${DateOfBirth}`,
         gender: `${gender}`,
-        image : `${image}`,
+        image : ``,
         
       },
       validationSchema:editProfile,
       onSubmit,
     });
   
-   
+    useEffect(() => {
+      if (employeeData) {
+        formik.setValues(employeeData);
+      }
+    }, [employeeData]);
+
   
     const inputs =[
         {

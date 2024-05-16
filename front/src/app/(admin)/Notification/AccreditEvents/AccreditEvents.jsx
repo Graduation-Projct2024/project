@@ -26,6 +26,8 @@ export default function AccreditEvents() {
     }}
   };
 
+
+
   const accreditEvent = async (eventId , Status) => {
     //setLoader(true);
     console.log(eventId);
@@ -61,10 +63,14 @@ export default function AccreditEvents() {
   useEffect(() => {
     fetchEventsForAccredit();
   }, [accreditEvents,userData]);
+
+
 if(loader){
   return <p>Loading ...</p>
 }
 console.log(accreditEvents);
+
+
   const [searchTerm, setSearchTerm] = useState('');
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
