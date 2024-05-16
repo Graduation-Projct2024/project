@@ -19,7 +19,7 @@ namespace courseProject.Repository.GenericRepository
         public int PageNumber { get; set; } = 1;
 
         public int PageSize { get; set; } = 3;
-        public static int maxPageSize { get; set; } = 5;
+        public static int maxPageSize { get; set; } = 15;
         public int TotalCount { get; }
         public int TotalPages { get; set; }
         public bool HasPreviousPage => PageNumber > 1;
