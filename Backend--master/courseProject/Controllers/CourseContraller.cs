@@ -58,7 +58,7 @@ namespace courseProject.Controllers
                 responce.IsSuccess = false;
                 responce.StatusCode = HttpStatusCode.NotFound;
                 responce.ErrorMassages.Add("Not Has Any Accrefit Course Yet");
-                return NotFound(responce);
+                return Ok(responce);
             }
             var mapperCourse = mapper.Map<IReadOnlyList<Course>, IReadOnlyList<CourseInformationDto>>(courses);
             responce.IsSuccess = true;
@@ -85,7 +85,7 @@ namespace courseProject.Controllers
                     responce.IsSuccess = false;
                     responce.StatusCode = HttpStatusCode.NotFound;
                     responce.ErrorMassages.Add("Not Has Any Accrefit Course Yet");
-                    return NotFound(responce);
+                    return Ok(responce);
                 }
                 var mapperCourse = mapper.Map<IReadOnlyList<Course>, IReadOnlyList<CourseInfoForStudentsDTO>>(courses);
                 responce.IsSuccess = true;
@@ -108,7 +108,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(400)]
 
         //get all courses
-        public async Task<ActionResult<IReadOnlyList<Course>>> GetAllCoursesForAccreditAsync([FromQuery] PaginationRequest paginationRequest)
+        public async Task<ActionResult<ApiResponce>> GetAllCoursesForAccreditAsync([FromQuery] PaginationRequest paginationRequest)
         {
             var courses = await courseRepo.GetAllCoursesForAccreditAsync();
             if (courses.Count() == 0)
@@ -116,7 +116,7 @@ namespace courseProject.Controllers
                 responce.IsSuccess = false;
                 responce.StatusCode = HttpStatusCode.NotFound;
                 responce.ErrorMassages.Add("Not Has Any Course Yet");
-                return NotFound(responce);
+                return (responce);
             }
 
             var mapperCourse = mapper.Map<IReadOnlyList<Course>, IReadOnlyList<CourseAccreditDTO>>(courses);

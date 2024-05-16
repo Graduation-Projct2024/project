@@ -495,7 +495,7 @@ namespace courseProject.Controllers
                 response.IsSuccess = false;
                 response.StatusCode = HttpStatusCode.NotFound;
                 response.ErrorMassages = new List<string>() { "the Material is not found" };
-                return NotFound(response);
+                return Ok(response);
             }            
             ArrayList arrayList = new ArrayList();
 

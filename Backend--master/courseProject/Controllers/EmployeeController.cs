@@ -59,7 +59,9 @@ namespace courseProject.Controllers
                 var instructors = await unitOfWork.instructorRepositpry.GetAllEmployeeAsync();
                 if (SubAdmins == null && instructors == null)
                 {
-                    return NotFound();
+                    responce.StatusCode = HttpStatusCode.NoContent;
+                    responce.ErrorMassages.Add("There is no employee yet");
+                    return Ok(responce);
                 }
                 var mapperSubAdmin = mapper.Map<IReadOnlyList<SubAdmin>, IReadOnlyList<EmployeeDto>>(SubAdmins);
                 //foreach (var SubAdmin in mapperSubAdmin)
@@ -100,7 +102,9 @@ namespace courseProject.Controllers
 
             if (subAdmins == null && instructors == null)
             {
-                return NotFound();
+                responce.StatusCode = HttpStatusCode.NoContent;
+                responce.ErrorMassages.Add("There is no employee yet");
+                return Ok(responce);
             }
             var mapperSubAdmin = mapper.Map<IReadOnlyList<SubAdmin>, IReadOnlyList<ContactDto>>(subAdmins);
             var mapperInstructor = mapper.Map<IReadOnlyList<Instructor>, IReadOnlyList<ContactDto>>(instructors);
@@ -470,7 +474,7 @@ namespace courseProject.Controllers
                 responce.IsSuccess = false;
                 responce.StatusCode = HttpStatusCode.NotFound;
                 responce.ErrorMassages.Add($"The Instructor with Id = {Instructorid} is not add his office hour ");
-                return NotFound(responce);
+                return Ok(responce);
             }
             responce.StatusCode=HttpStatusCode.OK;
             responce.IsSuccess=true;
@@ -538,9 +542,9 @@ namespace courseProject.Controllers
                 if (GetCustomCourse.Count() == 0)
                 {
                     responce.IsSuccess = false;
-                    responce.StatusCode = HttpStatusCode.NotFound;
+                    responce.StatusCode = HttpStatusCode.NoContent;
                     responce.ErrorMassages.Add("No Request To Custom Course Yet");
-                    return NotFound(responce);
+                    return Ok(responce);
                 }
                 var CustomCoursesMapper = mapper.Map<IReadOnlyList<Request>, IReadOnlyList<CustomCourseForRetriveDTO>>(GetCustomCourse);
 
@@ -617,9 +621,9 @@ namespace courseProject.Controllers
             {
                 responce.IsSuccess = false;
                 responce.StatusCode= HttpStatusCode.NoContent;
-              //  responce.ErrorMassages.Add("No Consultation Lectures For This Instructor");
-                Response.Headers.Add("Message", "No Consultation Lectures For This Instructor");
-                return  NoContent();
+                responce.ErrorMassages.Add("No Consultation Lectures For This Instructor");
+               // Response.Headers.Add("Message", "No Consultation Lectures For This Instructor");
+                return  Ok(responce);
             }
             var LecturesMapper = mapper.Map<IReadOnlyList<Consultation>, IReadOnlyList<LecturesForRetriveDTO>>(GetLectures);
             responce.IsSuccess = true;
@@ -640,9 +644,9 @@ namespace courseProject.Controllers
             if (GetInstructors.Count() == 0)
             {
                 responce.IsSuccess = false;
-                responce.StatusCode = HttpStatusCode.NotFound;
+                responce.StatusCode = HttpStatusCode.NoContent;
                 responce.ErrorMassages.Add("Not have any instructor account yet ");
-                return NotFound(responce);
+                return Ok(responce);
             }
             var CustomCoursesMapper = mapper.Map<IEnumerable<Instructor>, IEnumerable<EmployeeListDTO>>(GetInstructors);
 
@@ -666,8 +670,8 @@ namespace courseProject.Controllers
                 responce.StatusCode = HttpStatusCode.NoContent;
                 var message = "Not have any instructor account yet ";
                 responce.ErrorMassages.Add(message);
-                Response.Headers.Add("Message", message);
-                return NoContent();
+              //  Response.Headers.Add("Message", message);
+                return Ok(responce);
             }
             var InstrctorOfficeHoursMapper = mapper.Map<IReadOnlyList<Instructor_Working_Hours>, IReadOnlyList<Instructor_OfficeHoursDTO>>(AllOfficeHours);
             responce.IsSuccess = true;
@@ -861,7 +865,7 @@ namespace courseProject.Controllers
                     responce.IsSuccess = false;
                     responce.StatusCode = HttpStatusCode.NotFound;
                     responce.ErrorMassages.Add($"The skill with id = {skillId} is not found ");
-                    return BadRequest(responce);
+                    return Ok(responce);
                 }
                 var getInstructors = await unitOfWork.instructorRepositpry.getAListOfInstructorDependOnSkillsAndOfficeTime(skillId, StartTime, EndTime, date);
                 if (getInstructors.Count() == 0)

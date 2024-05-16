@@ -35,7 +35,10 @@ namespace courseProject.Controllers
             var events = await eventRepo.GetAllEventsAsync();
             if (events == null)
             {
-                return NotFound();
+                responce.StatusCode = HttpStatusCode.NoContent;
+                responce.ErrorMassages.Add("There is no accredit events yet");
+                return Ok(responce);
+                
             }
             var mapperEvent = mapper.Map<IReadOnlyList<Event>, IReadOnlyList<EventDto>>(events);
             //var updatedEvents = mapperEvent.Select(events =>
@@ -57,7 +60,9 @@ namespace courseProject.Controllers
             var events = await eventRepo.GetAllEventsForAccreditAsync();
             if(events == null)
             {
-                return NotFound();
+                responce.StatusCode = HttpStatusCode.NoContent;
+                responce.ErrorMassages.Add("There is no events yet");
+                return Ok(responce); 
             }
 
             var mapperEvents = mapper.Map<IReadOnlyList<Event>, IReadOnlyList<EventAccreditDto>>(events);
