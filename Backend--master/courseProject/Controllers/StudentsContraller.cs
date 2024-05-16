@@ -51,8 +51,10 @@ namespace courseProject.Controllers
 
             if(Students == null)
             {
-               
-                return  NotFound();
+
+                response.StatusCode = HttpStatusCode.NoContent;
+                response.ErrorMassages.Add("There is no students yet");
+                return Ok(response);
             }
             
             var mappedStudentDTO = mapper.Map<IReadOnlyList<Student>, IReadOnlyList<StudentsInformationDto>>(Students);
@@ -71,7 +73,9 @@ namespace courseProject.Controllers
             var students = await unitOfWork.StudentRepository.GetAllStudentsForContactAsync();
             if (students == null)
             {
-                return NotFound();
+                response.StatusCode = HttpStatusCode.NoContent;
+                response.ErrorMassages.Add("There is no students yet");
+                return Ok(response);
             }
             var mapperStudents = mapper.Map<IReadOnlyList<Student>, IReadOnlyList<ContactDto>>(students);
             var updatedStudents = mapperStudents.Select(model =>
@@ -150,7 +154,7 @@ namespace courseProject.Controllers
                 response.IsSuccess = false;
                 response.StatusCode = HttpStatusCode.NotFound;
                 response.ErrorMassages = new List<string>() { $"The Student Of Id = { studentid} Does Not Enroll Any Course " };
-                return NotFound(response);
+                return Ok(response);
             }
             var courseFound =   Studentfound.Select(x => x.Course).ToList();
             CommonClass.EditImageInFor(courseFound , null);
@@ -249,7 +253,7 @@ namespace courseProject.Controllers
                     response.IsSuccess = false;
                     response.StatusCode = HttpStatusCode.NotFound;
                     response.ErrorMassages = new List<string>() { "This Course Does Not Has Any Student!" };
-                    return NotFound(response);
+                    return Ok(response);
                 }
                 var StudentMapper = mapper.Map<IReadOnlyList< Student>,IReadOnlyList<StudentsInformationDto>>(GetStudents);
                 response.IsSuccess = true;

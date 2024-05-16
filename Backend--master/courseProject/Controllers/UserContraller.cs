@@ -185,7 +185,7 @@ namespace courseProject.Controllers
                 response.IsSuccess = false;
                 response.StatusCode = HttpStatusCode.NotFound;
                 response.ErrorMassages = new List<string>() { "the user is not found" };
-                return NotFound(response);
+                return Ok(response);
             }
             if (!ModelState.IsValid)
             {
