@@ -47,7 +47,9 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<IReadOnlyList<Course>>> GetAllCoursesAsync()
+
+        //get all accredits courses
+        public async Task<ActionResult<ApiResponce>> GetAllCoursesAsync([FromQuery] PaginationRequest paginationRequest)
         {
             var courses = await courseRepo.GetAllCoursesAsync();
 
@@ -61,7 +63,7 @@ namespace courseProject.Controllers
             var mapperCourse = mapper.Map<IReadOnlyList<Course>, IReadOnlyList<CourseInformationDto>>(courses);
             responce.IsSuccess = true;
             responce.StatusCode=HttpStatusCode.OK;
-            responce.Result = mapperCourse;
+            responce.Result = (Pagination<CourseInformationDto>.CreateAsync(mapperCourse, paginationRequest.pageNumber, paginationRequest.pageSize)).Result;
             return Ok(responce);
         }
 
@@ -69,7 +71,8 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<IReadOnlyList<Course>>> GetAllCourses(int studentId)
+        [Authorize(Policy ="Student")]
+        public async Task<ActionResult<IReadOnlyList<Course>>> GetAllCourses(int studentId , [FromQuery] PaginationRequest paginationRequest)
         {
             try
             {
@@ -87,7 +90,7 @@ namespace courseProject.Controllers
                 var mapperCourse = mapper.Map<IReadOnlyList<Course>, IReadOnlyList<CourseInfoForStudentsDTO>>(courses);
                 responce.IsSuccess = true;
                 responce.StatusCode = HttpStatusCode.OK;
-                responce.Result = mapperCourse;
+                responce.Result = (Pagination<CourseInfoForStudentsDTO>.CreateAsync(mapperCourse, paginationRequest.pageNumber, paginationRequest.pageSize)).Result;
                 return Ok(responce);
             }
             catch (Exception ex)
@@ -103,7 +106,9 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<IReadOnlyList<Course>>> GetAllCoursesForAccreditAsync()
+
+        //get all courses
+        public async Task<ActionResult<IReadOnlyList<Course>>> GetAllCoursesForAccreditAsync([FromQuery] PaginationRequest paginationRequest)
         {
             var courses = await courseRepo.GetAllCoursesForAccreditAsync();
             if (courses.Count() == 0)
@@ -118,7 +123,7 @@ namespace courseProject.Controllers
 
             responce.IsSuccess = true;
             responce.StatusCode = HttpStatusCode.OK;
-            responce.Result = mapperCourse;
+            responce.Result = (Pagination<CourseAccreditDTO>.CreateAsync(mapperCourse, paginationRequest.pageNumber, paginationRequest.pageSize)).Result;
             
             return Ok(responce);
         }
@@ -131,6 +136,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize(Policy ="SubAdmin")]
         public async Task<ActionResult<Course>> createCourse([FromForm] CourseForCreateDTO model , int? StudentId)
         {
             if (! model.GetType().GetProperties()
@@ -203,6 +209,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize(Policy ="SubAdmin")]
         public async Task<ActionResult<Event>> createEvent([FromForm]EventForCreateDTO model)
         {
             await unitOfWork.FileRepository.UploadFile1(model.image);
@@ -385,7 +392,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<ApiResponce>> GetALlUndefinedCoursesForSubAdmins(int subAdminId)
+        public async Task<ActionResult<ApiResponce>> GetALlUndefinedCoursesForSubAdmins(int subAdminId , [FromQuery] PaginationRequest paginationRequest)
         {
             try
             {
@@ -402,7 +409,7 @@ namespace courseProject.Controllers
                 var mapperCourse = mapper.Map<IReadOnlyList<Course>, IReadOnlyList<CourseInformationDto>>(allUndefinedCourses);
                 responce.IsSuccess = true;
                 responce.StatusCode = HttpStatusCode.OK;
-                responce.Result = mapperCourse;
+                responce.Result = (Pagination<CourseInformationDto>.CreateAsync(mapperCourse, paginationRequest.pageNumber, paginationRequest.pageSize)).Result;
                 return Ok(responce);
 
             }

@@ -21,7 +21,8 @@ namespace courseProject.MappingProfile
             CreateMap<SubAdmin , EmployeeDto>()
                 .ForMember(x=>x.FName , o=>o.MapFrom(y=>y.user.userName))
                 .ForMember(x => x.Id, o => o.MapFrom(y => y.SubAdminId))
-                .ForMember(x=>x.email , o=>o.MapFrom(y=>y.user.email));
+                .ForMember(x=>x.email , o=>o.MapFrom(y=>y.user.email))
+                .ForMember(x=>x.type , o=>o.MapFrom(y=>y.user.role));
 
             CreateMap<Instructor, EmployeeDto>()
                 .ForMember(x => x.FName, o => o.MapFrom(y => y.user.userName))

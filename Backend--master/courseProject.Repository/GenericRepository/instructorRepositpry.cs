@@ -39,7 +39,7 @@ namespace courseProject.Repository.GenericRepository
 
         public async Task<IReadOnlyList<Course>> GetAllCoursesGivenByInstructorIdAsync(int Instructorid)
         {
-           return  await dbContext.courses.Where(x=>x.InstructorId== Instructorid && x.status.ToLower()== "accredit").ToListAsync();
+           return  await dbContext.courses.Where(x=>x.InstructorId== Instructorid && (x.status.ToLower()== "accredit" || x.status.ToLower() == "start" || x.status.ToLower() == "finished")).ToListAsync();
         }
 
 
@@ -146,6 +146,11 @@ namespace courseProject.Repository.GenericRepository
             (startTime <= y.startTime && endTime >= y.endTime)
         )))
     .ToListAsync();
+        }
+
+        public async Task<IReadOnlyList<Skills>> getAllInstructorSkills(int instructorId)
+        {
+            return await dbContext.Skills.Where(x=>x.instructorSkills.Any(y=>y.InstructorId == instructorId)).ToListAsync();
         }
     }
 }
