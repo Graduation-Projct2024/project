@@ -17,7 +17,7 @@ import Link from '@mui/material/Link';
 import { useRouter } from 'next/navigation'
 const pages = ['About','AllCourses', 'Contact'];
 const settings = ['Login', 'Register'];
-
+import './navbar.css'
 export default function Navbar() {
   const router = useRouter();
 
@@ -41,9 +41,10 @@ export default function Navbar() {
 
 
   return (
-    <AppBar position="fixed" color='secondary'>
+    <AppBar position="fixed">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
+          {/* <Link className='text-decoration-none d-flex gap-1 text-white' href='/'> */}
           <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
           <Typography
             variant="h6"
@@ -63,6 +64,7 @@ export default function Navbar() {
           >
             LOGO
           </Typography>
+          
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
@@ -119,6 +121,7 @@ export default function Navbar() {
           >
             LOGO
           </Typography>
+          
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
               <Button
@@ -159,7 +162,7 @@ export default function Navbar() {
             >
               {settings.map((setting) => (
                 <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Link href='/Login' color="inherit"  underline='none'>{setting}</Link>
+                  <Link href='/login' color="inherit"  underline='none'>{setting}</Link>
                 </MenuItem>
               ))}
             </Menu>

@@ -1,0 +1,12 @@
+.side-drawer{
+    background-color: #4C5372 !important;
+    color: #fffdf6;
+    height:100%;
+}
+.side-drawer span, .side-drawer a,.side-drawer svg{
+    color: #fffdf6;
+}
+.css-d9ml5t-MuiDrawer-docked .MuiDrawer-paper {
+    background-color: #4C5372 !important;
+    color: #fffdf6;
+}

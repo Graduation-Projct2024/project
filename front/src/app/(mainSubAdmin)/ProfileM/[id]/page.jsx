@@ -7,14 +7,12 @@ import { faEnvelope, faPen } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './Profile.css'
 import '../../../(admin)/dashboard/dashboard.css'
-import { UserContext } from '@/context/user/User';
 import EditProfile from './EditProfile';
 import '../../../../../node_modules/bootstrap/dist/js/bootstrap.bundle'
-import Layout from '../../instructorLayout/Layout';
-import WeeklyHours from './WeeklyHours';
-import ViewWeeklyHours from './ViewWeeklyHours';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, useMediaQuery, useTheme } from '@mui/material';
-
+import { UserContext } from '@/context/user/User';
+import Layout from '../../MainSumAdminLayout/Layout';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, useMediaQuery, useTheme } from '@mui/material';
+import { Stack } from '@mui/system';
 
 export default function page({params}) {
   const {userToken, setUserToken, userData,userId}=useContext(UserContext);
@@ -55,7 +53,7 @@ const handleCloseUpdate = () => {
       }}
       
   }
-  console.log(userData)
+  console.log(user)
   useEffect(()=>{
       getUser();
   },[user,userData])
@@ -93,7 +91,7 @@ const handleCloseUpdate = () => {
                           <div className="row">
                             {userData &&
                             <EditProfile id={params.id}  FName = {userData.userName} LName= {userData.lName}  gender = {userData.gender} phoneNumber = {userData.phoneNumber} DateOfBirth = {userData.dateOfBirth} address= {userData.address} image = {userData.imageUrl}/>
-                           }</div>
+                            }</div>
                         </div>
                       </div>
                     </div>
@@ -135,8 +133,6 @@ const handleCloseUpdate = () => {
          </Button>
        </DialogActions>
         </Dialog>
-
-
              <div className="d-flex ps-xl-4 pt-3 gap-2 role justify-content-xl-start fs-5 fw-bold justify-content-lg-center justify-content-md-center justify-content-sm-center justify-content-center">
                 <FontAwesomeIcon icon={faUser} className='pt-1'/>
                 <p className='text-uppercase'>{user.role}</p>
@@ -163,11 +159,11 @@ const handleCloseUpdate = () => {
               <div className="col-xl-10">
               <div className="d-flex justify-content-xl-start justify-content-lg-center justify-content-md-center justify-content-sm-center justify-content-center">
                     <p className='fw-bold labels'>Email:</p>
-                    <p className=' info ps-2'>{user.email}</p>
+                    <p className=' info ps-4'>{user.email}</p>
                   </div>
                   <div className="d-flex justify-content-xl-start justify-content-lg-center justify-content-md-center justify-content-sm-center justify-content-center">
                     <p className='fw-bold labels'>Address:</p>
-                    <p className=' info ps-2'>{user.address}</p>
+                    <p className=' info ps-4'>{user.address}</p>
                   </div>
               </div>
                 
@@ -184,8 +180,6 @@ const handleCloseUpdate = () => {
           
         </div>
       </div>
-      <ViewWeeklyHours id={params.id}/>
-      <WeeklyHours id = {params.id}/>
     </div>
     </Layout>
   )
