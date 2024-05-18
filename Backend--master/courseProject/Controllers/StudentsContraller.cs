@@ -44,7 +44,8 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-       
+        [Authorize(Policy = "Admin")]
+
         public async Task <ActionResult<IEnumerable<Student>>> GetAllStudentsAsync([FromQuery] PaginationRequest paginationRequest)
         {
             var Students = await unitOfWork.StudentRepository.GetAllStudentsAsync();
@@ -68,6 +69,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [Authorize(Policy = "Admin")]
         public async Task<ActionResult<IReadOnlyList<Student>>> GetAllStudentsForContactAsync([FromQuery] PaginationRequest? paginationRequest)
         {
             var students = await unitOfWork.StudentRepository.GetAllStudentsForContactAsync();
@@ -94,6 +96,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+       // [Authorize(Policy = "Student")]
         public async Task<ActionResult<ApiResponce>> EnrollInCourseAsync (StudentCourseDTO studentCourseDTO)
         {
             if (studentCourseDTO == null)
@@ -139,6 +142,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [Authorize(Policy = "Student")]
         public async Task<ActionResult<ApiResponce>> GetEnrolledCourses(int studentid , [FromQuery] PaginationRequest paginationRequest)
         {
             if (studentid <= 0)
@@ -168,7 +172,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-
+        [Authorize(Policy = "Student")]
         public async Task<ActionResult<ApiResponce>> AddTaskByStudent(int Studentid , int taskid ,[FromForm] SubmissionsDTO submissions)
         {
             if (Studentid<=0 || taskid<=0)
@@ -272,6 +276,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [Authorize(Policy = "Student")]
         public async Task<ActionResult<ApiResponce>> RequestToCreateACustomCourse (int studentid  , [FromForm] StudentCustomCourseDTO studentCustomCourse)
         {
             if(studentid <=0 )
@@ -322,6 +327,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [Authorize(Policy = "Student")]
         public async Task<ActionResult<ApiResponce>> BooKLectureByStudent(int studentId , DateTime date , string startTime , string endTime , [FromForm] BookALectureDTO bookALecture)
         {
             try
@@ -418,6 +424,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [Authorize(Policy = "Student")]
         public async Task<ActionResult<ApiResponce>> JoinToAPublicLecture(int StudentId , int ConsultaionId)
         {
             if (StudentId <= 0)
@@ -472,6 +479,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [Authorize]
         public async Task<ActionResult<ApiResponce>> GetAllConsultation(int studentId, [FromQuery] PaginationRequest paginationRequest)
         {
             if (studentId <= 0)
@@ -540,6 +548,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [Authorize]
         public async Task<ActionResult<ApiResponce>> GetAConsultationById(int consultationId)
         {
             if (consultationId <= 0)
@@ -579,6 +588,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [Authorize(Policy ="Student")]
         public async Task<ActionResult<ApiResponce>> AddInstructorFeedback(int studentId, int InstructorId, FeedbackDTO Feedback)
         {
             var getStudents = await unitOfWork.StudentRepository.GetAllStudentsAsync();
@@ -624,6 +634,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [Authorize(Policy = "Student")]
         public async Task<ActionResult<ApiResponce>> AddCourseFeedback(int studentId, int courseId, FeedbackDTO Feedback)
         {
             var getStudents = await unitOfWork.StudentRepository.GetAllStudentsAsync();
@@ -667,6 +678,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [Authorize(Policy = "Student")]
         public async Task<ActionResult<ApiResponce>> AddGeneralFeedback(int studentId, FeedbackDTO Feedback)
         {
             var getStudents = await unitOfWork.StudentRepository.GetAllStudentsAsync();
@@ -812,6 +824,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [Authorize(Policy = "MainSubAdmin")]
         public async Task<ActionResult<ApiResponce>> ApprovalForTheStudentToJoinTheCourse(int courseId, int studentId, string status)
         {
             if (courseId <= 0)

@@ -116,8 +116,18 @@ namespace courseProject.Repository.GenericRepository
             return await dbContext.studentCourses.Include(x => x.Student)
                                                       .ThenInclude(x => x.user)
                                                  .Include(x => x.Course)
-                                                 .Where(x => x.status.ToLower() == "waiting")
+                                                // .Where(x => x.status.ToLower() == "waiting")
                                                  .ToListAsync();
+        }
+
+        public async Task RemoveSubAdmin(SubAdmin subAdmin)
+        {
+            dbContext.subadmins.Remove(subAdmin);
+        }
+
+        public async Task editRole(User user)
+        {
+            dbContext.users.Update(user);
         }
 
         //public async Task<Event> GetEventById(int id)

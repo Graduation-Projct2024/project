@@ -18,7 +18,7 @@
         public string? SubAdminLName { get; set; }
         public string? InstructorFName { get; set; }
         public string? InstructorLName { get; set; }
-
+        public int? totalHours { get; set; }
 
 
 

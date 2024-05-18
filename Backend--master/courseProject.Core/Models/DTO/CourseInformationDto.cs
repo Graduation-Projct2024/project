@@ -19,7 +19,10 @@ namespace courseProject.Core.Models.DTO
         public string InstructorName { get; set; }
         public int SubAdminId { get; set; }
         public string SubAdminName { get; set; }
-     
+
+        public string? Deadline { get; set; }
+        public int? limitNumberOfStudnet { get; set; }
+        public int? totalHours { get; set; }
 
     }
 }

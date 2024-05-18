@@ -128,5 +128,10 @@ namespace courseProject.Repository.GenericRepository
         {
             return await dbContext.users.FirstOrDefaultAsync(x => x.UserId == UserId);
         }
+
+        public async Task<IReadOnlyList< User>> getAllMainSubAmdinRole()
+        {
+           return await dbContext.users.Where(x => x.role.ToLower() == "main-subadmin").ToListAsync();
+        }
     }
 }

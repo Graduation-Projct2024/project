@@ -47,7 +47,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-
+        
         //get all accredits courses
         public async Task<ActionResult<ApiResponce>> GetAllCoursesAsync([FromQuery] PaginationRequest paginationRequest)
         {
@@ -62,7 +62,7 @@ namespace courseProject.Controllers
             }
             var mapperCourse = mapper.Map<IReadOnlyList<Course>, IReadOnlyList<CourseInformationDto>>(courses);
             responce.IsSuccess = true;
-            responce.StatusCode=HttpStatusCode.OK;
+            responce.StatusCode = HttpStatusCode.OK;
             responce.Result = (Pagination<CourseInformationDto>.CreateAsync(mapperCourse, paginationRequest.pageNumber, paginationRequest.pageSize)).Result;
             return Ok(responce);
         }
@@ -71,8 +71,8 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        [Authorize(Policy ="Student")]
-        public async Task<ActionResult<IReadOnlyList<Course>>> GetAllCourses(int studentId , [FromQuery] PaginationRequest paginationRequest)
+        [Authorize(Policy = "Student")]
+        public async Task<ActionResult<IReadOnlyList<Course>>> GetAllCourses(int studentId, [FromQuery] PaginationRequest paginationRequest)
         {
             try
             {
@@ -124,7 +124,7 @@ namespace courseProject.Controllers
             responce.IsSuccess = true;
             responce.StatusCode = HttpStatusCode.OK;
             responce.Result = (Pagination<CourseAccreditDTO>.CreateAsync(mapperCourse, paginationRequest.pageNumber, paginationRequest.pageSize)).Result;
-            
+
             return Ok(responce);
         }
 
@@ -136,12 +136,12 @@ namespace courseProject.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [Authorize(Policy ="SubAdmin")]
-        public async Task<ActionResult<Course>> createCourse([FromForm] CourseForCreateDTO model , int? StudentId)
+        [Authorize(Policy = "SubAdmin , Main-SubAdmin")]
+        public async Task<ActionResult<Course>> createCourse([FromForm] CourseForCreateDTO model, int? StudentId)
         {
-            if (! model.GetType().GetProperties()
-                .Select(x=>x.GetValue(model))
-                .Any(Value =>Value !=null)  )
+            if (!model.GetType().GetProperties()
+                .Select(x => x.GetValue(model))
+                .Any(Value => Value != null))
             {
                 responce.IsSuccess = false;
                 responce.StatusCode = HttpStatusCode.NotFound;
@@ -155,16 +155,16 @@ namespace courseProject.Controllers
                 return BadRequest(responce);
             }
             await unitOfWork.FileRepository.UploadFile1(model.image);
-            
+
             var courseMapped = mapper.Map<Course>(model);
             var requestMapped = mapper.Map<Request>(model);
             var admin = await unitOfWork.UserRepository.GetUserByRoleAsync("admin");
             requestMapped.AdminId = admin.UserId;
-            if(StudentId != null)
+            if (StudentId != null)
             {
                 requestMapped.StudentId = StudentId;
             }
-            courseMapped.ImageUrl = "Files\\"+ await unitOfWork.FileRepository.UploadFile1(model.image);
+            courseMapped.ImageUrl = "Files\\" + await unitOfWork.FileRepository.UploadFile1(model.image);
 
             using (var transaction = await unitOfWork.SubAdminRepository.BeginTransactionAsync())
             {
@@ -182,7 +182,7 @@ namespace courseProject.Controllers
 
                     if (success1 > 0 && success2 > 0)
                     {
-                        await transaction.CommitAsync();                        
+                        await transaction.CommitAsync();
                         responce.StatusCode = (HttpStatusCode)StatusCodes.Status201Created;
                         responce.IsSuccess = true;
                         responce.Result = model;
@@ -209,8 +209,8 @@ namespace courseProject.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [Authorize(Policy ="SubAdmin")]
-        public async Task<ActionResult<Event>> createEvent([FromForm]EventForCreateDTO model)
+        [Authorize(Policy = "SubAdmin , Main-SubAdmin")]
+        public async Task<ActionResult<Event>> createEvent([FromForm] EventForCreateDTO model)
         {
             await unitOfWork.FileRepository.UploadFile1(model.image);
 
@@ -226,7 +226,7 @@ namespace courseProject.Controllers
                     await unitOfWork.SubAdminRepository.CreateRequest(requestMapped);
                     var success1 = await unitOfWork.SubAdminRepository.saveAsync();
 
-                    
+
                     var eventid = mapper.Map<Request, Event>(requestMapped);
                     EventMapped.requestId = eventid.Id;
                     await unitOfWork.SubAdminRepository.CreateEvent(EventMapped);
@@ -263,32 +263,34 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<ApiResponce>> EditCourseStatus( int courseId , string Status )
-        {            
+        [Authorize(Policy = "Admin")]
+        public async Task<ActionResult<ApiResponce>> EditCourseStatus(int courseId, string Status)
+        {
             var entity = await unitOfWork.CourseRepository.GetCourseByIdAsync(courseId);
             if (entity == null)
             {
                 return NotFound();
-            }            
+            }
             Expression<Func<Course, string>> path = x => x.status;
             var patchDocument = new JsonPatchDocument<Course>();
             patchDocument.Replace(path, Status);
             entity.status = Status;
             // jsonPatch.ApplyTo(entity, ModelState);
-           // jsonPatch.Replace(path , "Accredit");
+            // jsonPatch.Replace(path , "Accredit");
             await unitOfWork.SubAdminRepository.updateCourse(entity);
-           await unitOfWork.SubAdminRepository.saveAsync();
+            await unitOfWork.SubAdminRepository.saveAsync();
             return Ok(entity);
         }
-        
+
 
         [HttpPatch("accreditEvent")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [Authorize(Policy ="Admin")]
         public async Task<ActionResult<ApiResponce>> EditEventStatus(int eventId, string Status)
         {
-            var entity = await unitOfWork.eventRepository.GetEventByIdAsync( eventId);
+            var entity = await unitOfWork.eventRepository.GetEventByIdAsync(eventId);
 
             if (entity == null)
             {
@@ -319,9 +321,9 @@ namespace courseProject.Controllers
                 responce.ErrorMassages.Add($"The Course Id = {id} is less or equal 0 ");
                 return BadRequest(responce);
             }
-           
-           var coursee = await  unitOfWork.CourseRepository.GetCourseByIdAsync(id);
-            if (coursee == null )
+
+            var coursee = await unitOfWork.CourseRepository.GetCourseByIdAsync(id);
+            if (coursee == null)
             {
                 responce.IsSuccess = false;
                 responce.StatusCode = HttpStatusCode.NotFound;
@@ -340,11 +342,11 @@ namespace courseProject.Controllers
 
 
 
-        [HttpPost("EditCourse")]
+        [HttpPut("EditCourse")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        //[Authorize(Policy = "subAdmin")]
+        [Authorize(Policy = "SubAdmin , Main-SubAdmin")]
         public async Task<ActionResult<ApiResponce>> EditCourseBeforeAccredit(int id,[FromForm] CourseForEditDTO course)
         {
             if (id <= 0)
@@ -392,6 +394,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [Authorize(Policy = "SubAdmin , Main-SubAdmin")]
         public async Task<ActionResult<ApiResponce>> GetALlUndefinedCoursesForSubAdmins(int subAdminId , [FromQuery] PaginationRequest paginationRequest)
         {
             try

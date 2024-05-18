@@ -263,7 +263,7 @@ namespace courseProject.Controllers
                         response.Result = profileResult;
                         return Ok(response);
                     }
-                    return BadRequest(response);
+                    return  BadRequest(response);
                 }
                 catch (Exception ex)
                 {
