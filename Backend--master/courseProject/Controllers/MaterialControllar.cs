@@ -43,12 +43,20 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+       // [Authorize(Policy ="Instructor")]
         public async Task<ActionResult<ApiResponce>> AddTask( [FromForm] TaskDTO taskDTO)
         {
             await unitOfWork.FileRepository.UploadFile1(taskDTO.pdf);
             var taskMapped = mapper.Map<TaskDTO, CourseMaterial>(taskDTO);
             taskMapped.type = "Task";
-            taskMapped.courseId = taskDTO.courseId;
+           // taskMapped.courseId = taskDTO.courseId;
+           // var getInstructor = await unitOfWork.instructorRepositpry.getInstructorByIdAsync(taskDTO.InstructorId);
+            var getcourses = await unitOfWork.instructorRepositpry.GetAllCoursesGivenByInstructorIdAsync(taskDTO.InstructorId);
+            if(! getcourses.Any(x=>x.Id == taskDTO.courseId))
+            {
+                response.ErrorMassages.Add("You are not allowed to add to this course");
+                return Unauthorized(response);
+            }
             taskMapped.pdfUrl = "Files\\" + await unitOfWork.FileRepository.UploadFile1(taskDTO.pdf);
             await unitOfWork.instructorRepositpry.AddMaterial(taskMapped);
             var success = await unitOfWork.instructorRepositpry.saveAsync();
@@ -77,6 +85,12 @@ namespace courseProject.Controllers
             await unitOfWork.FileRepository.UploadFile1(fileDTO.pdf);
             var fileMapped = mapper.Map<FileDTO, CourseMaterial>(fileDTO);
             fileMapped.type = "File";
+            var getcourses = await unitOfWork.instructorRepositpry.GetAllCoursesGivenByInstructorIdAsync(fileDTO.InstructorId);
+            if (!getcourses.Any(x => x.Id == fileDTO.courseId))
+            {
+                response.ErrorMassages.Add("You are not allowed to add to this course");
+                return Unauthorized(response);
+            }
             fileMapped.pdfUrl = "Files\\" + await unitOfWork.FileRepository.UploadFile1(fileDTO.pdf);
             await unitOfWork.instructorRepositpry.AddMaterial(fileMapped);
             var success = await unitOfWork.instructorRepositpry.saveAsync();
@@ -104,6 +118,12 @@ namespace courseProject.Controllers
            
             var AnnouncementMapped = mapper.Map<AnnouncementDTO, CourseMaterial>(AnnouncementDTO);
             AnnouncementMapped.type = "Announcement";
+            var getcourses = await unitOfWork.instructorRepositpry.GetAllCoursesGivenByInstructorIdAsync(AnnouncementDTO.InstructorId);
+            if (!getcourses.Any(x => x.Id == AnnouncementDTO.courseId))
+            {
+                response.ErrorMassages.Add("You are not allowed to add to this course");
+                return Unauthorized(response);
+            }
             await unitOfWork.instructorRepositpry.AddMaterial(AnnouncementMapped);
             var success = await unitOfWork.instructorRepositpry.saveAsync();
             if (success > 0)
@@ -131,6 +151,12 @@ namespace courseProject.Controllers
 
             var linkMapped = mapper.Map<LinkDTO, CourseMaterial>(linkDTO);
             linkMapped.type = "Link";
+            var getcourses = await unitOfWork.instructorRepositpry.GetAllCoursesGivenByInstructorIdAsync(linkDTO.InstructorId);
+            if (!getcourses.Any(x => x.Id == linkDTO.courseId))
+            {
+                response.ErrorMassages.Add("You are not allowed to add to this course");
+                return Unauthorized(response);
+            }
             await unitOfWork.instructorRepositpry.AddMaterial(linkMapped);
             var success = await unitOfWork.instructorRepositpry.saveAsync();
             if (success > 0)
@@ -155,6 +181,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [Authorize(Policy ="Instructor")]
         public async Task<ActionResult<ApiResponce>> EditTask(int id, [FromForm] TaskDTO taskDTO)
         {
             if (id <= 0)
@@ -213,6 +240,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [Authorize(Policy = "Instructor")]
         public async Task<ActionResult<ApiResponce>> EditFile(int id, [FromForm] FileDTO fileDTO)
         {
             if (id <= 0)
@@ -271,6 +299,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [Authorize(Policy = "Instructor")]
         public async Task<ActionResult<ApiResponce>> EditAnnouncement(int id, AnnouncementDTO AnnouncementDTO)
         {
             if (id <= 0)
@@ -328,6 +357,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [Authorize(Policy = "Instructor")]
         public async Task<ActionResult<ApiResponce>> EditLink(int id,  LinkDTO linkDTO)
         {
             if (id <= 0)
@@ -384,6 +414,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [Authorize(Policy = "Instructor")]
         public async Task<ActionResult<ApiResponce>> DeleteMaterial(int id)
         {
             if (id <= 0)

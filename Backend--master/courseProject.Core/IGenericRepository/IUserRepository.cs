@@ -19,6 +19,7 @@ namespace courseProject.Core.IGenericRepository
 
         public Task<User> GetUserByRoleAsync(string role);
         public Task<User> getUserByIdAsync(int UserId);
+        public Task<IReadOnlyList< User>> getAllMainSubAmdinRole();
         
 
         // void LogOut();

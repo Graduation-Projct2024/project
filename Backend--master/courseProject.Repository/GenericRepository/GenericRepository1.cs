@@ -192,6 +192,7 @@ namespace courseProject.Repository.GenericRepository
 
 
 
+
         //public async Task<T> GetUserInformationByIdAsync(int id)
         //{
         //    if(typeof(T) == typeof(Admin))

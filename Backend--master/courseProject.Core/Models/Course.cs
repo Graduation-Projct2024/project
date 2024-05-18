@@ -28,7 +28,7 @@ namespace courseProject.Core.Models
         public DateTime? dateOfUpdated { get; set; } 
         public DateTime? Deadline { get; set; }
         public int? limitNumberOfStudnet { get; set; }
-        
+        public int? totalHours { get; set; }
 
         [ForeignKey("Instructor")]
         public int InstructorId { get; set; } 

@@ -1,4 +1,5 @@
 ﻿using courseProject.Repository.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
@@ -13,6 +14,7 @@ namespace courseProject.Controllers
         private projectDbContext dbContext;
 
         [HttpGet("DownloadFile")]
+        [Authorize]
         public async Task<IActionResult> DownloadFile(string filename)
         {
            

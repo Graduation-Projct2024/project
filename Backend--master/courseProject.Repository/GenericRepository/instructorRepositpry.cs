@@ -152,5 +152,10 @@ namespace courseProject.Repository.GenericRepository
         {
             return await dbContext.Skills.Where(x=>x.instructorSkills.Any(y=>y.InstructorId == instructorId)).ToListAsync();
         }
+
+        public async Task removeInstructor(Instructor instructor)
+        {
+             dbContext.instructors.Remove(instructor);
+        }
     }
 }

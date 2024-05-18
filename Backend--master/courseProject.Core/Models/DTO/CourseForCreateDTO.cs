@@ -21,6 +21,7 @@ namespace courseProject.Core.Models.DTO
         public DateTime? startDate { get; set; }
         public DateTime? Deadline { get; set; }
         public int? limitNumberOfStudnet { get; set; }
+        public int? totalHours { get; set; }
         public int SubAdminId { get; set; }
         public int InstructorId { get; set; } 
           

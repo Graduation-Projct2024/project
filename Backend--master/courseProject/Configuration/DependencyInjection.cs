@@ -2,11 +2,14 @@
 using courseProject.MappingProfile;
 using courseProject.Repository.Data;
 using courseProject.Repository.GenericRepository;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Runtime.CompilerServices;
 using System.Text;
+
+
 
 namespace courseProject.Configuration
 {
@@ -30,6 +33,8 @@ namespace courseProject.Configuration
 
         public static IServiceCollection AddInfrastucture (this IServiceCollection services , IConfiguration configuration)
         {
+            //AuthenticationScheme.AddJwtAuthentication(services, configuration);
+
             services.AddDbContext<projectDbContext>(options =>
             {
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
