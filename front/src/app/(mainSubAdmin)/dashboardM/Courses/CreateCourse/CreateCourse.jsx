@@ -21,6 +21,8 @@ export default function CreateCourse() {
     SubAdminId:0,
     InstructorId:0,
     startDate:'',
+    Deadline:'',
+    limitNumberOfStudnet:'',
     image:'',
     
 };
@@ -41,13 +43,14 @@ const onSubmit = async (values) => {
     formData.append('SubAdminId', values.SubAdminId);
     formData.append('InstructorId', values.InstructorId);
     formData.append('startDate', values.startDate);
+    formData.append('Deadline', values.Deadline);
+    formData.append('limitNumberOfStudnet', values.limitNumberOfStudnet);
     //formData.append('image', values.image,values.image.name);
     if (values.image) {
       formData.append('image', values.image);
     }
    
-    const { data } = await axios.post('http://localhost:5134/api/CourseContraller/CreateCourse', formData,
-      );
+    const { data } = await axios.post('http://localhost:5134/api/CourseContraller/CreateCourse',formData,{headers :{Authorization:`Bearer ${userToken}`}});
     
    if(data.isSuccess){
     console.log(data);
@@ -55,7 +58,7 @@ const onSubmit = async (values) => {
     formik.resetForm();
     Swal.fire({
       title: "Course Created Successfully",
-      text: "Wait for Admin accredit this Course",
+      text: "Wait for Admin accredit this Course & you can edit it before admin accreditation",
       icon: "success"
     });
 
@@ -104,12 +107,13 @@ const inputs =[
         value:formik.values.category,
     },
     {
-      type : 'date',
-      id:'startDate',
-      name:'startDate',
-      title:'Course start date',
-      value:formik.values.startDate,
+      type : 'number',
+      id:'limitNumberOfStudnet',
+      name:'limitNumberOfStudnet',
+      title:'limit number of studnets',
+      value:formik.values.limitNumberOfStudnet,
   },
+    
   
   {
       type : 'number',
@@ -126,13 +130,28 @@ const inputs =[
     value:formik.values.InstructorId,
 },
 
+{
+  type : 'date',
+  id:'startDate',
+  name:'startDate',
+  title:'Course start date',
+  value:formik.values.startDate,
+},
     {
-        type:'file',
-        id:'image',
-        name:'image',
-        title:'image',
-        onChange:handleFieldChange,
-    },
+      type : 'date',
+      id:'Deadline',
+      name:'Deadline',
+      title:'Course Deadline',
+      value:formik.values.Deadline,
+  },
+  
+{
+  type:'file',
+  id:'image',
+  name:'image',
+  title:'image',
+  onChange:handleFieldChange,
+},
     {
       type : 'text',
       id:'description',

@@ -21,11 +21,11 @@ const [role, setRole]=useState('student');
     const [courses, setCourses] = useState([]);
     const getCourses = async () => {
       const data = await axios.get(
-        `http://localhost:5134/api/CourseContraller`
+        `http://localhost:5134/api/CourseContraller?pageNumber=1&pageSize=10`
       );
     
       console.log(data);
-       setCourses(data.data.result);
+       setCourses(data.data.result.items);
     };
   
 

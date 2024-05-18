@@ -251,8 +251,8 @@ const formatDate = (dateString) => {
   return `${year}-${month}-${day}`;
 };
 
-export default function EditProfile({ id, FName, LName, gender, phoneNumber, DateOfBirth, address, image }) {
-  const { userData } = useContext(UserContext);
+export default function EditProfile({ id, FName, LName, gender, phoneNumber, DateOfBirth, address, image ,openUpdate,setOpenUpdate }) {
+  const { userData ,userToken} = useContext(UserContext);
 
   const [selectedGender, setSelectedGender] = useState(gender);
 
@@ -261,6 +261,7 @@ export default function EditProfile({ id, FName, LName, gender, phoneNumber, Dat
   };
 
   const onSubmit = async (updatedData) => {
+    if(userData){
     try {
       const formData = new FormData();
       formData.append('FName', updatedData.FName);
@@ -273,10 +274,11 @@ export default function EditProfile({ id, FName, LName, gender, phoneNumber, Dat
         formData.append('image', updatedData.image);
       }
 
-      const { data } = await axios.put(`http://localhost:5134/api/UserAuth/EditProfile?id=${id}`, formData);
+      const { data } = await axios.put(`http://localhost:5134/api/UserAuth/EditProfile?id=${id}`, formData,{headers :{Authorization:`Bearer ${userToken}`}},);
       if (data.isSuccess) {
         console.log('Profile Updated');
         formik.resetForm();
+        setOpenUpdate(false);
         Swal.fire({
           title: "Profile updated successfully",
           text: "You can see the data updated in your profile",
@@ -285,7 +287,7 @@ export default function EditProfile({ id, FName, LName, gender, phoneNumber, Dat
       }
     } catch (error) {
       console.error('Error updating employee:', error);
-    }
+    }}
   };
 
   const formik = useFormik({

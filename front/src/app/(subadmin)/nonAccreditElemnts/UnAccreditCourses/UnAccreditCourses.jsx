@@ -1,21 +1,18 @@
-"use client";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useContext, useEffect, useState } from "react";
-import {
-  faArrowUpFromBracket,
-  faEye,
-  faFilter,
-  faPen,
-} from "@fortawesome/free-solid-svg-icons";
-import Link from "next/link";
-import axios from "axios";
-import { UserContext } from "@/context/user/User";
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, useMediaQuery, useTheme } from "@mui/material";
-import EditCourse from "../EditCourse/[id]/page";
+'use client'
+import { UserContext } from '@/context/user/User';
+import { faArrowUpFromBracket, faEye, faFilter, faPen } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, useMediaQuery } from '@mui/material';
+import { Stack, useTheme } from '@mui/system';
+import axios from 'axios';
+import Link from 'next/link';
+import React, { useContext, useEffect, useState } from 'react'
+import EditCourse from './EditCourse/[id]/page';
 
-export default function ViewCourses() {
-  const { userToken, setUserToken, userData } = useContext(UserContext);
+export default function UnAccreditCourses() {
+  const { userToken, setUserToken, userData,userId } = useContext(UserContext);
 
+  const [nonAccreditcourses, setNonAccreditCourses] = useState([]);
   const [openUpdate, setOpenUpdate] = React.useState(false);
 
   const theme = useTheme();
@@ -31,16 +28,14 @@ const handleCloseUpdate = () => {
   setOpenUpdate(false);
 };
 
-  const [courses, setCourses] = useState([]);
-
-  const fetchCourses = async () => {
+  const fetchCoursesBeforeAccredittion = async () => {
     if (userData) {
       try {
         const { data } = await axios.get(
-          `http://localhost:5134/api/CourseContraller?pageNumber=1&pageSize=10`
+          `http://localhost:5134/api/CourseContraller/GetallUndefinedCoursesToSubAdmin?subAdminId=${userId}&pageNumber=1&pageSize=10`
         );
         //console.log(data);
-        setCourses(data.result.items);
+        setNonAccreditCourses(data.result.items);
       } catch (error) {
         console.log(error);
       }
@@ -48,8 +43,8 @@ const handleCloseUpdate = () => {
   };
 
   useEffect(() => {
-    fetchCourses();
-  }, [courses,userData]);
+    fetchCoursesBeforeAccredittion();
+  }, [nonAccreditcourses,userData]);
 //  console.log(courses)
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -58,7 +53,7 @@ const handleCloseUpdate = () => {
     setSearchTerm(event.target.value);
   };
 
-  const filteredCourses = Array.isArray(courses) ? courses.filter((course) => {
+  const filteredCoursesBeforeAccreditation = Array.isArray(nonAccreditcourses) ? nonAccreditcourses.filter((course) => {
     const matchesSearchTerm = Object.values(course).some(
       (value) =>
         typeof value === "string" &&
@@ -66,8 +61,10 @@ const handleCloseUpdate = () => {
     );
     return matchesSearchTerm;
   }) : [];
+
+
   return (
-    <>
+       <>
       <div className="filter py-2 text-end">
         <nav className="navbar">
           <div className="container justify-content-end">
@@ -106,28 +103,25 @@ const handleCloseUpdate = () => {
             <th scope="col">Name</th>
             <th scope="col">Price</th>
             <th scope="col">Category</th>
-            <th scope="col">Status</th>
             <th scope="col">Start Date</th>
             <th scope="col">Instructor</th>
-            <th scope="col">Option</th>
+            <th scope="col">Actions</th>
           </tr>
         </thead>
         <tbody>
-          {filteredCourses.length ? (
-            filteredCourses.map((course) => (
+          {filteredCoursesBeforeAccreditation.length ? (
+            filteredCoursesBeforeAccreditation.map((course) => (
               <tr key={course.id}>
                 <th scope="row">{course.id}</th>
                 <td>{course.name}</td>
                 <td>{course.price}</td>
                 <td>{course.category}</td>
-                <td>{course.status}</td>
                 <td>{course.startDate}</td>
                 <td>{course.instructorName}</td>
                 <td className="d-flex gap-1">
                 <button className="border-0 bg-white" type="button" onClick={() => handleClickOpenUpdate(course.id)}>
                 <FontAwesomeIcon icon={faPen} className="edit-pen" />
             </button>
-
             <Dialog
         fullScreen={fullScreen}
         open={openUpdate}
@@ -153,7 +147,7 @@ const handleCloseUpdate = () => {
    spacing={1}
    sx={{ justifyContent: 'center',  alignContent: 'center'}}
     >
-      <EditCourse courseId={course.id} startDate = {course.startDate}  />
+     <EditCourse id={course.id} name={course.name} price={course.price} category={course.category} InstructorId={course.instructorId} Deadline={course.startDate} description={course.description} image={course.imageUrl} />
      </Stack>
         </DialogContent>
         <DialogActions>
@@ -171,8 +165,11 @@ const handleCloseUpdate = () => {
                       <FontAwesomeIcon icon={faEye} />
                     </button>
                   </Link>
+                  
                 </td>
               </tr>
+
+              
             ))
           ) : (
             <tr>
@@ -182,5 +179,5 @@ const handleCloseUpdate = () => {
         </tbody>
       </table>
     </>
-  );
+  )
 }

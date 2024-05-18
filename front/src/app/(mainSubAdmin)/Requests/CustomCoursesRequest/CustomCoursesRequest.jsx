@@ -14,10 +14,10 @@ export default function CustomCoursesRequest() {
     const fetchRequestsForCustomCourses = async () => {
       if(userData){
       try{
-      const { data } = await axios.get(`http://localhost:5134/api/Employee/GetAllCustomCourses`);
+      const { data } = await axios.get(`http://localhost:5134/api/Employee/GetAllCustomCourses?pageNumber=1&pageSize=10`);
       // setLoading(false)
       console.log(data.result);
-      setCustomCourses(data.result);
+      setCustomCourses(data.result.items);
     }
       catch(error){
         console.log(error);

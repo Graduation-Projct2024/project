@@ -9,8 +9,8 @@ import { useFormik } from 'formik';
 import React, { useContext } from 'react'
 import Swal from 'sweetalert2';
 
-export default function CreateCourse() {
-  const {userToken, setUserToken, userData}=useContext(UserContext);
+export default function CreateCourse({setOpen}) {
+  const {userToken, setUserToken, userData,userId}=useContext(UserContext);
 
 
   const initialValues={
@@ -21,6 +21,8 @@ export default function CreateCourse() {
     SubAdminId:0,
     InstructorId:0,
     startDate:'',
+    Deadline:'',
+    limitNumberOfStudnet:'',
     image:'',
     
 };
@@ -41,18 +43,20 @@ const onSubmit = async (values) => {
     formData.append('SubAdminId', values.SubAdminId);
     formData.append('InstructorId', values.InstructorId);
     formData.append('startDate', values.startDate);
+    formData.append('Deadline', values.Deadline);
+    formData.append('limitNumberOfStudnet', values.limitNumberOfStudnet);
     //formData.append('image', values.image,values.image.name);
     if (values.image) {
       formData.append('image', values.image);
     }
    
-    const { data } = await axios.post('http://localhost:5134/api/CourseContraller/CreateCourse', formData,
-      );
+    const { data } = await axios.post('http://localhost:5134/api/CourseContraller/CreateCourse',formData,{headers :{Authorization:`Bearer ${userToken}`}});
     
    if(data.isSuccess){
     console.log(data);
     console.log('course created');
     formik.resetForm();
+    setOpen(false);
     Swal.fire({
       title: "Course Created Successfully",
       text: "Wait for Admin accredit this Course",
@@ -104,12 +108,13 @@ const inputs =[
         value:formik.values.category,
     },
     {
-      type : 'date',
-      id:'startDate',
-      name:'startDate',
-      title:'Course start date',
-      value:formik.values.startDate,
+      type : 'number',
+      id:'limitNumberOfStudnet',
+      name:'limitNumberOfStudnet',
+      title:'limit number of studnets',
+      value:formik.values.limitNumberOfStudnet,
   },
+    
   
   {
       type : 'number',
@@ -124,6 +129,20 @@ const inputs =[
     name:'InstructorId',
     title:'Instructor Id',
     value:formik.values.InstructorId,
+},
+{
+  type : 'date',
+  id:'startDate',
+  name:'startDate',
+  title:'Course start date',
+  value:formik.values.startDate,
+},
+{
+  type : 'date',
+  id:'Deadline',
+  name:'Deadline',
+  title:'Course Deadline',
+  value:formik.values.Deadline,
 },
 
     {

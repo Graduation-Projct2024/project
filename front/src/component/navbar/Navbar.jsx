@@ -102,6 +102,7 @@ export default function Navbar() {
               ))}
             </Menu>
           </Box>
+          {/* <Link href = '/' className='d-flex text-decoration-none gap-1' > */}
           <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
           <Typography
             variant="h5"
@@ -121,7 +122,6 @@ export default function Navbar() {
           >
             LOGO
           </Typography>
-          
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
               <Button

@@ -31,6 +31,8 @@ import AdbIcon from '@mui/icons-material/Adb';
 import './Layout.css'
 import { UserContext } from '@/context/user/User';
 import SubAdminRoute from '@/app/(auth)/protectedRoute/SubAdminRoute';
+import ReportOutlinedIcon from '@mui/icons-material/ReportOutlined';
+
 const drawerWidth = 240;
 
 function Layout(props) {
@@ -53,6 +55,11 @@ function Layout(props) {
     name: "Profile",
     href: `/ProfileS/${userId}`,
     icon: AccountCircleIcon,
+  },
+  {
+    name: "Non accredit elemnts",
+    href: `/nonAccreditElemnts`,
+    icon: ReportOutlinedIcon,
   },
     // {
     //   name: "Notification",
