@@ -32,28 +32,49 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 export default function CalendarPage() {
 const {userToken, setUserToken, userData,userId}=useContext(UserContext);
-const [date, setDate]=React.useState();
+const [date, setDate]=React.useState(new Date());
+const [skillName, setSkillName]=React.useState();
 const [lecture, setLecture]=React.useState();
-
+const [skill, setSkill]=React.useState(1);
+const [start, setStart]=React.useState('00:00');
+const [end, setEnd]=React.useState('01:00');
 const [status, setStatus] = React.useState('private');
 const [selectedInstructor,setSelectedInstructor]=React.useState();
 const [open, setOpen] = React.useState(false);
 const [alertOpen, setAlertOpen] = React.useState(false);
-
+function getCurrentDateFormatted(date) {
+  const today = new Date(date);
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-based, so add 1
+  const day = String(today.getDate()).padStart(2, '0');
+  return `${year}/${month}/${day}`;
+}
   const initialValues = {
-    name: "",
     description:"",
     startTime:"",
     endTime:""
   };
   const[instructors, setInstructors]=React.useState();
   const getInstructors = async () => {
-    const data = await axios.get(
-      `http://localhost:5134/api/Employee/GetAllInstructorsList
-      `
+    setDate(getCurrentDateFormatted(date));
+    const data = await axios.post(
+      `http://localhost:5134/api/Employee/GetListOfInstructorForLectures?skillId=${skill}&startTime=${start}&endTime=${end}&date=${getCurrentDateFormatted(date)}`
+     , {headers: {
+        'Content-Type': 'application/json','Content-Type': 'charset=utf-8',
+      }}
     );
-  
+    if(data.data.isSuccess){
     setInstructors(data.data.result);
+    }
+  };
+  const[skills, setSkills]=React.useState();
+  const getSkills = async () => {
+    const data = await axios.get(
+      `http://localhost:5134/api/Employee/GetAllSkillOptions`
+    );
+    //console.log(data.data.result);
+  
+    setSkills(data.data.result);
   };
   function convertDateFormat(dateString) {
     // Split the date string into date and time parts
@@ -72,8 +93,9 @@ const [alertOpen, setAlertOpen] = React.useState(false);
         const response = await axios.post(
           `http://localhost:5134/api/StudentsContraller/GetAllConsultations?studentId=${userId}`
         );
+
         if (response.data.isSuccess) {
-          const parsedEvents = response.data.result.map(event => ({
+          const parsedEvents = response.data.result.items.map(event => ({
             title: event.name,
             
             start: convertDateFormat(`${event.date} ${event.startTime}`),
@@ -108,11 +130,10 @@ const [alertOpen, setAlertOpen] = React.useState(false);
 
     const duration=`${formattedHours}:${formattedMinutes}`;
     const formData = new FormData();
-formData.append("name", lectures.name);
+formData.append("name", skillName);
 formData.append("description", lectures.description);
 formData.append("type", status);
 formData.append("InstructorId", selectedInstructor);
-formData.append("Duration",duration);
 
 
 const { data } = await axios.post(
@@ -126,7 +147,6 @@ const { data } = await axios.post(
  if(data.isSuccess){
   setAlertOpen(true);
   setOpen(false);
-  console.log(data);
  formik.resetForm();
  //setAlertOpen(true);
 
@@ -134,9 +154,7 @@ const { data } = await axios.post(
   }
   };
   const validationSchema = yup.object({
-    name: yup
-      .string()
-      .required("title is required"),
+
       description: yup.string(),
 
   });
@@ -148,13 +166,7 @@ const { data } = await axios.post(
   });
 
   const inputs = [
-    {
-      id: "name",
-      type: "text",
-      name: "name",
-      title: "Title",
-      value: formik.values.name,
-    },
+
     {
       id: "startTime",
       type: "time",
@@ -179,6 +191,17 @@ const { data } = await axios.post(
       value: formik.values.description,
     }
   ];
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    formik.handleChange(event); // Formik's default handleChange
+    if(name=='startTime'){
+      setStart(value);
+    }
+    if(name=='endTime'){
+      setEnd(value);
+    }
+
+  };
   const renderInputs = inputs.slice(0, -1).map((input, index) => (
     <Input
       type={input.type}
@@ -186,7 +209,7 @@ const { data } = await axios.post(
       name={input.name}
       value={input.value}
       title={input.title}
-      onChange={input.onChange || formik.handleChange}
+      onChange={handleInputChange}
       onBlur={formik.handleBlur}
       touched={formik.touched}
       errors={formik.errors}
@@ -313,10 +336,14 @@ const textAraeInput = (
   useEffect(() => {
     getInstructors();
     getLectures();
+    getSkills();
+
+
+
     if (calendarRef.current) {
       calendarRef.current.getApi().setOption('dayMaxEventRows', 3);
     }
-  }, [status, date, selectedInstructor, lecture]);
+  }, [status, date, selectedInstructor, lecture, skill, start, end, instructors, skillName]);
   return (
     <Layout title='Book a Lecture'>
        <Snackbar open={alertOpen} autoHideDuration={6000} onClose={handleCloseAlert}>
@@ -398,7 +425,45 @@ const textAraeInput = (
 
 
         <DialogContent>
-        <form onSubmit={formik.handleSubmit} encType="multipart/form-data">        
+        <form onSubmit={formik.handleSubmit} encType="multipart/form-data">  
+        <div className="col-md-12 mb-3">
+
+        <select
+        lable='Select topic'
+  className="form-select p-3"
+  aria-label="Default select example"
+  name="selectedSkill" // Ensure the name attribute matches the form field in Formik
+  value={selectedInstructor}
+  onChange={(e) => {
+    formik.handleChange(e); // Formik's handleChange to update the form state
+    const selectedSkillId = e.target.value;
+    setSkill(selectedSkillId);
+    
+    // Find the selected skill object from the skills array
+    const selectedSkill = skills.find(skill => skill.id == selectedSkillId);
+    console.log(selectedSkill);
+
+  
+      setSkillName(selectedSkill.name);
+    
+    console.log(skillName);
+  }}
+>
+  
+  <option value="" disabled>
+    Select topic
+  </option>
+  {skills?.length ? (
+    skills.map((skill) => (
+      <option key={skill.id} value={skill.id}>
+        {skill.name}
+      </option>
+    ))
+  ): (
+          <option disabled>No data</option>
+        )}
+      </select>
+      </div>      
         {renderInputs}
         <div className="col-md-12">
        <select
@@ -415,8 +480,8 @@ const textAraeInput = (
         <option value="" >
           Select instructor
         </option>
-        {instructors?.length ? (
-          instructors.map((instructor, index) => (
+        {instructors&&instructors?.length ? (
+          instructors?.map((instructor, index) => (
             <option key={instructor.id} value={instructor.id}>
               {instructor.name}
             </option>

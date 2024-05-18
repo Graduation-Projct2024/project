@@ -17,12 +17,12 @@ import '../../(admin)/dashboard/dashboard.css'
 
 export default function Testimonials() {
 
-  let [contacts,setContact] = useState([]);
+  let [contacts,setContacts] = useState([]);
   const fetchContacts = async () => {
     try{
     const { data } = await axios.get(`http://localhost:5134/api/Employee/GetAllEmployeeForContact`);
-    console.log(data);
-    setContact(data);
+    console.log(data.result.items);
+    setContacts(data.result.items);
   }
     catch(error){
       console.log(error);
@@ -49,7 +49,7 @@ export default function Testimonials() {
            onSlideChange={() => console.log('slide change')}
            loop = {true}
         >
-           {contacts ? contacts.map((contact)=>(
+           {contacts? (contacts.map((contact)=>(
           <SwiperSlide className='py-5'>
          
           <div key={contact.id} className="col-md-4">
@@ -74,7 +74,7 @@ export default function Testimonials() {
                   </div>
 
           </SwiperSlide>
-                )) : <h1>No Data</h1>}
+                ))) :( <h1>No Data</h1>)}
          
         </Swiper>
       </div>

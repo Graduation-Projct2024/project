@@ -25,10 +25,12 @@ export default function page({params}) {
     try {
       //setLoading(false)
       const {data} = await axios.get(`http://localhost:5134/api/UserAuth/GetProfileInfo?id=${params.id}`,
+      {headers :{Authorization:`Bearer ${userToken}`}}
+
      
       );
       if(data.isSuccess){
-        console.log(data.result);
+        // console.log(data.result);
       setUser(data.result);
       //setLoading(false)
       }}
@@ -37,7 +39,6 @@ export default function page({params}) {
       }}
       
   }
-  console.log(user)
   useEffect(()=>{
       getUser();
   },[userData,user])

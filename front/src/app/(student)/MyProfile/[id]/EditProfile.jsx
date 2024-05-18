@@ -11,12 +11,15 @@ export default function EditProfile({id , FName , LName  , gender,phoneNumber,Da
 
     const [employeeData, setEmployeeData] = useState('');
     const [selectedGender, setSelectedGender] = useState('');
-console.log(id, FName,LName, gender, phoneNumber, DateOfBirth, address, image)
+// console.log(id, FName,LName, gender, phoneNumber, DateOfBirth, address, image)
     
       const fetchUserData = async () => {
         if(userData){
         try {
-          const { data } = await axios.get(`http://localhost:5134/api/UserAuth/GetProfileInfo?id=${id}`);
+          const { data } = await axios.get(`http://localhost:5134/api/UserAuth/GetProfileInfo?id=${id}`,
+          {headers :{Authorization:`Bearer ${userToken}`}}
+
+          );
           console.log(data.result);
           setEmployeeData(data.result);
         } catch (error) {
@@ -47,7 +50,10 @@ useEffect(() => {
         }
        
 
-        const {data} = await axios.put(`http://localhost:5134/api/UserAuth/EditProfile?id=${id}`, formData);
+        const {data} = await axios.put(`http://localhost:5134/api/UserAuth/EditProfile?id=${id}`, formData,
+        {headers :{Authorization:`Bearer ${userToken}`}, 'Content-Type':'application/problem+json','Content-Type':'charset=utf-8'}
+
+        );
         if(data.isSuccess){
           console.log('Profile Updated')
             formik.resetForm();

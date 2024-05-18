@@ -35,8 +35,10 @@ export default function UserContextProvider({children}){
       }
 
     const getUserInfo= async() =>{
-        if(userId!=null){
-            const {data} = await axios.get(`http://localhost:5134/api/UserAuth/GetProfileInfo?id=${userId}`)
+        if(userId){ 
+            const {data} = await axios.get(`http://localhost:5134/api/UserAuth/GetProfileInfo?id=${userId}`,
+            {headers :{Authorization:`Bearer ${userToken}`}}
+            )
             setUserData(data.result);
           }}
             console.log(userData);
@@ -53,7 +55,7 @@ export default function UserContextProvider({children}){
     },[userToken,userId])
    
    
-return <UserContext.Provider value={{userToken, setUserToken, userData, setUserData, userId }}>
+return <UserContext.Provider value={{userToken, setUserToken, userData, setUserData, userId , setUserId}}>
     {children}
 </UserContext.Provider>
 
