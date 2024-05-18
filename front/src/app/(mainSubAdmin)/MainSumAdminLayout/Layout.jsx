@@ -21,6 +21,7 @@ import LocalLibraryIcon from '@mui/icons-material/LocalLibrary';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import ReportOutlinedIcon from '@mui/icons-material/ReportOutlined';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import FeedOutlinedIcon from '@mui/icons-material/FeedOutlined';
 import { deepPurple ,purple} from '@mui/material/colors';
@@ -54,6 +55,11 @@ function Layout(props) {
     name: "Profile",
     href: `/ProfileM/${userId}`,
     icon: AccountCircleIcon,
+  },
+  {
+    name: "Non accredit elemnts",
+    href: `/UnAccreditElemnts`,
+    icon: ReportOutlinedIcon,
   },
     {
       name: "Requests",

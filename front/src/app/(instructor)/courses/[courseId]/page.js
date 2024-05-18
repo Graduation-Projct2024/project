@@ -175,10 +175,10 @@ const handleCloseViewTaskDialog = () => {
       const getParticipants = async () => {
   
         const data = await axios.get(
-          `http://localhost:5134/api/StudentsContraller/GetCourseParticipants?Courseid=${courseId}`
+          `http://localhost:5134/api/StudentsContraller/GetCourseParticipants?Courseid=${courseId}&pageNumber=1&pageSize=10`
         );
       console.log(data);
-        setParticipants(data.data.result);
+        setParticipants(data.data.result.items);
       };
       useEffect(() => {
         getCourseMaterial();

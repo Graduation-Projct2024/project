@@ -15,10 +15,10 @@ export default function JoinCoursesRequests() {
     const fetchRequestsForJoinCourses = async () => {
       if(userData){
       try{
-      const { data } = await axios.get(`http://localhost:5134/api/Employee/GetAllRequestToJoinCourses`);
+      const { data } = await axios.get(`http://localhost:5134/api/Employee/GetAllRequestToJoinCourses?pageNumber=1&pageSize=10`);
       // setLoading(false)
       console.log(data.result);
-      setJoinCoursesReq(data.result);
+      setJoinCoursesReq(data.result.items);
     }
       catch(error){
         console.log(error);
@@ -68,16 +68,24 @@ export default function JoinCoursesRequests() {
       setSearchTerm(event.target.value);
     };
 
-    const filteredRequestsToJoinCourses = joinCoursesReq.filter((req) => {
-      const matchesSearchTerm =
-      Object.values(req).some(
-          (value) =>
-          typeof value === 'string' && value.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+//     const filteredRequestsToJoinCourses = joinCoursesReq?  joinCoursesReq.filter((req) => {
 
+//       const matchesSearchTerm =
+//       Object.values(req).some(
+//           (value) =>
+//           typeof value === 'string' && value.toLowerCase().includes(searchTerm.toLowerCase())
+//       );
+//       return matchesSearchTerm;
+// }):<p>null</p>;
 
-      return matchesSearchTerm;
-});
+const filteredRequestsToJoinCourses = Array.isArray(joinCoursesReq) ? joinCoursesReq.filter((course) => {
+  const matchesSearchTerm = Object.values(course).some(
+    (value) =>
+      typeof value === "string" &&
+      value.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  return matchesSearchTerm;
+}) : [];
 
 
   return (

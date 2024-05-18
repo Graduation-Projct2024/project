@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 import Swal from 'sweetalert2';
 
-export default function CreateEmployee() {
+export default function CreateEmployee({setOpen}) {
   const router = useRouter();
 
     
@@ -33,8 +33,6 @@ export default function CreateEmployee() {
 const onSubmit = async (users) => {
   setLoading(true);
     try {
-
-
       const formData = new FormData();
       formData.append('FName', users.FName);
       formData.append('LName', users.LName);
@@ -51,9 +49,6 @@ const onSubmit = async (users) => {
   
       const { data } = await axios.post('http://localhost:5134/api/Employee/CreateEmployee', formData,
         {
-        // headers: {
-        //   'Content-Type': 'multipart/form-data','Content-Type': 'application/json',
-        // }
         
       });
       
@@ -62,7 +57,9 @@ const onSubmit = async (users) => {
       setPageLoading(true);
       //console.log('tttt');
       formik.resetForm();
-      router.push('/dashboard');
+      setOpen(false);
+      // router.push('/dashboard');
+
       Swal.fire({
         title: "Account Created Successfully!",
         text: "Check Dashboard to see it",
@@ -221,6 +218,7 @@ const renderInputs = inputs.map((input,index)=>
             Select Role
           </option>
           <option value="subadmin">SubAdmin</option>
+          <option value="main-subadmin">Main-SubAdmin</option>
           <option value="instructor">Instructor</option>
         </select>
       </div> 

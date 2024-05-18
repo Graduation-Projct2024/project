@@ -34,7 +34,7 @@ const handleClickOpen = () => {
     try{
     const { data } = await axios.get(`http://localhost:5134/api/CourseContraller`);
     console.log(data.result);
-    setCourses(data.result);
+    setCourses(data.result.items);
   }
     catch(error){
       console.log(error);
@@ -144,7 +144,7 @@ const handleClickOpen = () => {
 
         <DialogContent >
         
-      <CreateCourse/>
+      <CreateCourse setOpen={setOpen}/>
         </DialogContent>
         <DialogActions>
          
@@ -189,11 +189,11 @@ const handleClickOpen = () => {
       <td>{course.instructorName}</td>
       
       <td className='d-flex gap-1'>
-      <button className="border-0 bg-white " type="button" data-bs-toggle="modal" data-bs-target={`#exampleModal2-${course.id}`}>
+      {/* <button className="border-0 bg-white " type="button" data-bs-toggle="modal" data-bs-target={`#exampleModal2-${course.id}`}>
                     <FontAwesomeIcon icon={faPen} className="edit-pen" />
-                  </button>
+                  </button> */}
 
-                  <div className="modal fade" id={`exampleModal2-${course.id}`} tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  {/* <div className="modal fade" id={`exampleModal2-${course.id}`} tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div className="modal-dialog modal-dialog-centered modal-lg">
                       <div className="modal-content row justify-content-center">
                         <div className="modal-body text-center ">
@@ -204,7 +204,7 @@ const handleClickOpen = () => {
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
       <Link href={'/Profile'}>
         <button  type="button" className='border-0 bg-white '>
         <FontAwesomeIcon icon={faEye}  className='edit-pen'/>

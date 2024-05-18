@@ -23,7 +23,7 @@ export default function Testimonials() {
     try{
     const { data } = await axios.get(`http://localhost:5134/api/Employee/GetAllEmployeeForContact`);
     console.log(data);
-    setContact(data);
+    setContact(data.result.items);
   }
     catch(error){
       console.log(error);

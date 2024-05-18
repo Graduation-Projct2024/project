@@ -14,8 +14,11 @@ export const createEmployee = yup.object({
     name:yup.string().required('Name is required').min(3,'Course Name must have at least 3 characters').max(30,'Course Name must have at most 30 characters'),
     price:yup.string().required('Price is required'),
     category:yup.string().required('Category is required').min(3,'Course Category must have at least 6 characters').max(100,'Course Category must have at most 100 characters'),
+    limitNumberOfStudnet:yup.string().required('limitNumberOfStudnet Id is required'),
     SubAdminId:yup.string().required('SubAdmin Id is required'),
     InstructorId:yup.string().required('Instructor Id is required'),
+    startDate:yup.string().required('startDate is required'),
+    Deadline:yup.string().required('Deadline is required'),
     description:yup.string().required('Description is required').min(6,'Course Description must have at least 6 characters').max(10000,'Course Description must have at most 100000 characters'),
     //imageUrl: yup.mixed().required('Image is required'),
  })
@@ -52,4 +55,7 @@ export const editCourse = yup.object({
 export const addWeeklyHours = yup.object({
    startTime:yup.string().required('Start time is Required'),
    endTime:yup.string().required('End time is Required'),
+})
+export const addSkills = yup.object({
+   skillName:yup.string().required('Skill name is Required'),
 })

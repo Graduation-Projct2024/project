@@ -41,7 +41,7 @@ const handleCloseUpdate = () => {
     try {
       //setLoading(false)
       const {data} = await axios.get(`http://localhost:5134/api/UserAuth/GetProfileInfo?id=${params.id}`,
-     
+      {headers :{Authorization:`Bearer ${userToken}`}}
       );
       if(data.isSuccess){
         console.log(data.result);
@@ -123,7 +123,7 @@ const handleCloseUpdate = () => {
    sx={{ justifyContent: 'center',  alignContent: 'center'}}
     >
       {userData &&
-    <EditProfile id={params.id}  FName = {userData.userName} LName= {userData.lName}  gender = {userData.gender} phoneNumber = {userData.phoneNumber} DateOfBirth = {userData.dateOfBirth} address= {userData.address} image = {userData.imageUrl}/>}
+    <EditProfile id={params.id}  FName = {userData.userName} LName= {userData.lName}  gender = {userData.gender} phoneNumber = {userData.phoneNumber} DateOfBirth = {userData.dateOfBirth} address= {userData.address} image = {userData.imageUrl} openUpdate={openUpdate} setOpenUpdate={setOpenUpdate}/>}
      </Stack>
         </DialogContent>
         <DialogActions>
