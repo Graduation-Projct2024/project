@@ -11,12 +11,27 @@ import EditProfile from './EditProfile';
 import Layout from '../../SubAdminLayout/Layout';
 import '../../../../../node_modules/bootstrap/dist/js/bootstrap.bundle'
 import { UserContext } from '@/context/user/User';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, useMediaQuery, useTheme } from '@mui/material';
 
 export default function page({params}) {
   const {userToken, setUserToken, userData,userId}=useContext(UserContext);
 
   let [user,setUser] = useState({})
   const [loading, setLoading] = useState(false);
+  const [openUpdate, setOpenUpdate] = React.useState(false);
+
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+  const [userIdP, setUserIdP] = useState(null);
+
+const handleClickOpenUpdate = (id) => {
+    setUserIdP(id);
+    console.log(id)
+    setOpenUpdate(true);
+};
+const handleCloseUpdate = () => {
+  setOpenUpdate(false);
+};
   // const {id} = useParams();
   // console.log(useParams());
 // console.log(params)
@@ -25,6 +40,7 @@ export default function page({params}) {
     try {
       //setLoading(false)
       const {data} = await axios.get(`http://localhost:5134/api/UserAuth/GetProfileInfo?id=${params.id}`,
+      {headers :{Authorization:`Bearer ${userToken}`}}
      
       );
       if(data.isSuccess){
@@ -59,15 +75,15 @@ export default function page({params}) {
           <div className="row">
             <div className="col-xl-8 col-lg-12 pt-lg-3 pt-md-3 pt-sm-3 pt-3 d-flex gap-2">
               <p className='text-uppercase fw-bold pt-2 '><span className='name'>{user.userName} {user.lName}</span></p>
-              {userData && params.id == userId && <button className="border-0 bg-white" type="button" data-bs-toggle="modal" data-bs-target={`#exampleModal2-${params.id}`}>
-                      <FontAwesomeIcon icon={faPen} className="edit-pen" />
-                </button>} 
+              {userData && params.id == userId && <button className="border-0 bg-white" type="button" onClick={() => handleClickOpenUpdate(params.id)}>
+                <FontAwesomeIcon icon={faPen} className="edit-pen" />
+            </button>} 
             </div>
             
             {/* <div className="col-xl-6 col-lg-12">
               
             </div> */}
-            <div className="modal fade" id={`exampleModal2-${params.id}`} tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            {/* <div className="modal fade" id={`exampleModal2-${params.id}`} tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div className="modal-dialog modal-dialog-centered modal-lg">
                       <div className="modal-content row justify-content-center">
                         <div className="modal-body text-center ">
@@ -79,7 +95,43 @@ export default function page({params}) {
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
+                  <Dialog
+        fullScreen={fullScreen}
+        open={openUpdate}
+        onClose={handleCloseUpdate}
+        aria-labelledby="responsive-dialog-title"
+        sx={{
+          "& .MuiDialog-container": {
+            "& .MuiPaper-root": {
+              width: "100%",
+              maxWidth: "600px!important",  
+              height: "400px!important",            },
+          },
+          
+        }}
+        >
+          <DialogTitle id="responsive-dialog-title" className='primaryColor fw-bold' >
+          {"Update Profile"}
+        </DialogTitle>
+
+        <DialogContent>
+        <Stack
+   direction="row"
+   spacing={1}
+   sx={{ justifyContent: 'center',  alignContent: 'center'}}
+    >
+      {userData &&
+    <EditProfile id={params.id}  FName = {userData.userName} LName= {userData.lName}  gender = {userData.gender} phoneNumber = {userData.phoneNumber} DateOfBirth = {userData.dateOfBirth} address= {userData.address} image = {userData.imageUrl} openUpdate={openUpdate} setOpenUpdate={setOpenUpdate}/>}
+     </Stack>
+        </DialogContent>
+        <DialogActions>
+         
+         <Button onClick={handleCloseUpdate} autoFocus>
+           Cancle
+         </Button>
+       </DialogActions>
+        </Dialog>
              <div className="d-flex ps-xl-4 pt-3 gap-2 role justify-content-xl-start fs-5 fw-bold justify-content-lg-center justify-content-md-center justify-content-sm-center justify-content-center">
                 <FontAwesomeIcon icon={faUser} className='pt-1'/>
                 <p className='text-uppercase'>{user.role}</p>

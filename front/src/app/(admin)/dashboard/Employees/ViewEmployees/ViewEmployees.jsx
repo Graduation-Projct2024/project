@@ -42,10 +42,10 @@ export default function ViewEmployees() {
       const fetchEmployees = async () => {
         if(userData){
         try{
-        const { data } = await axios.get(`http://localhost:5134/api/Employee/GetAllEmployee`);
+        const { data } = await axios.get(`http://localhost:5134/api/Employee/GetAllEmployee?pageNumber=1&pageSize=10`);
         // setLoading(false)
       //  console.log(data);
-        setEmployees(data);
+        setEmployees(data.result.items);
       }
         catch(error){
        //   console.log(error);
@@ -206,7 +206,7 @@ export default function ViewEmployees() {
    spacing={1}
    sx={{ justifyContent: 'center',  alignContent: 'center'}}
     >
-      <CreateEmployee/>
+      <CreateEmployee setOpen={setOpen}/>
      </Stack>
         </DialogContent>
         <DialogActions>

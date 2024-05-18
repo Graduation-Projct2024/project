@@ -24,6 +24,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import AddIcCallIcon from '@mui/icons-material/AddIcCall';
 import { deepPurple ,purple} from '@mui/material/colors';
+import DoneAllIcon from '@mui/icons-material/DoneAll';
 import Link from '@mui/material/Link';
 import { useRouter } from 'next/navigation'
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -32,6 +33,7 @@ import AdbIcon from '@mui/icons-material/Adb';
 import './Layout.css'
 import { UserContext } from '@/context/user/User';
 import AdminRoute from '@/app/(auth)/protectedRoute/AdminRoute';
+import CategoryIcon from '@mui/icons-material/Category';
 const drawerWidth = 240;
 
 
@@ -52,9 +54,14 @@ const sidebarItems = [
     icon: AccountCircleIcon,
   },
   {
-      name: "Notification",
-      href: "/Notification",
-      icon: NotificationsIcon,
+      name: "Accreditation",
+      href: "/Accreditation",
+      icon: DoneAllIcon,
+    },
+    {
+      name: "AcademySkills",
+      href: "/AcademySkills",
+      icon: CategoryIcon,
     },
     {
       name: "Contacts",

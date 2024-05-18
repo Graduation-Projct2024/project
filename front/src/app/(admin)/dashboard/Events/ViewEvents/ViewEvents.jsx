@@ -15,9 +15,9 @@ export default function ViewEvents() {
     const fetchEvents = async () => {
       if(userData){
       try{
-      const { data } = await axios.get(`http://localhost:5134/api/EventContraller/GetAllAccreditEvents`);
+      const { data } = await axios.get(`http://localhost:5134/api/EventContraller/GetAllAccreditEvents?pageNumber=1&pageSize=10`);
       //console.log(data);
-      setEvent(data);
+      setEvent(data.result.items);
     }
       catch(error){
         console.log(error);

@@ -48,14 +48,10 @@ namespace courseProject.Controllers
         // [Authorize(Policy = "Admin")]
        // [Authorize(Policy = "Admin&subAdmin")]
         public async Task<ActionResult<IReadOnlyList<SubAdmin>>> GetAllEmployeeAsync([FromQuery] PaginationRequest paginationRequest)
-        {
-            // pagenation.PageSize = pageSize ?? pagenation.PageSize;
+        {         
             try
             {
-
-
                 var SubAdmins = await unitOfWork.SubAdminRepository.GetAllEmployeeAsync();
-
                 var instructors = await unitOfWork.instructorRepositpry.GetAllEmployeeAsync();
                 if (SubAdmins == null && instructors == null)
                 {
@@ -63,18 +59,9 @@ namespace courseProject.Controllers
                     responce.ErrorMassages.Add("There is no employee yet");
                     return Ok(responce);
                 }
-                var mapperSubAdmin = mapper.Map<IReadOnlyList<SubAdmin>, IReadOnlyList<EmployeeDto>>(SubAdmins);
-                //foreach (var SubAdmin in mapperSubAdmin)
-                //{
-                //    SubAdmin.type = "SubAdmin";
-                //}
-                var mapperInstructor = mapper.Map<IReadOnlyList<Instructor>, IReadOnlyList<EmployeeDto>>(instructors);
-                //foreach (var instructor in mapperInstructor)
-                //{
-                //    instructor.type = "Instructor";
-                //}
-                var allEmployees = (mapperSubAdmin.Concat(mapperInstructor)).OrderBy(x=>x.Id).ToList();
-           //     allEmployees = allEmployees.OrderBy(x => x.Id);
+                var mapperSubAdmin = mapper.Map<IReadOnlyList<SubAdmin>, IReadOnlyList<EmployeeDto>>(SubAdmins);             
+                var mapperInstructor = mapper.Map<IReadOnlyList<Instructor>, IReadOnlyList<EmployeeDto>>(instructors);             
+                var allEmployees = (mapperSubAdmin.Concat(mapperInstructor)).OrderBy(x=>x.Id).ToList();          
                 responce.Result = (Pagination<EmployeeDto>.CreateAsync(allEmployees, paginationRequest.pageNumber, paginationRequest.pageSize)).Result;
                 responce.IsSuccess = true;
                 responce.StatusCode = HttpStatusCode.OK;
@@ -95,6 +82,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [Authorize(Policy ="Admin")]
         public async Task<ActionResult<ApiResponce>> GetAllEmployeeForContactAsync([FromQuery] PaginationRequest paginationRequest)
         {
             var subAdmins = await unitOfWork.SubAdminRepository.GetAllEmployeeForContactAsync();
@@ -120,6 +108,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [Authorize(Policy ="Admin")]
         public async Task<ActionResult> CreateEmployee([FromForm]EmployeeForCreate model)
         {
             if (model == null)
@@ -264,6 +253,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [Authorize(Policy ="Admin")]
         public async Task<ActionResult<ApiResponce>> updateEmployee(int id,[FromForm] EmployeeForUpdateDTO EmpolyeeModel)
         {
 
@@ -290,7 +280,8 @@ namespace courseProject.Controllers
             var subAdminToUpdate = await unitOfWork.SubAdminRepository.getSubAdminByIdAsync(id);
             var instructorToUpdate = await unitOfWork.instructorRepositpry.getInstructorByIdAsync(id);
             var UserToUpdate = await unitOfWork.UserRepository.getUserByIdAsync(id);
-            if (subAdminToUpdate == null && UserToUpdate.role.ToLower() == "subadmin") {
+        
+            if (subAdminToUpdate == null && (UserToUpdate.role.ToLower() == "subadmin" || UserToUpdate.role.ToLower() == "main-subadmin")) {
                 responce.IsSuccess = false;
                 responce.StatusCode = HttpStatusCode.NotFound;
                 responce.ErrorMassages = new List<string>() { "the subAdmin is not found" };
@@ -317,11 +308,13 @@ namespace courseProject.Controllers
                     var success2 = 0;
                     SubAdmin? Subadminmapper = null;
                     Instructor? Instructormapper = null;
-                    if (UserToUpdate.role.ToLower() == "subadmin")
+                    if (UserToUpdate.role.ToLower() == "subadmin" || UserToUpdate.role.ToLower()=="main-subadmin")
                     {
+                        
                          Subadminmapper = mapper.Map<EmployeeForUpdateDTO, SubAdmin>(EmpolyeeModel);
                          Subadminmapper.SubAdminId = subAdminToUpdate.SubAdminId;
                          await subAdminRepo.updateSubAdminAsync(Subadminmapper);
+                        
                         responce.Result = Subadminmapper;
                     }
 
@@ -330,6 +323,7 @@ namespace courseProject.Controllers
                          Instructormapper = mapper.Map(EmpolyeeModel, instructorToUpdate);
                         Instructormapper.InstructorId = instructorToUpdate.InstructorId;
                          await unitOfWork.instructorRepositpry.updateSubAdminAsync(Instructormapper);
+                        
                         responce.Result = Instructormapper;
                     }
                     success2 = await unitOfWork.SubAdminRepository.saveAsync();
@@ -361,6 +355,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [Authorize(Policy ="Instructor")]
         public async Task<ActionResult<ApiResponce>> GetAllCoursesByInstructorId (int Instructorid , [FromQuery] PaginationRequest paginationRequest)
         {
             if (Instructorid <= 0)
@@ -390,6 +385,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [Authorize(Policy ="Instructor")]
         public async Task<ActionResult<ApiResponce>> AddOfficeHours(int InstructorId ,[FromForm] WorkingHourDTO _Working_Hours)
         {
             if(InstructorId <= 0)
@@ -488,6 +484,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [Authorize(Policy ="Instructor")]
         public async Task<ActionResult<ApiResponce>> GetAllSubmissionUsingTaskId(int taskId , [FromQuery] PaginationRequest paginationRequest)
         {
             if (taskId <= 0)
@@ -531,7 +528,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        //[Authorize(Policy ="MainSubAdmin")]
+        [Authorize(Policy = "SubAdmin , Main-SubAdmin")]
         public async Task<ActionResult<ApiResponce>> GetAllCustomCoursesToMainSubAdmin([FromQuery] PaginationRequest paginationRequest)
         {
             try
@@ -684,7 +681,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-       // [Authorize(Policy ="MainSubAdmin")]
+        [Authorize(Policy = "SubAdmin , Main-SubAdmin")]
         public async Task<ActionResult<ApiResponce>> GetAllRequestFromStudentsToJoinCourses([FromQuery] PaginationRequest paginationRequest)
         {
             try
@@ -777,7 +774,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-      //  [Authorize(Policy ="Instructor")]
+        [Authorize(Policy ="Instructor")]
         public async Task<ActionResult<ApiResponce>> SelectASkillsByInstructor(int instructorId ,[FromForm] ListIntegerDTO array)
         {
             try
@@ -832,6 +829,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [Authorize(Policy ="Student")]
         public async Task<ActionResult<ApiResponce>> GetAListOfInstrcutorsForBookALectures(int skillId , string startTime , string endTime , DateTime date)
         {
             try
@@ -895,6 +893,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [Authorize(Policy ="Instructor")]
         public async Task<ActionResult<ApiResponce>> DeleteAnInstructorSkillFromSelected (int InstructorId , int SkillId)
         {
             try
@@ -970,6 +969,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [Authorize]
         public async Task<ActionResult<ApiResponce>> GetAllInstructorSkills(int instructorId)
         {
             if (instructorId <= 0)
@@ -983,6 +983,50 @@ namespace courseProject.Controllers
             return Ok(responce);
         }
 
+
+        [HttpPut("EditroleBetweenSubAdmin&MainSubAdmin")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        [Authorize(Policy ="Admin")]
+        public async Task<ActionResult<ApiResponce>> EditRole (int userId ,string role)
+        {
+            var getUser = await unitOfWork.UserRepository.getUserByIdAsync(userId);
+            if(getUser == null)
+            {
+                responce.ErrorMassages.Add($"The User with id = {userId} is not found");
+                return NotFound(responce);
+            }
+            if(getUser.role.ToLower() !="subadmin" && getUser.role.ToLower() != "main-subadmin")
+            {
+                responce.ErrorMassages.Add($"You can't change the user role = {getUser.role}");
+                return responce;
+            }
+            if(role.ToLower() != "subadmin" && role.ToLower()!="main-subadmin")
+            {
+                responce.ErrorMassages.Add("edit the role to SubAdmin or main-SubAdmin only");
+                return responce;
+            }
+            var getAllMainSubAdmins = await unitOfWork.UserRepository.getAllMainSubAmdinRole();
+           if(getAllMainSubAdmins.Count() >= 1 && role.ToLower()=="main-subadmin")
+            {
+                responce.ErrorMassages.Add("You have a one main-SubAdmin , if you need to make the role of this user to main-SubAdmin , change the role to the currently existing one to SubAdmin ");
+                return (responce);
+            }
+            getUser.role = role.ToLower();
+            await unitOfWork.SubAdminRepository.editRole(getUser);
+            if(await unitOfWork.UserRepository.saveAsync() > 0)
+            {
+                responce.IsSuccess = true;
+                responce.StatusCode = HttpStatusCode.OK;
+                return responce;
+            }
+            responce.IsSuccess = false;
+            responce.StatusCode = HttpStatusCode.BadRequest;
+            responce.ErrorMassages.Add("some error occured while saving ");
+            return BadRequest(responce);
+
+        }
 
     }
 }

@@ -342,6 +342,7 @@
 import Input from '@/component/input/Input';
 import InputTime from '@/component/input/InputTime';
 import { addWeeklyHours } from '@/component/validation/validation';
+import { Button } from '@mui/material';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react'
@@ -463,16 +464,16 @@ Select Day          </option>
       {renderInputs}
        
 
-<div className="col-md-12 justify-content-center">
 
-</div>
-      <button
-        type="submit"
-        className="btn btn-primary createButton mt-3 fs-3 px-3 w-25"
-        disabled = {!selectedDay ||Object.keys(formik.touched).length === 0||formik.isSubmitting || Object.keys(formik.errors).length > 0}
-      >
-       Submit
-      </button>
+      <div className='text-center mt-3'>
+      <Button sx={{px:2}} variant="contained"
+              className="m-2 btn primaryBg"
+              type="submit"
+              disabled={!selectedDay ||Object.keys(formik.touched).length === 0||formik.isSubmitting || Object.keys(formik.errors).length > 0}
+            >
+              Add
+            </Button>
+      </div>
 
 
     </form>

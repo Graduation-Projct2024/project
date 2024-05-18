@@ -19,9 +19,9 @@ export default function page() {
   const fetchContacts = async () => {
     if(userData){
     try{
-    const { data } = await axios.get(`http://localhost:5134/api/Employee/GetAllEmployeeForContact`);
+    const { data } = await axios.get(`http://localhost:5134/api/Employee/GetAllEmployeeForContact?pageNumber=1&pageSize=10`);
     console.log(data);
-    setContact(data);
+    setContact(data.result.items);
   }
     catch(error){
       console.log(error);

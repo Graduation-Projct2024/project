@@ -5,13 +5,31 @@ import {
   faArrowUpFromBracket,
   faEye,
   faFilter,
+  faPen,
 } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import axios from "axios";
 import { UserContext } from "@/context/user/User";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, useMediaQuery, useTheme } from "@mui/material";
+import EditCourse from "../EditCourse/[id]/page";
 
 export default function ViewCourses() {
   const { userToken, setUserToken, userData } = useContext(UserContext);
+
+  const [openUpdate, setOpenUpdate] = React.useState(false);
+
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+  const [courseId, setCourseId] = useState(null);
+
+const handleClickOpenUpdate = (id) => {
+  setCourseId(id);
+    console.log(id)
+    setOpenUpdate(true);
+};
+const handleCloseUpdate = () => {
+  setOpenUpdate(false);
+};
 
   const [courses, setCourses] = useState([]);
 
@@ -19,10 +37,10 @@ export default function ViewCourses() {
     if (userData) {
       try {
         const { data } = await axios.get(
-          `http://localhost:5134/api/CourseContraller`
+          `http://localhost:5134/api/CourseContraller?pageNumber=1&pageSize=10`
         );
         //console.log(data);
-        setCourses(data.result);
+        setCourses(data.result.items);
       } catch (error) {
         console.log(error);
       }
@@ -106,6 +124,45 @@ export default function ViewCourses() {
                 <td>{course.startDate}</td>
                 <td>{course.instructorName}</td>
                 <td className="d-flex gap-1">
+                <button className="border-0 bg-white" type="button" onClick={() => handleClickOpenUpdate(course.id)}>
+                <FontAwesomeIcon icon={faPen} className="edit-pen" />
+            </button>
+
+            <Dialog
+        fullScreen={fullScreen}
+        open={openUpdate}
+        onClose={handleCloseUpdate}
+        aria-labelledby="responsive-dialog-title"
+        sx={{
+          "& .MuiDialog-container": {
+            "& .MuiPaper-root": {
+              width: "100%",
+              maxWidth: "600px!important",  
+              height: "400px!important",            },
+          },
+          
+        }}
+        >
+          <DialogTitle id="responsive-dialog-title" className='primaryColor fw-bold' >
+          {"Edit Course"}
+        </DialogTitle>
+
+        <DialogContent>
+        <Stack
+   direction="row"
+   spacing={1}
+   sx={{ justifyContent: 'center',  alignContent: 'center'}}
+    >
+      <EditCourse courseId={course.id} startDate = {course.startDate}  />
+     </Stack>
+        </DialogContent>
+        <DialogActions>
+         
+         <Button onClick={handleCloseUpdate} autoFocus>
+           Cancle
+         </Button>
+       </DialogActions>
+        </Dialog>
                   <Link href={"/Profile"}>
                     <button
                       type="button"

@@ -31,7 +31,7 @@ export default function AllCourses() {
           <div className="row">
           {courses.length ? (
             courses.map((course) => (
-              <div className="col-md-4 pb-4" key={course.id}>
+              <div className="col-lg-4 col-md-6 col-sm-12 pb-4" key={course.id}>
                <div className="singleCourse">
                 <div className="course-image row">
                   <img src={course.imageUrl} alt="Courses" className='col-md-6'/>
