@@ -11,17 +11,27 @@ import { faEnvelope } from '@fortawesome/free-regular-svg-icons'
 import '../Profile/[id]/Profile.css'
 import { faArrowUpFromBracket, faEye, faFilter } from '@fortawesome/free-solid-svg-icons'
 import { UserContext } from '@/context/user/User'
+import { FormControl, InputLabel, MenuItem, Pagination, Select, Stack, Tooltip } from '@mui/material'
 
 export default function page() {
   const {userToken, setUserToken, userData}=useContext(UserContext);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalPages, setTotalPages] = useState(0);
 
   let [contacts,setContact] = useState([]);
-  const fetchContacts = async () => {
+  const fetchContacts = async (pageNum = pageNumber, pageSizeNum = pageSize) => {
     if(userData){
     try{
-    const { data } = await axios.get(`http://localhost:5134/api/Employee/GetAllEmployeeForContact?pageNumber=1&pageSize=10`);
+    const { data } = await axios.get(`http://localhost:5134/api/Employee/GetAllEmployeeForContact?pageNumber=${pageNum}&pageSize=${pageSize}`,
+    {
+        headers: {
+            Authorization: `Bearer ${userToken}`,
+        },
+    });
     console.log(data);
     setContact(data.result.items);
+    setTotalPages(data.result.totalPages);
   }
     catch(error){
       console.log(error);
@@ -29,9 +39,19 @@ export default function page() {
   }
   };
 
+
   useEffect(() => {
     fetchContacts();
-  }, [userData]);
+  }, [userData, pageNumber, pageSize]);
+
+  const handlePageSizeChange = (event) => {
+    setPageSize(event.target.value);
+    setPageNumber(1); // Reset to the first page when page size changes
+  };
+  
+  const handlePageChange = (event, value) => {
+    setPageNumber(value);
+  };
 
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -63,7 +83,23 @@ return matchesSearchTerm ;
                     value={searchTerm}
                     onChange={handleSearch}
                 />
-                <div className="icons d-flex gap-2 pt-2">
+                 <FormControl fullWidth className="w-50">
+        <InputLabel id="page-size-select-label">Page Size</InputLabel>
+        <Select
+        className="justify-content-center"
+          labelId="page-size-select-label"
+          id="page-size-select"
+          value={pageSize}
+          label="Page Size"
+          onChange={handlePageSizeChange}
+        >
+          <MenuItem value={5}>5</MenuItem>
+          <MenuItem value={10}>10</MenuItem>
+          <MenuItem value={20}>20</MenuItem>
+          <MenuItem value={50}>50</MenuItem>
+        </Select>
+      </FormControl>
+                <div className="icons d-flex gap-2 pt-3">
                     
                     <div className="dropdown">
   <button className="dropdown-toggle border-0 bg-white edit-pen" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -83,6 +119,19 @@ return matchesSearchTerm ;
         </nav>
         
       </div>
+      <Stack spacing={2} sx={{ width: '100%', maxWidth: 500, margin: '0 auto' }}>
+     
+      <Pagination
+      className="pb-3"
+        count={totalPages}
+        page={pageNumber}
+        onChange={handlePageChange}
+        variant="outlined"
+        color="secondary"
+        showFirstButton
+        showLastButton
+      />
+    </Stack>
 
       <div className="row">
         {filteredContacts ? filteredContacts.map((contact)=>(
@@ -100,8 +149,10 @@ return matchesSearchTerm ;
                       <h4 className="card-title contactName">{contact.userName} {contact.lName}</h4>
                         
                         <div className="d-flex justify-content-center gap-3 pt-3">
-                          <Link className='social' href={`tel:${contact.phone}`}><FontAwesomeIcon icon={faPhone} /></Link>
-                          <Link className='social' href={`mailto:${contact.email}`}><FontAwesomeIcon icon={faEnvelope} /></Link>
+                        <Tooltip title="phone" placement="top">
+                          <Link className='social' href={`tel:${contact.phone}`}><FontAwesomeIcon icon={faPhone} /></Link></Tooltip>
+                        <Tooltip title="Email" placement="top">
+                          <Link className='social' href={`mailto:${contact.email}`}><FontAwesomeIcon icon={faEnvelope} /></Link></Tooltip>
                         </div>
                       </div>
                     </div>

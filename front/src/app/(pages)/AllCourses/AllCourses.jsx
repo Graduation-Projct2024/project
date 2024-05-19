@@ -15,7 +15,7 @@ export default function AllCourses() {
             `http://localhost:5134/api/CourseContraller`
           );
           console.log(data);
-          setCourses(data.result);
+          setCourses(data.result.items);
         } catch (error) {
           console.log(error);
         }
