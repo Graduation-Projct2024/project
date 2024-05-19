@@ -4,6 +4,7 @@ import { faArrowUpFromBracket, faEye, faFilter } from '@fortawesome/free-solid-s
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { UserContext } from '@/context/user/User';
+import { FormControl, InputLabel, MenuItem, Pagination, Select, Stack } from '@mui/material';
 
 export default function AccreditEvents() {
 
@@ -11,14 +12,18 @@ export default function AccreditEvents() {
   let[loader,setLoader] = useState(false);
   // const [processingEvent, setProcessingEvent] = useState(null); // State to track which event is being processed
   const {userToken, setUserToken, userData}=useContext(UserContext);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalPages, setTotalPages] = useState(0);
 
-  const fetchEventsForAccredit = async () => {
+  const fetchEventsForAccredit =async (pageNum = pageNumber, pageSizeNum = pageSize) => {
     if(userData){
     
     try{
-    const { data } = await axios.get(`http://localhost:5134/api/EventContraller/GetAllUndefinedEvents?pageNumber=1&pageSize=10`);
+    const { data } = await axios.get(`http://localhost:5134/api/EventContraller/GetAllUndefinedEvents?pageNumber=${pageNum}&pageSize=${pageSize}`);
     console.log(data);
     // setAccreditEvents(data);
+    setTotalPages(data.result.totalPages);
     setAccreditEvents(data.result.items);
   }
     catch(error){
@@ -60,9 +65,19 @@ export default function AccreditEvents() {
   }
   };
 
+
   useEffect(() => {
     fetchEventsForAccredit();
-  }, [accreditEvents,userData]);
+  }, [accreditEvent,userData, pageNumber, pageSize]);
+
+  const handlePageSizeChange = (event) => {
+    setPageSize(event.target.value);
+    setPageNumber(1); // Reset to the first page when page size changes
+  };
+  
+  const handlePageChange = (event, value) => {
+    setPageNumber(value);
+  };
 
 
 if(loader){
@@ -102,7 +117,23 @@ const  filteredAccreditEvents= Array.isArray(accreditEvents) ? accreditEvents.fi
                 value={searchTerm}
                 onChange={handleSearch}
               />
-              <div className="icons d-flex gap-2 pt-2">
+              <FormControl fullWidth className="w-50">
+        <InputLabel id="page-size-select-label">Page Size</InputLabel>
+        <Select
+        className="justify-content-center"
+          labelId="page-size-select-label"
+          id="page-size-select"
+          value={pageSize}
+          label="Page Size"
+          onChange={handlePageSizeChange}
+        >
+          <MenuItem value={5}>5</MenuItem>
+          <MenuItem value={10}>10</MenuItem>
+          <MenuItem value={20}>20</MenuItem>
+          <MenuItem value={50}>50</MenuItem>
+        </Select>
+      </FormControl>
+              <div className="icons d-flex gap-2 pt-3">
                 <div className="dropdown">
                   <button
                     className="dropdown-toggle border-0 bg-white edit-pen"
@@ -122,6 +153,19 @@ const  filteredAccreditEvents= Array.isArray(accreditEvents) ? accreditEvents.fi
           </div>
         </nav>
       </div>
+      <Stack spacing={2} sx={{ width: '100%', maxWidth: 500, margin: '0 auto' }}>
+     
+      <Pagination
+      className="pb-3"
+        count={totalPages}
+        page={pageNumber}
+        onChange={handlePageChange}
+        variant="outlined"
+        color="secondary"
+        showFirstButton
+        showLastButton
+      />
+    </Stack>
      
       <table className="table">
         <thead>

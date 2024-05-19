@@ -21,7 +21,7 @@ export default function page() {
   const getCourses = async () => {
     if(userData){
     const data = await axios.get(
-      `http://localhost:5134/api/Employee/GetAllCoursesGivenByInstructor?Instructorid=${userData.userId}&pageNumber=1&pageSize=10`
+      `http://localhost:5134/api/Employee/GetAllCoursesGivenByInstructor?Instructorid=${userData.userId}&pageNumber=1&pageSize=10`,{headers :{Authorization:`Bearer ${userToken}`}}
     );
     setCourses(data.data.result.items);
     setLoading(false);

@@ -12,7 +12,7 @@ import '../../dashboard/dashboard.css'
 import { UserContext } from '@/context/user/User';
 import EditProfile from './EditProfile';
 import '../../../../../node_modules/bootstrap/dist/js/bootstrap.bundle'
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, useMediaQuery, useTheme } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Tooltip, useMediaQuery, useTheme } from '@mui/material';
 import { Stack } from '@mui/system';
 
 
@@ -78,9 +78,9 @@ const handleCloseUpdate = () => {
           <div className="row">
             <div className="col-xl-8 col-lg-12 pt-lg-3 pt-md-3 pt-sm-3 pt-3 d-flex gap-2">
               <p className='text-uppercase fw-bold pt-2 '><span className='name'>{user.userName} {user.lName}</span></p>
-              {userData && params.id == userId && <button className="border-0 bg-white" type="button" onClick={() => handleClickOpenUpdate(params.id)}>
+              {userData && params.id == userId && <Tooltip title="Update profile" placement="top"><button className="border-0 bg-white" type="button" onClick={() => handleClickOpenUpdate(params.id)}>
                 <FontAwesomeIcon icon={faPen} className="edit-pen" />
-            </button>} 
+            </button></Tooltip>} 
             </div>
             
             {/* <div className="col-xl-6 col-lg-12">

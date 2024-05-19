@@ -45,11 +45,11 @@ export const editProfile = yup.object({
    
 })
 export const editCourse = yup.object({
-   name:yup.string().required('Name is required'),
-   price:yup.string().required('Price is required'),
-   category:yup.string().required('Category is required'),
-   description:yup.string().required('Description is required'),
    InstructorId:yup.string().required('InstructorId is required'),
+   startDate:yup.string().required('startDate is required'),
+   Deadline:yup.string().required('Deadline is required'),
+   limitNumberOfStudnet:yup.string().required('limitNumberOfStudnet is required'),
+   description:yup.string().required('description is required'),
 })
 
 export const addWeeklyHours = yup.object({

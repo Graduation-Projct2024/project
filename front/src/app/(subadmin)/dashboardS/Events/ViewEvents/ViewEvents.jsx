@@ -6,7 +6,7 @@ import CreateEvent from '../CreateEvent/CreateEvent';
 import axios from 'axios';
 import Link from 'next/link';
 import { UserContext } from '@/context/user/User';
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, useMediaQuery, useTheme } from '@mui/material';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Pagination, Select, Stack, useMediaQuery, useTheme } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 
@@ -15,6 +15,9 @@ export default function ViewEvents() {
     const [events, setEvent] = useState([]);
     const {userToken, setUserToken, userData}=useContext(UserContext);
     const [open, setOpen] = React.useState(false);
+    const [pageNumber, setPageNumber] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
+    const [totalPages, setTotalPages] = useState(0);
 
 
     const theme = useTheme();
@@ -27,12 +30,13 @@ export default function ViewEvents() {
     };
   
 
-    const fetchEvents = async () => {
+    const fetchEvents = async (pageNum = pageNumber, pageSizeNum = pageSize) => {
       if(userData){
       try{
-      const { data } = await axios.get(`http://localhost:5134/api/EventContraller/GetAllAccreditEvents?pageNumber=1&pageSize=10`);
+      const { data } = await axios.get(`http://localhost:5134/api/EventContraller/GetAllAccreditEvents?pageNumber=${pageNum}&pageSize=${pageSize}`);
       console.log(data);
       setEvent(data.result.items);
+      setTotalPages(data.result.totalPages);
     }
       catch(error){
         console.log(error);
@@ -42,8 +46,16 @@ export default function ViewEvents() {
   
     useEffect(() => {
       fetchEvents();
-    }, [events,userData]);
-  
+    }, [events,userData, pageNumber, pageSize]);  // Fetch courses on mount and when page or size changes
+    
+    const handlePageSizeChange = (event) => {
+      setPageSize(event.target.value);
+      setPageNumber(1); // Reset to the first page when page size changes
+    };
+    
+    const handlePageChange = (event, value) => {
+      setPageNumber(value);
+    };
     const [searchTerm, setSearchTerm] = useState('');
   
     const handleSearch = (event) => {
@@ -74,7 +86,23 @@ export default function ViewEvents() {
                     value={searchTerm}
                     onChange={handleSearch}
                 />
-                <div className="icons d-flex gap-2 pt-2">
+                 <FormControl fullWidth className="w-50">
+        <InputLabel id="page-size-select-label">Page Size</InputLabel>
+        <Select
+        className="justify-content-center"
+          labelId="page-size-select-label"
+          id="page-size-select"
+          value={pageSize}
+          label="Page Size"
+          onChange={handlePageSizeChange}
+        >
+          <MenuItem value={5}>5</MenuItem>
+          <MenuItem value={10}>10</MenuItem>
+          <MenuItem value={20}>20</MenuItem>
+          <MenuItem value={50}>50</MenuItem>
+        </Select>
+      </FormControl>
+                <div className="icons d-flex gap-2 pt-3">
                     
                     <div className="dropdown">
   <button className="dropdown-toggle border-0 bg-white edit-pen" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -153,7 +181,19 @@ export default function ViewEvents() {
         </Dialog>
         
       </div>
-
+      <Stack spacing={2} sx={{ width: '100%', maxWidth: 500, margin: '0 auto' }}>
+     
+     <Pagination
+     className="pb-3"
+       count={totalPages}
+       page={pageNumber}
+       onChange={handlePageChange}
+       variant="outlined"
+       color="secondary"
+       showFirstButton
+       showLastButton
+     />
+   </Stack>
       <table className="table">
   <thead>
     <tr>
