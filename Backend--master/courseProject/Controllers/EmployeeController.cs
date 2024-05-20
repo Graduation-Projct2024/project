@@ -6,12 +6,18 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using courseProject.Core.IGenericRepository;
 using courseProject.Core.Models;
-using courseProject.Core.Models.DTO;
 using courseProject.Repository.Data;
 using courseProject.Repository.GenericRepository;
 using System.Net;
 using courseProject.core.Models;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using courseProject.Core.Models.DTO.CoursesDTO;
+using courseProject.Core.Models.DTO.EmployeesDTO;
+using courseProject.Core.Models.DTO.LecturesDTO;
+using courseProject.Core.Models.DTO.InstructorsDTO;
+using courseProject.Core.Models.DTO.StudentsDTO;
+using courseProject.Core.Models.DTO.UsersDTO;
+using courseProject.Core.Models.DTO.RegisterDTO;
 
 namespace courseProject.Controllers
 {
@@ -44,9 +50,7 @@ namespace courseProject.Controllers
         [HttpGet("GetAllEmployee")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
-        [ProducesResponseType(400)]
-        // [Authorize(Policy = "Admin")]
-       // [Authorize(Policy = "Admin&subAdmin")]
+        [ProducesResponseType(400)]      
         public async Task<ActionResult<IReadOnlyList<SubAdmin>>> GetAllEmployeeAsync([FromQuery] PaginationRequest paginationRequest)
         {         
             try
@@ -82,7 +86,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        [Authorize(Policy ="Admin")]
+        
         public async Task<ActionResult<ApiResponce>> GetAllEmployeeForContactAsync([FromQuery] PaginationRequest paginationRequest)
         {
             var subAdmins = await unitOfWork.SubAdminRepository.GetAllEmployeeForContactAsync();
@@ -256,7 +260,6 @@ namespace courseProject.Controllers
         [Authorize(Policy ="Admin")]
         public async Task<ActionResult<ApiResponce>> updateEmployee(int id,[FromForm] EmployeeForUpdateDTO EmpolyeeModel)
         {
-
             if (id <= 0)
             {
                 responce.IsSuccess = false;
@@ -272,7 +275,7 @@ namespace courseProject.Controllers
                 responce.ErrorMassages = new List<string>() { "the subAdmin is not found" };
                 return NotFound(responce);
             }
-            if (id != EmpolyeeModel.Id || !ModelState.IsValid) {
+            if ( !ModelState.IsValid) {
                 responce.IsSuccess = false;
                 responce.StatusCode = HttpStatusCode.BadRequest;
                 return BadRequest(responce);
@@ -355,7 +358,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        [Authorize(Policy ="Instructor")]
+        [Authorize(Policy = "Admin , Instructor")]
         public async Task<ActionResult<ApiResponce>> GetAllCoursesByInstructorId (int Instructorid , [FromQuery] PaginationRequest paginationRequest)
         {
             if (Instructorid <= 0)
@@ -446,6 +449,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [Authorize]
         public async Task<ActionResult<ApiResponce>> GetInstructorOfficeHourById(int Instructorid)
         {
             if(Instructorid <= 0)
@@ -528,7 +532,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        [Authorize(Policy = "SubAdmin , Main-SubAdmin")]
+        [Authorize(Policy = "Main-SubAdmin , Student")]
         public async Task<ActionResult<ApiResponce>> GetAllCustomCoursesToMainSubAdmin([FromQuery] PaginationRequest paginationRequest)
         {
             try
@@ -564,6 +568,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [Authorize(Policy = "Main-SubAdmin , Student")]
         public async Task<ActionResult<ApiResponce>> GetCustomCourseById(int id)
         {
             if (id <= 0)
@@ -595,6 +600,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
+        [Authorize(Policy = "Main-SubAdmin ,Instructor , Student")]
         public async Task<ActionResult<ApiResponce>> GetAllLecturesByInstructorId(int instructorId , [FromQuery] PaginationRequest paginationRequest)
         {
             if (instructorId <= 0)
@@ -619,7 +625,7 @@ namespace courseProject.Controllers
                 responce.IsSuccess = false;
                 responce.StatusCode= HttpStatusCode.NoContent;
                 responce.ErrorMassages.Add("No Consultation Lectures For This Instructor");
-               // Response.Headers.Add("Message", "No Consultation Lectures For This Instructor");
+             
                 return  Ok(responce);
             }
             var LecturesMapper = mapper.Map<IReadOnlyList<Consultation>, IReadOnlyList<LecturesForRetriveDTO>>(GetLectures);
@@ -635,6 +641,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [Authorize]
         public async Task<ActionResult<ApiResponce>> GetInstructorsForDropDownList()
         {
             var GetInstructors = await unitOfWork.instructorRepositpry.GetAllEmployeeAsync();
@@ -658,6 +665,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [Authorize]
         public async Task<ActionResult<ApiResponce>> GetAllIinstructorsWithAllOfficeHours()
         {
             var AllOfficeHours = await unitOfWork.instructorRepositpry.getAllInstructorsOfficeHoursAsync();
@@ -667,7 +675,7 @@ namespace courseProject.Controllers
                 responce.StatusCode = HttpStatusCode.NoContent;
                 var message = "Not have any instructor account yet ";
                 responce.ErrorMassages.Add(message);
-              //  Response.Headers.Add("Message", message);
+             
                 return Ok(responce);
             }
             var InstrctorOfficeHoursMapper = mapper.Map<IReadOnlyList<Instructor_Working_Hours>, IReadOnlyList<Instructor_OfficeHoursDTO>>(AllOfficeHours);
@@ -681,7 +689,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        [Authorize(Policy = "SubAdmin , Main-SubAdmin")]
+        [Authorize(Policy = "Main-SubAdmin")]
         public async Task<ActionResult<ApiResponce>> GetAllRequestFromStudentsToJoinCourses([FromQuery] PaginationRequest paginationRequest)
         {
             try
@@ -714,6 +722,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [Authorize(Policy ="Admin")]
         public async Task<ActionResult<ApiResponce>> GetAllOptions()
         {
             try
@@ -744,6 +753,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [Authorize("Instructor")]
         public async Task<ActionResult<ApiResponce>> GetAllOptionsToInstructorDropdown(int instructorId)
         {
             try
@@ -802,18 +812,15 @@ namespace courseProject.Controllers
                     return (responce);
                 }
                 await unitOfWork.instructorRepositpry.AddListOfSkillsAsync(instructorId, array.skills);
-               // var success = await unitOfWork.instructorRepositpry.saveAsync();
+             
                 var getAllSkills = await unitOfWork.instructorRepositpry.GetAllSkillsNameToInstructorAsync(array.skills);
-                //if (success > 0)
-                //{
+               
+               
                     responce.IsSuccess = true;
                     responce.StatusCode = HttpStatusCode.Created;
                     responce.Result = getAllSkills;
                     return Ok(responce);
-            //}
-            //    responce.IsSuccess = false;
-            //responce.StatusCode = HttpStatusCode.BadRequest;
-            //return BadRequest(responce);
+           
         }
             catch(Exception ex)
             {

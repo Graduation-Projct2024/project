@@ -3,7 +3,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using courseProject.Core.IGenericRepository;
 using courseProject.Core.Models;
-using courseProject.Core.Models.DTO;
 using courseProject.Repository.Data;
 using System;
 using System.Collections.Generic;
@@ -12,9 +11,11 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using BC= BCrypt.Net.BCrypt;
+using BC = BCrypt.Net.BCrypt;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using courseProject.Core.Models.DTO.LoginDTO;
+using courseProject.Core.Models.DTO.RegisterDTO;
 
 namespace courseProject.Repository.GenericRepository
 {

@@ -2,9 +2,9 @@
 using courseProject.Core.Models;
 using courseProject.Core.IGenericRepository;
 using AutoMapper;
-using courseProject.Core.Models.DTO;
 using System.Net;
 using Microsoft.AspNetCore.Authorization;
+using courseProject.Core.Models.DTO.CoursesDTO;
 
 
 namespace courseProject.Controllers
