@@ -133,19 +133,7 @@ const filteredAccreditCourses = Array.isArray(accreditCourses) ? accreditCourses
       </div>
      
 
-<Stack spacing={2} sx={{ width: '100%', maxWidth: 500, margin: '0 auto' }}>
-     
-      <Pagination
-      className="pb-3"
-        count={totalPages}
-        page={pageNumber}
-        onChange={handlePageChange}
-        variant="outlined"
-        color="secondary"
-        showFirstButton
-        showLastButton
-      />
-    </Stack>
+
       <table className="table">
         <thead>
           <tr>
@@ -190,6 +178,19 @@ const filteredAccreditCourses = Array.isArray(accreditCourses) ? accreditCourses
           )}
         </tbody>
       </table>
+      <Stack spacing={2} sx={{ width: '100%', maxWidth: 500, margin: '0 auto' }}>
+     
+      <Pagination
+      className="pb-3"
+        count={totalPages}
+        page={pageNumber}
+        onChange={handlePageChange}
+        variant="outlined"
+        color="secondary"
+        showFirstButton
+        showLastButton
+      />
+    </Stack>
     </>
   );
 }

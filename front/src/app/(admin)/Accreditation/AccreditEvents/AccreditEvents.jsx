@@ -153,19 +153,7 @@ const  filteredAccreditEvents= Array.isArray(accreditEvents) ? accreditEvents.fi
           </div>
         </nav>
       </div>
-      <Stack spacing={2} sx={{ width: '100%', maxWidth: 500, margin: '0 auto' }}>
-     
-      <Pagination
-      className="pb-3"
-        count={totalPages}
-        page={pageNumber}
-        onChange={handlePageChange}
-        variant="outlined"
-        color="secondary"
-        showFirstButton
-        showLastButton
-      />
-    </Stack>
+      
      
       <table className="table">
         <thead>
@@ -211,6 +199,19 @@ const  filteredAccreditEvents= Array.isArray(accreditEvents) ? accreditEvents.fi
           )}
         </tbody>
       </table>
+      <Stack spacing={2} sx={{ width: '100%', maxWidth: 500, margin: '0 auto' }}>
+     
+      <Pagination
+      className="pb-3"
+        count={totalPages}
+        page={pageNumber}
+        onChange={handlePageChange}
+        variant="outlined"
+        color="secondary"
+        showFirstButton
+        showLastButton
+      />
+    </Stack>
     </>
 
   )

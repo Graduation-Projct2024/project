@@ -112,19 +112,7 @@ return matchesSearchTerm ;
         </nav>
         
       </div>
-      <Stack spacing={2} sx={{ width: '100%', maxWidth: 500, margin: '0 auto' }}>
-     
-     <Pagination
-     className="pb-3"
-       count={totalPages}
-       page={pageNumber}
-       onChange={handlePageChange}
-       variant="outlined"
-       color="secondary"
-       showFirstButton
-       showLastButton
-     />
-   </Stack>
+
 
 
       <table className="table">
@@ -143,7 +131,6 @@ return matchesSearchTerm ;
   {filteredStudents.length ? (
     filteredStudents.map((student) =>(
       <tr key={student.studentId}>
-        {console.log(student.studentId)}
       <th scope="row">{student.studentId}</th>
       <td>{student.userName}</td>
       <td>{student.email}</td>
@@ -171,7 +158,19 @@ return matchesSearchTerm ;
     
   </tbody>
 </table>
-
+      <Stack spacing={2} sx={{ width: '100%', maxWidth: 500, margin: '0 auto' }}>
+     
+     <Pagination
+     className="pb-3"
+       count={totalPages}
+       page={pageNumber}
+       onChange={handlePageChange}
+       variant="outlined"
+       color="secondary"
+       showFirstButton
+       showLastButton
+     />
+   </Stack>
 
       </>
   )

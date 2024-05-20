@@ -128,19 +128,6 @@ const handleCloseUpdate = () => {
           </div>
         </nav>
       </div>
-      <Stack spacing={2} sx={{ width: '100%', maxWidth: 500, margin: '0 auto' }}>
-     
-     <Pagination
-     className="pb-3"
-       count={totalPages}
-       page={pageNumber}
-       onChange={handlePageChange}
-       variant="outlined"
-       color="secondary"
-       showFirstButton
-       showLastButton
-     />
-   </Stack>
 
       <table className="table">
         <thead>
@@ -176,7 +163,7 @@ const handleCloseUpdate = () => {
             </button>
             <Dialog
         fullScreen={fullScreen}
-        open={openUpdate}
+        open={openUpdate && courseId === course.id}
         onClose={handleCloseUpdate}
         aria-labelledby="responsive-dialog-title"
         sx={{
@@ -230,6 +217,20 @@ const handleCloseUpdate = () => {
           )}
         </tbody>
       </table>
+            <Stack spacing={2} sx={{ width: '100%', maxWidth: 500, margin: '0 auto' }}>
+     
+     <Pagination
+     className="pb-3"
+       count={totalPages}
+       page={pageNumber}
+       onChange={handlePageChange}
+       variant="outlined"
+       color="secondary"
+       showFirstButton
+       showLastButton
+     />
+   </Stack>
+
     </>
   )
 }

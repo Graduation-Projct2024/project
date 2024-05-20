@@ -18,7 +18,7 @@ export default function CreateCourse({setOpen}) {
     description:'', 
     price:0,
     category: '',
-    SubAdminId:0,
+    SubAdminId:userId,
     InstructorId:0,
     startDate:'',
     Deadline:'',
@@ -120,8 +120,9 @@ const inputs =[
       type : 'number',
       id:'SubAdminId',
       name:'SubAdminId',
-      title:'SubAdmin Id',
+      title:`SubAdmin Id: ${userId}`,
       value:formik.values.SubAdminId,
+      disabled: true,
   },
   {
     type : 'number',
@@ -171,6 +172,7 @@ const renderInputs =  inputs.slice(0, -1).map((input,index)=>
           onChange={input.onChange||formik.handleChange}
            onBlur={formik.handleBlur}
             touched={formik.touched}
+            disabled={input.disabled}
             />  
     );
     const lastInput = inputs[inputs.length - 1];

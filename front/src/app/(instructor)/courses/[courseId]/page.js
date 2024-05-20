@@ -30,6 +30,7 @@ import AddFile from '../../components/Add/AddFile.jsx';
 import AddLink from '../../components/Add/AddLink.jsx';
 import AddAnnouncement from '../../components/Add/AddAnnouncement.jsx';
 import ViewTask from '../../components/View/ViewTask.jsx';
+import { FormControl, InputLabel, MenuItem, Pagination, Select } from '@mui/material';
 
 export default function page() {
     const contents=[
@@ -172,20 +173,37 @@ const handleCloseViewTaskDialog = () => {
 
       };
       const [participants, setParticipants]= useState();
-      const getParticipants = async () => {
+      const [pageNumber, setPageNumber] = useState(1);
+      const [pageSize, setPageSize] = useState(10);
+      const [totalPages, setTotalPages] = useState(0);
+      const getParticipants =async (pageNum = pageNumber, pageSizeNum = pageSize) => {
   
         const data = await axios.get(
-          `http://localhost:5134/api/StudentsContraller/GetCourseParticipants?Courseid=${courseId}&pageNumber=1&pageSize=10`
+          `http://localhost:5134/api/StudentsContraller/GetCourseParticipants?Courseid=${courseId}&pageNumber=${pageNum}&pageSize=${pageSize}`
         );
       console.log(data);
         setParticipants(data.data.result.items);
+        setTotalPages(data.data.result.totalPages);
       };
       useEffect(() => {
         getCourseMaterial();
         getCourses();
-        getParticipants();
+        // getParticipants();
       }, [materials]);
 
+
+      useEffect(() => {
+        getParticipants();
+      }, [participants, pageNumber, pageSize]);  // Fetch courses on mount and when page or size changes
+      
+      const handlePageSizeChange = (event) => {
+        setPageSize(event.target.value);
+        setPageNumber(1); // Reset to the first page when page size changes
+      };
+      
+      const handlePageChange = (event, value) => {
+        setPageNumber(value);
+      };
 
       
   return (
@@ -297,7 +315,25 @@ const handleCloseViewTaskDialog = () => {
 
     </div>
     <div className="tab-pane fade" id="Participants-tab-pane" role="tabpanel" aria-labelledby="Participants-tab" tabIndex={0}>
-    <div className='mt-5 ms-5'>
+
+              <div className='mt-5 ms-5'>
+                <div className='row justify-content-end'>
+        <FormControl fullWidth className="w-25 pb-3 pe-4">
+                <InputLabel id="page-size-select-label">Page Size</InputLabel>
+                <Select
+                className="justify-content-center"
+                  labelId="page-size-select-label"
+                  id="page-size-select"
+                  value={pageSize}
+                  label="Page Size"
+                  onChange={handlePageSizeChange}
+                >
+                  <MenuItem value={5}>5</MenuItem>
+                  <MenuItem value={10}>10</MenuItem>
+                  <MenuItem value={20}>20</MenuItem>
+                  <MenuItem value={50}>50</MenuItem>
+                </Select>
+              </FormControl></div>
     {participants?.map((participant, index)=>( 
     <Box
       height={50}
@@ -307,7 +343,7 @@ const handleCloseViewTaskDialog = () => {
       gap={4}
       p={2}
       sx={{ border: '1px solid grey' ,borderRadius: 3, justifyContent: 'space-between' }}
-      className={index%2==0?"bg-purple1":'bg-purple2'}
+      className={index%2==0?"bg-purple1":'bg-purple2 '}
     >
      <Typography variant='h6'> {participant.userName}</Typography>
      <div className='m-2'>
@@ -322,6 +358,20 @@ const handleCloseViewTaskDialog = () => {
    
     
     </div>
+     <Stack className='pt-5' spacing={2} sx={{ width: '100%', maxWidth: 500, margin: '0 auto' }}>
+     
+     <Pagination
+     className="pb-3"
+       count={totalPages}
+       page={pageNumber}
+       onChange={handlePageChange}
+       variant="outlined"
+       color="secondary"
+       showFirstButton
+       showLastButton
+     />
+   </Stack>
+   
    
   </div>
 </div>

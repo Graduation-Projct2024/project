@@ -74,7 +74,7 @@ const handleClickOpen = () => {
   }) : [];
   return (
     <>
-    <div className="filter py-2 text-end">
+    <div className="filter py-2 text-end gap-1">
         <nav className="navbar">
           <div className="container justify-content-end">
                 <form className="d-flex" role="search">
@@ -183,19 +183,7 @@ const handleClickOpen = () => {
         </Dialog>
       </div>
 
- <Stack spacing={2} sx={{ width: '100%', maxWidth: 500, margin: '0 auto' }}>
-     
-     <Pagination
-     className="pb-3"
-       count={totalPages}
-       page={pageNumber}
-       onChange={handlePageChange}
-       variant="outlined"
-       color="secondary"
-       showFirstButton
-       showLastButton
-     />
-   </Stack>
+
       <table className="table">
   <thead>
     <tr>
@@ -261,7 +249,19 @@ const handleClickOpen = () => {
     
   </tbody>
 </table>
-
+ <Stack spacing={2} sx={{ width: '100%', maxWidth: 500, margin: '0 auto' }}>
+     
+     <Pagination
+     className="pb-3"
+       count={totalPages}
+       page={pageNumber}
+       onChange={handlePageChange}
+       variant="outlined"
+       color="secondary"
+       showFirstButton
+       showLastButton
+     />
+   </Stack>
 
 
       </>

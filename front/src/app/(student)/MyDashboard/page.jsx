@@ -19,7 +19,7 @@ export default function page() {
     if(userData){
       try{
         const {data} = await axios.get(
-          `http://localhost:5134/api/StudentsContraller/GetAllEnrolledCoursesForAStudent?studentid=${userData.userId}&pageNumber=1&pageSize=10`
+          `http://localhost:5134/api/StudentsContraller/GetAllEnrolledCoursesForAStudent?studentid=${userData.userId}&pageNumber=1&pageSize=10`,{headers :{Authorization:`Bearer ${userToken}`}}
         );
         console.log(data.result);
          setCourses(data.result.items);

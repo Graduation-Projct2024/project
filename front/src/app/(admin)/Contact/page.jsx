@@ -119,19 +119,7 @@ return matchesSearchTerm ;
         </nav>
         
       </div>
-      <Stack spacing={2} sx={{ width: '100%', maxWidth: 500, margin: '0 auto' }}>
      
-      <Pagination
-      className="pb-3"
-        count={totalPages}
-        page={pageNumber}
-        onChange={handlePageChange}
-        variant="outlined"
-        color="secondary"
-        showFirstButton
-        showLastButton
-      />
-    </Stack>
 
       <div className="row">
         {filteredContacts ? filteredContacts.map((contact)=>(
@@ -160,6 +148,19 @@ return matchesSearchTerm ;
         )) : <h1>No Data</h1>}
        
       </div>
+       <Stack spacing={2} sx={{ width: '100%', maxWidth: 500, margin: '0 auto' }}>
+     
+      <Pagination
+      className="pb-3"
+        count={totalPages}
+        page={pageNumber}
+        onChange={handlePageChange}
+        variant="outlined"
+        color="secondary"
+        showFirstButton
+        showLastButton
+      />
+    </Stack>
     </Layout>
   );
 }

@@ -11,7 +11,7 @@ import Link from "next/link";
 import axios from "axios";
 import { UserContext } from "@/context/user/User";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Pagination, Stack, useMediaQuery, useTheme, MenuItem, FormControl, Select, InputLabel, Tooltip } from "@mui/material";
-import EditCourse from "../EditCourse/[id]/page";
+import EditCourse from "../EditCourse/[courseId]/page";
 
 export default function ViewCourses() {
   const { userToken, setUserToken, userData } = useContext(UserContext);
@@ -24,6 +24,7 @@ export default function ViewCourses() {
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
+  
 
 const handleClickOpenUpdate = (id) => {
   setCourseId(id);
@@ -150,21 +151,8 @@ const handlePageChange = (event, value) => {
       </div>
 
 
-      <Stack spacing={2} sx={{ width: '100%', maxWidth: 500, margin: '0 auto' }}>
-     
-      <Pagination
-      className="pb-3"
-        count={totalPages}
-        page={pageNumber}
-        onChange={handlePageChange}
-        variant="outlined"
-        color="secondary"
-        showFirstButton
-        showLastButton
-      />
-    </Stack>
 
-      <table className="table pt-4">
+      <table className="table ">
         <thead>
           <tr>
             <th scope="col">ID</th>
@@ -197,7 +185,7 @@ const handlePageChange = (event, value) => {
 
             <Dialog
         fullScreen={fullScreen}
-        open={openUpdate}
+        open={openUpdate && courseId === course.id}
         onClose={handleCloseUpdate}
         aria-labelledby="responsive-dialog-title"
         sx={{
@@ -250,6 +238,20 @@ const handlePageChange = (event, value) => {
           )}
         </tbody>
       </table>
+      
+      <Stack spacing={2} sx={{ width: '100%', maxWidth: 500, margin: '0 auto' }}>
+     
+      <Pagination
+      className="pb-3"
+        count={totalPages}
+        page={pageNumber}
+        onChange={handlePageChange}
+        variant="outlined"
+        color="secondary"
+        showFirstButton
+        showLastButton
+      />
+    </Stack>
     </>
   );
 }
