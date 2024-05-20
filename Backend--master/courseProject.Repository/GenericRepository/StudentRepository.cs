@@ -48,7 +48,7 @@ namespace courseProject.Repository.GenericRepository
 
         public async Task<IReadOnlyList<StudentCourse>> GetAllCoursesForStudentAsync(int Studentid)
         {
-         return await  dbContext.studentCourses.Include(x=>x.Course).Where(x => x.StudentId == Studentid && x.status.ToLower()=="joined").ToListAsync();
+         return await  dbContext.studentCourses.Include(x=>x.Course).Where(x => x.StudentId == Studentid && x.status.ToLower()=="joind").ToListAsync();
         }
 
         public async Task<IReadOnlyList<Student>> GetAllStudentsInTheSameCourseAsync(int courseId)
