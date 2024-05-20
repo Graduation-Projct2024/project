@@ -16,10 +16,10 @@ console.log(userToken);
   const getCourses = async () => {
     if(userData){
     const data = await axios.get(
-      `http://localhost:5134/api/Employee/GetAllCoursesGivenByInstructor?Instructorid=${userData.userId}`
+      `http://localhost:5134/api/Employee/GetAllCoursesGivenByInstructor?Instructorid=${userData.userId}pageNumber=1&pageSize=10`,{headers :{Authorization:`Bearer ${userToken}`}}
     );
-    setCourses(data.data.result);
-    console.log(data.result)
+    setCourses(data.data.result.items);
+    console.log(data.result.items)
     }
     
   };

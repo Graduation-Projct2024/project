@@ -183,8 +183,12 @@ const sidebarItems = [
           {title}
           </Typography>
           <Link  >
-          {userData&&userData.imageUrl?(<Avatar alt="profile picture" src={userData.imageUrl} sx={{ width: 60, height: 60,mr:7 ,mt:3,}} />):(<Avatar alt="Remy Sharp" sx={{ width: 60, height: 60,mr:7 ,mt:3,}} />)} 
-          </Link>
+          {/* <Link href={`/Profile/${userId}`}> <button type="button" > */}
+            {userData&&userData.imageUrl?(  
+            <Avatar alt="profile picture" src={userData.imageUrl} sx={{ width: 60, height: 60,mr:7 ,mt:3,}} />
+            ):(<Avatar alt="Remy Sharp" sx={{ width: 60, height: 60,mr:7 ,mt:3,}} />)} 
+             {/* </button></Link> */}
+         </Link>
         </Toolbar>
       </Stack>
       <Box

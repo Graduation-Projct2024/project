@@ -181,19 +181,7 @@ export default function ViewEvents() {
         </Dialog>
         
       </div>
-      <Stack spacing={2} sx={{ width: '100%', maxWidth: 500, margin: '0 auto' }}>
-     
-     <Pagination
-     className="pb-3"
-       count={totalPages}
-       page={pageNumber}
-       onChange={handlePageChange}
-       variant="outlined"
-       color="secondary"
-       showFirstButton
-       showLastButton
-     />
-   </Stack>
+
       <table className="table">
   <thead>
     <tr>
@@ -236,6 +224,19 @@ export default function ViewEvents() {
     
   </tbody>
 </table>
+      <Stack spacing={2} sx={{ width: '100%', maxWidth: 500, margin: '0 auto' }}>
+     
+     <Pagination
+     className="pb-3"
+       count={totalPages}
+       page={pageNumber}
+       onChange={handlePageChange}
+       variant="outlined"
+       color="secondary"
+       showFirstButton
+       showLastButton
+     />
+   </Stack>
 
 
       </>

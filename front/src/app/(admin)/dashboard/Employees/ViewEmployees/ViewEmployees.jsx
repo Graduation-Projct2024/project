@@ -2,7 +2,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import CreateEmployee from '../CreateEmployee/CreateEmployee';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowUpFromBracket, faBook, faEye, faFilter, faPen } from '@fortawesome/free-solid-svg-icons'
+import { faArrowUpFromBracket, faBook, faEye, faFilter, faPen, faPeopleArrows } from '@fortawesome/free-solid-svg-icons'
 import Link from 'next/link';
 import axios from 'axios';
 import UpdateEmployee from '../UpdateEmployee/[id]/page';
@@ -10,7 +10,8 @@ import { UserContext } from '@/context/user/User';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Pagination, Stack, useMediaQuery, useTheme, MenuItem, FormControl, Select, InputLabel, Box, Tooltip } from "@mui/material";
 import '../../../dashboard/dashboard.css'
-import '../../../../../../node_modules/bootstrap/dist/js/bootstrap.bundle'
+import '../../../../../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js'
+import ChangeRole from '../ChangeRole/[userId]/ChangeRole';
 
 export default function ViewEmployees() {
 
@@ -19,6 +20,7 @@ export default function ViewEmployees() {
       // const [loading,setLoading] = useState(true);
       const [open, setOpen] = React.useState(false);
       const [openUpdate, setOpenUpdate] = React.useState(false);
+      const [openChange, setOpenChange] = React.useState(false);
       const [pageNumber, setPageNumber] = useState(1);
       const [pageSize, setPageSize] = useState(10);
       const [totalPages, setTotalPages] = useState(0);
@@ -35,6 +37,14 @@ export default function ViewEmployees() {
     const handleCloseUpdate = () => {
       setOpenUpdate(false);
     };
+    const handleClickOpenChange = (id) => {
+      setEmployeeId(id);
+      console.log(id)
+      setOpenChange(true);
+  };
+  const handleCloseChange = () => {
+    setOpenChange(false);
+  };
 
       const handleClickOpen = () => {
         setOpen(true);
@@ -236,7 +246,7 @@ export default function ViewEmployees() {
           "& .MuiDialog-container": {
             "& .MuiPaper-root": {
               width: "100%",
-              maxWidth: "600px!important",  
+              maxWidth: "700px!important",  
               height: "500px!important",            },
           },
           
@@ -265,19 +275,7 @@ export default function ViewEmployees() {
 
       </div>
 
-      <Stack spacing={2} sx={{ width: '100%', maxWidth: 500, margin: '0 auto' }}>
-     
-     <Pagination
-     className="pb-3"
-       count={totalPages}
-       page={pageNumber}
-       onChange={handlePageChange}
-       variant="outlined"
-       color="secondary"
-       showFirstButton
-       showLastButton
-     />
-   </Stack>
+
 
       <table className="table">
         <thead>
@@ -287,7 +285,7 @@ export default function ViewEmployees() {
             <th scope="col">Email</th>
             <th scope="col">Role</th>
             <th scope="col">Gender</th>
-            <th scope="col">Phone number</th>
+            <th scope="col">Phone No.</th>
             <th scope="col">Address</th>
             <th scope="col">Option</th>
           </tr>
@@ -318,14 +316,14 @@ export default function ViewEmployees() {
                   </Button> */}
                  <Dialog
         fullScreen={fullScreen}
-        open={openUpdate}
+        open={openUpdate && employeeId === employee.id}
         onClose={handleCloseUpdate}
         aria-labelledby="responsive-dialog-title"
         sx={{
           "& .MuiDialog-container": {
             "& .MuiPaper-root": {
               width: "100%",
-              maxWidth: "600px!important",  
+              maxWidth: "700px!important",  
               height: "400px!important",            },
           },
           
@@ -350,7 +348,7 @@ export default function ViewEmployees() {
            Cancle
          </Button>
        </DialogActions>
-        </Dialog>
+                </Dialog>
                   {/* <div className="modal fade" id={`exampleModal2-${employee.id}`} tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div className="modal-dialog modal-dialog-centered modal-lg">
                       <div className="modal-content row justify-content-center">
@@ -384,6 +382,7 @@ export default function ViewEmployees() {
                       pathname: `/InstructorCourses/${employee.id}`,
                       query: { fName: employee.fName, lName: employee.lName }
                     }}>
+
                       <Tooltip title="View Instructor Courses" placement="top">
                     <button type="button" className="border-0 bg-white ">
                       <FontAwesomeIcon icon={faBook} className="edit-pen" />
@@ -392,7 +391,48 @@ export default function ViewEmployees() {
                   </Link>
                   
                   )}
+ {userData && (employee.type == "subadmin"|| employee.type == "main-subadmin")  && (
+<Tooltip title="Swap roles" placement="top">
+                <button className="border-0 bg-white"  type="button" onClick={() => handleClickOpenChange(employee.id)}>
+                <FontAwesomeIcon icon={faPeopleArrows} className='edit-pen'/>
+            </button>
+            </Tooltip>)}
                   
+            <Dialog
+        fullScreen={fullScreen}
+        open={openChange && employeeId === employee.id}
+        onClose={handleCloseChange}
+        aria-labelledby="responsive-dialog-title"
+        sx={{
+          "& .MuiDialog-container": {
+            "& .MuiPaper-root": {
+              width: "100%",
+              maxWidth: "450px!important",  
+              height: "280px!important",            },
+          },
+          
+        }}
+        >
+          <DialogTitle id="responsive-dialog-title" className='primaryColor fw-bold text-center' >
+          {"Change Role"}
+        </DialogTitle>
+
+        <DialogContent>
+        <Stack
+   direction="row"
+   spacing={1}
+   sx={{ justifyContent: 'center',  alignContent: 'center'}}
+    >
+      <ChangeRole userId = {employee.id} role={employee.type} setOpenChange={setOpenChange} />
+     </Stack>
+        </DialogContent>
+        <DialogActions>
+         
+         <Button onClick={handleCloseChange} autoFocus>
+           Cancle
+         </Button>
+       </DialogActions>
+                </Dialog>
                 </td>
               </tr>
             ))
@@ -403,6 +443,20 @@ export default function ViewEmployees() {
           )}
         </tbody>
       </table>
+      
+      <Stack spacing={2} sx={{ width: '100%', maxWidth: 500, margin: '0 auto' }}>
+     
+     <Pagination
+     className="pb-3"
+       count={totalPages}
+       page={pageNumber}
+       onChange={handlePageChange}
+       variant="outlined"
+       color="secondary"
+       showFirstButton
+       showLastButton
+     />
+   </Stack>
 
       {/* <div className="modal fade" id="exampleModal3" tabIndex="-1" aria-labelledby="exampleModa3Label" aria-hidden="true">
           <div className="modal-dialog modal-dialog-centered modal-lg">
