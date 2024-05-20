@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using courseProject.Core.Models;
-using courseProject.Core.Models.DTO;
+using courseProject.Core.Models.DTO.LoginDTO;
+using courseProject.Core.Models.DTO.RegisterDTO;
 
 
 namespace courseProject.Core.IGenericRepository

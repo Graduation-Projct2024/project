@@ -2,7 +2,9 @@
 using courseProject.Controllers;
 using courseProject.core.Models;
 using courseProject.Core.Models;
-using courseProject.Core.Models.DTO;
+using courseProject.Core.Models.DTO.CoursesDTO;
+using courseProject.Core.Models.DTO.MaterialsDTO;
+using courseProject.Core.Models.DTO.StudentsDTO;
 
 namespace courseProject.MappingProfile
 {

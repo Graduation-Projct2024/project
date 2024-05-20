@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using courseProject.Core.IGenericRepository;
 using courseProject.Core.Models;
-using courseProject.Core.Models.DTO;
 using System.Net;
 using System.Threading.Tasks.Dataflow;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -13,6 +12,9 @@ using Microsoft.EntityFrameworkCore;
 using courseProject.Repository.GenericRepository;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
+using courseProject.Core.Models.DTO.UsersDTO;
+using courseProject.Core.Models.DTO.LoginDTO;
+using courseProject.Core.Models.DTO.RegisterDTO;
 
 
 namespace courseProject.Controllers
@@ -77,7 +79,7 @@ namespace courseProject.Controllers
 
 
         [HttpPost("Register")]
-
+        [AllowAnonymous]
         public async Task<IActionResult> Register(RegistrationRequestDTO model)
         {
             if (model == null)

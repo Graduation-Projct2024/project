@@ -116,7 +116,7 @@ namespace courseProject.Repository.GenericRepository
             return await dbContext.studentCourses.Include(x => x.Student)
                                                       .ThenInclude(x => x.user)
                                                  .Include(x => x.Course)
-                                                // .Where(x => x.status.ToLower() == "waiting")
+                                                 .Where(x => x.status.ToLower() == "waiting")
                                                  .ToListAsync();
         }
 
