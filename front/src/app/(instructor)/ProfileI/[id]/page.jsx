@@ -13,12 +13,27 @@ import '../../../../../node_modules/bootstrap/dist/js/bootstrap.bundle'
 import Layout from '../../instructorLayout/Layout';
 import WeeklyHours from './WeeklyHours';
 import ViewWeeklyHours from './ViewWeeklyHours';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, useMediaQuery, useTheme } from '@mui/material';
+import Education from './Education.jsx';
 
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, useMediaQuery, useTheme } from '@mui/material';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import SchoolIcon from '@mui/icons-material/School';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import PersonIcon from '@mui/icons-material/Person';
+import ReviewsIcon from '@mui/icons-material/Reviews';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
+import Box from '@mui/material/Box';
 
 export default function page({params}) {
   const {userToken, setUserToken, userData,userId}=useContext(UserContext);
+  const [value, setValue] = React.useState(0);
 
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
   let [user,setUser] = useState({})
   const [loading, setLoading] = useState(false);
   const [openUpdate, setOpenUpdate] = React.useState(false);
@@ -47,7 +62,6 @@ const handleCloseUpdate = () => {
      
       );
       if(data.isSuccess){
-        console.log(data.result);
       setUser(data.result);
       //setLoading(false)
       }}
@@ -56,7 +70,6 @@ const handleCloseUpdate = () => {
       }}
       
   }
-  console.log(userData)
   useEffect(()=>{
       getUser();
   },[user,userData])
@@ -110,7 +123,7 @@ const handleCloseUpdate = () => {
             "& .MuiPaper-root": {
               width: "100%",
               maxWidth: "600px!important",  
-              height: "400px!important",            },
+              minheight: "400px!important",            },
           },
           
         }}
@@ -185,8 +198,27 @@ const handleCloseUpdate = () => {
           
         </div>
       </div>
-      <ViewWeeklyHours id={params.id}/>
-      <WeeklyHours id = {params.id}/>
+    <Box sx={{ width: '100%', typography: 'body1', mt:5 }}>
+      <TabContext value={value}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <TabList onChange={handleChange} aria-label="lab API tabs example" centered>
+
+            <Tab icon={< PersonIcon/>} label="About" value="0"/>
+      <Tab icon={<SchoolIcon />} label="Education" value="1" />
+      <Tab icon={<AccessTimeIcon />} label="Availability" value="2"/>
+      <Tab icon={<ReviewsIcon />} label="ReviewS" value="3"/>
+
+          </TabList>
+        </Box>
+        <TabPanel value="0" active>About me</TabPanel>
+        <TabPanel value="1"><Education /></TabPanel>
+        <TabPanel value="2"><ViewWeeklyHours id={params.id}/>
+      <WeeklyHours id = {params.id}/></TabPanel>
+        <TabPanel value="3">Item Four</TabPanel>
+
+      </TabContext>
+    </Box>
+      
     </div>
     </Layout>
   )

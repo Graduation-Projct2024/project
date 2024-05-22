@@ -18,10 +18,11 @@ import { faFacebookF, faGithub, faLinkedinIn } from '@fortawesome/free-brands-sv
 
 export default function Testimonials() {
 
-  let [contacts,setContact] = useState([]);
+  let [contacts,setContacts] = useState([]);
   const fetchContacts = async () => {
     try{
     const { data } = await axios.get(`http://localhost:5134/api/Employee/GetAllEmployeeForContact`);
+
     console.log(data);
     setContact(data.result.items);
   }
@@ -116,9 +117,9 @@ export default function Testimonials() {
            onSlideChange={() => console.log('slide change')}
            loop = {true}
         >
+
            {contacts.length? contacts.map((contact)=>(
-          <SwiperSlide key={contact.id} className='py-5' >
-         
+          <SwiperSlide key={contact.id} className='py-5' >     
           <div className="col-md-4">
                     <div className="card text-center mb-3" style={{ width: "18rem" }}>
                       <div className="card-body m-3">
@@ -143,7 +144,7 @@ export default function Testimonials() {
                   </div>
 
           </SwiperSlide>
-                )) : <h1>No Data</h1>}
+                )) :( <h1>No Data</h1>)}
          
         </Swiper>
       </div>

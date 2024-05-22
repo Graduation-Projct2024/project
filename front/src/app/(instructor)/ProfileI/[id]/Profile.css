@@ -266,3 +266,13 @@ body{
   color: #7C7E9D;
   font-weight: 600;
 }
+.css-aym9vq-MuiButtonBase-root-MuiTab-root.Mui-selected{
+  color:#4C5372 !important;
+}
+.css-1aquho2-MuiTabs-indicator{
+  background-color:#4C5372 !important;
+
+}
+.css-sghohy-MuiButtonBase-root-MuiButton-root, .css-sghohy-MuiButtonBase-root-MuiButton-root:hover{
+background-color:#4C5372 !important;
+}

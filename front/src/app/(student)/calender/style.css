@@ -26,3 +26,18 @@
 .css-1u3bzj6-MuiFormControl-root-MuiTextField-root{
     margin-top:20px;
 }
+
+.css-1xu2qw-MuiButtonBase-root-MuiButton-root, .css-1xu2qw-MuiButtonBase-root-MuiButton-root:hover {
+    background-color: #4c5372 !important;
+color:#fff6fd;
+}
+.css-1e6y48t-MuiButtonBase-root-MuiButton-root {
+    color:#4c5372 ;
+
+}
+
+.lecture-details{
+    border: 1px solid #4c5372;
+    padding:1rem .75rem;
+    border-radius:5px;
+}
