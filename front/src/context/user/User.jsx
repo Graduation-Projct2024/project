@@ -34,13 +34,9 @@ export default function UserContextProvider({children}){
         );
       }
 
-<<<<<<< HEAD
     const getUserInfo= async() =>{
         if(userId){ 
-=======
-      const getUserInfo= async() =>{
-        if(userId!=null){
->>>>>>> 10e28681990b17396ae7c9731d0953f8932308bf
+
             const {data} = await axios.get(`http://localhost:5134/api/UserAuth/GetProfileInfo?id=${userId}`,
             {headers :{Authorization:`Bearer ${userToken}`}}
             )

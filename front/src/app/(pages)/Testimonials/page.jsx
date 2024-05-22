@@ -22,13 +22,9 @@ export default function Testimonials() {
   const fetchContacts = async () => {
     try{
     const { data } = await axios.get(`http://localhost:5134/api/Employee/GetAllEmployeeForContact`);
-<<<<<<< HEAD
-    console.log(data.result.items);
-    setContacts(data.result.items);
-=======
+
     console.log(data);
     setContact(data.result.items);
->>>>>>> 10e28681990b17396ae7c9731d0953f8932308bf
   }
     catch(error){
       console.log(error);
@@ -121,14 +117,9 @@ export default function Testimonials() {
            onSlideChange={() => console.log('slide change')}
            loop = {true}
         >
-<<<<<<< HEAD
-           {contacts? (contacts.map((contact)=>(
-          <SwiperSlide className='py-5'>
-=======
+
            {contacts.length? contacts.map((contact)=>(
-          <SwiperSlide key={contact.id} className='py-5' >
->>>>>>> 10e28681990b17396ae7c9731d0953f8932308bf
-         
+          <SwiperSlide key={contact.id} className='py-5' >     
           <div className="col-md-4">
                     <div className="card text-center mb-3" style={{ width: "18rem" }}>
                       <div className="card-body m-3">
@@ -153,7 +144,7 @@ export default function Testimonials() {
                   </div>
 
           </SwiperSlide>
-                ))) :( <h1>No Data</h1>)}
+                )) :( <h1>No Data</h1>)}
          
         </Swiper>
       </div>

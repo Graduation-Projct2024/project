@@ -1,5 +1,5 @@
 'use client';
-import React, { useRef, useEffect, uesState ,useContext} from 'react';
+import React, { useRef, useEffect, useState, useContext } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -10,9 +10,10 @@ import listPlugin from '@fullcalendar/list';
 import * as yup from "yup";
 import axios from "axios";
 import { useFormik } from "formik";
-import timeGridDay  from '@fullcalendar/timegrid'
-import Layout from '../studentLayout/Layout.jsx'
-import './style.css'
+import timeGridDay from '@fullcalendar/timegrid';
+import Layout from '../studentLayout/Layout.jsx';
+import './style.css';
+import LectureDetails from './LectureDetails.jsx';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -30,18 +31,24 @@ import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+
 export default function CalendarPage() {
-const {userToken, setUserToken, userData,userId}=useContext(UserContext);
-const [date, setDate]=React.useState(new Date());
-const [skillName, setSkillName]=React.useState();
-const [lecture, setLecture]=React.useState();
-const [skill, setSkill]=React.useState(1);
-const [start, setStart]=React.useState('00:00');
-const [end, setEnd]=React.useState('01:00');
-const [status, setStatus] = React.useState('private');
-const [selectedInstructor,setSelectedInstructor]=React.useState();
-const [open, setOpen] = React.useState(false);
-const [alertOpen, setAlertOpen] = React.useState(false);
+  const { userToken, setUserToken, userData, userId } = useContext(UserContext);
+  const [date, setDate] = useState(new Date());
+  const [skillName, setSkillName] = useState();
+  const [lecture, setLecture] = useState();
+  const [lectureID, setLectureID] = useState();
+
+  const [skill, setSkill] = useState(1);
+  const [start, setStart] = useState('00:00');
+  const [end, setEnd] = useState('01:00');
+  const [status, setStatus] = useState('private');
+  const [selectedInstructor, setSelectedInstructor] = useState();
+  const [open, setOpen] = useState(false);
+  const [openDetails, setOpenDetails] = useState(false);
+
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null);
 function getCurrentDateFormatted(date) {
   const today = new Date(date);
   const year = today.getFullYear();
@@ -56,21 +63,41 @@ function getCurrentDateFormatted(date) {
   };
   const[instructors, setInstructors]=React.useState();
   const getInstructors = async () => {
-    setDate(getCurrentDateFormatted(date));
-    const data = await axios.post(
-      `http://localhost:5134/api/Employee/GetListOfInstructorForLectures?skillId=${skill}&startTime=${start}&endTime=${end}&date=${getCurrentDateFormatted(date)}`
-     , {headers: {
-        'Content-Type': 'application/json','Content-Type': 'charset=utf-8',
-      }}
-    );
-    if(data.data.isSuccess){
-    setInstructors(data.data.result);
+   
+    try {
+      const response = await axios.post(
+        `http://localhost:5134/api/Employee/GetListOfInstructorForLectures?skillId=${skill}&startTime=${start}&endTime=${end}&date=${getCurrentDateFormatted(date)}`,
+        {},
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${userToken}`
+          }
+        }
+      );
+  
+      if (response.data.isSuccess) {
+        setInstructors(response.data.result);
+      } else {
+        console.error('Error in response:', response.data);
+      }
+    } catch (error) {
+      console.error('Error fetching instructors:', error);
     }
   };
+  
   const[skills, setSkills]=React.useState();
   const getSkills = async () => {
     const data = await axios.get(
-      `http://localhost:5134/api/Employee/GetAllSkillOptions`
+      `http://localhost:5134/api/Employee/GetAllSkillOptions`,
+      {},
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${userToken}`
+          }
+        }
+
     );
     //console.log(data.data.result);
   
@@ -91,13 +118,17 @@ function getCurrentDateFormatted(date) {
     try {
       if (userId) {
         const response = await axios.post(
-          `http://localhost:5134/api/StudentsContraller/GetAllConsultations?studentId=${userId}`
+          `http://localhost:5134/api/StudentsContraller/GetAllConsultations?studentId=${userId}`,
+          {},
+
+          {headers :{Authorization:`Bearer ${userToken}`}}
+
         );
 
         if (response.data.isSuccess) {
           const parsedEvents = response.data.result.items.map(event => ({
             title: event.name,
-            
+            id:event.consultationId,
             start: convertDateFormat(`${event.date} ${event.startTime}`),
             end: convertDateFormat(`${event.date} ${event.endTime}`),
             // Additional event properties if needed
@@ -321,6 +352,7 @@ const textAraeInput = (
   const handleCloseAlert = () => {
     setAlertOpen(false);
   };
+  
   //const [calevents, setCalvents] =React.useState([]);
 
   const calendarRef = useRef(null);
@@ -333,11 +365,13 @@ const textAraeInput = (
   //setCalvents(parsedEvents);
 
   //console.log("events"+parsedEvents);
+  const handleCloseDetailskDialog = () => {
+    setOpenDetails(false);
+  };
   useEffect(() => {
     getInstructors();
     getLectures();
     getSkills();
-
 
 
     if (calendarRef.current) {
@@ -346,6 +380,7 @@ const textAraeInput = (
   }, [status, date, selectedInstructor, lecture, skill, start, end, instructors, skillName]);
   return (
     <Layout title='Book a Lecture'>
+      <LectureDetails open={openDetails} onClose={handleCloseDetailskDialog} lectureID={lectureID} />
        <Snackbar open={alertOpen} autoHideDuration={6000} onClose={handleCloseAlert}>
         <Alert
           onClose={handleClose}
@@ -372,6 +407,7 @@ const textAraeInput = (
           center: 'title',
           right: 'dayGridMonth,timeGridWeek,listWeek',
         }}
+
         initialView="dayGridMonth" 
         nowIndicator={true}
         //editable= {true}
@@ -384,12 +420,23 @@ const textAraeInput = (
         // eventDidMount ={(info)=>{
         // }}
 
+        eventClick={function(info) {
+
+          setLectureID(info.event.id);
+
+          setOpenDetails(true);
+       }}
 
         //views= {views}
         //initialDate={new Date()}
         // events={[{ title: 'nice event', start: new Date(), resourceId: 'a' }, { title: 'nice event', start: new Date(), resourceId: 'a' }, { title: 'nice event', start: new Date(), resourceId: 'a' }, { title: 'nice event', start: new Date(), resourceId: 'a' },  { title: 'event 1', start: '2024-04-30T12:30:00Z', resourceId: 'a' },
         // { title: 'event 2', start: '2024-04-02T12:30:00Z', resourceId: 'a' }]}
       events={lecture}
+      initialEvents={lecture}
+      // eventContent={renderEventContent} // custom render function
+
+      // eventContent={renderEventContent}
+
       // eventRender={lecture}
 
         dateClick={handleDateClick} 
@@ -441,12 +488,12 @@ const textAraeInput = (
     
     // Find the selected skill object from the skills array
     const selectedSkill = skills.find(skill => skill.id == selectedSkillId);
-    console.log(selectedSkill);
+    // console.log(selectedSkill);
 
   
       setSkillName(selectedSkill.name);
     
-    console.log(skillName);
+    // console.log(skillName);
   }}
 >
   
@@ -465,14 +512,14 @@ const textAraeInput = (
       </select>
       </div>      
         {renderInputs}
-        <div className="col-md-12">
+        <div className="col-md-12 mb-3">
        <select
         className="form-select p-3"
         aria-label="Default select example"
         value={selectedInstructor}
         onChange={(e) => {
           formik.handleChange(e);
-          console.log(e.target.value);
+          // console.log(e.target.value);
           setSelectedInstructor(e.target.value);
           
         }}

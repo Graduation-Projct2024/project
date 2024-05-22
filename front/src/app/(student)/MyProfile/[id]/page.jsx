@@ -225,10 +225,7 @@ const handleCloseUpdate = () => {
       //setLoading(false)
       const {data} = await axios.get(`http://localhost:5134/api/UserAuth/GetProfileInfo?id=${params.id}`,
       {headers :{Authorization:`Bearer ${userToken}`}}
-<<<<<<< HEAD
 
-=======
->>>>>>> 10e28681990b17396ae7c9731d0953f8932308bf
      
       );
       if(data.isSuccess){
