@@ -689,7 +689,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        [Authorize(Policy = "Main-SubAdmin")]
+        [Authorize(Policy = "MainSubAdmin")]
         public async Task<ActionResult<ApiResponce>> GetAllRequestFromStudentsToJoinCourses([FromQuery] PaginationRequest paginationRequest)
         {
             try
@@ -722,7 +722,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        [Authorize(Policy ="Admin")]
+        [Authorize(Policy ="Admin , Student")]
         public async Task<ActionResult<ApiResponce>> GetAllOptions()
         {
             try

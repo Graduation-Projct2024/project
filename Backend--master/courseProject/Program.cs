@@ -53,24 +53,7 @@ namespace courseProject
             builder.Services.AddHttpClient();
 
             
-                //options.AddPolicy("Instructor", policy => policy.RequireRole("instructor"));
-                //options.AddPolicy("Student", policy => policy.RequireRole("student"));
-                //options.AddPolicy("MainSubAdmin", policy => policy.RequireRole("main-subadmin"));
-                //options.AddPolicy("SubAdmin , Main-SubAdmin", policy=>policy.RequireRole("subadmin" , "main-subadmin"));
-                //options.AddPolicy("EnrolledInCourse", policy =>
-                //{
-                //    policy.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme);
-                //    policy.RequireAuthenticatedUser();
-                //    policy.Requirements.Add(new InstructorGivenCourseRequirement());
-                //});
-                //options.AddPolicy("EnrolledInCourse", policy =>
-                //policy.Requirements.Add(new InstructorGivenCourseRequirement()));
-
-                //options.AddPolicy("MaterialInEnrolledCourse", policy =>
-                //policy.Requirements.Add(new MaterialInEnrolledCourseRequeriment()));
-
-                //options.AddPolicy("InstructorGiveTheCourse", policy =>
-                //policy.Requirements.Add(new GiveTheCourseRequirements()));
+              
             
 
             builder.Services.AddHttpContextAccessor();
