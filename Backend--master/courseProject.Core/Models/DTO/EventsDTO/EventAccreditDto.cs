@@ -7,7 +7,7 @@
 
         public string content { get; set; }
         public string status { get; set; }
-        public DateTime dateOfEvent { get; set; }
+        public string? dateOfEvent { get; set; }
         public string category { get; set; }
 
         public int SubAdminId { get; set; }

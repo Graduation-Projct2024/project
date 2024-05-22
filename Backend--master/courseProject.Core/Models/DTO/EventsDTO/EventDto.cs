@@ -13,7 +13,7 @@ namespace courseProject.Core.Models.DTO.EventsDTO
         public string category { get; set; }
         public string status { get; set; }
         public string? ImageUrl { get; set; }
-        public DateTime dateOfEvent { get; set; }
+        public string? dateOfEvent { get; set; }
 
 
         public int SubAdminId { get; set; }
