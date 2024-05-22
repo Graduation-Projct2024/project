@@ -7,7 +7,7 @@ import axios from 'axios';
 import CreateCourse from '../CreateCourse/CreateCourse';
 import { UserContext } from '@/context/user/User';
 import EditCourse from '../EditCourse/[id]/page';
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, useMediaQuery, useTheme } from '@mui/material';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Pagination, Select, Stack, useMediaQuery, useTheme } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 
@@ -17,6 +17,10 @@ export default function ViewCourses() {
   const [courses, setCourses] = useState([]);
   const {userToken, setUserToken, userData}=useContext(UserContext);
   const [open, setOpen] = React.useState(false);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalPages, setTotalPages] = useState(0);
+
 
 
   const theme = useTheme();
@@ -29,12 +33,13 @@ const handleClickOpen = () => {
   };
 
 
-  const fetchCourses = async () => {
+  const fetchCourses = async (pageNum = pageNumber, pageSizeNum = pageSize) => {
     if(userData){
     try{
-    const { data } = await axios.get(`http://localhost:5134/api/CourseContraller?pageNumber=1&pageSize=10`);
+    const { data } = await axios.get(`http://localhost:5134/api/CourseContraller?pageNumber=${pageNum}&pageSize=${pageSize}`);
     console.log(data.result);
     setCourses(data.result.items);
+    setTotalPages(data.result.totalPages);
   }
     catch(error){
       console.log(error);
@@ -44,8 +49,16 @@ const handleClickOpen = () => {
 
   useEffect(() => {
     fetchCourses();
-  }, [courses,userData]);
-
+  }, [courses,userData, pageNumber, pageSize]);  // Fetch courses on mount and when page or size changes
+  
+  const handlePageSizeChange = (event) => {
+    setPageSize(event.target.value);
+    setPageNumber(1); // Reset to the first page when page size changes
+  };
+  
+  const handlePageChange = (event, value) => {
+    setPageNumber(value);
+  };
   const [searchTerm, setSearchTerm] = useState('');
 
   const handleSearch = (event) => {
@@ -65,7 +78,7 @@ const handleClickOpen = () => {
     <div className="filter py-2 text-end">
         <nav className="navbar">
           <div className="container justify-content-end">
-                <form className="d-flex" role="search">
+                <form className="d-flex gap-1" role="search">
                 <input
                     className="form-control me-2"
                     type="search"
@@ -74,7 +87,23 @@ const handleClickOpen = () => {
                     value={searchTerm}
                     onChange={handleSearch}
                 />
-                <div className="icons d-flex gap-2 pt-2">
+                <FormControl fullWidth className="w-50">
+        <InputLabel id="page-size-select-label">Page Size</InputLabel>
+        <Select
+        className="justify-content-center"
+          labelId="page-size-select-label"
+          id="page-size-select"
+          value={pageSize}
+          label="Page Size"
+          onChange={handlePageSizeChange}
+        >
+          <MenuItem value={5}>5</MenuItem>
+          <MenuItem value={10}>10</MenuItem>
+          <MenuItem value={20}>20</MenuItem>
+          <MenuItem value={50}>50</MenuItem>
+        </Select>
+      </FormControl>
+                <div className="icons d-flex gap-2 pt-3">
                     
                     <div className="dropdown">
   <button className="dropdown-toggle border-0 bg-white edit-pen" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -154,12 +183,8 @@ const handleClickOpen = () => {
        </DialogActions>
         </Dialog>
       </div>
-{/* <>
-      {filteredCourses.length ? filteredCourses.map((course) =>(
-        <img src={course.imageUrl}/>
-        
-      )) : <p>no imgs</p>}
-</> */}
+
+
       <table className="table">
   <thead>
     <tr>
@@ -223,7 +248,19 @@ const handleClickOpen = () => {
     
   </tbody>
 </table>
-
+<Stack spacing={2} sx={{ width: '100%', maxWidth: 500, margin: '0 auto' }}>
+     
+     <Pagination
+     className="pb-3"
+       count={totalPages}
+       page={pageNumber}
+       onChange={handlePageChange}
+       variant="outlined"
+       color="secondary"
+       showFirstButton
+       showLastButton
+     />
+   </Stack>
 
 
       </>

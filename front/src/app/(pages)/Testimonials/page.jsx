@@ -49,7 +49,7 @@ export default function Testimonials() {
           <h2> Our Experience Instructors</h2>
           <div className='py-3'><div className="bar"></div></div>
           
-          <p className='instructorParagraph py-2 text-center '>Our team of highly qualified professionals is dedicated to providing personalized education using innovative techniques and the latest tools, ensuring a comprehensive and engaging learning experience for all students.</p>
+          <p className='instructorParagraph py-2 text-center w-75 m-auto'>Our team of highly qualified professionals is dedicated to providing personalized education using innovative techniques and the latest tools, ensuring a comprehensive and engaging learning experience for all students.</p>
         </div>
         <Swiper 
            modules={[Navigation, Pagination, Scrollbar, A11y]}

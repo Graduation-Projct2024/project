@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using courseProject.Core.IGenericRepository;
 using courseProject.Core.Models;
-using courseProject.Core.Models.DTO;
 using System.Net;
 using Microsoft.EntityFrameworkCore;
 using courseProject.Repository.Data;
@@ -13,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.AspNetCore.Authorization;
 using courseProject.Repository.GenericRepository;
+using courseProject.Core.Models.DTO.MaterialsDTO;
 
 namespace courseProject.Controllers
 {
@@ -43,7 +43,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-       // [Authorize(Policy ="Instructor")]
+        [Authorize(Policy ="Instructor")]
         public async Task<ActionResult<ApiResponce>> AddTask( [FromForm] TaskDTO taskDTO)
         {
             await unitOfWork.FileRepository.UploadFile1(taskDTO.pdf);
@@ -80,6 +80,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [Authorize(Policy = "Instructor")]
         public async Task<ActionResult<ApiResponce>> AddFile([FromForm] FileDTO fileDTO)
         {
             await unitOfWork.FileRepository.UploadFile1(fileDTO.pdf);
@@ -113,6 +114,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [Authorize(Policy ="Instructor")]
         public async Task<ActionResult<ApiResponce>> AddAnnouncement( AnnouncementDTO AnnouncementDTO)
         {
            
@@ -181,7 +183,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        [Authorize(Policy ="Instructor")]
+        [Authorize(Policy ="InstructorwhoGiveTheMaterial")]
         public async Task<ActionResult<ApiResponce>> EditTask(int id, [FromForm] TaskDTO taskDTO)
         {
             if (id <= 0)
@@ -240,7 +242,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        [Authorize(Policy = "Instructor")]
+        [Authorize(Policy = "InstructorwhoGiveTheMaterial")]
         public async Task<ActionResult<ApiResponce>> EditFile(int id, [FromForm] FileDTO fileDTO)
         {
             if (id <= 0)
@@ -299,7 +301,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        [Authorize(Policy = "Instructor")]
+        [Authorize(Policy = "InstructorwhoGiveTheMaterial")]
         public async Task<ActionResult<ApiResponce>> EditAnnouncement(int id, AnnouncementDTO AnnouncementDTO)
         {
             if (id <= 0)
@@ -357,7 +359,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        [Authorize(Policy = "Instructor")]
+        [Authorize(Policy = "InstructorwhoGiveTheMaterial")]
         public async Task<ActionResult<ApiResponce>> EditLink(int id,  LinkDTO linkDTO)
         {
             if (id <= 0)
@@ -414,7 +416,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        [Authorize(Policy = "Instructor")]
+        [Authorize(Policy = "InstructorwhoGiveTheMaterial")]
         public async Task<ActionResult<ApiResponce>> DeleteMaterial(int id)
         {
             if (id <= 0)
@@ -453,7 +455,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-      //  [Authorize(Policy = "MaterialInEnrolledCourse")]
+        [Authorize(Policy = "MaterialInEnrolledCourse")]
         public async Task<ActionResult<ApiResponce>> GetMaterialByIdAsync( int id)
         {
             if (id <= 0)
@@ -508,7 +510,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        //[Authorize(Policy = "EnrolledInCourse")]
+        [Authorize(Policy = "EnrolledInCourse")]
         public async Task<ActionResult<ApiResponce>> GetAllMaterialInTheCourseAsync([FromQuery]int CourseId , [FromQuery] PaginationRequest paginationRequest)
         {
             if (CourseId == 0)

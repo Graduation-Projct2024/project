@@ -21,7 +21,7 @@ namespace courseProject.Repository.GenericRepository
             {
                 if (file == null || file.Length == 0)
                 {
-                    throw new ArgumentException("File is empty or null.");
+                    return null;
                 }
                 var extension = Path.GetExtension(file.FileName);
                 fileName = DateTimeOffset.Now.Ticks.ToString() + extension;

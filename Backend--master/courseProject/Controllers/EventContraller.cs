@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using courseProject.Core.IGenericRepository;
 using courseProject.Core.Models;
-using courseProject.Core.Models.DTO;
 using courseProject.Repository.GenericRepository;
 using System.Net;
 using Microsoft.AspNetCore.Authorization;
+using courseProject.Core.Models.DTO.EventsDTO;
 
 namespace courseProject.Controllers
 {
@@ -41,12 +41,8 @@ namespace courseProject.Controllers
                 return Ok(responce);
                 
             }
-            var mapperEvent = mapper.Map<IReadOnlyList<Event>, IReadOnlyList<EventDto>>(events);
-            //var updatedEvents = mapperEvent.Select(events =>
-            //{
-            //    events.ImageUrl = $"http://localhost:5134/{events.ImageUrl}";
-            //    return events;
-            //}).ToList();
+            events = events.OrderByDescending(x => x.dateOfAdded).ToList();
+            var mapperEvent = mapper.Map<IReadOnlyList<Event>, IReadOnlyList<EventDto>>(events);           
             responce.IsSuccess = true;
             responce.Result = (Pagination<EventDto>.CreateAsync(mapperEvent, paginationRequest.pageNumber, paginationRequest.pageSize)).Result;
             return Ok(responce);

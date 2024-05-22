@@ -2,15 +2,16 @@
 import React, { useContext, useEffect, useState } from 'react'
 import CreateEmployee from '../CreateEmployee/CreateEmployee';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowUpFromBracket, faBook, faEye, faFilter, faPen } from '@fortawesome/free-solid-svg-icons'
+import { faArrowUpFromBracket, faBook, faEye, faFilter, faPen, faPeopleArrows } from '@fortawesome/free-solid-svg-icons'
 import Link from 'next/link';
 import axios from 'axios';
 import UpdateEmployee from '../UpdateEmployee/[id]/page';
 import { UserContext } from '@/context/user/User';
-import Button from '@mui/material/Button';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import { Box, Dialog, DialogActions, DialogContent, DialogTitle, Stack, useMediaQuery, useTheme } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Pagination, Stack, useMediaQuery, useTheme, MenuItem, FormControl, Select, InputLabel, Box, Tooltip } from "@mui/material";
 import '../../../dashboard/dashboard.css'
+import '../../../../../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js'
+import ChangeRole from '../ChangeRole/[userId]/ChangeRole';
 
 export default function ViewEmployees() {
 
@@ -19,6 +20,10 @@ export default function ViewEmployees() {
       // const [loading,setLoading] = useState(true);
       const [open, setOpen] = React.useState(false);
       const [openUpdate, setOpenUpdate] = React.useState(false);
+      const [openChange, setOpenChange] = React.useState(false);
+      const [pageNumber, setPageNumber] = useState(1);
+      const [pageSize, setPageSize] = useState(10);
+      const [totalPages, setTotalPages] = useState(0);
 
       const theme = useTheme();
       const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
@@ -32,6 +37,14 @@ export default function ViewEmployees() {
     const handleCloseUpdate = () => {
       setOpenUpdate(false);
     };
+    const handleClickOpenChange = (id) => {
+      setEmployeeId(id);
+      console.log(id)
+      setOpenChange(true);
+  };
+  const handleCloseChange = () => {
+    setOpenChange(false);
+  };
 
       const handleClickOpen = () => {
         setOpen(true);
@@ -39,13 +52,15 @@ export default function ViewEmployees() {
       const handleClose = () => {
         setOpen(false);
       };
-      const fetchEmployees = async () => {
+      const fetchEmployees = async (pageNum = pageNumber, pageSizeNum = pageSize)  => {
         if(userData){
         try{
-        const { data } = await axios.get(`http://localhost:5134/api/Employee/GetAllEmployee?pageNumber=1&pageSize=10`);
+        const { data } = await axios.get(`http://localhost:5134/api/Employee/GetAllEmployee?pageNumber=${pageNum}&pageSize=${pageSize}`);
         // setLoading(false)
       //  console.log(data);
         setEmployees(data.result.items);
+        setTotalPages(data.result.totalPages);
+
       }
         catch(error){
        //   console.log(error);
@@ -53,10 +68,22 @@ export default function ViewEmployees() {
       }
       };
 
+      // useEffect(() => {
+      //   fetchEmployees();
+      // }, [employees,userData]);
+
       useEffect(() => {
         fetchEmployees();
-      }, [employees,userData]);
-
+      }, [employees,userData, pageNumber, pageSize]);  // Fetch courses on mount and when page or size changes
+      
+      const handlePageSizeChange = (event) => {
+        setPageSize(event.target.value);
+        setPageNumber(1); // Reset to the first page when page size changes
+      };
+      
+      const handlePageChange = (event, value) => {
+        setPageNumber(value);
+      };
       const [searchTerm, setSearchTerm] = useState('');
       const [selectedRole, setSelectedRole] = useState(null);
     
@@ -88,7 +115,7 @@ export default function ViewEmployees() {
       <div className="filter py-2 text-end">
         <nav className="navbar">
           <div className="container justify-content-end">
-            <form className="d-flex" role="search">
+            <form className="d-flex gap-1" role="search">
               <input
                 className="form-control me-2"
                 type="search"
@@ -97,8 +124,26 @@ export default function ViewEmployees() {
                 value={searchTerm}
                 onChange={handleSearch}
               />
-              <div className="icons d-flex gap-2 pt-2">
+              <FormControl fullWidth className="w-50">
+        <InputLabel id="page-size-select-label">Page Size</InputLabel>
+        <Select
+        className="justify-content-center"
+          labelId="page-size-select-label"
+          id="page-size-select"
+          value={pageSize}
+          label="Page Size"
+          onChange={handlePageSizeChange}
+        >
+          <MenuItem value={5}>5</MenuItem>
+          <MenuItem value={10}>10</MenuItem>
+          <MenuItem value={20}>20</MenuItem>
+          <MenuItem value={50}>50</MenuItem>
+        </Select>
+      </FormControl>
+              <div className="icons d-flex gap-2 pt-3">
+             
                 <div className="dropdown">
+                   <Tooltip title="Filter by Role" placement="top">
                   <button
                     className="dropdown-toggle border-0 bg-white edit-pen"
                     type="button"
@@ -107,6 +152,7 @@ export default function ViewEmployees() {
                   >
                     <FontAwesomeIcon icon={faFilter} />
                   </button>
+                  </Tooltip>
                   <ul className="dropdown-menu">
                     <li>
                       <a
@@ -130,6 +176,15 @@ export default function ViewEmployees() {
                       <a
                         className="dropdown-item"
                         href="#"
+                        onClick={() => handleRoleFilter("main-subadmin")}
+                      >
+                        Main-SubAdmin
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        className="dropdown-item"
+                        href="#"
                         onClick={() => handleRoleFilter("instructor")}
                       >
                         Instructor
@@ -137,7 +192,8 @@ export default function ViewEmployees() {
                     </li>
                   </ul>
                 </div>
-                <FontAwesomeIcon icon={faArrowUpFromBracket} />
+                
+                <FontAwesomeIcon icon={faArrowUpFromBracket} className='pb-1'/>
               </div>
             </form>
 
@@ -190,7 +246,7 @@ export default function ViewEmployees() {
           "& .MuiDialog-container": {
             "& .MuiPaper-root": {
               width: "100%",
-              maxWidth: "600px!important",  
+              maxWidth: "700px!important",  
               height: "500px!important",            },
           },
           
@@ -219,6 +275,8 @@ export default function ViewEmployees() {
 
       </div>
 
+
+
       <table className="table">
         <thead>
           <tr>
@@ -227,7 +285,7 @@ export default function ViewEmployees() {
             <th scope="col">Email</th>
             <th scope="col">Role</th>
             <th scope="col">Gender</th>
-            <th scope="col">Phone number</th>
+            <th scope="col">Phone No.</th>
             <th scope="col">Address</th>
             <th scope="col">Option</th>
           </tr>
@@ -248,23 +306,24 @@ export default function ViewEmployees() {
 
                 <td className="d-flex gap-1">
 
-
-                <button className="border-0 bg-white" type="button" onClick={() => handleClickOpenUpdate(employee.id)}>
+                <Tooltip title="Edit Employee" placement="top">
+                <button className="border-0 bg-white"  type="button" onClick={() => handleClickOpenUpdate(employee.id)}>
                 <FontAwesomeIcon icon={faPen} className="edit-pen" />
             </button>
+            </Tooltip>
                   {/* <Button sx={{px:2,m:0.5}} variant="contained" className='bg-transparent border-0 '  onClick={handleClickOpen}>
                   <FontAwesomeIcon icon={faPen} className="edit-pen" />
                   </Button> */}
                  <Dialog
         fullScreen={fullScreen}
-        open={openUpdate}
+        open={openUpdate && employeeId === employee.id}
         onClose={handleCloseUpdate}
         aria-labelledby="responsive-dialog-title"
         sx={{
           "& .MuiDialog-container": {
             "& .MuiPaper-root": {
               width: "100%",
-              maxWidth: "600px!important",  
+              maxWidth: "700px!important",  
               height: "400px!important",            },
           },
           
@@ -289,7 +348,7 @@ export default function ViewEmployees() {
            Cancle
          </Button>
        </DialogActions>
-        </Dialog>
+                </Dialog>
                   {/* <div className="modal fade" id={`exampleModal2-${employee.id}`} tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div className="modal-dialog modal-dialog-centered modal-lg">
                       <div className="modal-content row justify-content-center">
@@ -304,17 +363,76 @@ export default function ViewEmployees() {
                   </div> */}
 
                   <Link href={`/Profile/${employee.id}`}>
-                    <button type="button" className="border-0 bg-white ">
+                  <Tooltip title="View Profile" placement="top">
+                    <button type="button" className="border-0 bg-white " >
                       <FontAwesomeIcon icon={faEye} className="edit-pen" />
                     </button>
+                    </Tooltip>
                   </Link>
-                  {userData && employee.type == "Instructor" && (
+                  {/* {userData && employee.type == "instructor" && (
                     <Link href={`/InstructorCourses/${employee.id}`}>
                       <button type="button" className="border-0 bg-white ">
                         <FontAwesomeIcon icon={faBook} className="edit-pen" />
                       </button>
                     </Link>
+                  )} */}
+                   {userData && employee.type == "instructor" && (
+                    <Link 
+                    href={{
+                      pathname: `/InstructorCourses/${employee.id}`,
+                      query: { fName: employee.fName, lName: employee.lName }
+                    }}>
+
+                      <Tooltip title="View Instructor Courses" placement="top">
+                    <button type="button" className="border-0 bg-white ">
+                      <FontAwesomeIcon icon={faBook} className="edit-pen" />
+                    </button>
+                    </Tooltip>
+                  </Link>
+                  
                   )}
+ {userData && (employee.type == "subadmin"|| employee.type == "main-subadmin")  && (
+<Tooltip title="Swap roles" placement="top">
+                <button className="border-0 bg-white"  type="button" onClick={() => handleClickOpenChange(employee.id)}>
+                <FontAwesomeIcon icon={faPeopleArrows} className='edit-pen'/>
+            </button>
+            </Tooltip>)}
+                  
+            <Dialog
+        fullScreen={fullScreen}
+        open={openChange && employeeId === employee.id}
+        onClose={handleCloseChange}
+        aria-labelledby="responsive-dialog-title"
+        sx={{
+          "& .MuiDialog-container": {
+            "& .MuiPaper-root": {
+              width: "100%",
+              maxWidth: "450px!important",  
+              height: "280px!important",            },
+          },
+          
+        }}
+        >
+          <DialogTitle id="responsive-dialog-title" className='primaryColor fw-bold text-center' >
+          {"Change Role"}
+        </DialogTitle>
+
+        <DialogContent>
+        <Stack
+   direction="row"
+   spacing={1}
+   sx={{ justifyContent: 'center',  alignContent: 'center'}}
+    >
+      <ChangeRole userId = {employee.id} role={employee.type} setOpenChange={setOpenChange} />
+     </Stack>
+        </DialogContent>
+        <DialogActions>
+         
+         <Button onClick={handleCloseChange} autoFocus>
+           Cancle
+         </Button>
+       </DialogActions>
+                </Dialog>
                 </td>
               </tr>
             ))
@@ -325,6 +443,20 @@ export default function ViewEmployees() {
           )}
         </tbody>
       </table>
+      
+      <Stack spacing={2} sx={{ width: '100%', maxWidth: 500, margin: '0 auto' }}>
+     
+     <Pagination
+     className="pb-3"
+       count={totalPages}
+       page={pageNumber}
+       onChange={handlePageChange}
+       variant="outlined"
+       color="secondary"
+       showFirstButton
+       showLastButton
+     />
+   </Stack>
 
       {/* <div className="modal fade" id="exampleModal3" tabIndex="-1" aria-labelledby="exampleModa3Label" aria-hidden="true">
           <div className="modal-dialog modal-dialog-centered modal-lg">

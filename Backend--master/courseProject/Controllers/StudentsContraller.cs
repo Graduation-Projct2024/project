@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using courseProject.Core.IGenericRepository;
 using courseProject.Core.Models;
-using courseProject.Core.Models.DTO;
 using courseProject.Repository.GenericRepository;
 using System.Net;
 using Microsoft.AspNetCore.Authorization;
@@ -16,6 +15,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.VisualBasic;
 using Microsoft.AspNetCore.JsonPatch;
 using System.Linq.Expressions;
+using courseProject.Core.Models.DTO.FeedbacksDTO;
+using courseProject.Core.Models.DTO.MaterialsDTO;
+using courseProject.Core.Models.DTO.LecturesDTO;
+using courseProject.Core.Models.DTO.StudentsDTO;
+using courseProject.Core.Models.DTO.UsersDTO;
 
 
 namespace courseProject.Controllers
@@ -96,7 +100,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-       // [Authorize(Policy = "Student")]
+        [Authorize(Policy = "Student")]
         public async Task<ActionResult<ApiResponce>> EnrollInCourseAsync (StudentCourseDTO studentCourseDTO)
         {
             if (studentCourseDTO == null)
@@ -172,7 +176,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        [Authorize(Policy = "Student")]
+        [Authorize(Policy = "MaterialInEnrolledCourseForStudent")]
         public async Task<ActionResult<ApiResponce>> AddTaskByStudent(int Studentid , int taskid ,[FromForm] SubmissionsDTO submissions)
         {
             if (Studentid<=0 || taskid<=0)
@@ -232,6 +236,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [Authorize(Policy = "EnrolledInCourse")]
         public async Task<ActionResult<ApiResponce>> GetCourseParticipants(int Courseid , [FromQuery] PaginationRequest paginationRequest)
         {
             if (Courseid <= 0)

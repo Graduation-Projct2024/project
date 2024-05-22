@@ -1,5 +1,5 @@
 ﻿using courseProject.Core.Models;
-using courseProject.Core.Models.DTO;
+using courseProject.Core.Models.DTO.UsersDTO;
 using Microsoft.Extensions.Configuration;
 using System.Text.RegularExpressions;
 

@@ -10,8 +10,8 @@ import {
 import Link from "next/link";
 import axios from "axios";
 import { UserContext } from "@/context/user/User";
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, useMediaQuery, useTheme } from "@mui/material";
-import EditCourse from "../EditCourse/[id]/page";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Pagination, Stack, useMediaQuery, useTheme, MenuItem, FormControl, Select, InputLabel, Tooltip } from "@mui/material";
+import EditCourse from "../EditCourse/[courseId]/page";
 
 export default function ViewCourses() {
   const { userToken, setUserToken, userData } = useContext(UserContext);
@@ -21,6 +21,10 @@ export default function ViewCourses() {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
   const [courseId, setCourseId] = useState(null);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalPages, setTotalPages] = useState(0);
+  
 
 const handleClickOpenUpdate = (id) => {
   setCourseId(id);
@@ -33,25 +37,55 @@ const handleCloseUpdate = () => {
 
   const [courses, setCourses] = useState([]);
 
-  const fetchCourses = async () => {
+  // const fetchCourses = async () => {
+  //   if (userData) {
+  //     try {
+  //       const { data } = await axios.get(
+  //         `http://localhost:5134/api/CourseContraller?pageNumber=1&pageSize=10`
+  //       );
+  //       setTotalPages(data.result.totalPages);
+  //       //console.log(data);
+  //       setCourses(data.result.items);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   }
+  // };
+  const fetchCourses = async (pageNum = pageNumber, pageSizeNum = pageSize) => {
     if (userData) {
       try {
-        const { data } = await axios.get(
-          `http://localhost:5134/api/CourseContraller?pageNumber=1&pageSize=10`
-        );
-        //console.log(data);
+        const {data} = await axios.get(`http://localhost:5134/api/CourseContraller?pageNumber=${pageNum}&pageSize=${pageSizeNum}`, {
+          headers: {
+            Authorization: `Bearer ${userData.token}`,  // Assuming you have a token for authorization
+          },
+        });
         setCourses(data.result.items);
+        setTotalPages(data.result.totalPages);
       } catch (error) {
-        console.log(error);
+        console.error('Failed to fetch courses:', error);
       }
     }
   };
 
-  useEffect(() => {
-    fetchCourses();
-  }, [courses,userData]);
-//  console.log(courses)
+//   useEffect(() => {
+//     fetchCourses();
+//   }, [courses,pageNumber, pageSize,userData]);
+// //  console.log(courses)
+// const handleChange = (event, value) => {
+//   setPageNumber(value);
+// };
+useEffect(() => {
+  fetchCourses();
+}, [userData, pageNumber, pageSize]);  // Fetch courses on mount and when page or size changes
 
+const handlePageSizeChange = (event) => {
+  setPageSize(event.target.value);
+  setPageNumber(1); // Reset to the first page when page size changes
+};
+
+const handlePageChange = (event, value) => {
+  setPageNumber(value);
+};
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleSearch = (event) => {
@@ -71,15 +105,32 @@ const handleCloseUpdate = () => {
       <div className="filter py-2 text-end">
         <nav className="navbar">
           <div className="container justify-content-end">
-            <form className="d-flex" role="search">
+            <form className="d-flex gap-2" role="search">
+            
               <input
-                className="form-control me-2"
+                className="form-control me-1"
                 type="search"
                 placeholder="Search"
                 aria-label="Search"
                 value={searchTerm}
                 onChange={handleSearch}
               />
+              <FormControl fullWidth className="w-50">
+        <InputLabel id="page-size-select-label">Page Size</InputLabel>
+        <Select
+        className="justify-content-center"
+          labelId="page-size-select-label"
+          id="page-size-select"
+          value={pageSize}
+          label="Page Size"
+          onChange={handlePageSizeChange}
+        >
+          <MenuItem value={5}>5</MenuItem>
+          <MenuItem value={10}>10</MenuItem>
+          <MenuItem value={20}>20</MenuItem>
+          <MenuItem value={50}>50</MenuItem>
+        </Select>
+      </FormControl>
               <div className="icons d-flex gap-2 pt-2">
                 <div className="dropdown">
                   <button
@@ -99,7 +150,9 @@ const handleCloseUpdate = () => {
         </nav>
       </div>
 
-      <table className="table">
+
+
+      <table className="table ">
         <thead>
           <tr>
             <th scope="col">ID</th>
@@ -124,13 +177,15 @@ const handleCloseUpdate = () => {
                 <td>{course.startDate}</td>
                 <td>{course.instructorName}</td>
                 <td className="d-flex gap-1">
+                <Tooltip title="Edit course" placement="top">
                 <button className="border-0 bg-white" type="button" onClick={() => handleClickOpenUpdate(course.id)}>
                 <FontAwesomeIcon icon={faPen} className="edit-pen" />
             </button>
+            </Tooltip>
 
             <Dialog
         fullScreen={fullScreen}
-        open={openUpdate}
+        open={openUpdate && courseId === course.id}
         onClose={handleCloseUpdate}
         aria-labelledby="responsive-dialog-title"
         sx={{
@@ -153,7 +208,7 @@ const handleCloseUpdate = () => {
    spacing={1}
    sx={{ justifyContent: 'center',  alignContent: 'center'}}
     >
-      <EditCourse courseId={course.id} startDate = {course.startDate}  />
+      <EditCourse courseId={course.id} startDate = {course.startDate} Deadline={course.deadline} InstructorId={course.instructorId} limitNumberOfStudnet={course.limitNumberOfStudnet} description={course.description} image={course.imageUrl} setOpenUpdate={setOpenUpdate} />
      </Stack>
         </DialogContent>
         <DialogActions>
@@ -163,6 +218,7 @@ const handleCloseUpdate = () => {
          </Button>
        </DialogActions>
         </Dialog>
+        <Tooltip title="View Course details" placement="top">
                   <Link href={"/Profile"}>
                     <button
                       type="button"
@@ -171,6 +227,7 @@ const handleCloseUpdate = () => {
                       <FontAwesomeIcon icon={faEye} />
                     </button>
                   </Link>
+                  </Tooltip>
                 </td>
               </tr>
             ))
@@ -181,6 +238,20 @@ const handleCloseUpdate = () => {
           )}
         </tbody>
       </table>
+      
+      <Stack spacing={2} sx={{ width: '100%', maxWidth: 500, margin: '0 auto' }}>
+     
+      <Pagination
+      className="pb-3"
+        count={totalPages}
+        page={pageNumber}
+        onChange={handlePageChange}
+        variant="outlined"
+        color="secondary"
+        showFirstButton
+        showLastButton
+      />
+    </Stack>
     </>
   );
 }

@@ -1,4 +1,7 @@
-﻿using courseProject.Core.IGenericRepository;
+﻿using courseProject.Authentication;
+using courseProject.Authentication.EnrolledInCourse;
+using courseProject.Authentication.MaterialInEnrolledCourse;
+using courseProject.Core.IGenericRepository;
 using courseProject.MappingProfile;
 using courseProject.Repository.Data;
 using courseProject.Repository.GenericRepository;
@@ -51,7 +54,7 @@ namespace courseProject.Configuration
         }
 
         public static IServiceCollection AddAuthenticationAndAuthorization(this IServiceCollection services , IConfiguration configuration)
-        {
+       {
             var Key = configuration.GetValue<string>("Authentication:SecretKey");
 
             services.AddAuthentication(x =>
@@ -69,6 +72,92 @@ namespace courseProject.Configuration
                     ValidateIssuer = false,
                     ValidateAudience = false,
                 };
+            });
+
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Admin", policy => policy.RequireRole("admin"));
+                options.AddPolicy("subAdmin", policy => policy.RequireRole("subadmin"));
+                
+                options.AddPolicy("Instructor", policy => policy.RequireRole("instructor"));
+                options.AddPolicy("Student", policy => policy.RequireRole("student"));
+                options.AddPolicy("MainSubAdmin", policy => policy.RequireRole("main-subadmin"));
+                options.AddPolicy("SubAdmin , Main-SubAdmin", policy => policy.RequireRole("subadmin", "main-subadmin"));
+                options.AddPolicy("Admin&subAdmin", policy =>
+                {
+                    policy.RequireAssertion(a =>
+
+                        a.User.IsInRole("admin") ||
+                        a.User.IsInRole("subadmin")
+
+                    );
+
+                });
+                options.AddPolicy("Admin , Instructor", policy =>
+                {
+                    policy.RequireAssertion(a =>
+
+                    a.User.IsInRole("admin") ||
+                    a.User.IsInRole("instructor"));
+                });
+
+
+                options.AddPolicy("Main-SubAdmin , Student", policy =>
+                {
+                    policy.RequireAssertion(a =>
+                    a.User.IsInRole("main-subadmin") ||
+                    a.User.IsInRole("student"));
+                });
+
+                options.AddPolicy("Main-SubAdmin ,Instructor , Student", policy =>
+                {
+                    policy.RequireAssertion(a =>
+                    a.User.IsInRole("main-subadmin") ||
+                    a.User.IsInRole("instructor") ||
+                    a.User.IsInRole("student"));
+                }
+               );
+
+
+
+                options.AddPolicy("EnrolledInCourse", policy =>
+                policy.Requirements.Add(new EnrolledInCourseRequirement()));
+
+                options.AddPolicy("MaterialInEnrolledCourse", policy =>
+                policy.Requirements.Add(new MaterialInEnrolledCourseRequeriment()));
+
+                options.AddPolicy("InstructorGiveTheCourse", policy =>
+                {
+                    policy.Requirements.Add(new EnrolledInCourseRequirement());
+                    policy.RequireRole("instructor");
+                }
+              
+                
+                );
+
+                options.AddPolicy("InstructorwhoGiveTheMaterial", policy =>
+                {
+                    policy.Requirements.Add(new MaterialInEnrolledCourseRequeriment());
+                    policy.RequireRole("instructor");
+                }
+                );
+                
+                options.AddPolicy("MaterialInEnrolledCourseForStudent", policy =>
+                {
+                    policy.Requirements.Add(new MaterialInEnrolledCourseRequeriment());
+                    policy.RequireRole("student");
+                }
+                );
+
+              
+
+
+
+
+
+
+
             });
 
             return services;

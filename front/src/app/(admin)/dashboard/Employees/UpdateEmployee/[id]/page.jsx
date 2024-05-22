@@ -41,7 +41,7 @@ export default function UpdateEmployee({id , fName , lName , email, gender, phon
         // formData.append('role', users.role);
         formData.append('gender', selectedGender); // Use selectedGender from state
 
-        const {data} = await axios.put(`http://localhost:5134/api/Employee/UpdateEmployeeFromAdmin?id=${id}`, updatedData);
+        const {data} = await axios.put(`http://localhost:5134/api/Employee/UpdateEmployeeFromAdmin?id=${id}`, updatedData, { headers: { Authorization: `Bearer ${userToken}` } });
         if(data.isSuccess){
             formik.resetForm();
             Swal.fire({
@@ -180,8 +180,7 @@ export default function UpdateEmployee({id , fName , lName , email, gender, phon
       <Button sx={{px:2}} variant="contained"
               className="m-2 btn primaryBg"
               type="submit"
-              disabled={formik.isSubmitting || Object.keys(formik.errors).length > 0 || Object.keys(formik.touched).length === 0||!selectedGender || 
-                !selectedRole }
+              disabled={formik.isSubmitting || Object.keys(formik.errors).length > 0 || Object.keys(formik.touched).length === 0||!selectedGender  }
             >
               Update
             </Button>

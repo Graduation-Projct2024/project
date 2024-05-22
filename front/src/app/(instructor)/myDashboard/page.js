@@ -1,6 +1,6 @@
 'use client'
 import React, { useContext } from 'react'
-import { Box } from '@mui/material'
+import { Box, FormControl, InputLabel, MenuItem, Pagination, Select, Stack } from '@mui/material'
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
@@ -16,23 +16,37 @@ import { UserContext } from '../../../context/user/User.jsx';
 export default function page() {
   const [courses, setCourses] = useState([]);
   const [loading , setLoading]=useState(true);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalPages, setTotalPages] = useState(0);
   const {userToken, setUserToken, userData}=useContext(UserContext);
   console.log(userData);
-  const getCourses = async () => {
+
+  const getCourses = async (pageNum = pageNumber, pageSizeNum = pageSize) => {
     if(userData){
     const data = await axios.get(
-      `http://localhost:5134/api/Employee/GetAllCoursesGivenByInstructor?Instructorid=${userData.userId}&pageNumber=1&pageSize=10`
+      `http://localhost:5134/api/Employee/GetAllCoursesGivenByInstructor?Instructorid=${userData.userId}&pageNumber=${pageNum}&pageSize=${pageSize}`,{headers :{Authorization:`Bearer ${userToken}`}}
     );
     setCourses(data.data.result.items);
+    setTotalPages(data.data.result.totalPages);
     setLoading(false);
     }
     
   };
 
 
-  useEffect(() => {
-    getCourses();
-  }, [userData]);
+ useEffect(() => {
+        getCourses();
+      }, [userData, pageNumber, pageSize]);  // Fetch courses on mount and when page or size changes
+      
+      const handlePageSizeChange = (event) => {
+        setPageSize(event.target.value);
+        setPageNumber(1); // Reset to the first page when page size changes
+      };
+      
+      const handlePageChange = (event, value) => {
+        setPageNumber(value);
+      };
 
   if (loading) {
     return (
@@ -62,9 +76,25 @@ export default function page() {
     <Typography variant='h6' sx={{ ml: 3 }} color={deepPurple[50]}>Have a nice day!</Typography>
   </Box>
 </div>
-
-    <Typography gutterBottom variant="h5" component="div">
+<div className='d-flex gap-3'><Typography gutterBottom variant="h5" component="div">
           Your Courses         </Typography>
+          <FormControl fullWidth className="page-Size">
+                <InputLabel id="page-size-select-label">Page Size</InputLabel>
+                <Select
+                className="justify-content-center"
+                  labelId="page-size-select-label"
+                  id="page-size-select"
+                  value={pageSize}
+                  label="Page Size"
+                  onChange={handlePageSizeChange}
+                >
+                  <MenuItem value={5}>5</MenuItem>
+                  <MenuItem value={10}>10</MenuItem>
+                  <MenuItem value={20}>20</MenuItem>
+                  <MenuItem value={50}>50</MenuItem>
+                </Select>
+              </FormControl></div>
+    
         {courses?.length ? (
           courses.map((course) => (
             <Link href={`courses/${course.id}`}>
@@ -93,10 +123,24 @@ export default function page() {
         ) : (
           <p>No Enrolled Courses Yet</p>
         )}
+
        
         </>
       
 </div>
+<Stack spacing={2} sx={{ width: '100%', maxWidth: 500, margin: '0 auto' }}>
+     
+     <Pagination
+     className="pb-3"
+       count={totalPages}
+       page={pageNumber}
+       onChange={handlePageChange}
+       variant="outlined"
+       color="secondary"
+       showFirstButton
+       showLastButton
+     />
+   </Stack>
     </Layout>
     
   )

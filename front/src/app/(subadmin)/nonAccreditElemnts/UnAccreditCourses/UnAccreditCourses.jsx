@@ -2,7 +2,7 @@
 import { UserContext } from '@/context/user/User';
 import { faArrowUpFromBracket, faEye, faFilter, faPen } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, useMediaQuery } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Pagination, Select, useMediaQuery } from '@mui/material';
 import { Stack, useTheme } from '@mui/system';
 import axios from 'axios';
 import Link from 'next/link';
@@ -14,6 +14,9 @@ export default function UnAccreditCourses() {
 
   const [nonAccreditcourses, setNonAccreditCourses] = useState([]);
   const [openUpdate, setOpenUpdate] = React.useState(false);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalPages, setTotalPages] = useState(0);
 
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
@@ -28,14 +31,19 @@ const handleCloseUpdate = () => {
   setOpenUpdate(false);
 };
 
-  const fetchCoursesBeforeAccredittion = async () => {
+  const fetchCoursesBeforeAccredittion =  async (pageNum = pageNumber, pageSizeNum = pageSize) => {
     if (userData) {
       try {
         const { data } = await axios.get(
-          `http://localhost:5134/api/CourseContraller/GetallUndefinedCoursesToSubAdmin?subAdminId=${userId}&pageNumber=1&pageSize=10`
+          `http://localhost:5134/api/CourseContraller/GetallUndefinedCoursesToSubAdmin?subAdminId=${userId}&pageNumber=${pageNum}&pageSize=${pageSize}`,{
+            headers: {
+                Authorization: `Bearer ${userToken}`,
+            },
+        }
         );
-        //console.log(data);
+        console.log(data);
         setNonAccreditCourses(data.result.items);
+        setTotalPages(data.result.totalPages);
       } catch (error) {
         console.log(error);
       }
@@ -44,7 +52,16 @@ const handleCloseUpdate = () => {
 
   useEffect(() => {
     fetchCoursesBeforeAccredittion();
-  }, [nonAccreditcourses,userData]);
+  }, [nonAccreditcourses,userData, pageNumber, pageSize]);  // Fetch courses on mount and when page or size changes
+  
+  const handlePageSizeChange = (event) => {
+    setPageSize(event.target.value);
+    setPageNumber(1); // Reset to the first page when page size changes
+  };
+  
+  const handlePageChange = (event, value) => {
+    setPageNumber(value);
+  };
 //  console.log(courses)
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -77,7 +94,23 @@ const handleCloseUpdate = () => {
                 value={searchTerm}
                 onChange={handleSearch}
               />
-              <div className="icons d-flex gap-2 pt-2">
+               <FormControl fullWidth className="w-50">
+        <InputLabel id="page-size-select-label">Page Size</InputLabel>
+        <Select
+        className="justify-content-center"
+          labelId="page-size-select-label"
+          id="page-size-select"
+          value={pageSize}
+          label="Page Size"
+          onChange={handlePageSizeChange}
+        >
+          <MenuItem value={5}>5</MenuItem>
+          <MenuItem value={10}>10</MenuItem>
+          <MenuItem value={20}>20</MenuItem>
+          <MenuItem value={50}>50</MenuItem>
+        </Select>
+      </FormControl>
+              <div className="icons d-flex gap-2 pt-3">
                 <div className="dropdown">
                   <button
                     className="dropdown-toggle border-0 bg-white edit-pen"
@@ -104,6 +137,9 @@ const handleCloseUpdate = () => {
             <th scope="col">Price</th>
             <th scope="col">Category</th>
             <th scope="col">Start Date</th>
+            <th scope="col">LastDate to enroll</th>
+            <th scope="col">Total hours</th>
+            <th scope="col">Max # of Students</th>
             <th scope="col">Instructor</th>
             <th scope="col">Actions</th>
           </tr>
@@ -117,6 +153,9 @@ const handleCloseUpdate = () => {
                 <td>{course.price}</td>
                 <td>{course.category}</td>
                 <td>{course.startDate}</td>
+                <td>{course.deadline}</td>
+                <td>{course.totalHours}</td>
+                <td>{course.limitNumberOfStudnet}</td>
                 <td>{course.instructorName}</td>
                 <td className="d-flex gap-1">
                 <button className="border-0 bg-white" type="button" onClick={() => handleClickOpenUpdate(course.id)}>
@@ -124,7 +163,7 @@ const handleCloseUpdate = () => {
             </button>
             <Dialog
         fullScreen={fullScreen}
-        open={openUpdate}
+        open={openUpdate && courseId === course.id}
         onClose={handleCloseUpdate}
         aria-labelledby="responsive-dialog-title"
         sx={{
@@ -132,7 +171,7 @@ const handleCloseUpdate = () => {
             "& .MuiPaper-root": {
               width: "100%",
               maxWidth: "600px!important",  
-              height: "400px!important",            },
+              height: "600px!important",            },
           },
           
         }}
@@ -147,7 +186,7 @@ const handleCloseUpdate = () => {
    spacing={1}
    sx={{ justifyContent: 'center',  alignContent: 'center'}}
     >
-     <EditCourse id={course.id} name={course.name} price={course.price} category={course.category} InstructorId={course.instructorId} Deadline={course.startDate} description={course.description} image={course.imageUrl} />
+     <EditCourse id={course.id} name={course.name} price={course.price} category={course.category} InstructorId={course.instructorId} startDate={course.startDate} Deadline={course.Deadline} totalHours={course.totalHours} limitNumberOfStudnet={course.limitNumberOfStudnet} description={course.description} image={course.imageUrl} setOpenUpdate={setOpenUpdate} />
      </Stack>
         </DialogContent>
         <DialogActions>
@@ -178,6 +217,20 @@ const handleCloseUpdate = () => {
           )}
         </tbody>
       </table>
+            <Stack spacing={2} sx={{ width: '100%', maxWidth: 500, margin: '0 auto' }}>
+     
+     <Pagination
+     className="pb-3"
+       count={totalPages}
+       page={pageNumber}
+       onChange={handlePageChange}
+       variant="outlined"
+       color="secondary"
+       showFirstButton
+       showLastButton
+     />
+   </Stack>
+
     </>
   )
 }

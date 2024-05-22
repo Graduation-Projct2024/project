@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using courseProject.Core.IGenericRepository;
 using courseProject.Core.Models;
-using courseProject.Core.Models.DTO;
 using courseProject.Repository.Data;
 using courseProject.Repository.GenericRepository;
 using System.Net;
@@ -16,6 +15,8 @@ using static System.Net.WebRequestMethods;
 using courseProject.Common;
 using System.Net.NetworkInformation;
 using Microsoft.AspNetCore.Authorization;
+using courseProject.Core.Models.DTO.EventsDTO;
+using courseProject.Core.Models.DTO.CoursesDTO;
 
 namespace courseProject.Controllers
 {
@@ -118,13 +119,13 @@ namespace courseProject.Controllers
                 responce.ErrorMassages.Add("Not Has Any Course Yet");
                 return (responce);
             }
-
+            courses = courses.OrderByDescending(x => x.dateOfAdded).ToList();
             var mapperCourse = mapper.Map<IReadOnlyList<Course>, IReadOnlyList<CourseAccreditDTO>>(courses);
-
+           
             responce.IsSuccess = true;
             responce.StatusCode = HttpStatusCode.OK;
             responce.Result = (Pagination<CourseAccreditDTO>.CreateAsync(mapperCourse, paginationRequest.pageNumber, paginationRequest.pageSize)).Result;
-
+            
             return Ok(responce);
         }
 
@@ -164,7 +165,11 @@ namespace courseProject.Controllers
             {
                 requestMapped.StudentId = StudentId;
             }
-            courseMapped.ImageUrl = "Files\\" + await unitOfWork.FileRepository.UploadFile1(model.image);
+            if (courseMapped.image != null)
+            {
+                courseMapped.ImageUrl = "Files\\" + await unitOfWork.FileRepository.UploadFile1(model.image);
+            }
+          
 
             using (var transaction = await unitOfWork.SubAdminRepository.BeginTransactionAsync())
             {

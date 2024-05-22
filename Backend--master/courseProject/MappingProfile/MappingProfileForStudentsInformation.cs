@@ -1,7 +1,12 @@
 ﻿using AutoMapper;
 using courseProject.core.Models;
 using courseProject.Core.Models;
-using courseProject.Core.Models.DTO;
+using courseProject.Core.Models.DTO.CoursesDTO;
+using courseProject.Core.Models.DTO.FeedbacksDTO;
+using courseProject.Core.Models.DTO.LecturesDTO;
+using courseProject.Core.Models.DTO.RegisterDTO;
+using courseProject.Core.Models.DTO.StudentsDTO;
+using courseProject.Core.Models.DTO.UsersDTO;
 
 namespace courseProject.MappingProfile
 {

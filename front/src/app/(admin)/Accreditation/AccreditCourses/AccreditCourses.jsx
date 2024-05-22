@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUpFromBracket, faEye, faFilter } from '@fortawesome/free-solid-svg-icons'
 import Link from 'next/link';
 import { UserContext } from '@/context/user/User';
+import { FormControl, InputLabel, MenuItem, Pagination, Select, Stack } from '@mui/material';
 
 
 export default function AccreditCourses() {
@@ -13,12 +14,17 @@ export default function AccreditCourses() {
 
   const [accreditCourses, setAccreditCourses] = useState([]);
   let[loader,setLoader] = useState(false);
-  const fetchCoursesForAccredit = async () => {
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalPages, setTotalPages] = useState(0);
+
+  const fetchCoursesForAccredit = async (pageNum = pageNumber, pageSizeNum = pageSize)=> {
     if(userData){
     try{
-    const { data } = await axios.get(`http://localhost:5134/api/CourseContraller/GetAllCoursesForAccredit?pageNumber=1&pageSize=10`);
+    const { data } = await axios.get(`http://localhost:5134/api/CourseContraller/GetAllCoursesForAccredit?pageNumber=${pageNum}&pageSize=${pageSize}`);
     console.log(data);
     setAccreditCourses(data.result.items);
+    setTotalPages(data.result.totalPages);
   }
     catch(error){
       console.log(error);
@@ -46,7 +52,17 @@ export default function AccreditCourses() {
 
   useEffect(() => {
     fetchCoursesForAccredit();
-  }, [accreditCourses,userData]);
+  }, [accreditCourse,userData, pageNumber, pageSize]);
+
+  const handlePageSizeChange = (event) => {
+    setPageSize(event.target.value);
+    setPageNumber(1); // Reset to the first page when page size changes
+  };
+  
+  const handlePageChange = (event, value) => {
+    setPageNumber(value);
+  };
+
 if(loader){
   return <p>Loading ...</p>
 }
@@ -79,7 +95,23 @@ const filteredAccreditCourses = Array.isArray(accreditCourses) ? accreditCourses
                 value={searchTerm}
                 onChange={handleSearch}
               />
-              <div className="icons d-flex gap-2 pt-2">
+              <FormControl fullWidth className="w-50">
+        <InputLabel id="page-size-select-label">Page Size</InputLabel>
+        <Select
+        className="justify-content-center"
+          labelId="page-size-select-label"
+          id="page-size-select"
+          value={pageSize}
+          label="Page Size"
+          onChange={handlePageSizeChange}
+        >
+          <MenuItem value={5}>5</MenuItem>
+          <MenuItem value={10}>10</MenuItem>
+          <MenuItem value={20}>20</MenuItem>
+          <MenuItem value={50}>50</MenuItem>
+        </Select>
+      </FormControl>
+              <div className="icons d-flex gap-2 pt-3">
                 <div className="dropdown">
                   <button
                     className="dropdown-toggle border-0 bg-white edit-pen"
@@ -99,12 +131,9 @@ const filteredAccreditCourses = Array.isArray(accreditCourses) ? accreditCourses
           </div>
         </nav>
       </div>
-      {/* <>
-      {filteredAccreditCourses.length ? filteredAccreditCourses.map((course) =>(
-        <img src={course.imageUrl}/>
-        
-      )) : <p>no imgs</p>}
-</> */}
+     
+
+
       <table className="table">
         <thead>
           <tr>
@@ -149,6 +178,19 @@ const filteredAccreditCourses = Array.isArray(accreditCourses) ? accreditCourses
           )}
         </tbody>
       </table>
+      <Stack spacing={2} sx={{ width: '100%', maxWidth: 500, margin: '0 auto' }}>
+     
+      <Pagination
+      className="pb-3"
+        count={totalPages}
+        page={pageNumber}
+        onChange={handlePageChange}
+        variant="outlined"
+        color="secondary"
+        showFirstButton
+        showLastButton
+      />
+    </Stack>
     </>
   );
 }

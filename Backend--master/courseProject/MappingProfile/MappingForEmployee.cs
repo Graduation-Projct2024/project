@@ -1,7 +1,11 @@
 ﻿using AutoMapper;
 using courseProject.Common;
 using courseProject.Core.Models;
-using courseProject.Core.Models.DTO;
+using courseProject.Core.Models.DTO.EmployeesDTO;
+using courseProject.Core.Models.DTO.InstructorsDTO;
+using courseProject.Core.Models.DTO.LecturesDTO;
+using courseProject.Core.Models.DTO.RegisterDTO;
+using courseProject.Core.Models.DTO.UsersDTO;
 using Microsoft.OpenApi.Extensions;
 
 namespace courseProject.MappingProfile
@@ -33,11 +37,13 @@ namespace courseProject.MappingProfile
             CreateMap<SubAdmin, ContactDto>()
                 .ForMember(x => x.userName, o => o.MapFrom(y => y.user.userName))
                 .ForMember(x => x.email, o => o.MapFrom(y => y.user.email))
+                .ForMember(x => x.role, o => o.MapFrom(y => y.user.role))
                 .ForMember(x => x.ImageUrl, o => o.MapFrom(y => $"http://localhost:5134/{y.ImageUrl}"));
 
             CreateMap<Instructor, ContactDto>()
                 .ForMember(x => x.userName, o => o.MapFrom(y => y.user.userName))
                 .ForMember(x => x.email, o => o.MapFrom(y => y.user.email))
+                .ForMember(x => x.role, o => o.MapFrom(y => y.user.role))
                 .ForMember(x => x.ImageUrl, o => o.MapFrom(y => $"http://localhost:5134/{y.ImageUrl}"));
 
             CreateMap<EmployeeForCreate, SubAdmin>();

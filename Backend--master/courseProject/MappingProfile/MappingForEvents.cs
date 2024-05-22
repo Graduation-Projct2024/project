@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using courseProject.Core.Models;
-using courseProject.Core.Models.DTO;
+using courseProject.Core.Models.DTO.EventsDTO;
 
 namespace courseProject.MappingProfile
 {
