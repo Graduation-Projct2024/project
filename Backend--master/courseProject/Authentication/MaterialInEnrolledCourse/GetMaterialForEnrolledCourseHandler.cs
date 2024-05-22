@@ -20,23 +20,38 @@ namespace courseProject.Authentication.MaterialInEnrolledCourse
         }
         protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, MaterialInEnrolledCourseRequeriment requirement)
         {
-            //using (var scope = this.context.CreateScope())
-            //{
+            
             var httpContext = _httpContextAccessor.HttpContext;
             var routeData = httpContext.GetRouteData();
             var MaterialIdAsString = httpContext.Request.Query["Id"].FirstOrDefault()
                                    ?? routeData?.Values["Id"]?.ToString();
             if (!string.IsNullOrEmpty(MaterialIdAsString) && int.TryParse(MaterialIdAsString, out var MaterialId))
             {
-                var courseid = (await dbContext.courseMaterials.FirstOrDefaultAsync(x => x.Id == MaterialId))?.courseId;
-                var userId = context.User.FindFirst("UserId")?.Value;
-                if (userId != null)
+                //var materials = await dbContext.courseMaterials.ToListAsync();
+             
+              //  var material =   (await dbContext.courseMaterials.FirstOrDefaultAsync(x => x.Id == MaterialId));
+
+                var material = await dbContext.courseMaterials.FirstOrDefaultAsync(x => x.Id == MaterialId);
+
+                if (material != null)
                 {
-                    var enrolled = await dbContext.studentCourses.AnyAsync(sc => sc.courseId == courseid && (sc.StudentId.ToString() == userId || sc.Course.InstructorId.ToString() == userId));
-                    if (enrolled)
+                    var courseId = material.courseId;
+                    var consultationId = material.consultationId;
+                    var userIdAsString = context.User.FindFirst("UserId")?.Value;
+
+                    if (int.TryParse(userIdAsString, out var userId))
                     {
-                        context.Succeed(requirement);
+
+                        var enrolledInCourse = await dbContext.studentCourses.AnyAsync(sc => sc.courseId == courseId && (sc.StudentId == userId || sc.Course.InstructorId == userId));
+                        var enrolledInConsultation = await dbContext.courseMaterials.AnyAsync(cm => cm.consultationId == consultationId && cm.InstructorId == userId);
+
+                        if (enrolledInCourse || enrolledInConsultation)
+                        {
+                            context.Succeed(requirement);
+                            return;
+                        }
                     }
+
                     else
                     {
                         context.Fail();
@@ -45,7 +60,7 @@ namespace courseProject.Authentication.MaterialInEnrolledCourse
 
                 }
             }
-            //}
+            
         }
     }
 }

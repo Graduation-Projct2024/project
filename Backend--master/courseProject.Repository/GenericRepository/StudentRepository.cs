@@ -187,5 +187,10 @@ namespace courseProject.Repository.GenericRepository
         {
            return await dbContext.studentCourses.FirstOrDefaultAsync(x=>x.courseId==courseId &&  x.StudentId==studentId);
         }
+
+        public async Task RemoveTheRejectedRequestToJoinCourse(StudentCourse studentCourse)
+        {
+             dbContext.studentCourses.Remove(studentCourse);
+        }
     }
 }

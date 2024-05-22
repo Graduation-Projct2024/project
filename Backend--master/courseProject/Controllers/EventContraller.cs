@@ -52,6 +52,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [Authorize(Policy = "Admin, Main-SubAdmin , SubAdmin")]
         public async Task<ActionResult<ApiResponce>> GetAllEventsForAccreditAsync([FromQuery] PaginationRequest paginationRequest)
         {
             var events = await eventRepo.GetAllEventsForAccreditAsync();

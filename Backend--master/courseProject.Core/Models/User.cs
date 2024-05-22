@@ -21,7 +21,7 @@ namespace courseProject.Core.Models
         public string email {  get; set; }
         public string password { get; set; }
         public string role { get; set; }
-
+        public bool IsVerified { get; set; } 
         public Student student { get; set; }
 
         public Instructor instructor { get; set; }

@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using courseProject.Core.Models.DTO.LoginDTO;
 using courseProject.Core.Models.DTO.RegisterDTO;
+using System.Security.Cryptography;
 
 namespace courseProject.Repository.GenericRepository
 {
@@ -54,6 +55,7 @@ namespace courseProject.Repository.GenericRepository
             if (user != null)
             {
                 pass = BC.Verify(loginRequestDTO.password, user.password);
+                
             }
 
             if (user == null || pass == false)
@@ -111,7 +113,8 @@ namespace courseProject.Repository.GenericRepository
                 userName = registerRequestDTO.userName,
                 email= registerRequestDTO.email,
                 password= passHash,
-                role= registerRequestDTO.role.ToLower()
+                role= registerRequestDTO.role.ToLower(),
+                IsVerified = false
             };
            await dbContext.users.AddAsync(user);
           // await dbContext.SaveChangesAsync();
@@ -119,6 +122,15 @@ namespace courseProject.Repository.GenericRepository
             return  user;
         }
 
+        public async Task<string> GenerateSecureVerificationCode(int length)
+        {
+            using (var randomNumberGenerator = new RNGCryptoServiceProvider())
+            {
+                var randomNumber = new byte[length];
+                randomNumberGenerator.GetBytes(randomNumber);
+                return (Convert.ToBase64String(randomNumber).Substring(0, length));
+            }
+        }
 
         public async Task<User> GetUserByRoleAsync(string role)
         {
@@ -133,6 +145,16 @@ namespace courseProject.Repository.GenericRepository
         public async Task<IReadOnlyList< User>> getAllMainSubAmdinRole()
         {
            return await dbContext.users.Where(x => x.role.ToLower() == "main-subadmin").ToListAsync();
+        }
+
+        public async Task<User> GetUserByEmail(string email)
+        {
+            return await dbContext.users.FirstOrDefaultAsync(x => x.email == email);
+        }
+
+        public async Task UpdateUser(User user)
+        {
+            dbContext.users.Update(user);
         }
     }
 }

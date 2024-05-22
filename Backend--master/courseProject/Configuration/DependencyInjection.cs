@@ -49,7 +49,7 @@ namespace courseProject.Configuration
                          options.SerializerSettings.ReferenceLoopHandling =
                                  Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
-
+            services.AddMemoryCache();
             return services;
         }
 
@@ -94,12 +94,31 @@ namespace courseProject.Configuration
                     );
 
                 });
+                options.AddPolicy("Admin, Main-SubAdmin , SubAdmin", policy =>
+                {
+                    policy.RequireAssertion(a =>
+
+                        a.User.IsInRole("admin") ||
+                        a.User.IsInRole("subadmin")||
+                        a.User.IsInRole("main-subadmin")
+
+                    );
+
+                });
                 options.AddPolicy("Admin , Instructor", policy =>
                 {
                     policy.RequireAssertion(a =>
 
                     a.User.IsInRole("admin") ||
                     a.User.IsInRole("instructor"));
+                });
+
+                options.AddPolicy("Admin , Student", policy =>
+                {
+                    policy.RequireAssertion(a =>
+
+                    a.User.IsInRole("admin") ||
+                    a.User.IsInRole("student"));
                 });
 
 

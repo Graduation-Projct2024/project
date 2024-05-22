@@ -33,6 +33,7 @@ namespace courseProject.Core.IGenericRepository
         public Task<IReadOnlyList<Consultation>> GetAllPublicConsultationsAsync();
         public Task<IReadOnlyList<Course>> GetAllCoursesAsync(int studentId);
         public Task<StudentCourse> GetFromStudentCourse(int courseId, int studentId);
+        public Task RemoveTheRejectedRequestToJoinCourse(StudentCourse studentCourse);
         //  public Task RequestToCreateCustomCourseAsync ()
     }
 }

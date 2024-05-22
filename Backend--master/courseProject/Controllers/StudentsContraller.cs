@@ -860,7 +860,12 @@ namespace courseProject.Controllers
                 var patchDocument = new JsonPatchDocument<StudentCourse>();
                 patchDocument.Replace(path, status);
                 getStudentCourse.status = status;
+                
                 await unitOfWork.CourseRepository.UpdateStudentCourse(getStudentCourse);
+                if (status.ToLower() == "reject")
+                {
+                    await unitOfWork.StudentRepository.RemoveTheRejectedRequestToJoinCourse(getStudentCourse);
+                }
                 if (await unitOfWork.CourseRepository.saveAsync() > 0)
                 {
                     response.IsSuccess = true;
