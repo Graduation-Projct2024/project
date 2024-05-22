@@ -23,6 +23,7 @@ export default function CreateCourse({setOpen}) {
     startDate:'',
     Deadline:'',
     limitNumberOfStudnet:'',
+    totalHours:'',
     image:'',
     
 };
@@ -45,6 +46,7 @@ const onSubmit = async (values) => {
     formData.append('startDate', values.startDate);
     formData.append('Deadline', values.Deadline);
     formData.append('limitNumberOfStudnet', values.limitNumberOfStudnet);
+    formData.append('totalHours', values.totalHours);
     //formData.append('image', values.image,values.image.name);
     if (values.image) {
       formData.append('image', values.image);
@@ -114,6 +116,7 @@ const inputs =[
       title:'limit number of studnets',
       value:formik.values.limitNumberOfStudnet,
   },
+
     
   
   {
@@ -144,6 +147,13 @@ const inputs =[
   name:'Deadline',
   title:'Course Deadline',
   value:formik.values.Deadline,
+},
+{
+  type : 'number',
+  id:'totalHours',
+  name:'totalHours',
+  title:'# of hours',
+  value:formik.values.totalHours,
 },
 
     {

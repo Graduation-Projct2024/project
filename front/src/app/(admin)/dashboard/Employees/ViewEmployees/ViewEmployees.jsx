@@ -339,7 +339,7 @@ export default function ViewEmployees() {
    spacing={1}
    sx={{ justifyContent: 'center',  alignContent: 'center'}}
     >
-      <UpdateEmployee id = {employee.id}  fName = {employee.fName} lName = {employee.lName} email = {employee.email} gender = {employee.gender} phoneNumber = {employee.phoneNumber} address = {employee.address}/>
+      <UpdateEmployee id = {employee.id}  fName = {employee.fName} lName = {employee.lName} email = {employee.email} gender = {employee.gender} phoneNumber = {employee.phoneNumber} address = {employee.address} setOpenUpdate={setOpenUpdate}/>
      </Stack>
         </DialogContent>
         <DialogActions>

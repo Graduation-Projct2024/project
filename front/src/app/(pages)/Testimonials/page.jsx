@@ -117,8 +117,9 @@ export default function Testimonials() {
            loop = {true}
         >
            {contacts.length? contacts.map((contact)=>(
+            <div> {contact.role == "instructor" &&
           <SwiperSlide key={contact.id} className='py-5' >
-         
+           
           <div className="col-md-4">
                     <div className="card text-center mb-3" style={{ width: "18rem" }}>
                       <div className="card-body m-3">
@@ -140,9 +141,9 @@ export default function Testimonials() {
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> 
 
-          </SwiperSlide>
+          </SwiperSlide>}</div>
                 )) : <h1>No Data</h1>}
          
         </Swiper>
