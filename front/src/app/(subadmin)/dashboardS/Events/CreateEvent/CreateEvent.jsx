@@ -9,14 +9,14 @@ import React, { useContext } from 'react'
 import Swal from 'sweetalert2'
 
 
-export default function CreateEvent() {
-  const {userToken, setUserToken, userData}=useContext(UserContext);
+export default function CreateEvent({setOpen}) {
+  const {userToken, setUserToken, userData,userId}=useContext(UserContext);
 
   const initialValues={
     name: '',
     content:'',
     category: '',
-    SubAdminId:0,
+    SubAdminId:userId,
     dateOfEvent:'',
     image:'',
 };
@@ -38,13 +38,14 @@ const onSubmit = async (values) => {
       formData.append('image', values.image);
     }
 
-    const { data } = await axios.post('http://localhost:5134/api/CourseContraller/CreateEvent', formData,);
+    const { data } = await axios.post('http://localhost:5134/api/CourseContraller/CreateEvent', formData,{headers :{Authorization:`Bearer ${userToken}`}});
     
    if(data.isSuccess){
     
     console.log(data);
     console.log('tttt');
     formik.resetForm();
+    setOpen(false);
     Swal.fire({
       title: "Event Created Successfully",
       text: "Wait for Admin accredit this Event",
@@ -91,8 +92,9 @@ const inputs =[
       type : 'number',
       id:'SubAdminId',
       name:'SubAdminId',
-      title:'SubAdmin Id',
+      title:`SubAdmin Id : ${userId}`,
       value:formik.values.SubAdminId,
+      disabled: true,
   },
   {
     type : 'date',
@@ -127,6 +129,7 @@ const renderInputs = inputs.slice(0, -1).map((input,index)=>
           onChange={input.onChange||formik.handleChange}
            onBlur={formik.handleBlur}
             touched={formik.touched}
+            disabled={input.disabled}
             />
         
     )

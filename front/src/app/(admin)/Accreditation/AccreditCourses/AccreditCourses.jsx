@@ -7,6 +7,7 @@ import { faArrowUpFromBracket, faEye, faFilter } from '@fortawesome/free-solid-s
 import Link from 'next/link';
 import { UserContext } from '@/context/user/User';
 import { FormControl, InputLabel, MenuItem, Pagination, Select, Stack } from '@mui/material';
+import Swal from 'sweetalert2';
 
 
 export default function AccreditCourses() {
@@ -32,22 +33,65 @@ export default function AccreditCourses() {
   }
   };
 
+  // const accreditCourse = async (courseId , Status) => {
+  //   //setLoader(true);
+  //   console.log(courseId);
+  //   if(userData){
+  //   try{
+  //   const { data } = await axios.patch(`http://localhost:5134/api/CourseContraller/accreditCourse?courseId=${courseId}&Status=${Status}`,
+  // );
+  // if(data.isSuccess){
+  //   console.log(data);
+  //   //setLoader(false);
+  //   fetchCoursesForAccredit();
+  // }
+  // }
+  //   catch(error){
+  //     console.log(error);
+  //   }}
+  // };
+
   const accreditCourse = async (courseId , Status) => {
-    //setLoader(true);
-    console.log(courseId);
-    if(userData){
-    try{
-    const { data } = await axios.patch(`http://localhost:5134/api/CourseContraller/accreditCourse?courseId=${courseId}&Status=${Status}`,
-  );
-  if(data.isSuccess){
-    console.log(data);
-    //setLoader(false);
-    fetchCoursesForAccredit();
-  }
-  }
-    catch(error){
-      console.log(error);
-    }}
+    if (userData) {
+      Swal.fire({
+        title: `Are you sure?`,
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes!"
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            const { data } = await axios.patch(`http://localhost:5134/api/CourseContraller/accreditCourse?courseId=${courseId}&Status=${Status}`, {},
+              {
+                headers: {
+                  Authorization: `Bearer ${userToken}`,
+                },
+              });
+  
+            // console.log(data, status);
+            if (Status == "accredit") {
+              Swal.fire({
+                title: `Course Accredit Successully`,
+                text: "Request Accepted",
+                icon: "success"
+              });
+            } else if (Status == 'reject') {
+              Swal.fire({
+                icon: "error",
+                title: "Event Rejected ):",
+                text: "Opsss...",
+              });
+            }
+  
+          } catch (error) {
+            console.log(error);
+          }
+        }
+      });
+    }
   };
 
   useEffect(() => {

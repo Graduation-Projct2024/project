@@ -53,7 +53,7 @@ formData.append("studentId", userData.userId);
       }
 },
     );
-    router.push(`/MyCourses/${courseId}`);
+    // router.push(`/MyCourses/${courseId}`);
     setOpen(true);
 
     console.log(data);
@@ -82,7 +82,7 @@ formData.append("studentId", userData.userId);
           variant="filled"
           sx={{ width: '100%' }}
         >
-          You Enrolled succssfully!
+          Your request to join this course done successfully, please wait for Accreditation!
         </Alert>
       </Snackbar>
            <Grid container spacing={2}>
@@ -97,7 +97,7 @@ formData.append("studentId", userData.userId);
               width={300}
               height={250}
               className="rounded"
-              src={`http://localhost:5134/${course.imageUrl}`}
+              src={`${course.imageUrl}`}
               alt="course Image"
             />
           </Box>
