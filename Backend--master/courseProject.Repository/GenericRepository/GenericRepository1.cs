@@ -117,9 +117,8 @@ namespace courseProject.Repository.GenericRepository
         {
             if(typeof(T) == typeof(Event))
             {
-                return (IReadOnlyList<T>)await dbContext.events
-                    
-                    .Include(x => x.SubAdmin.user).ToListAsync();
+                return (IReadOnlyList<T>)await dbContext.events.Include(x=>x.SubAdmin)                    
+                    .ThenInclude(x => x.user).ToListAsync();
             }
             return await dbContext.Set<T>().ToListAsync();
         }

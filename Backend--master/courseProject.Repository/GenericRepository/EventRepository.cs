@@ -19,6 +19,12 @@ namespace courseProject.Repository.GenericRepository
             this.dbContext = dbContext;
         }
 
+        public async Task<IReadOnlyList<Event>> GetAllUndefindEventBySubAdminIdAsync(int subAdminId)
+        {
+            return await dbContext.events.Include(e => e.SubAdmin).ThenInclude(s => s.user)
+                 .Where(e => e.SubAdminId == subAdminId && e.status.ToLower()== "undefined").ToListAsync();
+        }
+
         public async Task<Event> GetEventByIdAsync(int eventId)
         {
             return await dbContext.events.FirstOrDefaultAsync(x => x.Id == eventId);

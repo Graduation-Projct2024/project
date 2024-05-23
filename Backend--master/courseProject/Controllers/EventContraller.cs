@@ -48,14 +48,34 @@ namespace courseProject.Controllers
             return Ok(responce);
         }
 
-        [HttpGet("GetAllUndefinedEvents")]
+        [HttpGet("GetAllEventsToAdmin")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        [Authorize(Policy = "Admin, Main-SubAdmin , SubAdmin")]
-        public async Task<ActionResult<ApiResponce>> GetAllEventsForAccreditAsync([FromQuery] PaginationRequest paginationRequest)
+        [Authorize(Policy = "Admin")]
+        public async Task<ActionResult<ApiResponce>> GetAllEventsForAccreditAsync( [FromQuery] PaginationRequest paginationRequest)
         {
             var events = await eventRepo.GetAllEventsForAccreditAsync();
+            if(events == null)
+            {
+                responce.StatusCode = HttpStatusCode.NoContent;
+                responce.ErrorMassages.Add("There is no events yet");
+                return Ok(responce); 
+            }
+
+            var mapperEvents = mapper.Map<IReadOnlyList<Event>, IReadOnlyList<EventAccreditDto>>(events);
+            responce.IsSuccess = true;
+            responce.Result = (Pagination<EventAccreditDto>.CreateAsync(mapperEvents, paginationRequest.pageNumber, paginationRequest.pageSize)).Result;
+            return Ok(responce);
+        }
+        [HttpGet("GetAllUndefinedEventsToSubAdmin")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        [Authorize(Policy = "Main-SubAdmin , SubAdmin")]
+        public async Task<ActionResult<ApiResponce>> GetAllEvents(int subAdminId , [FromQuery] PaginationRequest paginationRequest)
+        {
+            var events = await unitOfWork.eventRepository.GetAllUndefindEventBySubAdminIdAsync(subAdminId);
             if(events == null)
             {
                 responce.StatusCode = HttpStatusCode.NoContent;
@@ -74,7 +94,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        [Authorize(Policy = "SubAdmin , Main-SubAdmin")]
+        [Authorize(Policy = "Admin, Main-SubAdmin , SubAdmin")]
         public async Task<ActionResult<ApiResponce>> EditEvent(int id, [FromForm] EventForEditDTO eventForEditDTO)
         {
             if (id <= 0)

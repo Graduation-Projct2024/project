@@ -105,6 +105,17 @@ namespace courseProject.Configuration
                     );
 
                 });
+                options.AddPolicy("Main-SubAdmin , SubAdmin", policy =>
+                {
+                    policy.RequireAssertion(a =>
+
+                       
+                        a.User.IsInRole("subadmin") ||
+                        a.User.IsInRole("main-subadmin")
+
+                    );
+
+                });
                 options.AddPolicy("Admin , Instructor", policy =>
                 {
                     policy.RequireAssertion(a =>
