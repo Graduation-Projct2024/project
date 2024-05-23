@@ -37,36 +37,78 @@ export default function AccreditEvents() {
 
 
 
-  const accreditEvent = async (eventId , Status) => {
-    //setLoader(true);
-    console.log(eventId);
-    if(userData){
-    try{
-    const { data } = await axios.patch(`http://localhost:5134/api/CourseContraller/accreditEvent?eventId=${eventId}&Status=${Status}`,
-  );
-  console.log(data);
-  if(Status === 'accredit'){
-  Swal.fire({
-    title: `Event Accredited Successfully`,
-    text: "Check View Events page",
-    icon: "success"
-  });}
-  else if(Status === 'reject'){
-    Swal.fire({
-      icon: "error",
-      title: "Event Rejected ):",
-      text: "Opsss...",
+  // const accreditEvent = async (eventId , Status) => {
+  //   //setLoader(true);
+  //   console.log(eventId);
+  //   if(userData){
+  //   try{
+  //   const { data } = await axios.patch(`http://localhost:5134/api/CourseContraller/accreditEvent?eventId=${eventId}&Status=${Status}`,
+  // );
+  // console.log(data);
+  // if(Status === 'accredit'){
+  // Swal.fire({
+  //   title: `Event Accredited Successfully`,
+  //   text: "Check View Events page",
+  //   icon: "success"
+  // });}
+  // else if(Status === 'reject'){
+  //   Swal.fire({
+  //     icon: "error",
+  //     title: "Event Rejected ):",
+  //     text: "Opsss...",
       
-    });
+  //   });
 
-  }
+  // }
 
-  }
-    catch(error){
-      console.log(error);
+  // }
+  //   catch(error){
+  //     console.log(error);
+  //   }
+
+  // }
+  // };
+  const accreditEvent = async (eventId , Status) => {
+    if (userData) {
+      Swal.fire({
+        title: `Are you sure?`,
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes!"
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            const { data } = await axios.patch(`http://localhost:5134/api/CourseContraller/accreditEvent?eventId=${eventId}&Status=${Status}`, {},
+              {
+                headers: {
+                  Authorization: `Bearer ${userToken}`,
+                },
+              });
+  
+            // console.log(data, status);
+            if (Status == "accredit") {
+              Swal.fire({
+                title: `Event Accredit Successully`,
+                text: "Request Accepted",
+                icon: "success"
+              });
+            } else if (Status == 'reject') {
+              Swal.fire({
+                icon: "error",
+                title: "Request Rejected ):",
+                text: "Opsss...",
+              });
+            }
+  
+          } catch (error) {
+            console.log(error);
+          }
+        }
+      });
     }
-
-  }
   };
 
 

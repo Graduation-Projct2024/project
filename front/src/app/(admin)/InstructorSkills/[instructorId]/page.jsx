@@ -23,7 +23,8 @@ export default function InstructorSkills({params}) {
       if(userData){
     try {
       //setLoading(false)
-      const {data} = await axios.get(`http://localhost:5134/api/Employee/GetAllInstructorSkills?instructorId=1006`,{ headers: { Authorization: `Bearer ${userToken}` } });
+      const {data} = await axios.get(`http://localhost:5134/api/Employee/GetAllInstructorSkills?instructorId=${params.instructorId}`,
+      { headers: { Authorization: `Bearer ${userToken}` }});
       if (data) {
         setInstructorSkills(data.result || []);
       }}
