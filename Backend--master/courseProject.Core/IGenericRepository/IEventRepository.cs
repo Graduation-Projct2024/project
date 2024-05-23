@@ -10,5 +10,6 @@ namespace courseProject.Core.IGenericRepository
     public interface IEventRepository :IGenericRepository1<Event>
     {
         public Task<Event> GetEventByIdAsync(int eventId);
+        public Task<IReadOnlyList<Event>> GetAllUndefindEventBySubAdminIdAsync(int subAdminId);
     }
 }
