@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.Authentication;
 using courseProject.Core.Models.DTO.UsersDTO;
 using courseProject.Core.Models.DTO.LoginDTO;
 using courseProject.Core.Models.DTO.RegisterDTO;
+using Microsoft.Extensions.Caching.Memory;
+using BCrypt.Net;
 
 
 namespace courseProject.Controllers
@@ -29,14 +31,16 @@ namespace courseProject.Controllers
         private readonly projectDbContext dbContext;
         protected ApiResponce response;
         private Common.CommonClass CommonClass;
-        public UserContraller(   IUnitOfWork unitOfWork , IMapper mapper , projectDbContext dbContext)
+        private readonly IMemoryCache memoryCache;
+        public UserContraller(   IUnitOfWork unitOfWork, IMapper mapper, projectDbContext dbContext, IMemoryCache memoryCache)
         {
-          
+
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
             this.dbContext = dbContext;
             this.response = new();
             CommonClass = new Common.CommonClass();
+            this.memoryCache = memoryCache;
         }
 
         [HttpGet("GetUserIdFromToken")]
@@ -60,7 +64,16 @@ namespace courseProject.Controllers
         
         public async Task<IActionResult> Login( LoginRequestDTO loginRequestDTO)
         {
-            
+            var verify = await unitOfWork.UserRepository.GetUserByEmail(loginRequestDTO.email);
+
+            if (verify.IsVerified == false)
+            {
+                response.IsSuccess = false;
+                response.StatusCode = HttpStatusCode.BadRequest;
+                response.ErrorMassages.Add("Your email has not been confirmed");
+                return Ok(response);
+            }
+
             var loginResponse = await unitOfWork.UserRepository.LoginAsync(loginRequestDTO);
 
             if (loginResponse.User == null || string.IsNullOrEmpty(loginResponse.Token))
@@ -134,7 +147,15 @@ namespace courseProject.Controllers
                         await unitOfWork.AdminRepository.CreateAdminAccountAsync(adminMapper);
                     }
                     var success2 = await unitOfWork.SubAdminRepository.saveAsync();
+                    string verificationCode = await unitOfWork.UserRepository.GenerateSecureVerificationCode(6);
 
+                    var cacheKey = $"VerificationCodeFor-{model.email}";
+                    memoryCache.Set(cacheKey, verificationCode, TimeSpan.FromHours(2));
+                    //  var codes = memoryCache.Set(model.email, verificationCode);
+
+                    // Send verification email
+                    await unitOfWork.EmailService.SendEmailAsync(model.email, "Your Verification Code", $" Hi {model.userName} , Your code is: {verificationCode}");
+                    //    await unitOfWork.UserRepository.saveAsync();
                     if (success1 > 0 && success2 > 0)
                     {
                         await transaction.CommitAsync();
@@ -164,8 +185,71 @@ namespace courseProject.Controllers
             }
         }
 
+        [HttpPost("addCode")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<ApiResponce>> AddCode(string email, string code)
+        {
 
-     
+            //   var ValedationCode = memoryCache.Get<string>(email);
+            if (code == null)
+            {
+                response.IsSuccess = false;
+                response.StatusCode = HttpStatusCode.BadRequest;
+                response.ErrorMassages.Add("You input code is null , Please enter it correctly");
+                return BadRequest(response);
+            }
+            if (!memoryCache.TryGetValue($"VerificationCodeFor-{email}", out string verificationCode))
+            {
+                // If the code is not found in the cache, return a 404 Not Found response
+                response.IsSuccess = false;
+                response.StatusCode = HttpStatusCode.NotFound;
+                response.ErrorMassages.Add("No verification code found for the provided email.");
+                return NotFound(response);
+            }
+            if (verificationCode == code)
+            {
+                memoryCache.Remove($"VerificationCodeFor-{email}");
+                var getUser = await unitOfWork.UserRepository.GetUserByEmail(email);
+                getUser.IsVerified = true;
+                await unitOfWork.UserRepository.UpdateUser(getUser);
+                await unitOfWork.UserRepository.saveAsync();
+                response.IsSuccess = true;
+                response.StatusCode = HttpStatusCode.OK;
+                response.Result = "Verification successful, you are registered now.";
+                return Ok(response);
+            }
+            response.IsSuccess = false;
+            response.StatusCode = HttpStatusCode.BadRequest;
+            response.ErrorMassages.Add("The code entered is incorrect, please add it correctly");
+            return BadRequest(response);
+        }
+
+        [HttpGet("reSendCode")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        public async Task<ActionResult<ApiResponce>> reSendTheVerificationCode(string email)
+        {
+            var getUser = await unitOfWork.UserRepository.GetUserByEmail(email);
+            if(getUser==null )
+            {
+                response.ErrorMassages.Add($"The user with email = {email} is not found , register first");
+                return response;
+            }
+            if (getUser.IsVerified == true)
+            {
+                response.Result = "you are verified your email !!";
+                return response;
+            }
+            string verificationCode = await unitOfWork.UserRepository.GenerateSecureVerificationCode(6);
+            var cacheKey = $"VerificationCodeFor-{email}";
+            memoryCache.Set(cacheKey, verificationCode, TimeSpan.FromHours(2));                        
+            await unitOfWork.EmailService.SendEmailAsync(email, "Your Verification Code", $" Hi {getUser.userName} , Your code is: {verificationCode}");
+            response.Result = "We send the new code to your email";
+            return response;
+        }
 
 
         [HttpPut("EditProfile")]
@@ -215,8 +299,14 @@ namespace courseProject.Controllers
                     string imageUrl = "";
                     ProfileDTO profileResult=null;
                     if (profile.image != null)
+                        
                     {
-                         imageUrl = "Files\\" + await unitOfWork.FileRepository.UploadFile1(profile.image);
+                        if ( ! new[] { ".png", ".jpg", ".jpeg" }.Contains(Path.GetExtension(profile.image.FileName).ToLower()))
+                        {
+                            response.ErrorMassages.Add($"The image extention is not allowd");
+                            return response;
+                        }
+                         imageUrl = "Files\\" +  await unitOfWork.FileRepository.UploadFile1(profile.image);
                     }
                     if (profileToUpdate.role.ToLower() == "admin")
                     {
@@ -340,6 +430,27 @@ namespace courseProject.Controllers
 
 
 
+        [HttpGet("changePassword")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        [Authorize]
+        public async Task<ActionResult<ApiResponce>> changePassword (int userId , string NewPassword)
+        {
+            var getUser = await unitOfWork.UserRepository.getUserByIdAsync(userId);
+            if(getUser == null)
+            {
+                response.ErrorMassages.Add("The user is not found");
+                return response;
+            }
+            getUser.password= BCrypt.Net.BCrypt.HashPassword(NewPassword);
+            await unitOfWork.UserRepository.UpdateUser(getUser);
+            await unitOfWork.UserRepository.saveAsync();             
+            response.Result = "The password is changed";
+            return Ok(response);
+            
+            
+        }
 
     }
 }

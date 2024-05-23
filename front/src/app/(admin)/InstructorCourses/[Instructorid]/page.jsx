@@ -7,26 +7,31 @@ import Link from 'next/link'
 import React, { useContext, useEffect, useState } from 'react'
 import '../../dashboard/dashboard.css'
 import { UserContext } from '@/context/user/User'
+import { FormControl, InputLabel, MenuItem, Pagination, Select, Stack } from '@mui/material'
 
 export default function InstructorCourses({params}) {
     // console.log(params.Instructorid)
     const {userToken, setUserToken, userData}=useContext(UserContext);
+    
 
     const [instructorCourse,setInstructorCourse] = useState([])
     const [employeeName, setEmployeeName] = useState('');
     const [loading, setLoading] = useState(false);
   // const {id} = useParams();
   // console.log(useParams());
-    let[ins,setIns] = useState('');
+    const [pageNumber, setPageNumber] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
+    const [totalPages, setTotalPages] = useState(0);
 
-    const getInstructorCourses =async ()=>{
+    const getInstructorCourses = async (pageNum = pageNumber, pageSizeNum = pageSize) =>{
       if(userData){
     try {
       //setLoading(false)
-      const {data} = await axios.get(`http://localhost:5134/api/Employee/GetAllCoursesGivenByInstructor?Instructorid=${params.Instructorid}&pageNumber=1&pageSize=10`,{ headers: { Authorization: `Bearer ${userToken}` } });
+      const {data} = await axios.get(`http://localhost:5134/api/Employee/GetAllCoursesGivenByInstructor?Instructorid=${params.Instructorid}&pageNumber=${pageNum}&pageSize=${pageSize}`,{ headers: { Authorization: `Bearer ${userToken}` } });
       if(data.isSuccess){
         // console.log(data.result);
       setInstructorCourse(data.result.items);
+      setTotalPages(data.result.totalPages);
       //setLoading(false)
       }}
       catch (error) {
@@ -35,33 +40,43 @@ export default function InstructorCourses({params}) {
     }   
   };
 
-  // const [employees, setEmployees] = useState([]);
+  const [employees, setEmployees] = useState([]);
 
 
-      // const fetchEmployees = async () => {
-      //   if(userData){
-      //   try{
-      //   const { data } = await axios.get(`http://localhost:5134/api/Employee/GetAllEmployee`);
-      //   console.log(data);
-      //   setEmployees(data);
-      // }
-      //   catch(error){
-      //     console.log(error);
-      //   }}
-      // };
+      const fetchEmployees = async () => {
+        if(userData){
+        try{
+        const { data } = await axios.get(`http://localhost:5134/api/Employee/GetAllEmployee`);
+        console.log(data);
+        setEmployees(data.result.items);
+      }
+        catch(error){
+          console.log(error);
+        }}
+      };
 
-  useEffect(()=>{
+
+  useEffect(() => {
     getInstructorCourses();
-    // fetchEmployees();
-  },[instructorCourse,userData])
+    fetchEmployees();
+    }, [instructorCourse,userData, pageNumber, pageSize]);  // Fetch courses on mount and when page or size changes
+  
+  const handlePageSizeChange = (event) => {
+    setPageSize(event.target.value);
+    setPageNumber(1); // Reset to the first page when page size changes
+  };
+  
+  const handlePageChange = (event, value) => {
+    setPageNumber(value);
+  };
 
-//   useEffect(() => {
-//     const employee = employees.find(employee => employee.id == params.Instructorid);
-//     if(employee) {
-//         setEmployeeName(`${employee.fName} ${employee.lName}`);
-//     }
-// }, [employees, params.Instructorid]);
-// console.log(employeeName)
+  useEffect(() => {
+    const employee = employees.find(employee => employee.id == params.Instructorid);
+    if(employee) {
+        setEmployeeName(`${employee.fName} ${employee.lName}`);
+    }
+}, [employees, params.Instructorid]);
+console.log(employeeName)
 
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -83,7 +98,7 @@ return matchesSearchTerm ;
   
   return (
     
-    <Layout title = {`Courses Instructor`}>
+    <Layout title = {`Courses for "${employeeName}"`}>
         
     <div className="filter py-2 text-end">
         <nav className="navbar">
@@ -97,6 +112,22 @@ return matchesSearchTerm ;
                     value={searchTerm}
                     onChange={handleSearch}
                 />
+                 <FormControl fullWidth className="w-50">
+        <InputLabel id="page-size-select-label">Page Size</InputLabel>
+        <Select
+        className="justify-content-center"
+          labelId="page-size-select-label"
+          id="page-size-select"
+          value={pageSize}
+          label="Page Size"
+          onChange={handlePageSizeChange}
+        >
+          <MenuItem value={5}>5</MenuItem>
+          <MenuItem value={10}>10</MenuItem>
+          <MenuItem value={20}>20</MenuItem>
+          <MenuItem value={50}>50</MenuItem>
+        </Select>
+      </FormControl>
                 <div className="icons d-flex gap-2 pt-2">
                     
                     <div className="dropdown">
@@ -163,6 +194,19 @@ return matchesSearchTerm ;
     
   </tbody>
 </table>
+<Stack spacing={2} sx={{ width: '100%', maxWidth: 500, margin: '0 auto' }}>
+     
+     <Pagination
+     className="pb-3"
+       count={totalPages}
+       page={pageNumber}
+       onChange={handlePageChange}
+       variant="outlined"
+       color="secondary"
+       showFirstButton
+       showLastButton
+     />
+   </Stack>
 
 
       

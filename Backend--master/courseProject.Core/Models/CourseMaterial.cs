@@ -30,9 +30,12 @@ namespace courseProject.Core.Models
         public int InstructorId {  get; set; }
 
         [ForeignKey("Course")]
-        public int courseId {  get; set; }
+        public int? courseId {  get; set; }
 
+        [ForeignKey("Consultation")]
+        public int? consultationId { get; set; }
         public Course Course { get; set; }
+        public Consultation consultation { get; set; }
         public Instructor Instructor { get; set; }
         public List<Student_Task_Submissions> Student_Task_Submissions { get; set; }
 

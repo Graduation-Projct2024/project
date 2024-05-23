@@ -10,7 +10,8 @@ namespace courseProject.MappingProfile
         {
             CreateMap<Event , EventDto>()
                 .ForMember(x=>x.subAdminName , o=>o.MapFrom(y=>y.SubAdmin.user.userName))
-                .ForMember(x => x.ImageUrl, o => o.MapFrom(y => $"http://localhost:5134/{y.ImageUrl}"));
+                .ForMember(x => x.ImageUrl, o => o.MapFrom(y => $"http://localhost:5134/{y.ImageUrl}"))
+                .ForMember(x => x.dateOfEvent, o => o.MapFrom(y => y.dateOfEvent.HasValue ? y.dateOfEvent.Value.ToString("dd/MM/yyyy") : null));
 
             CreateMap<EventForCreateDTO, Event>();
             CreateMap<EventForCreateDTO, Request>()
@@ -19,7 +20,8 @@ namespace courseProject.MappingProfile
                 .ForMember(x => x.requestId, o => o.MapFrom(y => y.Id));
 
             CreateMap<Event, EventAccreditDto>()
-                .ForMember(x => x.subAdminFName, o => o.MapFrom(y => y.SubAdmin.user.userName));
+                .ForMember(x => x.subAdminFName, o => o.MapFrom(y => y.SubAdmin.user.userName))
+                 .ForMember(x => x.dateOfEvent, o => o.MapFrom(y => y.dateOfEvent.HasValue ? y.dateOfEvent.Value.ToString("dd/MM/yyyy") : null));
 
             CreateMap<EventForEditDTO, Event>();
         }

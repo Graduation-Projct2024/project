@@ -30,7 +30,8 @@ namespace courseProject.Repository.GenericRepository
             CourseRepository = new CourseRepository(dbContext);
             materialRepository = new MaterialRepository(dbContext);
             eventRepository = new EventRepository(dbContext);
-           
+            EmailService = new SmtpEmailService(configuration);
+
         }
 
         public ISubAdminRepository SubAdminRepository { get; set; }
@@ -42,8 +43,8 @@ namespace courseProject.Repository.GenericRepository
         public ICourseRepository<Course> CourseRepository { get; set ; }
         public IMaterialRepository materialRepository { get; set ; }
         public IEventRepository eventRepository { get; set ; }
-       
-      //  Core.IGenericRepository.ICourseRepository<Course> IUnitOfWork.CourseRepository { get ; set; }
+        public IEmailService EmailService { get; set; }
+        //  Core.IGenericRepository.ICourseRepository<Course> IUnitOfWork.CourseRepository { get ; set; }
     }
 }
 

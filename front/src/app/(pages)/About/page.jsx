@@ -26,8 +26,7 @@ export default function page() {
     const data = await axios.get(
       `http://localhost:5134/api/Employee/GetAllEmployeeForContact`
     );
-    setInstructors(data.data);
-    console.log(data.data)
+    setInstructors(data.data.result.items);
     
     
   };

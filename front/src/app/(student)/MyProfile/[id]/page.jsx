@@ -225,10 +225,11 @@ const handleCloseUpdate = () => {
       //setLoading(false)
       const {data} = await axios.get(`http://localhost:5134/api/UserAuth/GetProfileInfo?id=${params.id}`,
       {headers :{Authorization:`Bearer ${userToken}`}}
+
      
       );
       if(data.isSuccess){
-        console.log(data.result);
+        // console.log(data.result);
       setUser(data.result);
       //setLoading(false)
       }}
@@ -237,7 +238,6 @@ const handleCloseUpdate = () => {
       }}
       
   }
-  console.log(user)
   useEffect(()=>{
       getUser();
   },[user,userData])

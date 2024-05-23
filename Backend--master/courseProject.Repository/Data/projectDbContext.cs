@@ -98,7 +98,11 @@ namespace courseProject.Repository.Data
                       .IsRequired(false);
             });
 
-         
+            modelBuilder.Entity<CourseMaterial>(entity =>
+            {
+                entity.Property(e => e.courseId)
+                      .IsRequired(false);
+            });
 
             modelBuilder.Entity<SubAdmin>()
            .Property(c => c.DateOfBirth)

@@ -52,7 +52,8 @@ namespace courseProject.Controllers
            // taskMapped.courseId = taskDTO.courseId;
            // var getInstructor = await unitOfWork.instructorRepositpry.getInstructorByIdAsync(taskDTO.InstructorId);
             var getcourses = await unitOfWork.instructorRepositpry.GetAllCoursesGivenByInstructorIdAsync(taskDTO.InstructorId);
-            if(! getcourses.Any(x=>x.Id == taskDTO.courseId))
+            var getConsultations = await unitOfWork.instructorRepositpry.GetAllConsultationRequestByInstructorIdAsync(taskDTO.InstructorId);
+            if(! getcourses.Any(x=>x.Id == taskDTO.courseId) && !getConsultations.Any(x=>x.Id == taskDTO.consultationId))
             {
                 response.ErrorMassages.Add("You are not allowed to add to this course");
                 return Unauthorized(response);
@@ -87,7 +88,8 @@ namespace courseProject.Controllers
             var fileMapped = mapper.Map<FileDTO, CourseMaterial>(fileDTO);
             fileMapped.type = "File";
             var getcourses = await unitOfWork.instructorRepositpry.GetAllCoursesGivenByInstructorIdAsync(fileDTO.InstructorId);
-            if (!getcourses.Any(x => x.Id == fileDTO.courseId))
+            var getConsultations = await unitOfWork.instructorRepositpry.GetAllConsultationRequestByInstructorIdAsync(fileDTO.InstructorId);
+            if (!getcourses.Any(x => x.Id == fileDTO.courseId) && !getConsultations.Any(x => x.Id == fileDTO.consultationId))
             {
                 response.ErrorMassages.Add("You are not allowed to add to this course");
                 return Unauthorized(response);
@@ -121,7 +123,8 @@ namespace courseProject.Controllers
             var AnnouncementMapped = mapper.Map<AnnouncementDTO, CourseMaterial>(AnnouncementDTO);
             AnnouncementMapped.type = "Announcement";
             var getcourses = await unitOfWork.instructorRepositpry.GetAllCoursesGivenByInstructorIdAsync(AnnouncementDTO.InstructorId);
-            if (!getcourses.Any(x => x.Id == AnnouncementDTO.courseId))
+            var getConsultations = await unitOfWork.instructorRepositpry.GetAllConsultationRequestByInstructorIdAsync(AnnouncementDTO.InstructorId);
+            if (!getcourses.Any(x => x.Id == AnnouncementDTO.courseId) && !getConsultations.Any(x => x.Id == AnnouncementDTO.consultationId))
             {
                 response.ErrorMassages.Add("You are not allowed to add to this course");
                 return Unauthorized(response);
@@ -148,13 +151,15 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [Authorize(Policy = "Instructor")]
         public async Task<ActionResult<ApiResponce>> AddLink( LinkDTO linkDTO)
         {
 
             var linkMapped = mapper.Map<LinkDTO, CourseMaterial>(linkDTO);
             linkMapped.type = "Link";
             var getcourses = await unitOfWork.instructorRepositpry.GetAllCoursesGivenByInstructorIdAsync(linkDTO.InstructorId);
-            if (!getcourses.Any(x => x.Id == linkDTO.courseId))
+            var getConsultations = await unitOfWork.instructorRepositpry.GetAllConsultationRequestByInstructorIdAsync(linkDTO.InstructorId);
+            if (!getcourses.Any(x => x.Id == linkDTO.courseId) && !getConsultations.Any(x => x.Id == linkDTO.consultationId))
             {
                 response.ErrorMassages.Add("You are not allowed to add to this course");
                 return Unauthorized(response);

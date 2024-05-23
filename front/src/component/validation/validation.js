@@ -19,6 +19,7 @@ export const createEmployee = yup.object({
     InstructorId:yup.string().required('Instructor Id is required'),
     startDate:yup.string().required('startDate is required'),
     Deadline:yup.string().required('Deadline is required'),
+    totalHours:yup.string().required('totalHours is required'),
     description:yup.string().required('Description is required').min(6,'Course Description must have at least 6 characters').max(10000,'Course Description must have at most 100000 characters'),
     //imageUrl: yup.mixed().required('Image is required'),
  })
@@ -58,4 +59,22 @@ export const addWeeklyHours = yup.object({
 })
 export const addSkills = yup.object({
    skillName:yup.string().required('Skill name is Required'),
+})
+
+export const editEvent = yup.object({
+   name:yup.string().required('name is required'),
+   category:yup.string().required('category is required'),
+   dateOfEvent:yup.string().required('dateOfEvent is required'),
+   content:yup.string().required('content is required'),
+})
+export const editUndefinedCourse = yup.object({
+   name:yup.string().required('name is required'),
+   price:yup.string().required('price is required'),
+   category:yup.string().required('category is required'),
+   InstructorId:yup.string().required('InstructorId is required'),
+   startDate:yup.string().required('startDate is required'),
+   Deadline:yup.string().required('Deadline is required'),
+   totalHours:yup.string().required('totalHours is required'),
+   limitNumberOfStudnet:yup.string().required('limitNumberOfStudnet is required'),
+   description:yup.string().required('description is required'),
 })
