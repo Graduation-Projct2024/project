@@ -65,7 +65,7 @@ export default function Education() {
   const getAllSkills = async () => {
     if (userId) {
       try {
-        const { data } = await axios.get(`http://localhost:5134/api/Employee/GetAllSkillOptionsToInstructor?instructorId=${userId}`);
+        const { data } = await axios.get(`http://localhost:5134/api/Employee/GetAllSkillOptionsToInstructor?instructorId=${userId}`,{ headers: { Authorization: `Bearer ${userToken}` } });
         if (data.isSuccess) {
           setAllSkills(data.result || []);
         }
@@ -79,7 +79,7 @@ export default function Education() {
     if (userId) {
       try {
         const { data } = await axios.get(`http://localhost:5134/api/Employee/GetAllInstructorSkills?instructorId=${userId}`, {
-          headers: { Authorization: `Bearer ${userToken}` }
+          headers: { Authorization: `Bearer ${userToken}`}
         });
         if (data) {
           setInstructorSkills(data.result || []);

@@ -49,9 +49,9 @@ formData.append("studentId", userData.userId);
     const data = await axios.post(
       `http://localhost:5134/api/StudentsContraller/EnrollInCourse`,formData,
      { headers: {
-        'Content-Type': 'multipart/form-data','Content-Type': 'application/json',
+        'Content-Type': 'multipart/form-data','Content-Type': 'application/json',Authorization: `Bearer ${userToken}`
       }
-}
+},
     );
     router.push(`/MyCourses/${courseId}`);
     setOpen(true);

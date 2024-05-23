@@ -9,8 +9,8 @@ import { useFormik } from 'formik';
 import React, { useContext } from 'react'
 import Swal from 'sweetalert2';
 
-export default function CreateCourse() {
-  const {userToken, setUserToken, userData}=useContext(UserContext);
+export default function CreateCourse({setOpen}) {
+  const {userToken, setUserToken, userData,userId}=useContext(UserContext);
 
 
   const initialValues={
@@ -18,11 +18,12 @@ export default function CreateCourse() {
     description:'', 
     price:0,
     category: '',
-    SubAdminId:0,
+    SubAdminId:userId,
     InstructorId:0,
     startDate:'',
     Deadline:'',
     limitNumberOfStudnet:'',
+    totalHours:'',
     image:'',
     
 };
@@ -45,6 +46,7 @@ const onSubmit = async (values) => {
     formData.append('startDate', values.startDate);
     formData.append('Deadline', values.Deadline);
     formData.append('limitNumberOfStudnet', values.limitNumberOfStudnet);
+    formData.append('totalHours', values.totalHours);
     //formData.append('image', values.image,values.image.name);
     if (values.image) {
       formData.append('image', values.image);
@@ -56,9 +58,10 @@ const onSubmit = async (values) => {
     console.log(data);
     console.log('course created');
     formik.resetForm();
+    setOpen(false);
     Swal.fire({
       title: "Course Created Successfully",
-      text: "Wait for Admin accredit this Course & you can edit it before admin accreditation",
+      text: "Wait for Admin accredit this Course",
       icon: "success"
     });
 
@@ -113,14 +116,16 @@ const inputs =[
       title:'limit number of studnets',
       value:formik.values.limitNumberOfStudnet,
   },
+
     
   
   {
       type : 'number',
       id:'SubAdminId',
       name:'SubAdminId',
-      title:'SubAdmin Id',
+      title:`SubAdmin Id: ${userId}`,
       value:formik.values.SubAdminId,
+      disabled: true,
   },
   {
     type : 'number',
@@ -129,7 +134,6 @@ const inputs =[
     title:'Instructor Id',
     value:formik.values.InstructorId,
 },
-
 {
   type : 'date',
   id:'startDate',
@@ -137,21 +141,28 @@ const inputs =[
   title:'Course start date',
   value:formik.values.startDate,
 },
-    {
-      type : 'date',
-      id:'Deadline',
-      name:'Deadline',
-      title:'Course Deadline',
-      value:formik.values.Deadline,
-  },
-  
 {
-  type:'file',
-  id:'image',
-  name:'image',
-  title:'image',
-  onChange:handleFieldChange,
+  type : 'date',
+  id:'Deadline',
+  name:'Deadline',
+  title:'Course Deadline',
+  value:formik.values.Deadline,
 },
+{
+  type : 'number',
+  id:'totalHours',
+  name:'totalHours',
+  title:'# of hours',
+  value:formik.values.totalHours,
+},
+
+    {
+        type:'file',
+        id:'image',
+        name:'image',
+        title:'image',
+        onChange:handleFieldChange,
+    },
     {
       type : 'text',
       id:'description',
@@ -171,6 +182,7 @@ const renderInputs =  inputs.slice(0, -1).map((input,index)=>
           onChange={input.onChange||formik.handleChange}
            onBlur={formik.handleBlur}
             touched={formik.touched}
+            disabled={input.disabled}
             />  
     );
     const lastInput = inputs[inputs.length - 1];

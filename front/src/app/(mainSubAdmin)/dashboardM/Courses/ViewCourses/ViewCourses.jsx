@@ -173,7 +173,7 @@ const handleClickOpen = () => {
 
         <DialogContent >
         
-      <CreateCourse/>
+      <CreateCourse setOpen={setOpen}/>
         </DialogContent>
         <DialogActions>
          

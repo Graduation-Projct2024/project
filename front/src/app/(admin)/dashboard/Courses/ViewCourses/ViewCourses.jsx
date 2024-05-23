@@ -17,7 +17,6 @@ export default function ViewCourses() {
   const { userToken, setUserToken, userData } = useContext(UserContext);
 
   const [openUpdate, setOpenUpdate] = React.useState(false);
-
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
   const [courseId, setCourseId] = useState(null);

@@ -1,6 +1,7 @@
 'use client'
 import Input from '@/component/input/Input';
 import TextArea from '@/component/input/TextArea';
+import { editUndefinedCourse } from '@/component/validation/validation';
 import { UserContext } from '@/context/user/User';
 import { Button } from '@mui/material';
 import axios from 'axios';
@@ -78,6 +79,7 @@ export default function EditCourse({id,name, price,  category , InstructorId , s
       image: image || null,
     },
     onSubmit,
+    validationSchema:editUndefinedCourse
   });
 
   useEffect(() => {

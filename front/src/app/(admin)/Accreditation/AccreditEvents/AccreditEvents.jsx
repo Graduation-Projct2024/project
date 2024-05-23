@@ -20,7 +20,11 @@ export default function AccreditEvents() {
     if(userData){
     
     try{
-    const { data } = await axios.get(`http://localhost:5134/api/EventContraller/GetAllUndefinedEvents?pageNumber=${pageNum}&pageSize=${pageSize}`);
+    const { data } = await axios.get(`http://localhost:5134/api/EventContraller/GetAllUndefinedEvents?pageNumber=${pageNum}&pageSize=${pageSize}`,{
+      headers: {
+          Authorization: `Bearer ${userToken}`,
+      },
+  });
     console.log(data);
     // setAccreditEvents(data);
     setTotalPages(data.result.totalPages);

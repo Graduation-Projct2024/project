@@ -119,8 +119,9 @@ export default function Testimonials() {
         >
 
            {contacts.length? contacts.map((contact)=>(
-          <SwiperSlide key={contact.id} className='py-5' >     
-          <div className="col-md-4">
+            <div> {contact.role == "instructor" &&
+          <SwiperSlide key={contact.id} className='py-5' >
+                     <div className="col-md-4">
                     <div className="card text-center mb-3" style={{ width: "18rem" }}>
                       <div className="card-body m-3">
                       <img src={contact.imageUrl ? contact.imageUrl : "./user1.png"} 
@@ -141,10 +142,11 @@ export default function Testimonials() {
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> 
 
-          </SwiperSlide>
-                )) :( <h1>No Data</h1>)}
+          </SwiperSlide>}</div>
+                )) : <h1>No Data</h1>}
+          
          
         </Swiper>
       </div>

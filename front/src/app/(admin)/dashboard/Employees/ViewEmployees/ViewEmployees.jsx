@@ -12,6 +12,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Pagination, 
 import '../../../dashboard/dashboard.css'
 import '../../../../../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js'
 import ChangeRole from '../ChangeRole/[userId]/ChangeRole';
+import CategoryIcon from '@mui/icons-material/Category';
 
 export default function ViewEmployees() {
 
@@ -339,7 +340,7 @@ export default function ViewEmployees() {
    spacing={1}
    sx={{ justifyContent: 'center',  alignContent: 'center'}}
     >
-      <UpdateEmployee id = {employee.id}  fName = {employee.fName} lName = {employee.lName} email = {employee.email} gender = {employee.gender} phoneNumber = {employee.phoneNumber} address = {employee.address}/>
+      <UpdateEmployee id = {employee.id}  fName = {employee.fName} lName = {employee.lName} email = {employee.email} gender = {employee.gender} phoneNumber = {employee.phoneNumber} address = {employee.address} setOpenUpdate={setOpenUpdate}/>
      </Stack>
         </DialogContent>
         <DialogActions>
@@ -433,6 +434,20 @@ export default function ViewEmployees() {
          </Button>
        </DialogActions>
                 </Dialog>
+                {userData && employee.type == "instructor" && (
+                    <Link 
+                    href={{
+                      pathname: `/InstructorSkills/${employee.id}`,
+                   }}>
+
+                      <Tooltip title="View Instructor skills" placement="top">
+                    <button type="button" className="border-0 bg-white ">
+                     <CategoryIcon className='edit-pen'/>
+                    </button>
+                    </Tooltip>
+                  </Link>
+                  
+                  )}
                 </td>
               </tr>
             ))

@@ -1,11 +1,12 @@
 'use client'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useContext, useEffect, useState } from 'react'
-import { faArrowUpFromBracket, faEye, faFilter } from '@fortawesome/free-solid-svg-icons'
+import { faArrowUpFromBracket, faEye, faFilter, faPen } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios';
 import Link from 'next/link';
 import { UserContext } from '@/context/user/User';
-import { FormControl, InputLabel, MenuItem, Pagination, Select, Stack } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Pagination, Select, Stack, Tooltip, useMediaQuery, useTheme } from '@mui/material';
+import EditEvent from '../EditEvents/[id]/page';
 
 export default function ViewEvents() {
 
@@ -14,6 +15,21 @@ export default function ViewEvents() {
     const [pageNumber, setPageNumber] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [totalPages, setTotalPages] = useState(0);
+    
+    const [openUpdate, setOpenUpdate] = React.useState(false);
+    const theme = useTheme();
+    const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+    const [eventId, setEventId] = useState(null);
+
+    
+const handleClickOpenUpdate = (id) => {
+  setEventId(id);
+    console.log(id)
+    setOpenUpdate(true);
+};
+const handleCloseUpdate = () => {
+  setOpenUpdate(false);
+};
 
 
     const fetchEvents = async (pageNum = pageNumber, pageSizeNum = pageSize)  => {
@@ -140,6 +156,47 @@ export default function ViewEvents() {
       <td>{event.dateOfEvent}</td>
       <td>{event.subAdminName}</td>
       <td className='d-flex gap-1'>
+      <Tooltip title="Edit course" placement="top">
+                <button className="border-0 bg-white" type="button" onClick={() => handleClickOpenUpdate(event.id)}>
+                <FontAwesomeIcon icon={faPen} className="edit-pen" />
+            </button>
+            </Tooltip>
+
+            <Dialog
+        fullScreen={fullScreen}
+        open={openUpdate && eventId == event.id}
+        onClose={handleCloseUpdate}
+        aria-labelledby="responsive-dialog-title"
+        sx={{
+          "& .MuiDialog-container": {
+            "& .MuiPaper-root": {
+              width: "100%",
+              maxWidth: "600px!important",  
+              height: "400px!important",            },
+          },
+          
+        }}
+        >
+          <DialogTitle id="responsive-dialog-title" className='primaryColor fw-bold' >
+          {"Edit event"}
+        </DialogTitle>
+
+        <DialogContent>
+        <Stack
+   direction="row"
+   spacing={1}
+   sx={{ justifyContent: 'center',  alignContent: 'center'}}
+    >
+      <EditEvent id={event.id} name={event.name} category={event.category} dateOfEvent={event.dateOfEvent} content={event.content} image={event.imageUrl} setOpenUpdate={setOpenUpdate} />
+     </Stack>
+        </DialogContent>
+        <DialogActions>
+         
+         <Button onClick={handleCloseUpdate} autoFocus>
+           Cancle
+         </Button>
+       </DialogActions>
+        </Dialog>
 
       <Link href={'/Profile'}>
         <button  type="button" className='border-0 bg-white' >

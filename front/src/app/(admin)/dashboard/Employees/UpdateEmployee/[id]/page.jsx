@@ -7,10 +7,10 @@ import { useFormik } from 'formik';
 import React, { useContext, useEffect, useState } from 'react'
 import Swal from 'sweetalert2';
 
-export default function UpdateEmployee({id , fName , lName , email, gender, phoneNumber , address}) {
+export default function UpdateEmployee({id , fName , lName , email, gender, phoneNumber , address,setOpenUpdate}) {
 
     const [employeeData, setEmployeeData] = useState(null);
-    const [selectedGender, setSelectedGender] = useState('');
+    const [selectedGender, setSelectedGender] = useState(gender);
     const {userToken, setUserToken, userData,userId}=useContext(UserContext);
 
     useEffect(() => {
@@ -41,9 +41,10 @@ export default function UpdateEmployee({id , fName , lName , email, gender, phon
         // formData.append('role', users.role);
         formData.append('gender', selectedGender); // Use selectedGender from state
 
-        const {data} = await axios.put(`http://localhost:5134/api/Employee/UpdateEmployeeFromAdmin?id=${id}`, updatedData, { headers: { Authorization: `Bearer ${userToken}` } });
+        const {data} = await axios.put(`http://localhost:5134/api/Employee/UpdateEmployeeFromAdmin?id=${id}`, formData, { headers: { Authorization: `Bearer ${userToken}` } });
         if(data.isSuccess){
             formik.resetForm();
+            setOpenUpdate(false);
             Swal.fire({
                 title: "Account updated successfully",
                 text: "You can see the modified account in dashboard",
@@ -74,7 +75,8 @@ export default function UpdateEmployee({id , fName , lName , email, gender, phon
       if (employeeData) {
         formik.setValues(employeeData);
       }
-    }, [employeeData]);
+      setSelectedGender(gender);
+    }, [employeeData,gender]);
 
   
     const inputs =[
