@@ -83,7 +83,6 @@ const sidebarItems = [
     setUserToken(null);
     setUserData(null);
     setUserId(null);
-    
     router.push("/login");
   };
   const handleDrawerTransitionEnd = () => {

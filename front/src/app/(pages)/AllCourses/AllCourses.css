@@ -1,9 +1,30 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+body{
+    font-family:  "Nunito", sans-serif;;
+
+}
+.pageTitle{
+    font-family:  "Nunito", sans-serif;
+    position: relative;
+    z-index: 1;
+}
+.pageTitle h2{
+    font-size: 36px;
+    font-weight: 900;
+    line-height: 43.2px;
+    color: #4c5372;
+}
 .singleCourse{
     border: 1px solid rgba(48, 146, 85, 0.2);
     border-radius: 15px;
     padding: 20px;
     transition: all 0.3s ease 0s;
     padding: 20px;
+    -webkit-transition: all 0.3s ease 0s;
+    -moz-transition: all 0.3s ease 0s;
+    -ms-transition: all 0.3s ease 0s;
+    -o-transition: all 0.3s ease 0s;
 }
 .singleCourse:hover{
 border-color: #4C5372;

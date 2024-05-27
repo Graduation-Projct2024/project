@@ -1,6 +1,11 @@
-import { useTheme } from '@emotion/react';
-import { useMediaQuery } from '@mui/material';
-import React, { useState } from 'react'
+import { UserContext } from '@/context/user/User';
+import { faArrowUpFromBracket, faEye, faFilter, faPen } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Pagination, Select, Stack, useMediaQuery, useTheme } from '@mui/material';
+import axios from 'axios';
+import Link from 'next/link';
+import React, { useContext, useEffect, useState } from 'react'
+import EditEvent from './EditEvents/[id]/page';
 
 export default function UnAccreditEvents() {
 
@@ -11,13 +16,13 @@ export default function UnAccreditEvents() {
     const [pageNumber, setPageNumber] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [totalPages, setTotalPages] = useState(0);
-  
+    console.log(nonAccreditEvents)
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
-    const [courseId, setCourseId] = useState(null);
+    const [eventId, setEventId] = useState(null);
   
   const handleClickOpenUpdate = (id) => {
-    setCourseId(id);
+    setEventId(id);
       console.log(id)
       setOpenUpdate(true);
   };
@@ -29,14 +34,14 @@ export default function UnAccreditEvents() {
       if (userData) {
         try {
           const { data } = await axios.get(
-            `http://localhost:5134/api/CourseContraller/GetallUndefinedCoursesToSubAdmin?subAdminId=${userId}&pageNumber=${pageNum}&pageSize=${pageSize}`,{
+            `http://localhost:5134/api/EventContraller/GetAllUndefinedEventsToSubAdmin?subAdminId=${userId}&pageNumber=${pageNum}&pageSize=${pageSize}`,{
               headers: {
                   Authorization: `Bearer ${userToken}`,
               },
           }
           );
           console.log(data);
-          nonAccreditEvents(data.result.items);
+          setNonAccreditEvents(data.result.items);
           setTotalPages(data.result.totalPages);
         } catch (error) {
           console.log(error);
@@ -44,7 +49,7 @@ export default function UnAccreditEvents() {
       }
     };
   
-    (() => {
+    useEffect(() => {
       fetchEventsBeforeAccredittion();
     }, [nonAccreditEvents,userData, pageNumber, pageSize]);  // Fetch courses on mount and when page or size changes
     
@@ -75,6 +80,156 @@ export default function UnAccreditEvents() {
   
   
   return (
-    <div>UnAccreditEvents</div>
+    <>
+    <div className="filter py-2 text-end">
+        <nav className="navbar">
+          <div className="container justify-content-end">
+                <form className="d-flex" role="search">
+                <input
+                    className="form-control me-2"
+                    type="search"
+                    placeholder="Search"
+                    aria-label="Search"
+                    value={searchTerm}
+                    onChange={handleSearch}
+                />
+                 <FormControl fullWidth className="w-50">
+        <InputLabel id="page-size-select-label">Page Size</InputLabel>
+        <Select
+        className="justify-content-center"
+          labelId="page-size-select-label"
+          id="page-size-select"
+          value={pageSize}
+          label="Page Size"
+          onChange={handlePageSizeChange}
+        >
+          <MenuItem value={5}>5</MenuItem>
+          <MenuItem value={10}>10</MenuItem>
+          <MenuItem value={20}>20</MenuItem>
+          <MenuItem value={50}>50</MenuItem>
+        </Select>
+      </FormControl>
+                <div className="icons d-flex gap-2 pt-3">
+                    
+                    <div className="dropdown">
+  <button className="dropdown-toggle border-0 bg-white edit-pen" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <FontAwesomeIcon icon={faFilter} />
+  </button>
+  <ul className="dropdown-menu">
+ 
+  </ul>
+</div>
+<FontAwesomeIcon icon={faArrowUpFromBracket} />
+                    
+                </div>
+                </form>
+
+            </div>
+        </nav>
+
+
+
+        
+      </div>
+
+      <table className="table">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Name</th>
+      <th scope="col">Content</th>
+      <th scope="col">Category</th>
+      <th scope="col">Event Date</th>
+      <th scope="col">SubAdmin name</th>
+      <th scope="col">Option</th>
+    </tr>
+  </thead>
+  <tbody>
+  {filteredEventsBeforeAccreditation.length ? (
+    filteredEventsBeforeAccreditation.map((event) =>(
+      <tr key={event.id}>
+        {console.log(event.id)}
+      <th scope="row">{event.id}</th>
+      <td>{event.name}</td>
+      <td>{event.content}</td>
+      <td>{event.category}</td>
+      <td>{event.dateOfEvent}</td>
+      <td>{event.subAdminFName} {event.subAdminLName}</td>
+      <td className='d-flex gap-1'>
+      
+      <button className="border-0 bg-white" type="button" onClick={() => handleClickOpenUpdate(event.id)}>
+                <FontAwesomeIcon icon={faPen} className="edit-pen" />
+            </button>
+            <Dialog
+        fullScreen={fullScreen}
+        open={openUpdate && eventId === event.id}
+        onClose={handleCloseUpdate}
+        aria-labelledby="responsive-dialog-title"
+        sx={{
+          "& .MuiDialog-container": {
+            "& .MuiPaper-root": {
+              width: "100%",
+              maxWidth: "600px!important",  
+              height: "400px!important",            },
+          },
+          
+        }}
+        >
+          <DialogTitle id="responsive-dialog-title" className='primaryColor fw-bold' >
+          {"Edit Event"}
+        </DialogTitle>
+
+        <DialogContent>
+        <Stack
+   direction="row"
+   spacing={1}
+   sx={{ justifyContent: 'center',  alignContent: 'center'}}
+    >
+      <EditEvent id={event.id} name={event.name} category={event.category} dateOfEvent={event.dateOfEvent} content={event.content} image={event.imageUrl} setOpenUpdate={setOpenUpdate}/>
+     {/* <EditCourse id={course.id} name={course.name} price={course.price} category={course.category} InstructorId={course.instructorId} startDate={course.startDate} Deadline={course.Deadline} totalHours={course.totalHours} limitNumberOfStudnet={course.limitNumberOfStudnet} description={course.description} image={course.imageUrl} setOpenUpdate={setOpenUpdate} /> */}
+     </Stack>
+        </DialogContent>
+        <DialogActions>
+         
+         <Button onClick={handleCloseUpdate} autoFocus>
+           Cancle
+         </Button>
+       </DialogActions>
+        </Dialog>
+
+
+      <Link href={'/Profile'}>
+        <button  type="button" className='border-0 bg-white' >
+        <FontAwesomeIcon icon={faEye}  className='edit-pen '/>
+        </button>
+        </Link>
+        </td>
+
+    </tr>
+      ))): (
+        <tr>
+          <td colSpan="7">No Events</td>
+        </tr>
+        )}
+    
+    
+  </tbody>
+</table>
+      <Stack spacing={2} sx={{ width: '100%', maxWidth: 500, margin: '0 auto' }}>
+     
+     <Pagination
+     className="pb-3"
+       count={totalPages}
+       page={pageNumber}
+       onChange={handlePageChange}
+       variant="outlined"
+       color="secondary"
+       showFirstButton
+       showLastButton
+     />
+   </Stack>
+
+
+      </>
   )
 }

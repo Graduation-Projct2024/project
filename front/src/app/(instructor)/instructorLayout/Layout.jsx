@@ -35,7 +35,7 @@ const drawerWidth = 240;
 function Layout(props) {
   const { window } = props;
   const { children, title } = props;
-  let { userToken, setUserToken ,userData,setUserData,userId} = React.useContext(UserContext);
+  let { userToken, setUserToken ,userData,setUserData,userId,setUserId} = React.useContext(UserContext);
 const sidebarItems = [
   {
     name: "Dashboard",
@@ -77,6 +77,7 @@ const sidebarItems = [
     localStorage.removeItem("userToken");
     setUserToken(null);
     setUserData(null);
+    setUserId(null);
     router.push("/login");
   };
   const handleDrawerTransitionEnd = () => {

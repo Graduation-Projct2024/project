@@ -24,7 +24,7 @@ export default function Testimonials() {
     const { data } = await axios.get(`http://localhost:5134/api/Employee/GetAllEmployeeForContact`);
 
     console.log(data);
-    setContact(data.result.items);
+    setContacts(data.result.items);
   }
     catch(error){
       console.log(error);
@@ -131,7 +131,7 @@ export default function Testimonials() {
              console.error("Error loading image:", contact.imageUrl); 
              e.target.onerror = null; // prevents looping
              e.target.src = "./user1.png"; // default image if error
-           }} />                    
+           }} />                          
                       <h4 className="card-title contactName">{contact.userName} {contact.lName}</h4>
                         
                         <div className="d-flex justify-content-center gap-3 pt-3 border-top">
