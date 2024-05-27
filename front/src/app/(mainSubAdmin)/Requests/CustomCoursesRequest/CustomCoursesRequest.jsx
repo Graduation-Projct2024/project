@@ -22,7 +22,7 @@ export default function CustomCoursesRequest() {
       try{
       const { data } = await axios.get(`http://localhost:5134/api/Employee/GetAllCustomCourses?pageNumber=${pageNum}&pageSize=${pageSize}`,{headers :{Authorization:`Bearer ${userToken}`}});
       // setLoading(false)
-      console.log(data.result);
+      // console.log(data.result);
       setCustomCourses(data.result.items);
       setTotalPages(data.result.totalPages);
     }

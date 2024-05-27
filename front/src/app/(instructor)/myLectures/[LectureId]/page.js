@@ -1,5 +1,5 @@
 'use client'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { useParams } from 'next/navigation.js';
 import AssignmentIcon from '@mui/icons-material/Assignment';
@@ -31,11 +31,8 @@ import AddLink from '../../components/Add/AddLink.jsx';
 import AddAnnouncement from '../../components/Add/AddAnnouncement.jsx';
 import ViewTask from '../../components/View/ViewTask.jsx';
 import { FormControl, InputLabel, MenuItem, Pagination, Select } from '@mui/material';
-import { UserContext } from '../../../../context/user/User.jsx';
 
 export default function page() {
-  const {userToken, setUserToken, userData}=useContext(UserContext);
-
     const contents=[
         {
             title:'Task 1',
@@ -166,39 +163,33 @@ const handleCloseViewTaskDialog = () => {
       setCourseName(data.data.result.name);
     };
     const getCourseMaterial = async () => {
-      if(userToken){
         const { data } = await axios.get(
-          `http://localhost:5134/api/MaterialControllar/GetAllMaterial?CourseId=${courseId}`,
-          {headers :{Authorization:`Bearer ${userToken}`}}
-
+          `http://localhost:5134/api/MaterialControllar/GetAllMaterial?CourseId=${courseId}`
           
         );
         console.log(data);
         setMaterials(data);
         console.log(materials);
-      }
+
       };
       const [participants, setParticipants]= useState();
       const [pageNumber, setPageNumber] = useState(1);
       const [pageSize, setPageSize] = useState(10);
       const [totalPages, setTotalPages] = useState(0);
       const getParticipants =async (pageNum = pageNumber, pageSizeNum = pageSize) => {
-        if(userToken){
-
+  
         const data = await axios.get(
-          `http://localhost:5134/api/StudentsContraller/GetCourseParticipants?Courseid=${courseId}&pageNumber=${pageNum}&pageSize=${pageSize}`,
-          {headers :{Authorization:`Bearer ${userToken}`}}
-
+          `http://localhost:5134/api/StudentsContraller/GetCourseParticipants?Courseid=${courseId}&pageNumber=${pageNum}&pageSize=${pageSize}`
         );
       console.log(data);
         setParticipants(data.data.result.items);
         setTotalPages(data.data.result.totalPages);
-      }};
+      };
       useEffect(() => {
         getCourseMaterial();
         getCourses();
         // getParticipants();
-      }, [materials,userToken]);
+      }, [materials]);
 
 
       useEffect(() => {

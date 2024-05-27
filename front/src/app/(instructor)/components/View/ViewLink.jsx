@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import Link from '@mui/material/Link';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -27,12 +27,14 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import Alert from '@mui/material/Alert';
 import EditLink from '../Edit/EditLink.jsx';
 import { useRouter } from 'next/navigation'
+import { UserContext } from '../../../../context/user/User.jsx';
 
 export default function ViewLink({ materialID , courseId}) {
  const [material, setMaterial]=useState(null);
  const [loading ,setLoading]=useState(true);
  const [isEditing, setIsEditing] = useState(false);
  const router = useRouter();
+ const {userToken, setUserToken, userData}=useContext(UserContext);
 
  const [open, setOpen] = React.useState(false);
  const theme = useTheme();
@@ -54,17 +56,23 @@ const handleClose = () => {
    setOpenAlert(false);
  };
  const getMaterial=async()=>{
-  const {data}= await axios.get(`http://localhost:5134/api/MaterialControllar/GetMaterialById?id=${materialID}`)
+  if(userToken){
+  const {data}= await axios.get(`http://localhost:5134/api/MaterialControllar/GetMaterialById?id=${materialID}`,
+  {headers :{Authorization:`Bearer ${userToken}`}}
+)
 
 if(data.isSuccess==true){
   setMaterial(data.result);
   setLoading(false);
   console.log(data)
-}
+}}
 
  }
  const deleteMaterial=async()=>{
-  const {data}= await axios.delete(`http://localhost:5134/api/MaterialControllar/DeleteMaterial?id=${materialID}`)
+  const {data}= await axios.delete(`http://localhost:5134/api/MaterialControllar/DeleteMaterial?id=${materialID}`,
+  {headers :{Authorization:`Bearer ${userToken}`}}
+
+  )
   setOpenAlert(true);
   setOpen(false);
   router.back();
@@ -75,7 +83,7 @@ if(data.isSuccess==true){
  useEffect(() => {
     getMaterial();
   
-}, [materialID]);
+}, [materialID, userToken]);
 
 
   const style = {
