@@ -95,7 +95,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        // yes [Authorize(Policy ="Admin")]
+        [Authorize(Policy ="Admin")]
         public async Task<ActionResult<ApiResponce>> CreateEmployee([FromForm]EmployeeForCreate model)
         {
           
@@ -129,7 +129,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-       //yes [Authorize(Policy ="Admin")]
+        [Authorize(Policy ="Admin")]
         public async Task<ActionResult<ApiResponce>> updateEmployee(Guid id,[FromForm] EmployeeForUpdateDTO EmpolyeeModel)
         {
             var updateEmployee = await employeeServices.UpdateEmployeeFromAdmin(id, EmpolyeeModel);
@@ -148,7 +148,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        //yes[Authorize(Policy ="Admin")]
+        [Authorize(Policy ="Admin")]
         public async Task<ActionResult<ApiResponce>> EditRole (Guid userId ,string role)
         {
             var editRole = await employeeServices.EditRole(userId, role);

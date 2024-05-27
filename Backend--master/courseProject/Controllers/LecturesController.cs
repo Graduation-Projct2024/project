@@ -30,7 +30,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
-        //yes [Authorize(Policy = "Main-SubAdmin ,Instructor , Student")]
+        [Authorize(Policy = "Main-SubAdmin ,Instructor , Student")]
         //not try
         public async Task<ActionResult<ApiResponce>> GetAllLecturesByInstructorId(Guid instructorId, [FromQuery] PaginationRequest paginationRequest)
         {
@@ -48,7 +48,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        //yes [Authorize(Policy = "Student")]
+        [Authorize(Policy = "Student")]
         //not try
         public async Task<ActionResult<ApiResponce>> BooKLectureByStudent(Guid studentId, DateTime date, string startTime, string endTime, [FromForm] BookALectureDTO bookALecture)
         {
@@ -64,7 +64,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        //yes[Authorize(Policy = "Student")]
+        [Authorize(Policy = "Student")]
         //not try
         public async Task<ActionResult<ApiResponce>> JoinToAPublicLecture(Guid StudentId, Guid ConsultaionId)
         {

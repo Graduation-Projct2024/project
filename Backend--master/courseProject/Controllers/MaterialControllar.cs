@@ -46,7 +46,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-       //yes [Authorize(Policy ="Instructor")]
+        [Authorize(Policy ="Instructor")]
         public async Task<ActionResult<ApiResponce>> AddTask( [FromForm] TaskDTO taskDTO)
         {
             var addTask = await materialServices.AddTask(taskDTO);
@@ -60,7 +60,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        //yes [Authorize(Policy = "Instructor")]
+        [Authorize(Policy = "Instructor")]
         public async Task<ActionResult<ApiResponce>> AddFile([FromForm] FileDTO fileDTO)
         {
             var addfile = await materialServices.AddFile(fileDTO);
@@ -73,7 +73,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        //yes [Authorize(Policy ="Instructor")]
+        [Authorize(Policy ="Instructor")]
         public async Task<ActionResult<ApiResponce>> AddAnnouncement( AnnouncementDTO AnnouncementDTO)
         {
 
@@ -88,7 +88,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        //yes [Authorize(Policy = "Instructor")]
+        [Authorize(Policy = "Instructor")]
         public async Task<ActionResult<ApiResponce>> AddLink( LinkDTO linkDTO)
         {
 
@@ -105,7 +105,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        //yes[Authorize(Policy ="InstructorwhoGiveTheMaterial")]
+        [Authorize(Policy ="InstructorwhoGiveTheMaterial")]
         //not try
         public async Task<ActionResult<ApiResponce>> EditTask(Guid id, [FromForm] TaskDTO taskDTO)
         {
@@ -121,7 +121,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        //yes [Authorize(Policy = "InstructorwhoGiveTheMaterial")]
+        [Authorize(Policy = "InstructorwhoGiveTheMaterial")]
         public async Task<ActionResult<ApiResponce>> EditFile(Guid id, [FromForm] FileDTO fileDTO)
         {
             var editedFile = await materialServices.EditFile(id, fileDTO);
@@ -136,7 +136,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        //yes [Authorize(Policy = "InstructorwhoGiveTheMaterial")]
+        [Authorize(Policy = "InstructorwhoGiveTheMaterial")]
         public async Task<ActionResult<ApiResponce>> EditAnnouncement(Guid id, AnnouncementDTO AnnouncementDTO)
         {
             var editedAnnouncement = await materialServices.EditAnnouncement(id, AnnouncementDTO);
@@ -151,7 +151,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        //yes [Authorize(Policy = "InstructorwhoGiveTheMaterial")]
+        [Authorize(Policy = "InstructorwhoGiveTheMaterial")]
         public async Task<ActionResult<ApiResponce>> EditLink(Guid id,  LinkDTO linkDTO)
         {
             var editedLink = await materialServices.EDitLink(id, linkDTO);
@@ -165,7 +165,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        //yes [Authorize(Policy = "InstructorwhoGiveTheMaterial")]
+        [Authorize(Policy = "InstructorwhoGiveTheMaterial")]
         public async Task<ActionResult<ApiResponce>> DeleteMaterial(Guid id)
         {
             var materail = await materialServices.DeleteMaterial(id);
@@ -178,7 +178,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        //yes [Authorize(Policy = "MaterialInEnrolledCourse")]
+        [Authorize(Policy = "MaterialInEnrolledCourse")]
         public async Task<ActionResult> GetMaterialByIdAsync(Guid id)
         {
             var material = await materialServices.GetMaterialById(id);
@@ -191,7 +191,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        //yes [Authorize(Policy = "EnrolledInCourse")]
+        [Authorize(Policy = "EnrolledInCourse")]
         public async Task<ActionResult<ApiResponce>> GetAllMaterialInTheCourseAsync([FromQuery] Guid CourseId )
         {
             var AllMaterials = await materialServices.GetAllMaterialInTheCourse(CourseId);

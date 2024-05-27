@@ -27,7 +27,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-       //yes [Authorize(Policy = "Student")]
+        [Authorize(Policy = "Student")]
        //not try
         public async Task<ActionResult<ApiResponce>> AddInstructorFeedback(Guid studentId, Guid InstructorId, FeedbackDTO Feedback)
         {
@@ -42,7 +42,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        //yes [Authorize(Policy = "Student")]
+        [Authorize(Policy = "Student")]
         public async Task<ActionResult<ApiResponce>> AddCourseFeedback(Guid studentId, Guid courseId, FeedbackDTO Feedback)
         {
             var addedFeddback = await feedbackServices.AddCourseFeedback(studentId, courseId, Feedback);
@@ -56,7 +56,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        //yes [Authorize(Policy = "Student")]
+        [Authorize(Policy = "Student")]
         public async Task<ActionResult<ApiResponce>> AddGeneralFeedback(Guid studentId, FeedbackDTO Feedback)
         {
             var addedFeddback = await feedbackServices.AddGeneralFeedback(studentId, Feedback);

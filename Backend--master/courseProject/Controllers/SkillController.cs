@@ -62,7 +62,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        //[Authorize("Instructor")]
+        [Authorize("Instructor")]
         public async Task<ActionResult<ApiResponce>> GetAllOptionsToInstructorDropdown(Guid instructorId)
         {
            
@@ -74,7 +74,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        //[Authorize(Policy = "Instructor")]
+        [Authorize(Policy = "Instructor")]
         public async Task<ActionResult<ApiResponce>> SelectASkillsByInstructor(Guid instructorId, [FromForm] ListIntegerDTO array)
         {
             
@@ -106,7 +106,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        //[Authorize]
+        [Authorize]
         public async Task<ActionResult<ApiResponce>> GetAllInstructorSkills(Guid instructorId)
         {
 

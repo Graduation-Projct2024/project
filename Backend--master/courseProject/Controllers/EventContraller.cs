@@ -48,7 +48,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        //yes [Authorize(Policy = "Admin")]
+        [Authorize(Policy = "Admin")]
         //no try
         public async Task<ActionResult<ApiResponce>> GetAllEventsToAccreditAsync([FromQuery] PaginationRequest paginationRequest)
         {
@@ -63,7 +63,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        //yes [Authorize(Policy = "Main-SubAdmin , SubAdmin")]
+        [Authorize(Policy = "Main-SubAdmin , SubAdmin")]
         //not try
         public async Task<ActionResult<ApiResponce>> GetAllEvents(Guid subAdminId, [FromQuery] PaginationRequest paginationRequest)
         {
@@ -78,7 +78,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //yse [Authorize(Policy = "SubAdmin , Main-SubAdmin")]
+        [Authorize(Policy = "SubAdmin , Main-SubAdmin")]
         public async Task<ActionResult<ApiResponce>> createEvent([FromForm] EventForCreateDTO model)
         {
 
@@ -108,7 +108,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        //yse [Authorize(Policy = "Admin")]
+        [Authorize(Policy = "Admin")]
         public async Task<ActionResult<ApiResponce>> EditEventStatus(Guid eventId, string Status)
         {
             var updateStatus = await eventServices.accreditEvent(eventId, Status);
@@ -127,7 +127,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-       //yes [Authorize(Policy = "Admin, Main-SubAdmin , SubAdmin")]
+        [Authorize(Policy = "Admin, Main-SubAdmin , SubAdmin")]
        //nit try
         public async Task<ActionResult<ApiResponce>> EditEvent(Guid id, [FromForm] EventForEditDTO eventForEditDTO)
         {
