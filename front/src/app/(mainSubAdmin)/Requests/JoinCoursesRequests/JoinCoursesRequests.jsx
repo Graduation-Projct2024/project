@@ -22,6 +22,7 @@ export default function JoinCoursesRequests() {
       const { data } = await axios.get(`http://localhost:5134/api/Employee/GetAllRequestToJoinCourses?pageNumber=${pageNum}&pageSize=${pageSize}`,{headers :{Authorization:`Bearer ${userToken}`}});
       // setLoading(false)
       console.log(data);
+
       setJoinCoursesReq(data.result.items);
       setTotalPages(data.result.totalPages);
     }
@@ -31,37 +32,85 @@ export default function JoinCoursesRequests() {
     }
     };
 
-    const accreditEvent = async (courseId, studentId , status) => {
-        //setLoader(true);
-        if(userData){
-        try{
-        const { data } = await axios.patch(`http://localhost:5134/api/StudentsContraller/ApprovelToJoin?courseId=${courseId}&studentId=${studentId}&status=${status}`,
-      );
-      console.log(data);
-      if(status === 'joind'){
-      Swal.fire({
-        title: `This student enrolled to this course Successfully`,
-        text: "Check View Events page",
-        icon: "success"
-      });}
-    //   else if(Status === 'reject'){
+    // const joinCourse = async (courseId, studentId , status) => {
+    //     //setLoader(true);
+    //     if(userData){
+    //     try{
+    //     const { data } = await axios.patch(`http://localhost:5134/api/StudentsContraller/ApprovelToJoin?courseId=${courseId}&studentId=${studentId}&status=${status}`, {},
+    //     {
+    //         headers: {
+    //             Authorization: `Bearer ${userToken}`,
+    //         },
+    //     });
+      
+    //   console.log(data,status);
+    //   if(status == "joined"){
+    //   Swal.fire({
+    //     title: `This student enrolled to this course Successfully`,
+    //      text: "Request Accepted",
+    //     icon: "success"
+    //   });}
+    //   else if(status == 'reject'){
     //     Swal.fire({
     //       icon: "error",
-    //       title: "Event Rejected ):",
+    //       title: "Request Rejected ):",
     //       text: "Opsss...",
           
     //     });
     
     //   }
     
-      }
-        catch(error){
-          console.log(error);
-        }
+    //   }
+    //     catch(error){
+    //       console.log(error);
+    //     }
     
-      }
-      };
+    //   }
+    //   };
 
+    const joinCourse = async (courseId, studentId, status) => {
+      if (userData) {
+        Swal.fire({
+          title: `Are you sure?`,
+          text: "You won't be able to revert this!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes!"
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            try {
+              const { data } = await axios.patch(`http://localhost:5134/api/StudentsContraller/ApprovelToJoin?courseId=${courseId}&studentId=${studentId}&status=${status}`, {},
+                {
+                  headers: {
+                    Authorization: `Bearer ${userToken}`,
+                  },
+                });
+    
+              console.log(data, status);
+              if (status == "joined") {
+                Swal.fire({
+                  title: `This student enrolled to this course Successfully`,
+                  text: "Request Accepted",
+                  icon: "success"
+                });
+              } else if (status == 'reject') {
+                Swal.fire({
+                  icon: "error",
+                  title: "Request Rejected ):",
+                  text: "Opsss...",
+                });
+              }
+    
+            } catch (error) {
+              console.log(error);
+            }
+          }
+        });
+      }
+    };
+    
     
 
       useEffect(() => {
@@ -189,9 +238,9 @@ const filteredRequestsToJoinCourses = Array.isArray(joinCoursesReq) ? joinCourse
                       <FontAwesomeIcon icon={faEye} className="edit-pen" />
                     </button>
                   </Link> */}
-                  <button type="button" className="btn accredit" onClick={()=>accreditEvent(req.courseId,req.studentId,'joind')} disabled = {req.status == 'accredit'} >Accept</button>  
+                  <button type="button" className="btn accredit" onClick={()=>joinCourse(req.courseId,req.studentId,'joined')} >Accept</button>  
                 {/* <Link href='/dashboard' className='text-decoration-none acc'>Accredit </Link> */}
-                {/* <button type="button" className="btn accredit" onClick={()=>accreditEvent(req.courseId,req.studentId,'accredit')} disabled = {event.status == 'accredit' || event.status == 'reject'}>Reject</button> */}
+                <button type="button" className="btn accredit" onClick={()=>joinCourse(req.courseId,req.studentId,'reject')} >Reject</button>
 
                 </td>
 

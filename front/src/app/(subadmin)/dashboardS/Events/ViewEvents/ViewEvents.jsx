@@ -166,11 +166,11 @@ export default function ViewEvents() {
         }}
         >
           <DialogTitle id="responsive-dialog-title" className='primaryColor fw-bold' >
-          {"Add New Course"}
+          {"Add New Event"}
         </DialogTitle>
 
         <DialogContent >
-          <CreateEvent/>
+          <CreateEvent setOpen={setOpen}/>
         </DialogContent>
         <DialogActions>
          

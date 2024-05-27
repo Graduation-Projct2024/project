@@ -27,7 +27,7 @@ const [role, setRole]=useState('student');
       console.log(data);
        setCourses(data.data.result.items);
     };
-  
+  console.log(courses)
 
 
   useEffect(() => {
