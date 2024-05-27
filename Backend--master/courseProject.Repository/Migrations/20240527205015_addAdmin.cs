@@ -22,7 +22,7 @@ namespace courseProject.Repository.Migrations
             migrationBuilder.InsertData(
                 table: "users",
                 columns: new[] { "UserId", "IsVerified", "email", "password", "role", "userName" },
-                values: new object[] { new Guid("e132c30a-3d4e-40c7-94d4-873d25afc56e"), false, "programming.academy24@gmail.com", "$2a$11$cCCo7VY/4sxtIpeWDUFDROiDL/QPhi8AtawQhx4RGqKMAYgk8UIse", "admin", "admin" });
+                values: new object[] { new Guid("e132c30a-3d4e-40c7-94d4-873d25afc56e"), true, "programming.academy24@gmail.com", "$2a$11$cCCo7VY/4sxtIpeWDUFDROiDL/QPhi8AtawQhx4RGqKMAYgk8UIse", "admin", "admin" });
 
             migrationBuilder.InsertData(
                 table: "admins",
