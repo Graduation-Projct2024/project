@@ -30,7 +30,8 @@ namespace courseProject.Repository.Data
                            userName = "admin",
                            email = "programming.academy24@gmail.com",
                            password = "$2a$11$cCCo7VY/4sxtIpeWDUFDROiDL/QPhi8AtawQhx4RGqKMAYgk8UIse",
-                           role = "admin"
+                           role = "admin",
+                           IsVerified=true
                            });
 
             modelBuilder.Entity<Admin>().HasData(

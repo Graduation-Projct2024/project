@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using courseProject.Repository.Data;
 
@@ -11,9 +12,10 @@ using courseProject.Repository.Data;
 namespace courseProject.Repository.Migrations
 {
     [DbContext(typeof(projectDbContext))]
-    partial class projectDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240527205015_addAdmin")]
+    partial class addAdmin
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,7 +54,7 @@ namespace courseProject.Repository.Migrations
                     b.HasData(
                         new
                         {
-                            AdminId = new Guid("23cab1b4-2f7a-49a8-a4fb-15d54f96ac88")
+                            AdminId = new Guid("e132c30a-3d4e-40c7-94d4-873d25afc56e")
                         });
                 });
 
@@ -589,8 +591,8 @@ namespace courseProject.Repository.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("23cab1b4-2f7a-49a8-a4fb-15d54f96ac88"),
-                            IsVerified = true,
+                            UserId = new Guid("e132c30a-3d4e-40c7-94d4-873d25afc56e"),
+                            IsVerified = false,
                             email = "programming.academy24@gmail.com",
                             password = "$2a$11$cCCo7VY/4sxtIpeWDUFDROiDL/QPhi8AtawQhx4RGqKMAYgk8UIse",
                             role = "admin",
