@@ -51,10 +51,13 @@ console.log(tasks.pdf)
 formData.append("courseId", courseId);
 formData.append("instructorId", userData.userId);
 
-
+if(userToken){
 const { data } = await axios.post(
+ 
   "http://localhost:5134/api/MaterialControllar/AddTask",
   formData,
+  {headers :{Authorization:`Bearer ${userToken}`}}
+
 
 );
  if(data.isSuccess){
@@ -63,6 +66,7 @@ const { data } = await axios.post(
  onClose(); 
  handleCloseAdd();
  setAlertOpen(true);
+ }
 
   }}
   catch (error) {

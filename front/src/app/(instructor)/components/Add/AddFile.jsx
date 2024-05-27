@@ -49,6 +49,8 @@ const { data } = await axios.post(
   "http://localhost:5134/api/MaterialControllar/AddFile",
  
   formData,
+  {headers :{Authorization:`Bearer ${userToken}`}}
+
 
 );
  if(data.isSuccess){

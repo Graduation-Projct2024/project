@@ -17,7 +17,7 @@ import { useRouter } from 'next/navigation'
 export default function EditTask({materialID, name, description, deadLine, pdf, courseId }) {
   const router = useRouter();
 
-  const {userData}=useContext(UserContext);
+  const {userToken, setUserToken, userData}=useContext(UserContext);
 console.log(courseId)
   const handelFieldChang = (event) => {
     formik.setFieldValue("pdf", event.target.files[0]);
@@ -54,6 +54,8 @@ formData.append("instructorId", userData.userId);
 const { data } = await axios.put(
  `http://localhost:5134/api/MaterialControllar/EditTask?id=${materialID}`,
   formData,
+  {headers :{Authorization:`Bearer ${userToken}`}}
+
 
 
 );

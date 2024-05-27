@@ -1,5 +1,5 @@
 'use client'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { useParams } from 'next/navigation.js';
 import AssignmentIcon from '@mui/icons-material/Assignment';
@@ -14,7 +14,6 @@ import Link from '@mui/material/Link';
 import Box from '@mui/material/Box';
 import '../../../../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js'
 import './style.css'
-import Layout from '../../instructorLayout/Layout.jsx';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -25,17 +24,9 @@ import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import AddTask from '../../components/Add/AddTask.jsx';
-import AddFile from '../../components/Add/AddFile.jsx';
-import AddLink from '../../components/Add/AddLink.jsx';
-import AddAnnouncement from '../../components/Add/AddAnnouncement.jsx';
-import ViewTask from '../../components/View/ViewTask.jsx';
-import { FormControl, InputLabel, MenuItem, Pagination, Select } from '@mui/material';
-import { UserContext } from '../../../../context/user/User.jsx';
+import Layout from '../../studentLayout/Layout.jsx';
 
 export default function page() {
-  const {userToken, setUserToken, userData}=useContext(UserContext);
-
     const contents=[
         {
             title:'Task 1',
@@ -83,141 +74,54 @@ const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => {
     setOpen(true);
   };
-const [openTaskDialog, setOpenTaskDialog] = useState(false);
-const [openFileDialog, setOpenFileDialog] = useState(false);
-const [openLinkDialog, setOpenLinkDialog] = useState(false);
-const [openAnnouncementDialog, setOpenAnnouncementDialog] = useState(false);
-const [openViewTaskDialog, setOpenViewTaskDialog] = useState(false);
+
 const [materialId, setMaterialId]=useState();
-  const handleAddContent=(type)=>{
-if (type=='task'){
-  setOpenTaskDialog(true);
-  console.log(type);
-
-}
-if (type=='file'){
-  setOpenFileDialog(true);
-  console.log(type);
-
-}
-if (type=='link'){
-  setOpenLinkDialog(true);
-  console.log(type);
-
-}
-if (type=='announcement'){
-  setOpenAnnouncementDialog(true);
-  console.log(type);
-
-}
-}  
-const handleViewContent=(type, mId)=>{
-  if (type=='Task'){
-    setOpenViewTaskDialog(true);
-    console.log(type);
   
-  }
-  if (type=='file'){
-    setOpenFileDialog(true);
-    console.log(type);
-  
-  }
-  if (type=='link'){
-    setOpenLinkDialog(true);
-    console.log(type);
-  
-  }
-  if (type=='announcement'){
-    setOpenAnnouncementDialog(true);
-    console.log(type);
-  
-  }
-  }  
-const handleCloseTaskDialog = () => {
-  setOpenTaskDialog(false);
-};
-
-const handleCloseFileDialog = () => {
-  setOpenFileDialog(false);
-};
-const handleCloseLinkDialog = () => {
-  setOpenLinkDialog(false);
-};
-const handleCloseAnnouncementDialog = () => {
-  setOpenAnnouncementDialog(false);
-};
-const handleCloseViewTaskDialog = () => {
-  setOpenViewTaskDialog(false);
-};
-
   const handleClose = () => {
     setOpen(false);
   };
     const [materials, setMaterials] = useState([]);
     console.log(useParams());
     const { courseId } = useParams();
-    const [courseName, setCourseName]=useState();
-    const getCourses = async () => {
-
-      const data = await axios.get(
-        `http://localhost:5134/api/CourseContraller/GetCourseById?id=${courseId}`
-      );
-    
-      setCourseName(data.data.result.name);
-    };
     const getCourseMaterial = async () => {
-      if(userToken){
         const { data } = await axios.get(
-          `http://localhost:5134/api/MaterialControllar/GetAllMaterial?CourseId=${courseId}`,
-          {headers :{Authorization:`Bearer ${userToken}`}}
-
+          `http://localhost:5134/api/MaterialControllar/GetAllMaterial?CourseId=${courseId}`
           
         );
         console.log(data);
         setMaterials(data);
         console.log(materials);
-      }
+
       };
-      const [participants, setParticipants]= useState();
-      const [pageNumber, setPageNumber] = useState(1);
-      const [pageSize, setPageSize] = useState(10);
-      const [totalPages, setTotalPages] = useState(0);
-      const getParticipants =async (pageNum = pageNumber, pageSizeNum = pageSize) => {
-        if(userToken){
-
+      const [courseName, setCourseName]=useState();
+      const getCourses = async () => {
+  
         const data = await axios.get(
-          `http://localhost:5134/api/StudentsContraller/GetCourseParticipants?Courseid=${courseId}&pageNumber=${pageNum}&pageSize=${pageSize}`,
-          {headers :{Authorization:`Bearer ${userToken}`}}
-
+          `http://localhost:5134/api/CourseContraller/GetCourseById?id=${courseId}`
         );
-      console.log(data);
-        setParticipants(data.data.result.items);
-        setTotalPages(data.data.result.totalPages);
-      }};
+      
+        setCourseName(data.data.result.name);
+      };
       useEffect(() => {
         getCourseMaterial();
         getCourses();
-        // getParticipants();
-      }, [materials,userToken]);
-
-
+      }, []);
+      const [participants, setParticipants]= useState();
+      const getParticipants = async () => {
+  
+        const data = await axios.get(
+          `http://localhost:5134/api/StudentsContraller/GetCourseParticipants?Courseid=${courseId}`
+        );
+      console.log(data);
+        setParticipants(data.data.result);
+      };
       useEffect(() => {
+        getCourseMaterial();
+        getCourses();
         getParticipants();
-      }, [participants, pageNumber, pageSize]);  // Fetch courses on mount and when page or size changes
-      
-      const handlePageSizeChange = (event) => {
-        setPageSize(event.target.value);
-        setPageNumber(1); // Reset to the first page when page size changes
-      };
-      
-      const handlePageChange = (event, value) => {
-        setPageNumber(value);
-      };
-
-      
+      }, []);
   return (
     <Layout title={courseName}>
-      
     <div>
   <ul className="nav nav-tabs" id="myTab" role="tablist">
     <li className="nav-item" role="presentation">
@@ -238,9 +142,7 @@ const handleCloseViewTaskDialog = () => {
           mr: 6,
         }}
       >
-<Button sx={{px:2}} variant="contained" startIcon={<AddCircleOutlineIcon />} onClick={handleClickOpen}>
-  Add New
-</Button>
+
       </Box>
       <Dialog
         fullScreen={fullScreen}
@@ -260,11 +162,7 @@ const handleCloseViewTaskDialog = () => {
         <DialogTitle id="responsive-dialog-title">
           {"ADD NEW"}
         </DialogTitle>
-        
-        <AddTask open={openTaskDialog} onClose={handleCloseTaskDialog} handleCloseAdd={handleClose} courseId={courseId}/>
-        <AddFile open={openFileDialog} onClose={handleCloseFileDialog} handleCloseAdd={handleClose} courseId={courseId} />
-        <AddLink open={openLinkDialog} onClose={handleCloseLinkDialog} handleCloseAdd={handleClose} courseId={courseId}/>
-        <AddAnnouncement open={openAnnouncementDialog} onClose={handleCloseAnnouncementDialog} handleCloseAdd={handleClose} courseId={courseId} />
+       
 
         <DialogContent>
         <Stack
@@ -324,25 +222,7 @@ const handleCloseViewTaskDialog = () => {
 
     </div>
     <div className="tab-pane fade" id="Participants-tab-pane" role="tabpanel" aria-labelledby="Participants-tab" tabIndex={0}>
-
-              <div className='mt-5 ms-5'>
-                <div className='row justify-content-end'>
-        <FormControl fullWidth className="w-25 pb-3 pe-4">
-                <InputLabel id="page-size-select-label">Page Size</InputLabel>
-                <Select
-                className="justify-content-center"
-                  labelId="page-size-select-label"
-                  id="page-size-select"
-                  value={pageSize}
-                  label="Page Size"
-                  onChange={handlePageSizeChange}
-                >
-                  <MenuItem value={5}>5</MenuItem>
-                  <MenuItem value={10}>10</MenuItem>
-                  <MenuItem value={20}>20</MenuItem>
-                  <MenuItem value={50}>50</MenuItem>
-                </Select>
-              </FormControl></div>
+    <div className='mt-5 ms-5'>
     {participants?.map((participant, index)=>( 
     <Box
       height={50}
@@ -352,7 +232,7 @@ const handleCloseViewTaskDialog = () => {
       gap={4}
       p={2}
       sx={{ border: '1px solid grey' ,borderRadius: 3, justifyContent: 'space-between' }}
-      className={index%2==0?"bg-purple1":'bg-purple2 '}
+      className={index%2==0?"bg-purple1":'bg-purple2'}
     >
      <Typography variant='h6'> {participant.userName}</Typography>
      <div className='m-2'>
@@ -367,20 +247,6 @@ const handleCloseViewTaskDialog = () => {
    
     
     </div>
-     <Stack className='pt-5' spacing={2} sx={{ width: '100%', maxWidth: 500, margin: '0 auto' }}>
-     
-     <Pagination
-     className="pb-3"
-       count={totalPages}
-       page={pageNumber}
-       onChange={handlePageChange}
-       variant="outlined"
-       color="secondary"
-       showFirstButton
-       showLastButton
-     />
-   </Stack>
-   
    
   </div>
 </div>
