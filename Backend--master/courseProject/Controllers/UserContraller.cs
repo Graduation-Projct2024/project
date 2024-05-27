@@ -52,7 +52,7 @@ namespace courseProject.Controllers
         [Authorize]
         public IActionResult GetUserIdFromToken()
         {
-            var Id = Convert.ToInt32( HttpContext.User.FindFirstValue("UserId"));          
+            var Id = ( HttpContext.User.FindFirstValue("UserId"));          
             if (Id==null)
             {
                 return Unauthorized("User ID not found in token");
