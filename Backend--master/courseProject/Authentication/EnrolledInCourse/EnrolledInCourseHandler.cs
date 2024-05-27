@@ -37,7 +37,7 @@ namespace courseProject.Authentication.EnrolledInCourse
             var routeData = httpContext.GetRouteData();
             var courseIdAsString = httpContext.Request.Query["CourseId"].FirstOrDefault()
                                    ?? routeData?.Values["CourseId"]?.ToString();
-            if (!string.IsNullOrEmpty(courseIdAsString) && int.TryParse(courseIdAsString, out var courseId))
+            if (!string.IsNullOrEmpty(courseIdAsString) && Guid.TryParse(courseIdAsString, out var courseId))
             {
                 var userId = context.User.FindFirst("UserId")?.Value;
                 if (userId != null)

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using courseProject.Core.Models;
 using courseProject.Core.Models.DTO.EventsDTO;
+using courseProject.Common;
 
 namespace courseProject.MappingProfile
 {
@@ -21,9 +22,11 @@ namespace courseProject.MappingProfile
 
             CreateMap<Event, EventAccreditDto>()
                 .ForMember(x => x.subAdminFName, o => o.MapFrom(y => y.SubAdmin.user.userName))
-                 .ForMember(x => x.dateOfEvent, o => o.MapFrom(y => y.dateOfEvent.HasValue ? y.dateOfEvent.Value.ToString("dd/MM/yyyy") : null));
+                .ForMember(x => x.dateOfEvent, o => o.MapFrom(y => y.dateOfEvent.HasValue ? y.dateOfEvent.Value.ToString("dd/MM/yyyy") : null));
 
-            CreateMap<EventForEditDTO, Event>();
+            CreateMap<EventForEditDTO, Event>()
+                .ForAllMembers(opts => opts.Condition((src, dest, srcMember, destMember) =>
+            IsNotDefaultClassForMapping.IsNotDefault(srcMember)));
         }
     }
 }

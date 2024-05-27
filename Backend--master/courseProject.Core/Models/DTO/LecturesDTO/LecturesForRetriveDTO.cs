@@ -9,13 +9,13 @@ namespace courseProject.Core.Models.DTO.LecturesDTO
 {
     public class LecturesForRetriveDTO
     {
-
+        public int Id { get; set; }
         public string name { get; set; }
         public string description { get; set; }
         public string type { get; set; }
-        public int InstructorId { get; set; }
+        public Guid InstructorId { get; set; }
         public string Duration { get; set; }
-        public int StudentId { get; set; }
+        public Guid StudentId { get; set; }
         public string date { get; set; }
         public TimeSpan startTime { get; set; }
         public TimeSpan endTime { get; set; }

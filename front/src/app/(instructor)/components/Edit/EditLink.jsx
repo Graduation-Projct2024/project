@@ -49,6 +49,8 @@ const { data } = await axios.put(
  `http://localhost:5134/api/MaterialControllar/EditLink?id=${materialID}`,
   formData,
  { headers: {
+  'Authorization':`Bearer ${userToken}`,
+
     'Content-Type': 'multipart/form-data','Content-Type': 'application/json',
 }}
 );

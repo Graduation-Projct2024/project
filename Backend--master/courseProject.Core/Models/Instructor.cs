@@ -13,7 +13,7 @@ namespace courseProject.Core.Models
 
         [Key]
         [ForeignKey("User")]
-        public int InstructorId { get; set; }
+        public Guid InstructorId { get; set; }
         public string? LName { get; set; }
         public DateTime? DateOfBirth { get; set; }
 
@@ -35,7 +35,7 @@ namespace courseProject.Core.Models
         public List<CourseMaterial> Materials { get; set;}
         public List<Consultation> Consultations { get; set;}
 
-        public List<Instructor_Feedback> instructor_Feedbacks { get; set; }
+       // public List<Instructor_Feedback> instructor_Feedbacks { get; set; }
         public List<InstructorSkills> instructorSkills { get; set; }
 
     }

@@ -11,7 +11,7 @@ namespace courseProject.Core.Models
     public class Course
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string name { get; set; }
 
         public string description { get; set; }
@@ -31,13 +31,13 @@ namespace courseProject.Core.Models
         public int? totalHours { get; set; }
 
         [ForeignKey("Instructor")]
-        public int InstructorId { get; set; } 
+        public Guid InstructorId { get; set; } 
 
         [ForeignKey("SubAdmin")]
-        public int SubAdminId { get; set; } 
+        public Guid SubAdminId { get; set; } 
         [ForeignKey("Request")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int requestId { get; set; } 
+        public Guid requestId { get; set; } 
 
         public Instructor Instructor { get; set; }
 
@@ -47,7 +47,7 @@ namespace courseProject.Core.Models
 
         public List<StudentCourse> studentCourses { get; set; }
 
-        public List<Course_Feedback> course_Feedbacks { get; set; }
+      //  public List<Course_Feedback> course_Feedbacks { get; set; }
         public Request Request { get; set; }
         public List<Feedback> Feedbacks { get; set; }
 

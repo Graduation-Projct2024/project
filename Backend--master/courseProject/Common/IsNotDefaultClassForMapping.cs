@@ -2,7 +2,7 @@
 {
     public class IsNotDefaultClassForMapping
     {
-        public bool IsNotDefault(object srcMember)
+        public static bool IsNotDefault(object srcMember)
         {
             if (srcMember is int intValue)
             {

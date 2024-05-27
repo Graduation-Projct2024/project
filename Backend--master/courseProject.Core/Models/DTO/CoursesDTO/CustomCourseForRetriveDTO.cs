@@ -8,7 +8,7 @@ namespace courseProject.Core.Models.DTO.CoursesDTO
 {
     public class CustomCourseForRetriveDTO
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string name { get; set; }
         public string description { get; set; }
         public string? startDate { get; set; }

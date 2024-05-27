@@ -13,7 +13,7 @@ namespace courseProject.Core.Models
 
         [Key]
         [ForeignKey("User")]
-        public int SubAdminId { get; set; }
+        public Guid SubAdminId { get; set; }
         public string? LName { get; set; }
         public DateTime? DateOfBirth { get; set; }
 

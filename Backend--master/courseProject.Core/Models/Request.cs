@@ -13,7 +13,7 @@ namespace courseProject.Core.Models
     public class Request
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         public string name { get; set; } 
 
@@ -25,17 +25,17 @@ namespace courseProject.Core.Models
         public DateTime? startDate { get; set; }
         public DateTime? endDate { get; set; }
 
-        [ForeignKey("Admin")]
-        public int AdminId { get; set; } 
+       // [ForeignKey("Admin")]
+       // public Guid AdminId { get; set; } 
 
         [ForeignKey("Student")]
         [AllowNull]
-        public int? StudentId { get; set; }
+        public Guid? StudentId { get; set; }
         [ForeignKey("SubAdmin")]
         [AllowNull]
-        public int? SubAdminId { get; set; } 
+        public Guid? SubAdminId { get; set; } 
 
-        public Admin Admin { get; set; }
+      //  public Admin Admin { get; set; }
         public SubAdmin SubAdmin { get; set; }  
         public Student Student { get; set; }
 

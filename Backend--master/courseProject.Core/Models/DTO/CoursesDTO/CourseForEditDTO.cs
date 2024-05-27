@@ -15,7 +15,7 @@ namespace courseProject.Core.Models.DTO.CoursesDTO
         public string? category { get; set; }
         public string? description { get; set; }
         [NotMapped] public IFormFile? image { get; set; }
-        public int? InstructorId { get; set; }
+        public Guid? InstructorId { get; set; }
         public DateTime? Deadline { get; set; }
         public DateTime? startDate { get; set; }
         public int? limitNumberOfStudnet { get; set; }

@@ -13,7 +13,7 @@ namespace courseProject.Core.Models.DTO.CoursesDTO
     //</Summery>
     public class CourseInfoForStudentsDTO
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string name { get; set; }
         public string description { get; set; }
         public string category { get; set; }
@@ -23,9 +23,9 @@ namespace courseProject.Core.Models.DTO.CoursesDTO
         public string startDate { get; set; }
         public string endDate { get; set; }
         public int? totalHours { get; set; }
-        public int InstructorId { get; set; }
+        public Guid InstructorId { get; set; }
         public string InstructorName { get; set; }
-        public int SubAdminId { get; set; }
+        public Guid SubAdminId { get; set; }
         public string SubAdminName { get; set; }
         public bool isEnrolled { get; set; }
     }

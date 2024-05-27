@@ -10,12 +10,12 @@ namespace courseProject.Core.Models.DTO.MaterialsDTO
     public class CourseMaterialDTO
     {
 
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string name { get; set; }
         public string description { get; set; }
         public string type { get; set; }
         public string pdfUrl { get; set; }
-        public int InstructorId { get; set; }
-        public int courseId { get; set; }
+        public Guid InstructorId { get; set; }
+        public Guid courseId { get; set; }
     }
 }

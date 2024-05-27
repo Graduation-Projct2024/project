@@ -19,7 +19,7 @@ namespace courseProject.Core.IGenericRepository
        bool isUniqeUser(string email);
 
         public Task<User> GetUserByRoleAsync(string role);
-        public Task<User> getUserByIdAsync(int UserId);
+        public Task<User> getUserByIdAsync(Guid UserId);
         public Task<IReadOnlyList< User>> getAllMainSubAmdinRole();
         public Task<string> GenerateSecureVerificationCode(int length);
         public Task<User> GetUserByEmail(string email);

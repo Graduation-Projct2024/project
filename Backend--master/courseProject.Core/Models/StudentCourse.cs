@@ -12,10 +12,10 @@ namespace courseProject.Core.Models
     {
         [Key]
         [ForeignKey("Student")]
-        public int StudentId {  get; set; }
+        public Guid StudentId {  get; set; }
         [Key]
         [ForeignKey("Course")]
-        public int courseId { get; set; }
+        public Guid courseId { get; set; }
 
         public DateTime EnrollDate { get; set; }= DateTime.Now;
         public string status { get; set; } = "waiting";

@@ -8,7 +8,7 @@ namespace courseProject.Core.Models.DTO.InstructorsDTO
 {
     public class Instructor_OfficeHoursDTO
     {
-        public int InstructorId { get; set; }
+        public Guid InstructorId { get; set; }
         public string userName { get; set; }
         public string? LName { get; set; }
         public DayOfWeek day { get; set; }

@@ -12,10 +12,10 @@ namespace courseProject.Core.Models
     {
         [Key]
         [ForeignKey("Skills")]
-        public int skillId {  get; set; }
+        public Guid skillId {  get; set; }
         [Key]
         [ForeignKey("Instructor")]
-        public int InstructorId { get; set; }
+        public Guid InstructorId { get; set; }
 
         public Instructor Instructor { get; set; }
         public Skills Skills { get; set; }

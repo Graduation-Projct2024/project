@@ -17,6 +17,8 @@ using System.Net.NetworkInformation;
 using Microsoft.AspNetCore.Authorization;
 using courseProject.Core.Models.DTO.EventsDTO;
 using courseProject.Core.Models.DTO.CoursesDTO;
+using courseProject.Services.Courses;
+using courseProject.Validations;
 
 namespace courseProject.Controllers
 {
@@ -24,6 +26,7 @@ namespace courseProject.Controllers
     [ApiController]
     public class CourseContraller : ControllerBase
     {
+        private readonly ICourseServices courseServices;
         private readonly IUnitOfWork unitOfWork;
         private readonly projectDbContext dbContext;
         private readonly IGenericRepository1<Course> courseRepo;
@@ -33,8 +36,9 @@ namespace courseProject.Controllers
         private Common.CommonClass CommonClass;
         //  private Request request;
 
-        public CourseContraller(IUnitOfWork unitOfWork, projectDbContext dbContext, IGenericRepository1<Course> CourseRepo, IGenericRepository1<Request> RequestRepo, IMapper mapper)
+        public CourseContraller(ICourseServices courseServices, IUnitOfWork unitOfWork, projectDbContext dbContext, IGenericRepository1<Course> CourseRepo, IGenericRepository1<Request> RequestRepo, IMapper mapper)
         {
+            this.courseServices = courseServices;
             this.unitOfWork = unitOfWork;
             this.dbContext = dbContext;
             courseRepo = CourseRepo;
@@ -44,7 +48,7 @@ namespace courseProject.Controllers
             CommonClass = new Common.CommonClass();
         }
 
-        [HttpGet]
+        [HttpGet("GetAllAccreditCourses")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
@@ -52,18 +56,8 @@ namespace courseProject.Controllers
         //get all accredits courses
         public async Task<ActionResult<ApiResponce>> GetAllCoursesAsync([FromQuery] PaginationRequest paginationRequest)
         {
-            var courses = await courseRepo.GetAllCoursesAsync();
-
-            if (courses.Count() == 0)
-            {
-                responce.IsSuccess = false;
-                responce.StatusCode = HttpStatusCode.NotFound;
-                responce.ErrorMassages.Add("Not Has Any Accrefit Course Yet");
-                return Ok(responce);
-            }
-            var mapperCourse = mapper.Map<IReadOnlyList<Course>, IReadOnlyList<CourseInformationDto>>(courses);
-            responce.IsSuccess = true;
-            responce.StatusCode = HttpStatusCode.OK;
+            var getCourses = await courseServices.GetAllCourses();
+            var mapperCourse = mapper.Map<IReadOnlyList<Course>, IReadOnlyList<CourseInformationDto>>(getCourses);          
             responce.Result = (Pagination<CourseInformationDto>.CreateAsync(mapperCourse, paginationRequest.pageNumber, paginationRequest.pageSize)).Result;
             return Ok(responce);
         }
@@ -73,34 +67,16 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "Student")]
-        public async Task<ActionResult<IReadOnlyList<Course>>> GetAllCourses(int studentId, [FromQuery] PaginationRequest paginationRequest)
+
+        //this is to retrive all courses to students to enroll in
+        public async Task<ActionResult<ApiResponce>> GetAllCoursesToStudent(Guid studentId, [FromQuery] PaginationRequest paginationRequest)
         {
-            try
-            {
 
-
-                var courses = await unitOfWork.StudentRepository.GetAllCoursesAsync(studentId);
-
-                if (courses.Count() == 0)
-                {
-                    responce.IsSuccess = false;
-                    responce.StatusCode = HttpStatusCode.NotFound;
-                    responce.ErrorMassages.Add("Not Has Any Accrefit Course Yet");
-                    return Ok(responce);
-                }
+                var courses = await courseServices.GetAllCoursesToStudent(studentId);
                 var mapperCourse = mapper.Map<IReadOnlyList<Course>, IReadOnlyList<CourseInfoForStudentsDTO>>(courses);
-                responce.IsSuccess = true;
-                responce.StatusCode = HttpStatusCode.OK;
-                responce.Result = (Pagination<CourseInfoForStudentsDTO>.CreateAsync(mapperCourse, paginationRequest.pageNumber, paginationRequest.pageSize)).Result;
-                return Ok(responce);
-            }
-            catch (Exception ex)
-            {
-                responce.IsSuccess = false;
-                responce.StatusCode = HttpStatusCode.BadRequest;
-                responce.ErrorMassages.Add($"{ex.Message}");
-                return BadRequest(responce);
-            }
+            return new ApiResponce { Result = (Pagination<CourseInfoForStudentsDTO>.CreateAsync(mapperCourse, paginationRequest.pageNumber, paginationRequest.pageSize)).Result };
+                 
+           
         }
 
         [HttpGet("GetAllCoursesForAccredit")]
@@ -111,22 +87,10 @@ namespace courseProject.Controllers
         //get all courses
         public async Task<ActionResult<ApiResponce>> GetAllCoursesForAccreditAsync([FromQuery] PaginationRequest paginationRequest)
         {
-            var courses = await courseRepo.GetAllCoursesForAccreditAsync();
-            if (courses.Count() == 0)
-            {
-                responce.IsSuccess = false;
-                responce.StatusCode = HttpStatusCode.NotFound;
-                responce.ErrorMassages.Add("Not Has Any Course Yet");
-                return (responce);
-            }
-            courses = courses.OrderByDescending(x => x.dateOfAdded).ToList();
+            var courses = await courseServices.GetAllCoursesForAccreditAsync();
             var mapperCourse = mapper.Map<IReadOnlyList<Course>, IReadOnlyList<CourseAccreditDTO>>(courses);
-           
-            responce.IsSuccess = true;
-            responce.StatusCode = HttpStatusCode.OK;
-            responce.Result = (Pagination<CourseAccreditDTO>.CreateAsync(mapperCourse, paginationRequest.pageNumber, paginationRequest.pageSize)).Result;
+            return new ApiResponce { Result = (Pagination<CourseAccreditDTO>.CreateAsync(mapperCourse, paginationRequest.pageNumber, paginationRequest.pageSize)).Result };           
             
-            return Ok(responce);
         }
 
 
@@ -138,130 +102,24 @@ namespace courseProject.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize(Policy = "SubAdmin , Main-SubAdmin")]
-        public async Task<ActionResult<Course>> createCourse([FromForm] CourseForCreateDTO model, int? StudentId)
+
+        // a create course , created by subAdmin or main subAdmin
+        public async Task<ActionResult<ApiResponce>> createCourse( CourseForCreateDTO model, Guid? StudentId)
         {
-            if (!model.GetType().GetProperties()
-                .Select(x => x.GetValue(model))
-                .Any(Value => Value != null))
-            {
-                responce.IsSuccess = false;
-                responce.StatusCode = HttpStatusCode.NotFound;
-                responce.ErrorMassages = new List<string>() { "the inputs is null" };
-                return NotFound(responce);
-            }
-            if (!ModelState.IsValid)
-            {
-                responce.IsSuccess = false;
-                responce.StatusCode = HttpStatusCode.BadRequest;
-                return BadRequest(responce);
-            }
-            await unitOfWork.FileRepository.UploadFile1(model.image);
+         
 
             var courseMapped = mapper.Map<Course>(model);
             var requestMapped = mapper.Map<Request>(model);
-            var admin = await unitOfWork.UserRepository.GetUserByRoleAsync("admin");
-            requestMapped.AdminId = admin.UserId;
-            if (StudentId != null)
-            {
-                requestMapped.StudentId = StudentId;
-            }
-            if (courseMapped.image != null)
-            {
-                courseMapped.ImageUrl = "Files\\" + await unitOfWork.FileRepository.UploadFile1(model.image);
-            }
-          
 
-            using (var transaction = await unitOfWork.SubAdminRepository.BeginTransactionAsync())
-            {
-                try
-                {
-                    await unitOfWork.SubAdminRepository.CreateRequest(requestMapped);
-                    var success1 = await unitOfWork.StudentRepository.saveAsync();
-
-                    // courseMapped.Id = requestMapped.Id;
-
-                    // var idd= mapper.Map<Request, Course>(requestMapped);
-                    courseMapped.requestId = requestMapped.Id;
-                    await unitOfWork.SubAdminRepository.CreateCourse(courseMapped);
-                    var success2 = await unitOfWork.StudentRepository.saveAsync();
-
-                    if (success1 > 0 && success2 > 0)
-                    {
-                        await transaction.CommitAsync();
-                        responce.StatusCode = (HttpStatusCode)StatusCodes.Status201Created;
-                        responce.IsSuccess = true;
-                        responce.Result = model;
-                        return Ok(responce);
-                    }
-
-                    return BadRequest(responce);
-                }
-                catch (Exception ex)
-                {
-                    await transaction.RollbackAsync();
-                    responce.StatusCode = (HttpStatusCode)StatusCodes.Status400BadRequest;
-                    responce.IsSuccess = false;
-                    return BadRequest(responce);
-                }
-            }
+            var createCourse = await courseServices.createCourse(courseMapped, requestMapped, StudentId);
+            if (createCourse.IsError) return NotFound( new ApiResponce { ErrorMassages =  createCourse.FirstError.Description });
+            return new ApiResponce { Result="The Course Is Created Successfully"};
+            
 
         }
 
 
-        [HttpPost("CreateEvent")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(404)]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [Authorize(Policy = "SubAdmin , Main-SubAdmin")]
-        public async Task<ActionResult<Event>> createEvent([FromForm] EventForCreateDTO model)
-        {
-            await unitOfWork.FileRepository.UploadFile1(model.image);
-
-            var EventMapped = mapper.Map<Event>(model);
-            var requestMapped = mapper.Map<Request>(model);
-            var admin = await unitOfWork.UserRepository.GetUserByRoleAsync("admin");
-            requestMapped.AdminId = admin.UserId;
-            EventMapped.ImageUrl = "Files\\" + await unitOfWork.FileRepository.UploadFile1(model.image);
-            using (var transaction = await unitOfWork.SubAdminRepository.BeginTransactionAsync())
-            {
-                try
-                {
-                    await unitOfWork.SubAdminRepository.CreateRequest(requestMapped);
-                    var success1 = await unitOfWork.SubAdminRepository.saveAsync();
-
-
-                    var eventid = mapper.Map<Request, Event>(requestMapped);
-                    EventMapped.requestId = eventid.Id;
-                    await unitOfWork.SubAdminRepository.CreateEvent(EventMapped);
-                    var success2 = await unitOfWork.SubAdminRepository.saveAsync();
-
-                    await transaction.CommitAsync();
-
-                    if (success1 > 0 && success2 > 0)
-                    {
-                        responce.StatusCode = (HttpStatusCode)StatusCodes.Status201Created;
-                        responce.IsSuccess = true;
-                        responce.Result = model;
-                        return Ok(responce);
-                    }
-
-                    return BadRequest(responce);
-                }
-                catch (Exception ex)
-                {
-                    await transaction.RollbackAsync();
-
-
-                    responce.StatusCode = (HttpStatusCode)StatusCodes.Status400BadRequest;
-                    responce.IsSuccess = false;
-
-                    return BadRequest(responce);
-                }
-            }
-
-        }
+        
 
 
         [HttpPatch("accreditCourse")]
@@ -269,78 +127,52 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "Admin")]
-        public async Task<ActionResult<ApiResponce>> EditCourseStatus(int courseId, string Status)
+
+        // this to change the status of courses to reject or accredit
+        public async Task<ActionResult<ApiResponce>> EditCourseStatus(Guid courseId, string Status)
         {
-            var entity = await unitOfWork.CourseRepository.GetCourseByIdAsync(courseId);
-            if (entity == null)
+            var updateStatus = await courseServices.accreditCourse(courseId, Status);
+            if (updateStatus.IsError) return NotFound(new ApiResponce
             {
-                return NotFound();
-            }
-            Expression<Func<Course, string>> path = x => x.status;
-            var patchDocument = new JsonPatchDocument<Course>();
-            patchDocument.Replace(path, Status);
-            entity.status = Status;
-            // jsonPatch.ApplyTo(entity, ModelState);
-            // jsonPatch.Replace(path , "Accredit");
-            await unitOfWork.SubAdminRepository.updateCourse(entity);
-            await unitOfWork.SubAdminRepository.saveAsync();
-            return Ok(entity);
+                ErrorMassages = updateStatus.FirstError.Description
+            }) ;
+            return Ok(new ApiResponce
+            {
+                Result = $"The Course is {Status}"
+            });
         }
 
 
-        [HttpPatch("accreditEvent")]
+        [HttpPut("EditOnCourseAfterAccredit")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        [Authorize(Policy ="Admin")]
-        public async Task<ActionResult<ApiResponce>> EditEventStatus(int eventId, string Status)
+        [Authorize(Policy = "Admin")]
+        public async Task<ActionResult<ApiResponce>> EditOnCourseAfterAccreditByAdmin(Guid courseId, [FromForm] EditCourseAfterAccreditDTO editedCourse)
         {
-            var entity = await unitOfWork.eventRepository.GetEventByIdAsync(eventId);
 
-            if (entity == null)
-            {
-                return NotFound();
-            }
-            Expression<Func<Event, string>> path = x => x.status;
-            var patchDocument = new JsonPatchDocument<Event>();
-            patchDocument.Replace(path, Status);
-            entity.status = Status;
-            // jsonPatch.ApplyTo(entity, ModelState);
-            // jsonPatch.Replace(path , "Accredit");
-            await unitOfWork.SubAdminRepository.updateEvent(entity);
-            await unitOfWork.SubAdminRepository.saveAsync();
-            return Ok(entity);
+            var courseService = await courseServices.EditOnCourseAfterAccredit(courseId, editedCourse);
+            responce.Result = courseService;
+            if (courseService.IsError == true) responce.ErrorMassages = courseService.FirstError.Description;
+            return Ok(responce);
+
         }
+
+
 
 
         [HttpGet("GetCourseById")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<ApiResponce>> GetCourseById(int id)
-        {
-            if (id <= 0)
-            {
-                responce.StatusCode = HttpStatusCode.BadRequest;
-                responce.IsSuccess = false;
-                responce.ErrorMassages.Add($"The Course Id = {id} is less or equal 0 ");
-                return BadRequest(responce);
-            }
 
-            var coursee = await unitOfWork.CourseRepository.GetCourseByIdAsync(id);
-            if (coursee == null)
-            {
-                responce.IsSuccess = false;
-                responce.StatusCode = HttpStatusCode.NotFound;
-                responce.ErrorMassages = new List<string>() { $"The Course of Id = {id} does not exists" };
-                responce.Result = null;
-                return NotFound(responce);
-            }
-            var courseMapper = mapper.Map<Course, CourseInformationDto>(coursee);
-            responce.IsSuccess = true;
-            responce.StatusCode = HttpStatusCode.OK;
-            responce.Result = courseMapper;
-            return Ok(responce);
+        // get course by it's id
+        public async Task<ActionResult<ApiResponce>> GetCourseById(Guid id)
+        {
+
+            var course = await courseServices.GetCourseById(id);
+            if (course.IsError) return NotFound(new ApiResponce { ErrorMassages =  course.FirstError.Description });                           
+            return Ok(new ApiResponce { Result = mapper.Map<Course, CourseInformationDto>(course.Value) });
         }
 
 
@@ -352,45 +184,16 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "SubAdmin , Main-SubAdmin")]
-        public async Task<ActionResult<ApiResponce>> EditCourseBeforeAccredit(int id,[FromForm] CourseForEditDTO course)
+
+        // edit course by who created before the admin accredit or reject the course
+        public async Task<ActionResult<ApiResponce>> EditCourseBeforeAccredit(Guid id,[FromForm] CourseForEditDTO course)
         {
-            if (id <= 0)
-            {
-                responce.IsSuccess = false;
-                responce.StatusCode = HttpStatusCode.BadRequest;
-                responce.ErrorMassages = new List<string>() { "The Id is less or equal 0" };
-                return BadRequest(responce);
-            }
-            if (!ModelState.IsValid)
-            {
-                responce.IsSuccess = false;
-                responce.StatusCode = HttpStatusCode.BadRequest;
-                return BadRequest(responce);
-            }
-            var getCourse = await unitOfWork.CourseRepository.GetCourseByIdAsync(id);
-            if (getCourse == null)
-            {
-                responce.IsSuccess = false;
-                responce.StatusCode = HttpStatusCode.NotFound;
-                responce.ErrorMassages = new List<string>() { $"the course with id = {id} is not found" };
-                return NotFound(responce);
-            }
-            mapper.Map(course, getCourse);
-            if (course.image != null)
-            {
-                getCourse.ImageUrl  = "Files\\" + await unitOfWork.FileRepository.UploadFile1(course.image);
-            }
-            await unitOfWork.SubAdminRepository.updateCourse(getCourse);
-            if (await unitOfWork.CourseRepository.saveAsync() > 0)
-            {
-                responce.IsSuccess = true;
-                responce.StatusCode = HttpStatusCode.OK;
-                responce.Result = getCourse;
-                return Ok(responce);
-            }
-            responce.IsSuccess = false;
-            responce.StatusCode = HttpStatusCode.BadRequest;
-            return BadRequest(responce);
+          
+            
+            var editCourse = await courseServices.EditOnCOurseBeforeAnAccredit(id , course);
+            if (editCourse.IsError) return NotFound(new ApiResponce { ErrorMassages =  editCourse.FirstError.Description  });
+            return Ok(new ApiResponce { Result = "The course is updated successfully" });
+            
         }
 
 
@@ -400,34 +203,79 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "SubAdmin , Main-SubAdmin")]
-        public async Task<ActionResult<ApiResponce>> GetALlUndefinedCoursesForSubAdmins(int subAdminId , [FromQuery] PaginationRequest paginationRequest)
-        {
-            try
-            {
 
-                var allUndefinedCourses = await unitOfWork.CourseRepository.GetAllUndefinedCoursesBySubAdminIdAsync(subAdminId);
-                if (allUndefinedCourses.Count() == 0)
-                {
-                    responce.IsSuccess = true;
-                    responce.StatusCode = HttpStatusCode.NoContent;
-                    responce.ErrorMassages.Add("There is no Course whose status has not yet been determined ");
-                    return responce;
-                }
-
-                var mapperCourse = mapper.Map<IReadOnlyList<Course>, IReadOnlyList<CourseInformationDto>>(allUndefinedCourses);
-                responce.IsSuccess = true;
-                responce.StatusCode = HttpStatusCode.OK;
-                responce.Result = (Pagination<CourseInformationDto>.CreateAsync(mapperCourse, paginationRequest.pageNumber, paginationRequest.pageSize)).Result;
-                return Ok(responce);
-
-            }
-            catch (Exception ex)
-            {
-                responce.IsSuccess = false;
-                responce.StatusCode=HttpStatusCode.BadRequest;
-                responce.ErrorMassages.Add("The error is :" + ex.Message);
-                return BadRequest(responce);
-            }
+        // get all undefinded course created by a subAdmin depend on his id
+        public async Task<ActionResult<ApiResponce>> GetALlUndefinedCoursesForSubAdmins(Guid subAdminId , [FromQuery] PaginationRequest paginationRequest)
+        {          
+                var getCourses = await courseServices.GetALlUndefinedCoursesForSubAdmins(subAdminId);
+            if(getCourses.IsError) return NotFound(new ApiResponce { ErrorMassages =  getCourses.FirstError.Description  });
+            var mapperCourse = mapper.Map<IReadOnlyList<Course>, IReadOnlyList<CourseInformationDto>>(getCourses.Value);
+                return Ok(new ApiResponce { Result = (Pagination<CourseInformationDto>.CreateAsync(mapperCourse, paginationRequest.pageNumber, paginationRequest.pageSize)).Result });                          
         }
+
+        [HttpGet("GetAllCoursesGivenByInstructor")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        [Authorize(Policy = "Admin , Instructor")]
+        public async Task<ActionResult<ApiResponce>> GetAllCoursesByInstructorId(Guid Instructorid, [FromQuery] PaginationRequest paginationRequest)
+        {
+
+            var getCourses = await courseServices.GetAllCoursesByInstructor(Instructorid);
+            if (getCourses.IsError) return NotFound(new ApiResponce {ErrorMassages = getCourses.FirstError.Description });
+            
+            return Ok(new ApiResponce { Result = (Pagination<Course>.CreateAsync(getCourses.Value, paginationRequest.pageNumber, paginationRequest.pageSize)).Result });
+
+        }
+
+
+        [HttpGet("GetAllCustomCourses")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        [Authorize(Policy = "Main-SubAdmin , Student")]
+        // not try
+        public async Task<ActionResult<ApiResponce>> GetAllCustomCoursesToMainSubAdmin([FromQuery] PaginationRequest paginationRequest)
+        {
+
+            var GetCustomCourses = await courseServices.GetAllCustomCourses();
+
+            return Ok(new ApiResponce { Result= (Pagination<CustomCourseForRetriveDTO>.CreateAsync(GetCustomCourses, paginationRequest.pageNumber, paginationRequest.pageSize)).Result });
+            }
+
+
+
+        [HttpGet("GetCustomCoursesById")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        [Authorize(Policy = "Main-SubAdmin , Student")]
+        //not try
+        public async Task<ActionResult<ApiResponce>> GetCustomCourseById(Guid id)
+        {
+
+            var GetCustomCourse = await courseServices.GetCustomCoursesById(id);
+            if (GetCustomCourse.IsError) return NotFound(new ApiResponce { ErrorMassages = GetCustomCourse.FirstError.Description });
+            return Ok(new ApiResponce { Result =GetCustomCourse.Value });
+
+        }
+
+
+        [HttpGet("GetAllEnrolledCoursesForAStudent")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        [Authorize(Policy = "Student")]
+        public async Task<ActionResult<ApiResponce>> GetEnrolledCourses(Guid studentid, [FromQuery] PaginationRequest paginationRequest)
+        {
+
+            var enrolledCourses = await courseServices.GetAllEnrolledCourses(studentid);
+            return Ok( new ApiResponce { Result = 
+                (Pagination<StudentCourse>.CreateAsync(enrolledCourses.Value, paginationRequest.pageNumber, paginationRequest.pageSize)).Result}); 
+            
+        }
+
+
     }
-}
+    }
+

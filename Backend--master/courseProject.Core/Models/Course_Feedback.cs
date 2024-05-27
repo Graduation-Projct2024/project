@@ -9,17 +9,17 @@ namespace courseProject.Core.Models
 {
     public class Course_Feedback
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         public string content { get; set; }
 
         public DateTime dateOfAdded { get; set; }
 
         [ForeignKey("Student")]
-        public int StudentId { get; set; }
+        public Guid StudentId { get; set; }
 
         [ForeignKey("Course")]
-        public int courseId { get; set; }
+        public Guid courseId { get; set; }
 
         public Student Student { get; set; }
         public Course course { get; set; }

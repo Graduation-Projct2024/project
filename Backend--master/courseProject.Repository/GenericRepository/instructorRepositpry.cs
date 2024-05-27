@@ -26,7 +26,7 @@ namespace courseProject.Repository.GenericRepository
             await dbContext.Set<CourseMaterial>().AddAsync(courseMaterial);
         }
 
-        public async Task DeleteMaterial(int id)
+        public async Task DeleteMaterial(Guid id)
         {
             var materail= await dbContext.courseMaterials.FirstOrDefaultAsync(x => x.Id == id);
              dbContext.courseMaterials.Remove(materail);
@@ -37,7 +37,7 @@ namespace courseProject.Repository.GenericRepository
              dbContext.Set<CourseMaterial>().Update(courseMaterial);
         }
 
-        public async Task<IReadOnlyList<Course>> GetAllCoursesGivenByInstructorIdAsync(int Instructorid)
+        public async Task<IReadOnlyList<Course>> GetAllCoursesGivenByInstructorIdAsync(Guid Instructorid)
         {
            return  await dbContext.courses.Where(x=>x.InstructorId== Instructorid && (x.status.ToLower()== "accredit" || x.status.ToLower() == "start" || x.status.ToLower() == "finished")).ToListAsync();
         }
@@ -48,12 +48,12 @@ namespace courseProject.Repository.GenericRepository
             await dbContext.Set<Instructor_Working_Hours>().AddAsync(instructor_Working_Hours);
         }
 
-        public async Task<IReadOnlyList<Instructor_Working_Hours>> GetOfficeHourByIdAsync(int instructorId)
+        public async Task<IReadOnlyList<Instructor_Working_Hours>> GetOfficeHourByIdAsync(Guid instructorId)
         {
             return  await dbContext.Instructor_Working_Hours.Where(x=>x.InstructorId == instructorId).ToListAsync();
         }
 
-        public async Task<IReadOnlyList<Student_Task_Submissions>> GetAllSubmissionsByTaskIdAsync(int taskId)
+        public async Task<IReadOnlyList<Student_Task_Submissions>> GetAllSubmissionsByTaskIdAsync(Guid taskId)
         {
             return await dbContext.Student_Task_Submissions
                 .Include(x=>x.Student)
@@ -61,14 +61,14 @@ namespace courseProject.Repository.GenericRepository
                 .Where(x=>x.TaskId== taskId).ToListAsync();
         }
 
-        public async Task<IReadOnlyList<Consultation>> GetAllConsultationRequestByInstructorIdAsync(int instructorId)
+        public async Task<IReadOnlyList<Consultation>> GetAllConsultationRequestByInstructorIdAsync(Guid instructorId)
         {
            return await dbContext.consultations.Include(x=>x.student.user).Include(x => x.instructor.user).Where(x=>x.InstructorId == instructorId).ToListAsync();
         }
 
-        public async Task<Instructor> getInstructorByIdAsync(int id)
+        public async Task<Instructor> getInstructorByIdAsync(Guid id)
         {
-            return await dbContext.instructors.FirstOrDefaultAsync(x => x.InstructorId == id);
+            return await dbContext.instructors.Include(x=>x.user).FirstOrDefaultAsync(x => x.InstructorId == id);
         }
 
         public async Task<IReadOnlyList<Instructor_Working_Hours>> getAllInstructorsOfficeHoursAsync()
@@ -76,7 +76,7 @@ namespace courseProject.Repository.GenericRepository
            return await dbContext.Instructor_Working_Hours.Include(x=>x.instructor).ThenInclude(x=>x.user).ToListAsync();
         }
 
-        public async Task AddListOfSkillsAsync(int instructorId, List<int> skills)
+        public async Task AddListOfSkillsAsync(Guid instructorId, List<Guid> skills)
         {
             InstructorSkills instructorSkills= new InstructorSkills();
             foreach(var skill in skills)
@@ -88,7 +88,7 @@ namespace courseProject.Repository.GenericRepository
             }
         }
 
-        public async Task<IReadOnlyList<string>> GetAllSkillsNameToInstructorAsync(List<int> skills)
+        public async Task<IReadOnlyList<string>> GetAllSkillsNameToInstructorAsync(List<Guid> skills)
         {
             List<string> allSkills=new List<string>();
             foreach(var skill in skills)
@@ -126,12 +126,12 @@ namespace courseProject.Repository.GenericRepository
           return  await dbContext.InstructorSkills.ToListAsync();
         }
 
-        public async Task<IReadOnlyList<Skills>> getAllUnregisteredSkillsOfTheInstructor(int instructorId)
+        public async Task<IReadOnlyList<Skills>> getAllUnregisteredSkillsOfTheInstructor(Guid instructorId)
         {
             return await dbContext.Skills.Where(x=>!x.instructorSkills.Any(y=>y.InstructorId == instructorId)).ToListAsync();
         }
 
-        public async Task<IReadOnlyList<Instructor_Working_Hours>> getAListOfInstructorDependOnSkillsAndOfficeTime( int skillID, TimeSpan startTime, TimeSpan endTime, DateTime date )
+        public async Task<IReadOnlyList<Instructor_Working_Hours>> getAListOfInstructorDependOnSkillsAndOfficeTime(Guid skillID, TimeSpan startTime, TimeSpan endTime, DateTime date )
         {
             return await dbContext.Instructor_Working_Hours.Include(x => x.instructor).ThenInclude(x => x.Consultations)
                 .Include(x=>x.instructor.user)
@@ -148,7 +148,7 @@ namespace courseProject.Repository.GenericRepository
     .ToListAsync();
         }
 
-        public async Task<IReadOnlyList<Skills>> getAllInstructorSkills(int instructorId)
+        public async Task<IReadOnlyList<Skills>> getAllInstructorSkills(Guid instructorId)
         {
             return await dbContext.Skills.Where(x=>x.instructorSkills.Any(y=>y.InstructorId == instructorId)).ToListAsync();
         }

@@ -2,7 +2,7 @@
 {
     public class EventAccreditDto
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string name { get; set; }
 
         public string content { get; set; }
@@ -10,7 +10,7 @@
         public string? dateOfEvent { get; set; }
         public string category { get; set; }
 
-        public int SubAdminId { get; set; }
+        public Guid SubAdminId { get; set; }
 
         public string subAdminFName { get; set; }
         public string subAdminLName { get; set; }

@@ -26,14 +26,14 @@ namespace courseProject.Repository.GenericRepository
             this.dbContext = dbContext;
         }
 
-   
+
 
         public async Task<IReadOnlyList<T>> GetAllStudentsAsync()
         {
-            if(typeof(T) == typeof(Student))
+            if (typeof(T) == typeof(Student))
             {
-                return (IReadOnlyList<T>)await  dbContext.students.Include(x => x.user).Where(x=>x.user.IsVerified==true).ToListAsync();
-                
+                return (IReadOnlyList<T>)await dbContext.students.Include(x => x.user).Where(x => x.user.IsVerified == true).ToListAsync();
+
             }
             return await dbContext.Set<T>().ToListAsync();
 
@@ -42,7 +42,7 @@ namespace courseProject.Repository.GenericRepository
 
         public async Task<IReadOnlyList<T>> GetAllEmployeeAsync()
         {
-            if(typeof(T) == typeof(SubAdmin))
+            if (typeof(T) == typeof(SubAdmin))
             {
                 return (IReadOnlyList<T>)await dbContext.subadmins.Include(x => x.user).Where(x => x.user.IsVerified == true).ToListAsync();
             }
@@ -88,18 +88,18 @@ namespace courseProject.Repository.GenericRepository
         }
 
 
-        public async Task<IReadOnlyList<T>> GetAllEmployeeForContactAsync()
-        {
-            if (typeof(T) == typeof(Instructor))
-            {
-                return (IReadOnlyList<T>)await dbContext.instructors.Include(x => x.user).ToListAsync();
-            }
-            else if (typeof(T) == typeof(SubAdmin))
-            {
-                return (IReadOnlyList<T>) await dbContext.subadmins.Include(x=>x.user).ToListAsync();
-            }
-            return await dbContext.Set<T>().ToListAsync();
-        }
+        //public async Task<IReadOnlyList<T>> GetAllEmployeeForContactAsync()
+        //{
+        //    if (typeof(T) == typeof(Instructor))
+        //    {
+        //        return (IReadOnlyList<T>)await dbContext.instructors.Include(x => x.user).ToListAsync();
+        //    }
+        //    else if (typeof(T) == typeof(SubAdmin))
+        //    {
+        //        return (IReadOnlyList<T>) await dbContext.subadmins.Include(x=>x.user).ToListAsync();
+        //    }
+        //    return await dbContext.Set<T>().ToListAsync();
+        //}
 
 
         public async Task<IReadOnlyList<T>> GetAllCoursesForAccreditAsync()
@@ -117,8 +117,9 @@ namespace courseProject.Repository.GenericRepository
         {
             if(typeof(T) == typeof(Event))
             {
-                return (IReadOnlyList<T>)await dbContext.events.Include(x=>x.SubAdmin)                    
-                    .ThenInclude(x => x.user).ToListAsync();
+                return (IReadOnlyList<T>)await dbContext.events
+                    
+                    .Include(x => x.SubAdmin.user).ToListAsync();
             }
             return await dbContext.Set<T>().ToListAsync();
         }
@@ -142,7 +143,7 @@ namespace courseProject.Repository.GenericRepository
             
         }
 
-        public async Task<T> GetEmployeeById(int id)
+        public async Task<T> GetEmployeeById(Guid id)
         {
             if (typeof(T) == typeof(SubAdmin))
             {
@@ -163,7 +164,7 @@ namespace courseProject.Repository.GenericRepository
       
 
 
-        public async Task<T> ViewProfileAsync(int id ,string role)
+        public async Task<T> ViewProfileAsync(Guid id ,string role)
         {
             if(role.ToLower() == "admin")
             {

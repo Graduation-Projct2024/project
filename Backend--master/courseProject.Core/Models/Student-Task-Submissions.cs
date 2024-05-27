@@ -14,10 +14,10 @@ namespace courseProject.core.Models
     {
         [Key]
         [ForeignKey("Student")]
-        public int StudentId { get; set; }
+        public Guid StudentId { get; set; }
         [Key]
         [ForeignKey("CourseMaterial")]
-        public int TaskId { get; set; }
+        public Guid TaskId { get; set; }
         public string? description { get; set; }
         [NotMapped] public IFormFile? pdf { get; set; }
         public string? pdfUrl { get; set; }

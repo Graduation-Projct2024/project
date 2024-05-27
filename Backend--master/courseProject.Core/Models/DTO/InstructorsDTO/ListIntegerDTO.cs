@@ -8,6 +8,6 @@ namespace courseProject.Core.Models.DTO.InstructorsDTO
 {
     public class ListIntegerDTO
     {
-        public List<int> skills { get; set; }
+        public List<Guid> skills { get; set; }
     }
 }

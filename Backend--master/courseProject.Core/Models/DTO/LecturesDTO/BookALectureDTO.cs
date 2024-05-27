@@ -11,7 +11,7 @@ namespace courseProject.Core.Models.DTO.LecturesDTO
         public string name { get; set; }
         public string description { get; set; }
         public string type { get; set; }
-        public int InstructorId { get; set; }
+        public Guid InstructorId { get; set; }
         //   public string Duration { get; set; }
     }
 }

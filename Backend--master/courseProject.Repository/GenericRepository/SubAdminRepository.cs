@@ -91,9 +91,9 @@ namespace courseProject.Repository.GenericRepository
             await dbContext.Set<Event>().AddAsync(model);
         }
 
-        public async Task<SubAdmin> GetSubAdminByIdAsync(int id)
+        public async Task<SubAdmin> GetSubAdminByIdAsync(Guid id)
         {
-           return await dbContext.subadmins.FirstOrDefaultAsync(x => x.SubAdminId == id);
+           return await dbContext.subadmins.Include(x=>x.user).FirstOrDefaultAsync(x => x.SubAdminId == id);
  
         }
 
@@ -101,12 +101,12 @@ namespace courseProject.Repository.GenericRepository
         {
             return await dbContext.requests.Include(x => x.Student.user).Where(x => x.satus == "custom-course").ToListAsync(); 
         }
-        public async Task<Request> GerCourseRequestByIdAsync(int id)
+        public async Task<Request> GerCourseRequestByIdAsync(Guid id)
         {
              return await dbContext.requests.Include(x => x.Student.user).Where(x => x.satus == "custom-course").FirstOrDefaultAsync(x=>x.Id==id);
         }
 
-        public async Task<SubAdmin> getSubAdminByIdAsync(int subAdminId)
+        public async Task<SubAdmin> getSubAdminByIdAsync(Guid subAdminId)
         {
             return await dbContext.subadmins.FirstOrDefaultAsync(x => x.SubAdminId == subAdminId);
         }

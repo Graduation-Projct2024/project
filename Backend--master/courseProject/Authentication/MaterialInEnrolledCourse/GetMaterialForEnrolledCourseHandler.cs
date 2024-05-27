@@ -25,7 +25,7 @@ namespace courseProject.Authentication.MaterialInEnrolledCourse
             var routeData = httpContext.GetRouteData();
             var MaterialIdAsString = httpContext.Request.Query["Id"].FirstOrDefault()
                                    ?? routeData?.Values["Id"]?.ToString();
-            if (!string.IsNullOrEmpty(MaterialIdAsString) && int.TryParse(MaterialIdAsString, out var MaterialId))
+            if (!string.IsNullOrEmpty(MaterialIdAsString) && Guid.TryParse(MaterialIdAsString, out var MaterialId))
             {
                 //var materials = await dbContext.courseMaterials.ToListAsync();
              
@@ -39,7 +39,7 @@ namespace courseProject.Authentication.MaterialInEnrolledCourse
                     var consultationId = material.consultationId;
                     var userIdAsString = context.User.FindFirst("UserId")?.Value;
 
-                    if (int.TryParse(userIdAsString, out var userId))
+                    if (Guid.TryParse(userIdAsString, out var userId))
                     {
 
                         var enrolledInCourse = await dbContext.studentCourses.AnyAsync(sc => sc.courseId == courseId && (sc.StudentId == userId || sc.Course.InstructorId == userId));

@@ -5,6 +5,8 @@ using courseProject.Core.IGenericRepository;
 using courseProject.MappingProfile;
 using courseProject.Repository.Data;
 using courseProject.Repository.GenericRepository;
+using courseProject.Services.Courses;
+using courseProject.Services.Skill;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -22,9 +24,10 @@ namespace courseProject.Configuration
         {
             services.AddScoped(typeof(IGenericRepository1<>), typeof(GenericRepository1<>));
             services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
-          //  services.AddScoped(typeof(ISubAdminRepository), typeof(SubAdminRepository));
-          //  services.AddScoped(typeof(IUserRepository), typeof(UserRepository));
-          //  services.AddScoped(typeof(IStudentRepository), typeof(StudentRepository));
+           
+            //  services.AddScoped(typeof(ISubAdminRepository), typeof(SubAdminRepository));
+            //  services.AddScoped(typeof(IUserRepository), typeof(UserRepository));
+            //  services.AddScoped(typeof(IStudentRepository), typeof(StudentRepository));
             services.AddAutoMapper(typeof(MappingProfileForStudentsInformation));
             services.AddAutoMapper(typeof(MappingForCourseInformation));
             services.AddAutoMapper(typeof(MappingForEmployee));
@@ -94,23 +97,23 @@ namespace courseProject.Configuration
                     );
 
                 });
+                options.AddPolicy("Main-SubAdmin , SubAdmin", policy =>
+                {
+                    policy.RequireAssertion(a =>
+
+
+                        a.User.IsInRole("subadmin") ||
+                        a.User.IsInRole("main-subadmin")
+
+                    );
+
+                });
                 options.AddPolicy("Admin, Main-SubAdmin , SubAdmin", policy =>
                 {
                     policy.RequireAssertion(a =>
 
                         a.User.IsInRole("admin") ||
                         a.User.IsInRole("subadmin")||
-                        a.User.IsInRole("main-subadmin")
-
-                    );
-
-                });
-                options.AddPolicy("Main-SubAdmin , SubAdmin", policy =>
-                {
-                    policy.RequireAssertion(a =>
-
-                       
-                        a.User.IsInRole("subadmin") ||
                         a.User.IsInRole("main-subadmin")
 
                     );

@@ -6,14 +6,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
 namespace courseProject.Core.Models
 {
     public class Admin
     {
         [Key]
-        [ForeignKey("User")]
-        public int AdminId { get; set; }
+        [ForeignKey("User")]       
+        public Guid AdminId { get; set; }
         public string? LName { get; set; }
         public DateTime? DateOfBirth { get; set; }
 
@@ -27,7 +28,7 @@ namespace courseProject.Core.Models
         public string? ImageUrl { get; set; }
 
         public User user { get; set; }
-        public List<Request> requests { get; set; }
+       // public List<Request> requests { get; set; }
 
     }
 }

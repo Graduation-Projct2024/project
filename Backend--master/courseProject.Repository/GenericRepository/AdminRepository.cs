@@ -29,7 +29,7 @@ namespace courseProject.Repository.GenericRepository
             await dbContext.Set<Admin>().AddAsync(admin);
         }
 
-        public async Task<Admin> GetAdminByIdAsync(int id)
+        public async Task<Admin> GetAdminByIdAsync(Guid id)
         {
             return await dbContext.admins.FirstOrDefaultAsync(x => x.AdminId == id);
         }

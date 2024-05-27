@@ -106,7 +106,7 @@ namespace courseProject.Repository.GenericRepository
             {
                 return null;
             }
-            var passHash = BC.HashPassword(registerRequestDTO.password);
+            var passHash = BC.HashPassword(registerRequestDTO.password);           
             User user = new User()
             {
                
@@ -137,7 +137,7 @@ namespace courseProject.Repository.GenericRepository
            return await dbContext.users.FirstOrDefaultAsync(x=>x.role.ToLower()==role.ToLower());
         }
 
-        public async Task<User> getUserByIdAsync(int UserId)
+        public async Task<User> getUserByIdAsync(Guid UserId)
         {
             return await dbContext.users.FirstOrDefaultAsync(x => x.UserId == UserId);
         }

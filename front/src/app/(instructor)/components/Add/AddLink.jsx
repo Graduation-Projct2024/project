@@ -13,7 +13,7 @@ import Button from '@mui/material/Button';
 import Input from '../../../../component/input/Input.jsx';
 import { UserContext } from '../../../../context/user/User.jsx';
 export default function AddLink({ open, onClose ,handleCloseAdd, courseId}) {
-  const {userData}=useContext(UserContext);
+  const {userToken, setUserToken, userData}=useContext(UserContext);
 
   const [Alertopen, setAlertOpen] = React.useState(false);
   const handleClose = (event, reason) => {
@@ -39,6 +39,8 @@ const { data } = await axios.post(
   "http://localhost:5134/api/MaterialControllar/AddLink",
   formData,
   {headers: {
+  'Authorization':`Bearer ${userToken}`,
+
     'Content-Type': 'multipart/form-data','Content-Type': 'application/json',
   }}
 

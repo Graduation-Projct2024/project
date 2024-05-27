@@ -8,7 +8,7 @@ namespace courseProject.Core.Models.DTO.EmployeesDTO
 {
     public class updateEmployeeDTO
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string userName { get; set; }
 
         public string? LName { get; set; }

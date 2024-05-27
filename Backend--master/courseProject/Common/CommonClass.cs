@@ -9,7 +9,7 @@ namespace courseProject.Common
     {
         IConfiguration configuration;
 
-        public void ImageTOHttp(UserInfoDTO userInfoDTO)
+        public static void ImageTOHttp(UserInfoDTO userInfoDTO)
         {
             string url = "http://localhost:5134/";
             userInfoDTO.ImageUrl = url + userInfoDTO.ImageUrl;
@@ -56,7 +56,7 @@ namespace courseProject.Common
             }
         }
 
-        public bool IsValidTimeFormat(string time)
+        public static bool IsValidTimeFormat(string time)
         {
             return Regex.IsMatch(time, @"^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$");
         }
@@ -74,7 +74,7 @@ namespace courseProject.Common
             return startTime < endTime; // Ensure start time is before end time
         }
 
-        public TimeSpan ConvertToTimeSpan (string time)
+        public static TimeSpan ConvertToTimeSpan (string time)
         {
             
                 return TimeSpan.Parse(time);

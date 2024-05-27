@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using courseProject.Core.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace courseProject.Repository.GenericRepository
 {
@@ -16,17 +17,19 @@ namespace courseProject.Repository.GenericRepository
        
     
         private readonly projectDbContext dbContext;
+        private readonly IHttpContextAccessor httpContextAccessor;
         private IConfiguration configuration;
 
-        public UnitOfWork(projectDbContext dbContext , IConfiguration configuration)
+        public UnitOfWork(projectDbContext dbContext , IConfiguration configuration , IHttpContextAccessor httpContextAccessor)
         {
             this.dbContext = dbContext;
+            this.httpContextAccessor = httpContextAccessor;
             SubAdminRepository = new SubAdminRepository(dbContext);
             UserRepository = new UserRepository(dbContext, configuration);
             instructorRepositpry = new instructorRepositpry(dbContext);
             StudentRepository=new StudentRepository(dbContext);
             AdminRepository = new AdminRepository(dbContext);
-            FileRepository = new FileRepository();
+            FileRepository = new FileRepository(httpContextAccessor);
             CourseRepository = new CourseRepository(dbContext);
             materialRepository = new MaterialRepository(dbContext);
             eventRepository = new EventRepository(dbContext);

@@ -19,7 +19,7 @@ namespace courseProject.Core.Models.DTO.EventsDTO
         public DateTime? dateOfEvent { get; set; }
         public string category { get; set; }
 
-        public int SubAdminId { get; set; }
+        public Guid SubAdminId { get; set; }
 
     }
 }

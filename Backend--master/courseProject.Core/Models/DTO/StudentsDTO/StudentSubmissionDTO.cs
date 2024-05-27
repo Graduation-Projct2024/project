@@ -8,11 +8,11 @@ namespace courseProject.Core.Models.DTO.StudentsDTO
 {
     public class StudentSubmissionDTO
     {
-        public int StudentId { get; set; }
+        public Guid StudentId { get; set; }
         public string userName { get; set; }
         public string? LName { get; set; }
         public string email { get; set; }
-        public int TaskId { get; set; }
+        public Guid TaskId { get; set; }
         public string? description { get; set; }
         public string? pdfUrl { get; set; }
     }

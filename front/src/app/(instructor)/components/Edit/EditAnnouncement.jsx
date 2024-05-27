@@ -13,7 +13,7 @@ import { useRouter } from 'next/navigation'
 import TextArea from '../../../../component/input/TextArea.jsx';
 
 export default function EditAnnouncement({materialID, name, description, courseId }) {
-  const {userData}=useContext(UserContext);
+  const {userData, userToken}=useContext(UserContext);
 console.log(materialID)
 const router = useRouter();
 
@@ -45,6 +45,8 @@ const { data } = await axios.put(
  `http://localhost:5134/api/MaterialControllar/EditAnnouncement?id=${materialID}`,
   formData,
   {headers: {
+ 'Authorization':`Bearer ${userToken}`,
+
     'Content-Type': 'multipart/form-data','Content-Type': 'application/json',
   }}
 

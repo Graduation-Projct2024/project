@@ -10,7 +10,7 @@ namespace courseProject.Core.Models
 {
     public class Consultation
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string name { get; set; }
         public string description { get; set; }
 
@@ -25,14 +25,13 @@ namespace courseProject.Core.Models
          public TimeSpan Duration { get; set; }
         public DateTime dateOfAdded { get; set; } = DateTime.Now;
         [ForeignKey("Student")]
-        public int StudentId { get; set; }
+        public Guid StudentId { get; set; }
 
         [ForeignKey("Instructor")]
-        public int InstructorId { get; set; }
+        public Guid InstructorId { get; set; }
 
         public Student student { get; set; }
          public Instructor instructor { get; set; }
         public List<StudentConsultations> studentConsultations { get; set; }
-        public List<CourseMaterial> Materials { get; set; }
     }
 }

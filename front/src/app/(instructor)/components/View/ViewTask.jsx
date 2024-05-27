@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import Link from '@mui/material/Link';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -35,6 +35,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { UserContext } from '../../../../context/user/User.jsx';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -62,6 +63,7 @@ export default function ViewTask({ materialID , courseId}) {
   const router = useRouter();
  const [material, setMaterial]=useState(null);
  const [submission, setSubmission]=useState(null);
+ const {userToken, setUserToken, userData}=useContext(UserContext);
 
  const [loading ,setLoading]=useState(true);
  const [isEditing, setIsEditing] = useState(false);
@@ -85,26 +87,37 @@ export default function ViewTask({ materialID , courseId}) {
  };
 
  const getMaterial=async()=>{
-  const {data}= await axios.get(`http://localhost:5134/api/MaterialControllar/GetMaterialById?id=${materialID}`)
+  if(userToken){
+  const {data}= await axios.get(`http://localhost:5134/api/MaterialControllar/GetMaterialById?id=${materialID}`,
+  {headers :{Authorization:`Bearer ${userToken}`}}
+
+  )
 
 if(data.isSuccess==true){
   setMaterial(data.result);
   setLoading(false);
   console.log(data)
 }
-
+  }
  }
  const getSubmission=async()=>{
-  const {data}= await axios.get(`http://localhost:5134/api/Employee/GetAllSubmissionForTask?taskId=${materialID}`)
+  if(userToken){
+  const {data}= await axios.get(`http://localhost:5134/api/Employee/GetAllSubmissionForTask?taskId=${materialID}`,
+  {headers :{Authorization:`Bearer ${userToken}`}}
+
+  )
 
 if(data.isSuccess==true){
    setSubmission(data.result);
   console.log(data)
 }
-
+ }
  }
  const deleteMaterial=async()=>{
-  const {data}= await axios.delete(`http://localhost:5134/api/MaterialControllar/DeleteMaterial?id=${materialID}`)
+  const {data}= await axios.delete(`http://localhost:5134/api/MaterialControllar/DeleteMaterial?id=${materialID}`,
+  {headers :{Authorization:`Bearer ${userToken}`}}
+
+  )
   setOpenAlert(true);
   setOpen(false);
   router.back();
@@ -117,7 +130,7 @@ if(data.isSuccess==true){
     getMaterial();
     getSubmission();
   
-}, [materialID, isEditing]);
+}, [materialID, isEditing, userToken]);
 
 
   const style = {

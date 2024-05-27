@@ -6,7 +6,7 @@ namespace courseProject.Core.Models.DTO.EventsDTO
     public class EventDto
     {
 
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string name { get; set; }
 
         public string content { get; set; }
@@ -16,7 +16,7 @@ namespace courseProject.Core.Models.DTO.EventsDTO
         public string? dateOfEvent { get; set; }
 
 
-        public int SubAdminId { get; set; }
+        public Guid SubAdminId { get; set; }
 
         public string subAdminName { get; set; }
     }

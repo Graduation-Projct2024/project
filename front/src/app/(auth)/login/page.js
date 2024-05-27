@@ -81,7 +81,7 @@ export default function page() {
       if(data.result.user.role == "instructor") {
         router.push('/myDashboard');
         }
-        if(data.result.user.role == "main-subadmin") {
+        if(data.result.user.role == "Main-SubAdmin") {
           router.push('/dashboardM');
           }
     }

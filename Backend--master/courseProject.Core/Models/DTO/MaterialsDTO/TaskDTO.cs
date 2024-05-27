@@ -17,9 +17,10 @@ namespace courseProject.Core.Models.DTO.MaterialsDTO
         public string? description { get; set; }
 
         [NotMapped] public IFormFile pdf { get; set; }
+       // [NotMapped] public List<IFormFile> Listpdf { get; set; }
         public DateTime? DeadLine { get; set; }
-        public int? courseId { get; set; }
-        public int? consultationId { get; set; }
-        public int InstructorId { get; set; }
+        public Guid? courseId { get; set; }
+        public Guid? consultationId { get; set; }
+        public Guid InstructorId { get; set; }
     }
 }

@@ -9,9 +9,9 @@ namespace courseProject.Core.Models.DTO.CoursesDTO
     public class ViewTheRequestOfJoindCourseDTO
     {
         public string StudentName { get; set; }
-        public int StudentId { get; set; }
+        public Guid StudentId { get; set; }
         public string CourseName { get; set; }
-        public int courseId { get; set; }
+        public Guid courseId { get; set; }
         public string status { get; set; }
         public string EnrollDate { get; set; }
 

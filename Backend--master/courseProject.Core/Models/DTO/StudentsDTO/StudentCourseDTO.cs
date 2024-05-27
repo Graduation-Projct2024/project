@@ -10,7 +10,7 @@ namespace courseProject.Core.Models.DTO.StudentsDTO
 {
     public class StudentCourseDTO
     {
-        public int StudentId { get; set; }
-        public int courseId { get; set; }
+        public Guid StudentId { get; set; }
+        public Guid courseId { get; set; }
     }
 }

@@ -19,7 +19,7 @@ namespace courseProject.Repository.GenericRepository
             this.dbContext = dbContext;
         }
 
-        public async Task<CourseMaterial> GetMaterialByIdAsync(int id)
+        public async Task<CourseMaterial> GetMaterialByIdAsync(Guid id)
         {
            
                 return await dbContext.courseMaterials.FirstOrDefaultAsync(x => x.Id == id);
@@ -27,7 +27,7 @@ namespace courseProject.Repository.GenericRepository
             
         }
 
-        public async Task<IEnumerable<CourseMaterial>> GetAllMaterialInSameCourse(int courseId)
+        public async Task<IEnumerable<CourseMaterial>> GetAllMaterialInSameCourse(Guid courseId)
         {
             
                 return (IEnumerable<CourseMaterial>)

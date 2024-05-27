@@ -7,6 +7,10 @@ using courseProject.Repository.GenericRepository;
 using System.Net;
 using Microsoft.AspNetCore.Authorization;
 using courseProject.Core.Models.DTO.EventsDTO;
+using courseProject.Services.Courses;
+using courseProject.Services.Events;
+using Microsoft.AspNetCore.JsonPatch;
+using System.Linq.Expressions;
 
 namespace courseProject.Controllers
 {
@@ -17,13 +21,15 @@ namespace courseProject.Controllers
         private readonly IUnitOfWork unitOfWork;
         private readonly IGenericRepository1<Event> eventRepo;
         private readonly IMapper mapper;
+        private readonly IEventServices eventServices;
         private readonly ApiResponce responce;
 
-        public EventContraller(  IUnitOfWork unitOfWork,IGenericRepository1<Event> EventRepo , IMapper mapper)
+        public EventContraller(  IUnitOfWork unitOfWork,IGenericRepository1<Event> EventRepo , IMapper mapper , IEventServices eventServices)
         {
             this.unitOfWork = unitOfWork;
             eventRepo = EventRepo;
             this.mapper = mapper;
+            this.eventServices = eventServices;
             responce = new ApiResponce();
         }
 
@@ -31,21 +37,11 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult< ApiResponce>> GetAllEventsAsync([FromQuery] PaginationRequest paginationRequest)
+        //not try
+        public async Task<ActionResult< ApiResponce>> GetAllAccreditEventsAsync([FromQuery] PaginationRequest paginationRequest)
         {
-            var events = await eventRepo.GetAllEventsAsync();
-            if (events == null)
-            {
-                responce.StatusCode = HttpStatusCode.NoContent;
-                responce.ErrorMassages.Add("There is no accredit events yet");
-                return Ok(responce);
-                
-            }
-            events = events.OrderByDescending(x => x.dateOfAdded).ToList();
-            var mapperEvent = mapper.Map<IReadOnlyList<Event>, IReadOnlyList<EventDto>>(events);           
-            responce.IsSuccess = true;
-            responce.Result = (Pagination<EventDto>.CreateAsync(mapperEvent, paginationRequest.pageNumber, paginationRequest.pageSize)).Result;
-            return Ok(responce);
+            var events = await eventServices.GetAllAccreditEvents();
+            return Ok(new ApiResponce { Result = (Pagination<EventDto>.CreateAsync(events, paginationRequest.pageNumber, paginationRequest.pageSize)).Result });
         }
 
         [HttpGet("GetAllEventsToAdmin")]
@@ -53,87 +49,93 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "Admin")]
-        public async Task<ActionResult<ApiResponce>> GetAllEventsForAccreditAsync( [FromQuery] PaginationRequest paginationRequest)
+        //no try
+        public async Task<ActionResult<ApiResponce>> GetAllEventsToAccreditAsync([FromQuery] PaginationRequest paginationRequest)
         {
-            var events = await eventRepo.GetAllEventsForAccreditAsync();
-            if(events == null)
-            {
-                responce.StatusCode = HttpStatusCode.NoContent;
-                responce.ErrorMassages.Add("There is no events yet");
-                return Ok(responce); 
-            }
-
-            var mapperEvents = mapper.Map<IReadOnlyList<Event>, IReadOnlyList<EventAccreditDto>>(events);
-            responce.IsSuccess = true;
-            responce.Result = (Pagination<EventAccreditDto>.CreateAsync(mapperEvents, paginationRequest.pageNumber, paginationRequest.pageSize)).Result;
-            return Ok(responce);
+            var events = await eventServices.GetAllEventsToAccreditByAdmin();
+            return Ok( new ApiResponce { Result = (Pagination<EventAccreditDto>.CreateAsync(events, paginationRequest.pageNumber, paginationRequest.pageSize)).Result });
+            
         }
+
+
+
         [HttpGet("GetAllUndefinedEventsToSubAdmin")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "Main-SubAdmin , SubAdmin")]
-        public async Task<ActionResult<ApiResponce>> GetAllEvents(int subAdminId , [FromQuery] PaginationRequest paginationRequest)
+        //not try
+        public async Task<ActionResult<ApiResponce>> GetAllEvents(Guid subAdminId, [FromQuery] PaginationRequest paginationRequest)
         {
-            var events = await unitOfWork.eventRepository.GetAllUndefindEventBySubAdminIdAsync(subAdminId);
-            if(events == null)
-            {
-                responce.StatusCode = HttpStatusCode.NoContent;
-                responce.ErrorMassages.Add("There is no events yet");
-                return Ok(responce); 
-            }
-
-            var mapperEvents = mapper.Map<IReadOnlyList<Event>, IReadOnlyList<EventAccreditDto>>(events);
-            responce.IsSuccess = true;
-            responce.Result = (Pagination<EventAccreditDto>.CreateAsync(mapperEvents, paginationRequest.pageNumber, paginationRequest.pageSize)).Result;
-            return Ok(responce);
+            var events = await eventServices.GetAllUndefinedEvents(subAdminId);
+            return Ok(new ApiResponce { Result = (Pagination<EventAccreditDto>.CreateAsync(events, paginationRequest.pageNumber, paginationRequest.pageSize)).Result });
         }
 
 
-        [HttpPost("EditEvent")]
+        [HttpPost("CreateEvent")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize(Policy = "SubAdmin , Main-SubAdmin")]
+        public async Task<ActionResult<ApiResponce>> createEvent([FromForm] EventForCreateDTO model)
+        {
+
+            if (!model.GetType().GetProperties()
+                .Select(x => x.GetValue(model))
+                .Any(Value => Value != null))
+            {
+
+                responce.ErrorMassages =  "the inputs is null" ;
+                return NotFound(responce);
+            }
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(responce);
+            }
+
+            var EventMapped = mapper.Map<Event>(model);
+            var requestMapped = mapper.Map<Request>(model);
+
+            var createCourse = await eventServices.CreateEvent(EventMapped, requestMapped);
+            if (createCourse.IsError) return NotFound(new ApiResponce { ErrorMassages =  createCourse.FirstError.Description  });
+            return new ApiResponce { Result = "The Event Is Created Successfully" };
+            
+            }
+
+        [HttpPatch("accreditEvent")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        [Authorize(Policy = "Admin")]
+        public async Task<ActionResult<ApiResponce>> EditEventStatus(Guid eventId, string Status)
+        {
+            var updateStatus = await eventServices.accreditEvent(eventId, Status);
+            if (updateStatus.IsError) return NotFound(new ApiResponce
+            {
+                ErrorMassages =  updateStatus.FirstError.Description 
+            });
+            return Ok(new ApiResponce
+            {
+                Result = $"The Event is {Status}"
+            });
+        }
+
+
+        [HttpPut("EditEvent")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "Admin, Main-SubAdmin , SubAdmin")]
-        public async Task<ActionResult<ApiResponce>> EditEvent(int id, [FromForm] EventForEditDTO eventForEditDTO)
+       //nit try
+        public async Task<ActionResult<ApiResponce>> EditEvent(Guid id, [FromForm] EventForEditDTO eventForEditDTO)
         {
-            if (id <= 0)
-            {
-                responce.IsSuccess = false;
-                responce.StatusCode = HttpStatusCode.BadRequest;
-                responce.ErrorMassages = new List<string>() { "The Id is less or equal 0" };
-                return BadRequest(responce);
-            }
-            if (!ModelState.IsValid)
-            {
-                responce.IsSuccess = false;
-                responce.StatusCode = HttpStatusCode.BadRequest;
-                return BadRequest(responce);
-            }
-            var getEvent = await unitOfWork.eventRepository.GetEventByIdAsync(id);
-            if (getEvent == null)
-            {
-                responce.IsSuccess = false;
-                responce.StatusCode = HttpStatusCode.NotFound;
-                responce.ErrorMassages = new List<string>() { $"the Event with id = {id} is not found" };
-                return NotFound(responce);
-            }
-            mapper.Map(eventForEditDTO, getEvent);
-            if (eventForEditDTO.image != null)
-            {
-                getEvent.ImageUrl = "Files\\" + await unitOfWork.FileRepository.UploadFile1(eventForEditDTO.image);
-            }
-            await unitOfWork.SubAdminRepository.updateEvent(getEvent);
-            if (await unitOfWork.CourseRepository.saveAsync() > 0)
-            {
-                responce.IsSuccess = true;
-                responce.StatusCode = HttpStatusCode.OK;
-                responce.Result = getEvent;
-                return Ok(responce);
-            }
-            responce.IsSuccess = false;
-            responce.StatusCode = HttpStatusCode.BadRequest;
-            return BadRequest(responce);
+
+            
+            var editEvent = await eventServices.EditEvent(id, eventForEditDTO);
+            if (editEvent.IsError) return NotFound(new ApiResponce { ErrorMassages=editEvent.FirstError.Description});
+            return Ok(new ApiResponce { Result="The event is updated successfully"});                                                               
         }
 
     }

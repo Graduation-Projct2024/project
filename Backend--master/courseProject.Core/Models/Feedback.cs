@@ -14,7 +14,7 @@ namespace courseProject.Core.Models
        
             [Key]
             [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-            public int Id { get; set; }
+            public Guid Id { get; set; }
 
             public string content { get; set; }
             public DateTime dateOfAdded { get; set; } = DateTime.Now;
@@ -24,13 +24,13 @@ namespace courseProject.Core.Models
             public int? range { get; set; }
         [ForeignKey("Course")]
             [AllowNull]
-            public int? CourseId { get; set; }
+            public Guid? CourseId { get; set; }
 
             // public Instructor Instructor { get; set; }
             [ForeignKey("User , User")]
-            public int StudentId { get; set; }
+            public Guid StudentId { get; set; }
 
-            public int? InstructorId { get; set; }
+            public Guid? InstructorId { get; set; }
 
             public User User { get; set; }
             public Course course { get; set; }

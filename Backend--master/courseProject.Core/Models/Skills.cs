@@ -12,7 +12,7 @@ namespace courseProject.Core.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string name { get; set; }
         public DateTime TimeOfAdded { get; set; } = DateTime.Now;
         public List<InstructorSkills> instructorSkills { get; set; }

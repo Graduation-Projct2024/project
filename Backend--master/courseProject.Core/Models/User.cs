@@ -12,7 +12,7 @@ namespace courseProject.Core.Models
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
-        public int UserId { get; set; }
+        public Guid UserId { get; set; }
         public string userName { get; set; }
 
         
@@ -21,7 +21,7 @@ namespace courseProject.Core.Models
         public string email {  get; set; }
         public string password { get; set; }
         public string role { get; set; }
-        public bool IsVerified { get; set; } 
+        public bool IsVerified { get; set; }
         public Student student { get; set; }
 
         public Instructor instructor { get; set; }
@@ -29,7 +29,7 @@ namespace courseProject.Core.Models
         public Admin admin { get; set; }
         public SubAdmin subadmin { get; set; }
 
-        public List<General_Feedback> general_feedback { get; set; }
+       // public List<General_Feedback> general_feedback { get; set; }
         public List<Feedback> feedbacks { get; set; }
 
     }

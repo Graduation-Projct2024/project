@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using courseProject.Common;
 using courseProject.Controllers;
 using courseProject.core.Models;
 using courseProject.Core.Models;
@@ -10,10 +11,10 @@ namespace courseProject.MappingProfile
 {
     public class MappingForCourseInformation : Profile
     {
-        private Common.IsNotDefaultClassForMapping IsNotDefaultClass;
+      //  private Common.IsNotDefaultClassForMapping IsNotDefaultClass;
         public MappingForCourseInformation()
         {
-            IsNotDefaultClass = new Common.IsNotDefaultClassForMapping();
+            //IsNotDefaultClass = new Common.IsNotDefaultClassForMapping();
 
             CreateMap<Course, CourseInformationDto>()
                 .ForMember(x => x.InstructorName, o => o.MapFrom(y => y.Instructor.user.userName + " " + y.Instructor.LName))
@@ -53,7 +54,7 @@ namespace courseProject.MappingProfile
             CreateMap<CourseForEditDTO, Course>()
             //.ForAllMembers(opts => opts.Condition((src, dest, srcMember, destMember) => (srcMember != null || srcMember != 0)))
             .ForAllMembers(opts => opts.Condition((src, dest, srcMember, destMember) =>
-            IsNotDefaultClass.IsNotDefault(srcMember)));
+            IsNotDefaultClassForMapping .IsNotDefault(srcMember)));
             ;
 
 
@@ -82,10 +83,10 @@ namespace courseProject.MappingProfile
                 .ForMember(x => x.startDate, o => o.MapFrom(y => y.startDate.HasValue ? y.startDate.Value.ToString("dd/MM/yyyy" ) :null))
                 .ForMember(x => x.endDate, o => o.MapFrom(y => y.endDate.HasValue ? y.endDate.Value.ToString("dd/MM/yyyy") : null));
 
-            CreateMap<EditCourseAfterAccreditDTO, Course>()          
+            CreateMap<EditCourseAfterAccreditDTO, Course>()
            .ForAllMembers(opts => opts.Condition((src, dest, srcMember, destMember) =>
-           IsNotDefaultClass.IsNotDefault(srcMember)));
-            ;
+            IsNotDefaultClassForMapping.IsNotDefault(srcMember)));
+            
 
         }
     }

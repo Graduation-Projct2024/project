@@ -16,6 +16,10 @@ using Microsoft.AspNetCore.Authorization;
 using courseProject.Authentication;
 using courseProject.Authentication.EnrolledInCourse;
 using courseProject.Authentication.MaterialInEnrolledCourse;
+using FluentValidation.AspNetCore;
+using System.Reflection;
+using FluentValidation;
+using courseProject.Common;
 
 namespace courseProject
 {
@@ -46,24 +50,34 @@ namespace courseProject
 
             builder.Services
                    .AddApplication()
+                   .AddServices()
                    .AddInfrastucture(builder.Configuration)
                    .AddAuthenticationAndAuthorization(builder.Configuration);
 
 
             builder.Services.AddHttpClient();
 
-            
-              
-            
+            //validations 
+            //builder.Services.AddFluentValidation(
+            //    v =>
+            //    {
+            //        v.ImplicitlyValidateChildProperties = true;
+            //        v.ImplicitlyValidateRootCollectionElements = true;
+            //        v.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+            //    }            
+            //    );
+            builder.Services.AddFluentValidation();
+            builder.Services.AddValidatorsFromAssemblyContaining<IAssemblyMarker>();
+
 
             builder.Services.AddHttpContextAccessor();
-          //  builder.Services.AddScoped<IAuthorizationHandler, CombinedHandler>();
+         
 
             builder.Services.AddScoped<IAuthorizationHandler, GetMaterialForEnrolledCourseHandler>();
             builder.Services.AddScoped<IAuthorizationHandler, EnrolledInCourseHandler >();
 
            
-            //   builder.Services.AddScoped<IAuthorizationHandler, GiveTheCourseHandler>();
+          
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();

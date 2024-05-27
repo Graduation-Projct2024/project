@@ -22,6 +22,20 @@ namespace courseProject.Repository.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            var userId = Guid.NewGuid();
+            modelBuilder.Entity<User>().HasData(
+                         new User
+                          {
+                           UserId = userId,
+                           userName = "admin",
+                           email = "programming.academy24@gmail.com",
+                           password = "$2a$11$cCCo7VY/4sxtIpeWDUFDROiDL/QPhi8AtawQhx4RGqKMAYgk8UIse",
+                           role = "admin"
+                           });
+
+            modelBuilder.Entity<Admin>().HasData(
+                          new Admin { AdminId = userId }
+                         );
             modelBuilder.Entity<Instructor_Working_Hours>(
                 e =>
                 {
@@ -98,11 +112,7 @@ namespace courseProject.Repository.Data
                       .IsRequired(false);
             });
 
-            modelBuilder.Entity<CourseMaterial>(entity =>
-            {
-                entity.Property(e => e.courseId)
-                      .IsRequired(false);
-            });
+         
 
             modelBuilder.Entity<SubAdmin>()
            .Property(c => c.DateOfBirth)
@@ -171,9 +181,9 @@ namespace courseProject.Repository.Data
         public DbSet<CourseMaterial> courseMaterials { get; set; }
         public DbSet<StudentCourse> studentCourses { get; set; }
         public DbSet<Consultation> consultations { get; set; }
-        public DbSet<Course_Feedback> course_Feedbacks { get; set; }
-        public DbSet<Instructor_Feedback> instructor_Feedbacks { get; set; }
-        public DbSet<General_Feedback> general_Feedbacks { get; set; }
+       // public DbSet<Course_Feedback> course_Feedbacks { get; set; }
+       // public DbSet<Instructor_Feedback> instructor_Feedbacks { get; set; }
+        //public DbSet<General_Feedback> general_Feedbacks { get; set; }
         public DbSet<Student_Task_Submissions> Student_Task_Submissions { get; set; }
         public DbSet<Feedback> feedbacks { get; set; }
         public DbSet<StudentConsultations> StudentConsultations { get; set; }

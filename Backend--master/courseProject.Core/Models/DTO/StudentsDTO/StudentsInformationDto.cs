@@ -3,7 +3,7 @@
     public class StudentsInformationDto
     {
 
-        public int StudentId { get; set; }
+        public Guid StudentId { get; set; }
         public string userName { get; set; }
         public string? LName { get; set; }
         public string email { get; set; }

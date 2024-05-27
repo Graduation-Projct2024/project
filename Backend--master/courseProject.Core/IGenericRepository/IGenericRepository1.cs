@@ -18,8 +18,8 @@ namespace courseProject.Core.IGenericRepository
         Task<IReadOnlyList<T>> GetAllEventsAsync();
 
         Task<IReadOnlyList<T>> GetAllStudentsForContactAsync();
-        Task<IReadOnlyList<T>> GetAllEmployeeForContactAsync();
-        Task<T> GetEmployeeById(int id);
+       // Task<IReadOnlyList<T>> GetAllEmployeeForContactAsync();
+        Task<T> GetEmployeeById(Guid id);
 
         Task<IReadOnlyList<T>> GetAllCoursesForAccreditAsync();
         Task<IReadOnlyList<T>> GetAllEventsForAccreditAsync();
@@ -33,7 +33,7 @@ namespace courseProject.Core.IGenericRepository
         Task updateSubAdminAsync(T entity);
        
        // public Task<T> GetMaterialByIdAsync(int id);
-        public Task<T> ViewProfileAsync(int id, string role);
+        public Task<T> ViewProfileAsync(Guid id, string role);
         public Task<User> GetAdminId();
       
     }

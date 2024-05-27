@@ -21,7 +21,8 @@ export default function JoinCoursesRequests() {
       try{
       const { data } = await axios.get(`http://localhost:5134/api/Employee/GetAllRequestToJoinCourses?pageNumber=${pageNum}&pageSize=${pageSize}`,{headers :{Authorization:`Bearer ${userToken}`}});
       // setLoading(false)
-      // console.log(data.result);
+      console.log(data);
+
       setJoinCoursesReq(data.result.items);
       setTotalPages(data.result.totalPages);
     }
