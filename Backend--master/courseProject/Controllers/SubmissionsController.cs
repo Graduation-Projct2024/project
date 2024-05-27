@@ -28,7 +28,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        //yes [Authorize(Policy = "Instructor")]
+        [Authorize(Policy = "Instructor")]
         // not try
         public async Task<ActionResult<ApiResponce>> GetAllSubmissionUsingTaskId(Guid taskId, [FromQuery] PaginationRequest paginationRequest)
         {
@@ -43,7 +43,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        //yes [Authorize(Policy = "MaterialInEnrolledCourseForStudent")]
+        [Authorize(Policy = "MaterialInEnrolledCourseForStudent")]
         public async Task<ActionResult<ApiResponce>> AddTaskByStudent(Guid Studentid, Guid taskid, [FromForm] SubmissionsDTO submissions)
         {
             var addedTask = await submissionServices.AddTaskSubmission(Studentid, taskid, submissions);

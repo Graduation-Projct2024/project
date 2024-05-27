@@ -28,7 +28,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        //yes [Authorize(Policy ="Instructor")]
+        [Authorize(Policy ="Instructor")]
         public async Task<ActionResult<ApiResponce>> AddOfficeHours(Guid InstructorId, [FromForm] WorkingHourDTO _Working_Hours)
         {
 
@@ -46,7 +46,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-       //yes [Authorize]
+        [Authorize]
         public async Task<ActionResult<ApiResponce>> GetInstructorOfficeHourById(Guid Instructorid)
         {
 
@@ -61,7 +61,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        //yes [Authorize]
+        [Authorize]
         public async Task<ActionResult<ApiResponce>> GetInstructorsForDropDownList()
         {
             return Ok(new ApiResponce { Result=await instructorServices.GetAllInstructorsList()});
@@ -72,7 +72,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        //yes [Authorize]
+        [Authorize]
         public async Task<ActionResult<ApiResponce>> GetAllIinstructorsWithAllOfficeHours()
         {           
             return Ok(new ApiResponce {Result = await instructorServices.GetAllInstructorsOfficeHours() });
@@ -83,7 +83,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        //yes [Authorize(Policy ="Student")]
+        [Authorize(Policy ="Student")]
         public async Task<ActionResult<ApiResponce>> GetAListOfInstrcutorsForBookALectures(Guid skillId, string startTime, string endTime, DateTime date)
         {
             var getInstructors = await instructorServices.GetListOfInstructorForLectures(skillId, startTime, endTime, date);

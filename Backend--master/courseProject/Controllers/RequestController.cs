@@ -27,7 +27,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        //yes [Authorize(Policy = "MainSubAdmin")]
+        [Authorize(Policy = "MainSubAdmin")]
         //not try
         public async Task<ActionResult<ApiResponce>> GetAllRequestFromStudentsToJoinCourses([FromQuery] PaginationRequest paginationRequest)
         {
@@ -42,7 +42,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        //yes [Authorize(Policy = "Student")]
+        [Authorize(Policy = "Student")]
         //not try
         public async Task<IActionResult> RequestToCreateACustomCourse(Guid studentid, [FromForm] StudentCustomCourseDTO studentCustomCourse)
         {

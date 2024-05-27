@@ -28,7 +28,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        //yes [Authorize(Policy = "Student")]
+        [Authorize(Policy = "Student")]
         public async Task<ActionResult<ApiResponce>> EnrollInCourseAsync(StudentCourseDTO studentCourseDTO)
         {
             var enrolledCourse = await studentCoursesServices.EnrollInCourse(studentCourseDTO);
@@ -48,7 +48,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        //yes [Authorize(Policy = "MainSubAdmin")]
+        [Authorize(Policy = "MainSubAdmin")]
         public async Task<ActionResult<ApiResponce>> ApprovalForTheStudentToJoinTheCourse(Guid courseId, Guid studentId, string status)
         {
             var editedStatus = await studentCoursesServices.ApprovelToJoinCourse(courseId, studentId, status);

@@ -66,7 +66,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-       //yes [Authorize(Policy = "Student")]
+        [Authorize(Policy = "Student")]
 
         //this is to retrive all courses to students to enroll in
         public async Task<ActionResult<ApiResponce>> GetAllCoursesToStudent(Guid studentId, [FromQuery] PaginationRequest paginationRequest)
@@ -101,7 +101,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-       //yes [Authorize(Policy = "SubAdmin , Main-SubAdmin")]
+        [Authorize(Policy = "SubAdmin , Main-SubAdmin")]
 
         // a create course , created by subAdmin or main subAdmin
         public async Task<ActionResult<ApiResponce>> createCourse( CourseForCreateDTO model, Guid? StudentId)
@@ -126,7 +126,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-       //yes [Authorize(Policy = "Admin")]
+        [Authorize(Policy = "Admin")]
 
         // this to change the status of courses to reject or accredit
         public async Task<ActionResult<ApiResponce>> EditCourseStatus(Guid courseId, string Status)
@@ -183,7 +183,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-       //yes [Authorize(Policy = "SubAdmin , Main-SubAdmin")]
+        [Authorize(Policy = "SubAdmin , Main-SubAdmin")]
 
         // edit course by who created before the admin accredit or reject the course
         public async Task<ActionResult<ApiResponce>> EditCourseBeforeAccredit(Guid id,[FromForm] CourseForEditDTO course)
@@ -202,7 +202,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        //yes[Authorize(Policy = "SubAdmin , Main-SubAdmin")]
+        [Authorize(Policy = "SubAdmin , Main-SubAdmin")]
 
         // get all undefinded course created by a subAdmin depend on his id
         public async Task<ActionResult<ApiResponce>> GetALlUndefinedCoursesForSubAdmins(Guid subAdminId , [FromQuery] PaginationRequest paginationRequest)
@@ -217,7 +217,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        //yes [Authorize(Policy = "Admin , Instructor")]
+        [Authorize(Policy = "Admin , Instructor")]
         public async Task<ActionResult<ApiResponce>> GetAllCoursesByInstructorId(Guid Instructorid, [FromQuery] PaginationRequest paginationRequest)
         {
 
@@ -233,7 +233,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        //yes [Authorize(Policy = "Main-SubAdmin , Student")]
+        [Authorize(Policy = "Main-SubAdmin , Student")]
         // not try
         public async Task<ActionResult<ApiResponce>> GetAllCustomCoursesToMainSubAdmin([FromQuery] PaginationRequest paginationRequest)
         {
@@ -249,7 +249,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        //yes [Authorize(Policy = "Main-SubAdmin , Student")]
+        [Authorize(Policy = "Main-SubAdmin , Student")]
         //not try
         public async Task<ActionResult<ApiResponce>> GetCustomCourseById(Guid id)
         {
@@ -265,7 +265,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        //yes [Authorize(Policy = "Student")]
+        [Authorize(Policy = "Student")]
         public async Task<ActionResult<ApiResponce>> GetEnrolledCourses(Guid studentid, [FromQuery] PaginationRequest paginationRequest)
         {
 

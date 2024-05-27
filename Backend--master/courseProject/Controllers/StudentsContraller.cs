@@ -55,7 +55,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        //yes[Authorize(Policy = "Admin")]
+        [Authorize(Policy = "Admin")]
         //not try
 
         public async Task <ActionResult<ApiResponce>> GetAllStudentsAsync([FromQuery] PaginationRequest paginationRequest)
@@ -70,7 +70,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        //yes [Authorize(Policy = "Admin")]
+        [Authorize(Policy = "Admin")]
         public async Task<ActionResult<IReadOnlyList<Student>>> GetAllStudentsForContactAsync([FromQuery] PaginationRequest? paginationRequest)
         {
             var students = await studentServices.GetAllStudentsForContact();
@@ -95,7 +95,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        //yes [Authorize(Policy = "EnrolledInCourse")]
+        [Authorize(Policy = "EnrolledInCourse")]
         //not try
         public async Task<ActionResult<ApiResponce>> GetCourseParticipants(Guid Courseid, [FromQuery] PaginationRequest paginationRequest)
         {
