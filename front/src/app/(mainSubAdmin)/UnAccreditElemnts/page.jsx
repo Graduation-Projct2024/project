@@ -4,6 +4,7 @@ import Layout from '../MainSumAdminLayout/Layout'
 import UnAccreditCourses from './UnAccreditCourses/UnAccreditCourses'
 import '../../(admin)/dashboard/dashboard.css'
 import '../../../../node_modules/bootstrap/dist/js/bootstrap.bundle'
+import UnAccreditEvents from '@/app/(subadmin)/nonAccreditElemnts/UnAccreditEvents/UnAccreditEvents'
 
 export default function page() {
   return (
@@ -24,7 +25,7 @@ export default function page() {
       <UnAccreditCourses/>
     </div>
     <div className="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabIndex={0}>
-......
+<UnAccreditEvents/>
     </div>
     {/* <div className="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab" tabIndex={0}>
       ,,,,,

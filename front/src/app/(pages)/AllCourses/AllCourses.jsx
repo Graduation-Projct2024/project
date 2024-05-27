@@ -28,6 +28,9 @@ export default function AllCourses() {
   return (
     <>
         <div className="container">
+        <div className="pageTitle text-center py-5">
+        <h2 className='coursesPageTitle'>Courses in academy</h2>
+      </div>
           <div className="row">
           {courses.length ? (
             courses.map((course) => (

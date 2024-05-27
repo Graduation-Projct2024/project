@@ -62,7 +62,6 @@ formData.append("studentId", userData.userId);
   useEffect(() => {
     if(userData){
       setStudentId(userData.userId);
-
     }
     getCourses();
   }, [userData]);

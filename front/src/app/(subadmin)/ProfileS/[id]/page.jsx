@@ -53,7 +53,9 @@ const handleCloseUpdate = () => {
       }}
       
   }
+  
   console.log(user)
+
   useEffect(()=>{
       getUser();
   },[user,userData])

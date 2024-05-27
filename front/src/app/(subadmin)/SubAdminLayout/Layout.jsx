@@ -38,7 +38,7 @@ const drawerWidth = 240;
 function Layout(props) {
   const { window } = props;
   const { children, title } = props;
-  let { userToken, setUserToken ,userData,setUserData,userId} = React.useContext(UserContext);
+  let { userToken, setUserToken ,userData,setUserData,userId,setUserId} = React.useContext(UserContext);
 
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
@@ -86,6 +86,7 @@ function Layout(props) {
     localStorage.removeItem("userToken");
     setUserToken(null);
     setUserData(null);
+    setUserId(null);
     router.push("/login");
   };
   const handleDrawerTransitionEnd = () => {
