@@ -3,7 +3,7 @@ using courseProject.Core.Models.DTO.CoursesDTO;
 using FluentValidation;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace courseProject.Validations
+namespace courseProject.Validations.Courses
 {
     public class CreateCourseValidations : AbstractValidator<CourseForCreateDTO>
     {
@@ -36,10 +36,10 @@ namespace courseProject.Validations
             }
 
             var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
-            var extension = System.IO.Path.GetExtension(image.FileName).ToLower();
+            var extension = Path.GetExtension(image.FileName).ToLower();
 
             return allowedExtensions.Contains(extension);
         }
     }
-    }
+}
 

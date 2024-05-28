@@ -115,6 +115,7 @@ namespace courseProject.MappingProfile
                 .ForMember(x => x.userName, o => o.MapFrom(y => y.user.userName))
                 .ForMember(x => x.email, o => o.MapFrom(y => y.user.email))
                 .ForMember(x => x.role, o => o.MapFrom(y => y.user.role))
+                .ForMember(x=>x.skillDescription , o=>o.MapFrom(y=>y.user.instructor.skillDescription))
                 .ForMember(x => x.DateOfBirth, o => o.MapFrom(y => y.DateOfBirth.HasValue ? y.DateOfBirth.Value.ToString("dd/MM/yyyy") : null));
 
 

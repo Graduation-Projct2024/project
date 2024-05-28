@@ -35,6 +35,7 @@ namespace courseProject.Configuration
             services.AddScoped<IStudentServices, StudentServices>();
             services.AddScoped<ISubmissionServices, SubmissionServices>();
             services.AddScoped<IFeedbackServices, FeedbackServices>();
+          
 
             return services;
         }

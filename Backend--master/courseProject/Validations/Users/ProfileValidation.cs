@@ -1,7 +1,7 @@
 ﻿using courseProject.Core.Models.DTO.UsersDTO;
 using FluentValidation;
 
-namespace courseProject.Validations
+namespace courseProject.Validations.Users
 {
     public class ProfileValidation : AbstractValidator<ProfileDTO>
     {
@@ -15,7 +15,7 @@ namespace courseProject.Validations
 
 
 
-        private  bool HaveValidImageExtension(IFormFile image)
+        private bool HaveValidImageExtension(IFormFile image)
         {
             if (image == null || image.Length == 0)
             {
@@ -23,11 +23,11 @@ namespace courseProject.Validations
             }
 
             var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
-            var extension = System.IO.Path.GetExtension(image.FileName).ToLower();
+            var extension = Path.GetExtension(image.FileName).ToLower();
 
             return allowedExtensions.Contains(extension);
         }
 
     }
-    }
+}
 

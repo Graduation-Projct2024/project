@@ -15,5 +15,6 @@ namespace courseProject.Services.Instructors
         public Task<IReadOnlyList<EmployeeListDTO>> GetAllInstructorsList();
         public Task<IReadOnlyList<Instructor_OfficeHoursDTO>> GetAllInstructorsOfficeHours();
         public Task<ErrorOr<IReadOnlyList<EmployeeListDTO>>> GetListOfInstructorForLectures(Guid skillId, string startTime, string endTime, DateTime date);
+        public Task<ErrorOr<Updated>> AddSkillDescription(Guid instructorId , SkillDescriptionDTO skillDescription);
     }
 }

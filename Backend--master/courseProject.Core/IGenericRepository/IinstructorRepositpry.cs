@@ -29,5 +29,7 @@ namespace courseProject.Core.IGenericRepository
         public Task<IReadOnlyList<Instructor_Working_Hours>> getAListOfInstructorDependOnSkillsAndOfficeTime(Guid skillID, TimeSpan startTime, TimeSpan endTime, DateTime date );
         public Task<IReadOnlyList<Skills>> getAllInstructorSkills(Guid instructorId);
         public  Task removeInstructor(Instructor instructor);
+       
+
     }
 }

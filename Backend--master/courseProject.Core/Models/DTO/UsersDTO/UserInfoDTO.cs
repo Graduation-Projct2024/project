@@ -19,5 +19,6 @@ namespace courseProject.Core.Models.DTO.UsersDTO
         public string? gender { get; set; }
         public string? address { get; set; }
         public string? ImageUrl { get; set; }
+        public string? skillDescription { get; set; }
     }
 }

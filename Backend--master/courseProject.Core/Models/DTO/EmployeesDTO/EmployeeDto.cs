@@ -15,6 +15,7 @@
         public string? gender { get; set; }
 
         public string? address { get; set; }
+        public string? skillDescription { get; set; }
 
     }
 }
