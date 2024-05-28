@@ -132,7 +132,7 @@ const handleCloseUpdate = () => {
       <table className="table">
         <thead>
           <tr>
-            <th scope="col">ID</th>
+            <th scope="col">#</th>
             <th scope="col">Name</th>
             <th scope="col">Price</th>
             <th scope="col">Category</th>
@@ -146,9 +146,9 @@ const handleCloseUpdate = () => {
         </thead>
         <tbody>
           {filteredCoursesBeforeAccreditation.length ? (
-            filteredCoursesBeforeAccreditation.map((course) => (
+            filteredCoursesBeforeAccreditation.map((course,index) => (
               <tr key={course.id}>
-                <th scope="row">{course.id}</th>
+                <th scope="row">{++index}</th>
                 <td>{course.name}</td>
                 <td>{course.price}</td>
                 <td>{course.category}</td>
@@ -186,7 +186,7 @@ const handleCloseUpdate = () => {
    spacing={1}
    sx={{ justifyContent: 'center',  alignContent: 'center'}}
     >
-     <EditCourse id={course.id} name={course.name} price={course.price} category={course.category} InstructorId={course.instructorId} startDate={course.startDate} Deadline={course.Deadline} totalHours={course.totalHours} limitNumberOfStudnet={course.limitNumberOfStudnet} description={course.description} image={course.imageUrl} setOpenUpdate={setOpenUpdate} />
+     <EditCourse id={course.id} name={course.name} price={course.price} category={course.category} instructorId={course.instructorId} startDate={course.startDate} Deadline={course.Deadline} totalHours={course.totalHours} limitNumberOfStudnet={course.limitNumberOfStudnet} description={course.description} image={course.imageUrl} setOpenUpdate={setOpenUpdate} />
      </Stack>
         </DialogContent>
         <DialogActions>

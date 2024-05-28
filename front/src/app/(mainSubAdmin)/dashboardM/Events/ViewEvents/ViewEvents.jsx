@@ -34,7 +34,7 @@ export default function ViewEvents() {
       if(userData){
       try{
       const { data } = await axios.get(`https://localhost:7116/api/EventContraller/GetAllAccreditEvents?pageNumber=${pageNum}&pageSize=${pageSize}`);
-      console.log(data);
+      // console.log(data);
       setEvent(data.result.items);
       setTotalPages(data.result.totalPages);
     }

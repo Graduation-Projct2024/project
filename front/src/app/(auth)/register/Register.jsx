@@ -36,17 +36,14 @@ formData.append("confirmPassword", users.confirmPassword);
 formData.append("role", 'student');
 
 const { data } = await axios.post(
-  "http://localhost:5134/api/UserAuth/Register",
+  "https://localhost:7116/api/UserAuth/Register",
  formData,
  {headers: {
   'Content-Type': 'multipart/form-data','Content-Type': 'application/json',}}
 );
- if(data.isSuccess){
   console.log("test");
 //   formik.resetForm();
 setOpen(true);
-
-  }
   };
   const validationSchema = yup.object({
     userName: yup

@@ -16,7 +16,7 @@ import Layout from '@/app/(pages)/Layout/Layout';
 
 export default function page() {
   const [open, setOpen] = React.useState(false);
-
+  let [errmsg,setErrmsg] = useState()
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -60,8 +60,15 @@ export default function page() {
     const { data } = await axios.post(
       "https://localhost:7116/api/UserAuth/Login",
       users
+     
     );
-    console.log(data);
+     if(data.errorMassages != null){
+        setErrmsg(data.errorMassages)
+        
+        // console.log(data.errorMassages)
+      }
+      else{
+        console.log(data);
       setOpen(true);
       localStorage.setItem("userToken", data.result.token);
       setUserToken(data.result.token);
@@ -82,6 +89,8 @@ export default function page() {
         if(data.result.user.role == "main-subadmin") {
           router.push('/dashboardM');
           }
+      }
+    
   };
 
   const formik=useFormik(
@@ -140,6 +149,8 @@ export default function page() {
       <h1 className='pb-3'>Log In</h1>
       
         {renderInputs}
+        {/* {console.log(errmsg)} */}
+        
         <div className="text-center mt-3 loginActions">
               <button
                 className="m-2 btn "
@@ -150,6 +161,7 @@ export default function page() {
               </button>
               {/* <Link  to='/sendCode'>Forget Password?</Link> */}
             </div>
+            <p className='text-danger'>{errmsg}</p>
     </form>
   </div>
   <div className="toggle-container">

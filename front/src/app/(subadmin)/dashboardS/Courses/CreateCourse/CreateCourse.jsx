@@ -6,11 +6,23 @@ import { UserContext } from '@/context/user/User';
 import { Button } from '@mui/material';
 import axios from 'axios';
 import { useFormik } from 'formik';
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Swal from 'sweetalert2';
 
 export default function CreateCourse({setOpen}) {
   const {userToken, setUserToken, userData,userId}=useContext(UserContext);
+  let [instructors,setInstructors] = useState([]);
+  const [selectedIns, setSelectedIns] = useState('');
+  const fetchIns = async ()=>{
+    const {data} = await axios.get('https://localhost:7116/api/Instructor/GetAllInstructorsList',{headers :{Authorization:`Bearer ${userToken}`}});
+    // console.log(data)
+     setInstructors(data.result);
+  }
+  // console.log(instructors)
+
+  useEffect(() => {
+    fetchIns();
+  }, [instructors,userData]);
 
 
   const initialValues={
@@ -42,11 +54,11 @@ const onSubmit = async (values) => {
     formData.append('price', values.price);
     formData.append('category', values.category);
     formData.append('subAdminId', values.subAdminId);
-    formData.append('instructorId', values.instructorId);
     formData.append('startDate', values.startDate);
     formData.append('Deadline', values.Deadline);
     formData.append('limitNumberOfStudnet', values.limitNumberOfStudnet);
     formData.append('totalHours', values.totalHours);
+    formData.append('instructorId', selectedIns);
     //formData.append('image', values.image,values.image.name);
     if (values.image) {
       formData.append('image', values.image);
@@ -114,23 +126,6 @@ const inputs =[
       value:formik.values.limitNumberOfStudnet,
   },
 
-    
-  
-  {
-      type : 'text',
-      id:'subAdminId',
-      name:'subAdminId',
-      title:`SubAdmin Id`,
-      value:formik.values.subAdminId,
-      disabled: true,
-  },
-  {
-    type : 'text',
-    id:'instructorId',
-    name:'instructorId',
-    title:'Instructor Id',
-    value:formik.values.instructorId,
-},
 {
   type : 'date',
   id:'startDate',
@@ -160,6 +155,16 @@ const inputs =[
         title:'image',
         onChange:handleFieldChange,
     },
+      
+  {
+    type : 'text',
+    id:'subAdminId',
+    name:'subAdminId',
+    title:`SubAdmin Id`,
+    value:formik.values.subAdminId,
+    disabled: true,
+},
+
     {
       type : 'text',
       id:'description',
@@ -202,6 +207,25 @@ const renderInputs =  inputs.slice(0, -1).map((input,index)=>
     <form onSubmit={formik.handleSubmit} encType="multipart/form-data" >
       <div className="row justify-content-center">
           {renderInputs}
+          <div className="col-md-6">
+        <select
+          className="form-select p-3 primaryColor"
+          aria-label="Default select example"
+          value={selectedIns}
+          
+          onChange={(e) => {
+            formik.handleChange(e);
+            setSelectedIns(e.target.value);
+          }}
+        >
+          <option value="" disabled>
+            Select Instructor
+          </option>
+          {instructors.map((instructor) => (
+            <option key={instructor.id} value={instructor.id}>{instructor.name}</option>
+          ))}
+        </select>
+      </div> 
         {textAraeInput}
         
       </div>
