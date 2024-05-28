@@ -23,7 +23,7 @@ export default function page() {
   const fetchContacts = async (pageNum = pageNumber, pageSizeNum = pageSize) => {
     if(userData){
     try{
-    const { data } = await axios.get(`http://localhost:5134/api/Employee/GetAllEmployeeForContact?pageNumber=${pageNum}&pageSize=${pageSize}`,
+    const { data } = await axios.get(`https://localhost:7116/api/Employee/GetAllEmployeeForContact?pageNumber=${pageNum}&pageSize=${pageSize}`,
     {
         headers: {
             Authorization: `Bearer ${userToken}`,

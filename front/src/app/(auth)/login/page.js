@@ -58,12 +58,10 @@ export default function page() {
     console.log(users);
 
     const { data } = await axios.post(
-      "http://localhost:5134/api/UserAuth/Login",
+      "https://localhost:7116/api/UserAuth/Login",
       users
     );
     console.log(data);
-
-    if (data.isSuccess) {
       setOpen(true);
       localStorage.setItem("userToken", data.result.token);
       setUserToken(data.result.token);
@@ -81,10 +79,9 @@ export default function page() {
       if(data.result.user.role == "instructor") {
         router.push('/myDashboard');
         }
-        if(data.result.user.role == "Main-SubAdmin") {
+        if(data.result.user.role == "main-subadmin") {
           router.push('/dashboardM');
           }
-    }
   };
 
   const formik=useFormik(

@@ -40,7 +40,7 @@ const handleCloseUpdate = () => {
     if(userData){
     try {
       //setLoading(false)
-      const {data} = await axios.get(`http://localhost:5134/api/UserAuth/GetProfileInfo?id=${params.id}`,
+      const {data} = await axios.get(`https://localhost:7116/api/UserAuth/GetProfileInfo?id=${params.id}`,
       {headers :{Authorization:`Bearer ${userToken}`}}
       );
       if(data.isSuccess){

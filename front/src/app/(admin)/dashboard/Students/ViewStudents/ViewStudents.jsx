@@ -18,7 +18,7 @@ export default function ViewStudents() {
   const fetchStudents =  async (pageNum = pageNumber, pageSizeNum = pageSize) => {
     if(userData){
     try{
-    const { data } = await axios.get(`http://localhost:5134/api/StudentsContraller?pageNumber=${pageNum}&pageSize=${pageSize}`,{ headers: { Authorization: `Bearer ${userToken}` } });
+    const { data } = await axios.get(`https://localhost:7116/api/StudentsContraller/GetAllStudents?pageNumber=${pageNum}&pageSize=${pageSize}`,{ headers: { Authorization: `Bearer ${userToken}` } });
     //console.log(data);
     setStudents(data.result.items);
     setTotalPages(data.result.totalPages);

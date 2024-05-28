@@ -20,7 +20,7 @@ export default function CustomCoursesRequest() {
     const fetchRequestsForCustomCourses = async (pageNum = pageNumber, pageSizeNum = pageSize) => {
       if(userData){
       try{
-      const { data } = await axios.get(`http://localhost:5134/api/Employee/GetAllCustomCourses?pageNumber=${pageNum}&pageSize=${pageSize}`,{headers :{Authorization:`Bearer ${userToken}`}});
+      const { data } = await axios.get(`https://localhost:7116/api/CourseContraller/GetAllCustomCourses?pageNumber=${pageNum}&pageSize=${pageSize}`,{headers :{Authorization:`Bearer ${userToken}`}});
       // setLoading(false)
       // console.log(data.result);
       setCustomCourses(data.result.items);

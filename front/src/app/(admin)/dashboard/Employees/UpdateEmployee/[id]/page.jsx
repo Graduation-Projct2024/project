@@ -41,8 +41,7 @@ export default function UpdateEmployee({id , fName , lName , email, gender, phon
         // formData.append('role', users.role);
         formData.append('gender', selectedGender); // Use selectedGender from state
 
-        const {data} = await axios.put(`http://localhost:5134/api/Employee/UpdateEmployeeFromAdmin?id=${id}`, formData, { headers: { Authorization: `Bearer ${userToken}` } });
-        if(data.isSuccess){
+        const {data} = await axios.put(`https://localhost:7116/api/Employee/UpdateEmployeeFromAdmin?id=${id}`, formData, { headers: { Authorization: `Bearer ${userToken}` } });
             formik.resetForm();
             setOpenUpdate(false);
             Swal.fire({
@@ -51,7 +50,6 @@ export default function UpdateEmployee({id , fName , lName , email, gender, phon
                 icon: "success"
               });
             
-        }
 
       } catch (error) {
         console.error('Error updating employee:', error);

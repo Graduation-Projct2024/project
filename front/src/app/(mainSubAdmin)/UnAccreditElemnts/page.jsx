@@ -1,10 +1,10 @@
 'use client'
 import React from 'react'
 import Layout from '../MainSumAdminLayout/Layout'
-import UnAccreditCourses from './UnAccreditCourses/UnAccreditCourses'
 import '../../(admin)/dashboard/dashboard.css'
 import '../../../../node_modules/bootstrap/dist/js/bootstrap.bundle'
 import UnAccreditEvents from '@/app/(subadmin)/nonAccreditElemnts/UnAccreditEvents/UnAccreditEvents'
+import UnAccreditCourses from '@/app/(subadmin)/nonAccreditElemnts/UnAccreditCourses/UnAccreditCourses'
 
 export default function page() {
   return (

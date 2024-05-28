@@ -36,7 +36,7 @@ export default function EditCourse({courseId , startDate , Deadline , Instructor
           formData.append('image', updatedData.image);
         }
 
-        const { data } = await axios.put(`http://localhost:5134/api/Admin/EditOnCourseAfterAccredit?courseId=${courseId}`, formData, { headers: { Authorization: `Bearer ${userToken}` } });
+        const { data } = await axios.put(`https://localhost:7116/api/CourseContraller/EditOnCourseAfterAccredit?courseId=${courseId}`, formData, { headers: { Authorization: `Bearer ${userToken}` } });
         if (data.isSuccess) {
           formik.resetForm();
           setOpenUpdate(false);

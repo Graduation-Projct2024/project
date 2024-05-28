@@ -20,7 +20,7 @@ export default function AccreditEvents() {
     if(userData){
     
     try{
-    const { data } = await axios.get(`http://localhost:5134/api/EventContraller/GetAllUndefinedEvents?pageNumber=${pageNum}&pageSize=${pageSize}`,{
+    const { data } = await axios.get(`https://localhost:7116/api/EventContraller/GetAllEventsToAdmin?pageNumber=${pageNum}&pageSize=${pageSize}`,{
       headers: {
           Authorization: `Bearer ${userToken}`,
       },
@@ -81,7 +81,7 @@ export default function AccreditEvents() {
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
-            const { data } = await axios.patch(`http://localhost:5134/api/CourseContraller/accreditEvent?eventId=${eventId}&Status=${Status}`, {},
+            const { data } = await axios.patch(`https://localhost:7116/api/EventContraller/accreditEvent?eventId=${eventId}&Status=${Status}`, {},
               {
                 headers: {
                   Authorization: `Bearer ${userToken}`,

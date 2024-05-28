@@ -19,7 +19,7 @@ export default function JoinCoursesRequests() {
     const fetchRequestsForJoinCourses = async (pageNum = pageNumber, pageSizeNum = pageSize) => {
       if(userData){
       try{
-      const { data } = await axios.get(`http://localhost:5134/api/Employee/GetAllRequestToJoinCourses?pageNumber=${pageNum}&pageSize=${pageSize}`,{headers :{Authorization:`Bearer ${userToken}`}});
+      const { data } = await axios.get(`https://localhost:7116/api/Request/GetAllRequestToJoinCourses?pageNumber=${pageNum}&pageSize=${pageSize}`,{headers :{Authorization:`Bearer ${userToken}`}});
       // setLoading(false)
       console.log(data);
 
@@ -81,7 +81,7 @@ export default function JoinCoursesRequests() {
         }).then(async (result) => {
           if (result.isConfirmed) {
             try {
-              const { data } = await axios.patch(`http://localhost:5134/api/StudentsContraller/ApprovelToJoin?courseId=${courseId}&studentId=${studentId}&status=${status}`, {},
+              const { data } = await axios.patch(`https://localhost:7116/api/StudentCourse/ApprovelToJoin?courseId=${courseId}&studentId=${studentId}&status=${status}`, {},
                 {
                   headers: {
                     Authorization: `Bearer ${userToken}`,

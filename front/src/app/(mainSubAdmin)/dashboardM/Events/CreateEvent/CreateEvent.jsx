@@ -38,7 +38,7 @@ const onSubmit = async (values) => {
       formData.append('image', values.image);
     }
 
-    const { data } = await axios.post('http://localhost:5134/api/CourseContraller/CreateEvent', formData,{headers :{Authorization:`Bearer ${userToken}`}});
+    const { data } = await axios.post('https://localhost:7116/api/EventContraller/CreateEvent', formData,{headers :{Authorization:`Bearer ${userToken}`}});
     
    if(data.isSuccess){
     
@@ -92,7 +92,7 @@ const inputs =[
       type : 'number',
       id:'SubAdminId',
       name:'SubAdminId',
-      title:`SubAdmin Id: ${userId}`,
+      title:`SubAdmin Id`,
       value:formik.values.SubAdminId,
       disabled: true,
   },

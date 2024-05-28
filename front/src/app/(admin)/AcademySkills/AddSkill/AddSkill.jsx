@@ -18,14 +18,13 @@ export default function AddSkill({setOpen}) {
         if(userData){
           try {
             const { data } = await axios.post(
-                `http://localhost:5134/api/Admin/AddSkillOptionsByAdmin?skillName=${values.skillName}`,
+                `https://localhost:7116/api/Skill/AddSkillOptionsByAdmin?skillName=${values.skillName}`,
                 {},
                 {
                     headers: {
                         Authorization: `Bearer ${userToken}`,
                     },
                 });
-           if(data.isSuccess){
             //console.log(data);
             formik.resetForm();
             setOpen(false);      
@@ -34,8 +33,7 @@ export default function AddSkill({setOpen}) {
               text: "Check AcademySkills page to see it",
               icon: "success"
             });
-        }
-      
+        
           } catch (error) {
             console.error('Error submitting form:', error);
             console.log('Error response:', error.response);

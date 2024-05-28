@@ -16,8 +16,7 @@ export default function ChangeRole({userId ,   role,    setOpenChange}) {
             try {
        
   
-        const { data } = await axios.put(`http://localhost:5134/api/Employee/EditroleBetweenSubAdmin&MainSubAdmin?userId=${userId}&role=${selectedRole}`,{},{headers :{Authorization:`Bearer ${userToken}`}},);
-        if (data.isSuccess) {
+        const { data } = await axios.patch(`https://localhost:7116/api/Employee/EditroleBetweenSubAdmin&MainSubAdmin?userId=${userId}&role=${selectedRole}`,{},{headers :{Authorization:`Bearer ${userToken}`}},);
           console.log('Profile Updated');
           formik.resetForm();
           setOpenChange(false);
@@ -26,7 +25,6 @@ export default function ChangeRole({userId ,   role,    setOpenChange}) {
             text: `Role changed to ${selectedRole}`,
             icon: "success"
           });
-        }
       } catch (error) {
         console.error('Error updating employee:', error);
       }}

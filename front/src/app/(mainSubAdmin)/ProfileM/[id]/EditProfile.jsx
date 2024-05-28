@@ -233,7 +233,7 @@ export default function EditProfile({ id, FName, LName, gender, phoneNumber, Dat
         formData.append('image', updatedData.image);
       }
 
-      const { data } = await axios.put(`http://localhost:5134/api/UserAuth/EditProfile?id=${id}`, formData,{headers :{Authorization:`Bearer ${userToken}`}},);
+      const { data } = await axios.put(`https://localhost:7116/api/UserAuth/EditProfile?id=${id}`, formData,{headers :{Authorization:`Bearer ${userToken}`}},);
       if (data.isSuccess) {
         console.log('Profile Updated');
         formik.resetForm();

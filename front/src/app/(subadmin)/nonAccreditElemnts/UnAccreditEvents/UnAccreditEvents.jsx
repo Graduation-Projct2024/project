@@ -34,7 +34,7 @@ export default function UnAccreditEvents() {
       if (userData) {
         try {
           const { data } = await axios.get(
-            `http://localhost:5134/api/EventContraller/GetAllUndefinedEventsToSubAdmin?subAdminId=${userId}&pageNumber=${pageNum}&pageSize=${pageSize}`,{
+            `https://localhost:7116/api/EventContraller/GetAllUndefinedEventsToSubAdmin?subAdminId=${userId}&pageNumber=${pageNum}&pageSize=${pageSize}`,{
               headers: {
                   Authorization: `Bearer ${userToken}`,
               },

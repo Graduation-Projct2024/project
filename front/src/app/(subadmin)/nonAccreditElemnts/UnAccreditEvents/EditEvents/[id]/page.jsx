@@ -35,8 +35,7 @@ export default function EditEvent({id   , name   , category    ,dateOfEvent   , 
           formData.append('image', updatedData.image);
         }
 
-        const { data } = await axios.post(`http://localhost:5134/api/EventContraller/EditEvent?id=${id}`, formData, { headers: { Authorization: `Bearer ${userToken}` } });
-        if (data.isSuccess) {
+        const { data } = await axios.put(`https://localhost:7116/api/EventContraller/EditEvent?id=${id}`, formData, { headers: { Authorization: `Bearer ${userToken}` } });
           formik.resetForm();
           setOpenUpdate(false);
           Swal.fire({
@@ -44,7 +43,6 @@ export default function EditEvent({id   , name   , category    ,dateOfEvent   , 
             text: "You can see the data updated in Events page",
             icon: "success"
           });
-        }
       } catch (error) {
         console.error('Error updating Course:', error);
       }
