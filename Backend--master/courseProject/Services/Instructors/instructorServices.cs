@@ -14,13 +14,13 @@ namespace courseProject.Services.Instructors
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
-        private readonly CommonClass commonClass;
+        
 
         public instructorServices(IUnitOfWork unitOfWork , IMapper mapper)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
-            commonClass = new CommonClass();
+         
         }
 
        
@@ -46,7 +46,7 @@ namespace courseProject.Services.Instructors
             if (!CommonClass.IsValidTimeFormat(_Working_Hours.startTime) || !CommonClass.IsValidTimeFormat(_Working_Hours.endTime))
                 return ErrorInstructor.InvalidTime;
             var OfficeHourMapper = mapper.Map<WorkingHourDTO, Instructor_Working_Hours>(_Working_Hours);
-            if (!commonClass.CheckStartAndEndTime(OfficeHourMapper.startTime, OfficeHourMapper.endTime))
+            if (!CommonClass.CheckStartAndEndTime(OfficeHourMapper.startTime, OfficeHourMapper.endTime))
                 return ErrorInstructor.InvalidTime;
             OfficeHourMapper.InstructorId = InstructorId;
             await unitOfWork.instructorRepositpry.AddOfficeHoursAsync(OfficeHourMapper);

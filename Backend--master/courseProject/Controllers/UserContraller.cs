@@ -32,7 +32,7 @@ namespace courseProject.Controllers
         private readonly IMapper mapper;
         private readonly projectDbContext dbContext;
         protected ApiResponce response;
-        private Common.CommonClass CommonClass;
+   
         private readonly IMemoryCache memoryCache;
         private readonly IUserServices userServices;
 
@@ -43,7 +43,7 @@ namespace courseProject.Controllers
             this.mapper = mapper;
             this.dbContext = dbContext;
             this.response = new();
-            CommonClass = new Common.CommonClass();
+       
             this.memoryCache = memoryCache;
             this.userServices = userServices;
         }

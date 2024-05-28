@@ -15,13 +15,13 @@ namespace courseProject.Services.Lectures
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
-        private readonly CommonClass commonClass;
+       
 
         public LectureServices(IUnitOfWork unitOfWork , IMapper mapper)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
-            commonClass= new CommonClass();
+       
         }
 
        

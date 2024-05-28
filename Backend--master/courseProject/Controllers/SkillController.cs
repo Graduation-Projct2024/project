@@ -20,14 +20,14 @@ namespace courseProject.Controllers
         private readonly IMapper mapper;
         private readonly ISkillsServices skillsServices;
         private readonly ApiResponce response;
-        private readonly CommonClass CommonClass;
+        
 
         public SkillController(IMapper mapper , ISkillsServices skillsServices)
         {
             this.mapper = mapper;
             this.skillsServices = skillsServices;
             response=new ApiResponce();
-            CommonClass = new CommonClass();
+           
         }
 
 

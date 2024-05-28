@@ -38,13 +38,13 @@ namespace courseProject.MappingProfile
                 .ForMember(x => x.userName, o => o.MapFrom(y => y.user.userName))
                 .ForMember(x => x.email, o => o.MapFrom(y => y.user.email))
                 .ForMember(x => x.role, o => o.MapFrom(y => y.user.role))
-                .ForMember(x => x.ImageUrl, o => o.MapFrom(y => $"http://localhost:5134/{y.ImageUrl}"));
+                .ForMember(x => x.ImageUrl, o => o.MapFrom(y => $"http://localhost:7116/{y.ImageUrl}"));
 
             CreateMap<Instructor, ContactDto>()
                 .ForMember(x => x.userName, o => o.MapFrom(y => y.user.userName))
                 .ForMember(x => x.email, o => o.MapFrom(y => y.user.email))
                 .ForMember(x => x.role, o => o.MapFrom(y => y.user.role))
-                .ForMember(x => x.ImageUrl, o => o.MapFrom(y => $"http://localhost:5134/{y.ImageUrl}"));
+                .ForMember(x => x.ImageUrl, o => o.MapFrom(y => $"http://localhost:7116/{y.ImageUrl}"));
 
            // CreateMap<RegistrationRequestDTO, SubAdmin>();
             CreateMap<EmployeeForCreate, User>()

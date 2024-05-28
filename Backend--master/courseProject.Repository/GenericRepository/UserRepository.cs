@@ -154,7 +154,7 @@ namespace courseProject.Repository.GenericRepository
 
         public async Task UpdateUser(User user)
         {
-            dbContext.users.Update(user);
+            dbContext.Entry(user).State = EntityState.Modified;
         }
     }
 }

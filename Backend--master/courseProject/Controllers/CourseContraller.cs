@@ -33,7 +33,7 @@ namespace courseProject.Controllers
         private readonly IGenericRepository1<Request> requestRepo;
         private readonly IMapper mapper;
         protected ApiResponce responce;
-        private Common.CommonClass CommonClass;
+
         //  private Request request;
 
         public CourseContraller(ICourseServices courseServices, IUnitOfWork unitOfWork, projectDbContext dbContext, IGenericRepository1<Course> CourseRepo, IGenericRepository1<Request> RequestRepo, IMapper mapper)
@@ -45,7 +45,7 @@ namespace courseProject.Controllers
             requestRepo = RequestRepo;
             this.mapper = mapper;
             responce = new ApiResponce();
-            CommonClass = new Common.CommonClass();
+        
         }
 
         [HttpGet("GetAllAccreditCourses")]
