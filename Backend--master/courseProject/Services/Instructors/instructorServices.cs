@@ -97,5 +97,16 @@ namespace courseProject.Services.Instructors
             return instructorMapper.ToErrorOr();
             
         }
+
+        public async Task<ErrorOr<Updated>> AddSkillDescription(Guid instructorId, SkillDescriptionDTO skillDescriptionDTO)
+        {
+            var instructor = await unitOfWork.instructorRepositpry.getInstructorByIdAsync(instructorId);
+            if (instructor == null) return ErrorInstructor.NotFound;
+
+            instructor.skillDescription = skillDescriptionDTO.skillDescription;
+            await unitOfWork.instructorRepositpry.updateSubAdminAsync(instructor);
+            await unitOfWork.instructorRepositpry.saveAsync();
+            return Result.Updated;
+        }
     }
 }

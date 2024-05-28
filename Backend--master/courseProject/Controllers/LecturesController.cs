@@ -74,7 +74,7 @@ namespace courseProject.Controllers
         }
 
 
-        [HttpPost("GetAllConsultations")]
+        [HttpGet("GetAllConsultations")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
@@ -88,7 +88,7 @@ namespace courseProject.Controllers
 
 
 
-        [HttpPost("GetConsultationById")]
+        [HttpGet("GetConsultationById")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]

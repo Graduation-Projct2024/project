@@ -52,7 +52,7 @@ namespace courseProject.Controllers
         [Authorize]
         public IActionResult GetUserIdFromToken()
         {
-            var Id = ( HttpContext.User.FindFirstValue("UserId"));          
+            var Id = HttpContext.User.FindFirstValue("UserId");          
             if (Id==null)
             {
                 return Unauthorized("User ID not found in token");
@@ -83,14 +83,7 @@ namespace courseProject.Controllers
             return Ok(new ApiResponce { Result = "You have been registered successfully" });
         }
             
-                
-
-
-
-
-
-            
-        
+                    
 
         [HttpPost("addCode")]
         [ProducesResponseType(200)]
