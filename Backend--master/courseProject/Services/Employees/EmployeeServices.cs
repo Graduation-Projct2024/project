@@ -114,22 +114,24 @@ namespace courseProject.Services.Employees
                 return ErrorInstructor.NotFound;
             using (var transaction = await unitOfWork.SubAdminRepository.BeginTransactionAsync())
             {
-
+               // unitOfWork.UserRepository.DetachEntity(UserToUpdate);
                 var userMapper = mapper.Map(employee, UserToUpdate);
                 userMapper.UserId = employeeId;
                 userMapper.role = UserToUpdate.role;
                 userMapper.password = UserToUpdate.password;
 
 
-                await unitOfWork.UserRepository.updateSubAdminAsync(userMapper);
+                await unitOfWork.UserRepository.UpdateUser(userMapper);
                     var success1 = await unitOfWork.UserRepository.saveAsync();
                     var success2 = 0;
                     SubAdmin? Subadminmapper = null;
                     Instructor? Instructormapper = null;
                     if (UserToUpdate.role.ToLower() == "subadmin" || UserToUpdate.role.ToLower() == "main-subadmin")
                     {
+                    // Detach existing SubAdmin entity
+                  //  unitOfWork.SubAdminRepository.DetachEntity(subAdminToUpdate);
 
-                        Subadminmapper = mapper.Map<EmployeeForUpdateDTO, SubAdmin>(employee);
+                    Subadminmapper = mapper.Map<EmployeeForUpdateDTO, SubAdmin>(employee);
                         Subadminmapper.SubAdminId = subAdminToUpdate.SubAdminId;
                         await unitOfWork.SubAdminRepository.updateSubAdminAsync(Subadminmapper);
 
@@ -138,7 +140,9 @@ namespace courseProject.Services.Employees
 
                     if (UserToUpdate.role.ToLower() == "instructor")
                     {
-                        Instructormapper = mapper.Map(employee, instructorToUpdate);
+                    // Detach existing Instructor entity
+                 //   unitOfWork.instructorRepositpry.DetachEntity(instructorToUpdate);
+                    Instructormapper = mapper.Map(employee, instructorToUpdate);
                         Instructormapper.InstructorId = instructorToUpdate.InstructorId;
                         await unitOfWork.instructorRepositpry.updateSubAdminAsync(Instructormapper);
 

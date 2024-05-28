@@ -21,8 +21,8 @@ namespace courseProject.MappingProfile
                 .ForMember(x => x.SubAdminName, o => o.MapFrom(y => y.SubAdmin.user.userName + " " + y.SubAdmin.LName))
                 .ForMember(x => x.startDate, o => o.MapFrom(y => y.startDate.HasValue ? y.startDate.Value.ToString("dd/MM/yyyy") : null))
                 .ForMember(x => x.endDate, o => o.MapFrom(y => y.endDate.HasValue ? y.endDate.Value.ToString("dd/MM/yyyy") : null))
-                .ForMember(x => x.Deadline, o => o.MapFrom(y => y.Deadline.HasValue ? y.Deadline.Value.ToString("dd/MM/yyyy") : null))
-                .ForMember(x => x.ImageUrl, o => o.MapFrom(y => $"http://localhost:5134/{y.ImageUrl}"));
+                .ForMember(x => x.Deadline, o => o.MapFrom(y => y.Deadline.HasValue ? y.Deadline.Value.ToString("dd/MM/yyyy") : null));
+                //.ForMember(x => x.ImageUrl, o => o.MapFrom(y => $"http://localhost:5134/{y.ImageUrl}"));
                 
 
             CreateMap<Course, CourseInfoForStudentsDTO>()
@@ -30,7 +30,7 @@ namespace courseProject.MappingProfile
                 .ForMember(x => x.SubAdminName, o => o.MapFrom(y => y.SubAdmin.user.userName + " " + y.Instructor.LName))
                 .ForMember(x => x.startDate, o => o.MapFrom(y => y.startDate.HasValue ? y.startDate.Value.ToString("dd/MM/yyyy") : null))
                 .ForMember(x => x.endDate, o => o.MapFrom(y => y.endDate.HasValue ? y.endDate.Value.ToString("dd/MM/yyyy") : null))
-                .ForMember(x => x.ImageUrl, o => o.MapFrom(y => $"http://localhost:5134/{y.ImageUrl}"))
+               // .ForMember(x => x.ImageUrl, o => o.MapFrom(y => $"http://localhost:5134/{y.ImageUrl}"))
                 .ForMember(x => x.isEnrolled, o => o.MapFrom(y => y.studentCourses.Any(x => x.isEnrolled)));
 
             CreateMap<Course, CourseAccreditDTO>()
@@ -38,7 +38,9 @@ namespace courseProject.MappingProfile
                 .ForMember(x => x.SubAdminLName, o => o.MapFrom(y => y.SubAdmin.LName))
                 .ForMember(x => x.InstructorFName, o => o.MapFrom(y => y.Instructor.user.userName))
                 .ForMember(x => x.InstructorLName, o => o.MapFrom(y => y.Instructor.LName))
-                .ForMember(x => x.ImageUrl, o => o.MapFrom(y => $"http://localhost:5134/{y.ImageUrl}"));
+                .ForMember(x => x.endDate, o => o.MapFrom(y => y.endDate.HasValue ? y.endDate.Value.ToString("dd/MM/yyyy") : null))
+                .ForMember(x => x.startDate, o => o.MapFrom(y => y.startDate.HasValue ? y.startDate.Value.ToString("dd/MM/yyyy") : null));
+                //.ForMember(x => x.ImageUrl, o => o.MapFrom(y => $"http://localhost:5134/{y.ImageUrl}"));
 
 
             CreateMap<CourseForCreateDTO, Course>();
@@ -63,12 +65,12 @@ namespace courseProject.MappingProfile
             CreateMap<FileDTO, CourseMaterial>();
             CreateMap<AnnouncementDTO, CourseMaterial>();
             CreateMap<LinkDTO, CourseMaterial>();
-            CreateMap<CourseMaterial, TaskForRetriveDTO>()
-                .ForMember(x => x.pdfUrl, o => o.MapFrom(y => $"http://localhost:5134/{y.pdfUrl}"));
-            CreateMap<CourseMaterial, FileForRetriveDTO>()
-                .ForMember(x => x.pdfUrl, o => o.MapFrom(y => $"http://localhost:5134/{y.pdfUrl}"));
-            CreateMap<CourseMaterial, AnnouncementForRetriveDTO>();
-            CreateMap<CourseMaterial, LinkForRetriveDTO>();
+         //   CreateMap<CourseMaterial, TaskForRetriveDTO>();
+            //  .ForMember(x => x.pdfUrl, o => o.MapFrom(y => $"http://localhost:5134/{y.pdfUrl}"));
+           // CreateMap<CourseMaterial, FileForRetriveDTO>();
+              //  .ForMember(x => x.pdfUrl, o => o.MapFrom(y => $"http://localhost:5134/{y.pdfUrl}"));
+           /// CreateMap<CourseMaterial, AnnouncementForRetriveDTO>();
+            //CreateMap<CourseMaterial, LinkForRetriveDTO>();
             //  .ForMember(x=>x.pdf , o=>o.MapFrom(y=>y.pdfUrl));
 
 

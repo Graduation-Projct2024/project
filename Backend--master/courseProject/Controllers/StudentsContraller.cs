@@ -36,7 +36,7 @@ namespace courseProject.Controllers
         private readonly IStudentServices studentServices;
         private readonly IStudentCoursesServices studentCoursesServices;
         protected ApiResponce response;
-        private Common.CommonClass CommonClass;
+        
 
         public StudentsContraller(IUnitOfWork unitOfWork, IGenericRepository1<Student> StudentRepo , IMapper mapper , IStudentServices studentServices
            )
@@ -47,7 +47,7 @@ namespace courseProject.Controllers
             this.studentServices = studentServices;
             this.studentCoursesServices = studentCoursesServices;
             response =new ApiResponce();
-            CommonClass = new Common.CommonClass();
+            
         }
 
 

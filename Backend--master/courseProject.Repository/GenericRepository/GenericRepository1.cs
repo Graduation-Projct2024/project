@@ -27,6 +27,15 @@ namespace courseProject.Repository.GenericRepository
         }
 
 
+        public async void DetachEntity(T entity)
+        {
+            dbContext.Entry(entity).State = EntityState.Detached;
+        }
+
+        public async void AttachEntity(Course entity)
+        {
+            dbContext.Entry(entity).State = EntityState.Modified;
+        }
 
         public async Task<IReadOnlyList<T>> GetAllStudentsAsync()
         {
@@ -139,7 +148,8 @@ namespace courseProject.Repository.GenericRepository
 
         public async Task updateSubAdminAsync(T entity)
         {
-             dbContext.Set<T>().Update(entity);
+            dbContext.Entry(entity).State = EntityState.Modified;
+          //  dbContext.Set<T>().Update(entity);
             
         }
 

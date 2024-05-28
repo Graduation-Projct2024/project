@@ -8,6 +8,7 @@
         public string? LName { get; set; }
 
         public string email { get; set; }
+        public string? ImageUrl { get; set; }
         public string type { get; set; }
 
         public string phoneNumber { get; set; }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using courseProject.Common;
 using courseProject.Core.IGenericRepository;
 using courseProject.Core.Models;
 using courseProject.Core.Models.DTO.MaterialsDTO;
@@ -161,6 +162,7 @@ namespace courseProject.Services.Materials
         {
             var material = await unitOfWork.materialRepository.GetMaterialByIdAsync(id);
             if (material == null) return ErrorMaterial.NotFound;
+            CommonClass.EditFileInMaterial(material);
             return material;           
         }
 
@@ -174,6 +176,7 @@ namespace courseProject.Services.Materials
 
             foreach (var material in AlMaterials)
             {
+                CommonClass.EditFileInMaterial(material);
                 arrayList.Add(material);
                 
             }

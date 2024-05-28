@@ -1,5 +1,6 @@
 ﻿using courseProject.Core.Models;
 using courseProject.Core.Models.DTO.UsersDTO;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using System.Text.RegularExpressions;
 
@@ -7,53 +8,61 @@ namespace courseProject.Common
 {
     public class CommonClass
     {
-        IConfiguration configuration;
+        
+        public static string Url= "https://localhost:7116/";
+
+       
 
         public static void ImageTOHttp(UserInfoDTO userInfoDTO)
         {
-            string url = "http://localhost:5134/";
-            userInfoDTO.ImageUrl = url + userInfoDTO.ImageUrl;
+           
+            userInfoDTO.ImageUrl = Url + userInfoDTO.ImageUrl;
         }
-        public void AddHttpToImage(User GetUser, string role)
-        {
-            string url = "http://localhost:5134/";
+        public static void AddHttpToImage(User GetUser, string role)
+        { 
             switch (role.ToLower())
             {
                 case "admin" when GetUser.admin?.ImageUrl != null:
-                    GetUser.admin.ImageUrl = url + GetUser.admin.ImageUrl;
+                    GetUser.admin.ImageUrl = Url + GetUser.admin.ImageUrl;
                     break;
                 case "subadmin" when GetUser.subadmin?.ImageUrl != null:
-                    GetUser.subadmin.ImageUrl = url + GetUser.subadmin.ImageUrl;
+                    GetUser.subadmin.ImageUrl = Url + GetUser.subadmin.ImageUrl;
                     break;
                 case "instructor" when GetUser.instructor?.ImageUrl != null:
-                    GetUser.instructor.ImageUrl = url + GetUser.instructor.ImageUrl;
+                    GetUser.instructor.ImageUrl = Url + GetUser.instructor.ImageUrl;
                     break;
                 case "student" when GetUser.student?.ImageUrl != null:
-                    GetUser.student.ImageUrl = url + GetUser.student.ImageUrl;
+                    GetUser.student.ImageUrl = Url + GetUser.student.ImageUrl;
                     break;
             }
 
         }
 
 
-        public async void EditImageInFor (IReadOnlyList<Course>? model , Course? modelcourse)
+        public static async void EditImageInFor (IReadOnlyList<Course>? model , Course? modelcourse)
         {
-            //string secretKey = configuration.GetSection("profiles")["applicationUrl"];
-            string url = "http://localhost:5134/";
-            if(model != null)
+
+           
+            if (model != null)
             {
             foreach (var course in model)
             {
                 if (course.ImageUrl != null)
                 {
-                    course.ImageUrl = url + course.ImageUrl;
+                    course.ImageUrl = Url + course.ImageUrl;
                 }
             }
             }
             if(modelcourse?.ImageUrl != null)
             {
-                modelcourse.ImageUrl = url + modelcourse.ImageUrl;
+                modelcourse.ImageUrl = Url + modelcourse.ImageUrl;
             }
+        }
+
+        public static async void EditFileInMaterial(CourseMaterial? material)
+        {
+            material.pdfUrl = Url + material.pdfUrl;
+
         }
 
         public static bool IsValidTimeFormat(string time)
@@ -62,7 +71,7 @@ namespace courseProject.Common
         }
 
 
-        public bool CheckStartAndEndTime(TimeSpan startTime, TimeSpan endTime)
+        public static bool CheckStartAndEndTime(TimeSpan startTime, TimeSpan endTime)
         {
 
 
