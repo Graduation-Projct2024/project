@@ -53,7 +53,7 @@ const handleCloseUpdate = () => {
   const fetchCourses = async (pageNum = pageNumber, pageSizeNum = pageSize) => {
     if (userData) {
       try {
-        const {data} = await axios.get(`http://localhost:5134/api/CourseContraller?pageNumber=${pageNum}&pageSize=${pageSizeNum}`, {
+        const {data} = await axios.get(`https://localhost:7116/api/CourseContraller/GetAllAccreditCourses?pageNumber=${pageNum}&pageSize=${pageSizeNum}`, {
           headers: {
             Authorization: `Bearer ${userData.token}`,  // Assuming you have a token for authorization
           },

@@ -9,7 +9,7 @@ export default function MainSubAdminRoute({children}) {
   const MainSubAdminAuth=()=>{
     if(userData){
      
-  if(localStorage.getItem("userToken")==null||!(userData.role=='Main-SubAdmin')){
+  if(localStorage.getItem("userToken")==null||!(userData.role=="main-subadmin")){
     return router.push('/login')
     
  }

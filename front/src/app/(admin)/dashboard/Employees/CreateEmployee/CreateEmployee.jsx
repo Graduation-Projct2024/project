@@ -1,17 +1,18 @@
 'use client'
 import Input from '@/component/input/Input';
 import { createEmployee } from '@/component/validation/validation';
+import { UserContext } from '@/context/user/User';
 import { Button } from '@mui/material';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Swal from 'sweetalert2';
 
 export default function CreateEmployee({setOpen}) {
   const router = useRouter();
 
-    
+  const {userToken, setUserToken, userData,userId}=useContext(UserContext);
   const [selectedGender, setSelectedGender] = useState('');
   const [selectedRole, setSelectedRole] = useState('');
   const [loading,setLoading] = useState(false);
@@ -47,12 +48,8 @@ const onSubmit = async (users) => {
   
       
   
-      const { data } = await axios.post('http://localhost:5134/api/Employee/CreateEmployee', formData,
-        {
-        
-      });
+      const { data } = await axios.post('https://localhost:7116/api/Employee/CreateEmployee', formData,{ headers: { Authorization: `Bearer ${userToken}` } });
       
-     if(data.isSuccess){
       //console.log(data);
       setPageLoading(true);
       //console.log('tttt');
@@ -65,7 +62,6 @@ const onSubmit = async (users) => {
         text: "Check Dashboard to see it",
         icon: "success"
       });
-  }
 
     } catch (error) {
       // Handle the error here

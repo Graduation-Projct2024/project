@@ -30,7 +30,7 @@ export default function page() {
     const fetchSkills = async () => {
       if(userData){
       try{
-      const { data } = await axios.get(`http://localhost:5134/api/Employee/GetAllSkillOptions`,{ headers: { Authorization: `Bearer ${userToken}` } });
+      const { data } = await axios.get(`https://localhost:7116/api/Skill/GetAllSkillOptions`,{ headers: { Authorization: `Bearer ${userToken}` } });
       // setLoading(false)
       console.log(data);
       setSkills(data.result);

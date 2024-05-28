@@ -27,7 +27,7 @@ export default function InstructorCourses({params}) {
       if(userData){
     try {
       //setLoading(false)
-      const {data} = await axios.get(`http://localhost:5134/api/Employee/GetAllCoursesGivenByInstructor?Instructorid=${params.Instructorid}&pageNumber=${pageNum}&pageSize=${pageSize}`,{ headers: { Authorization: `Bearer ${userToken}` } });
+      const {data} = await axios.get(`https://localhost:7116/api/CourseContraller/GetAllCoursesGivenByInstructor?Instructorid=${params.Instructorid}&pageNumber=${pageNum}&pageSize=${pageSize}`,{ headers: { Authorization: `Bearer ${userToken}` } });
       if(data.isSuccess){
         // console.log(data.result);
       setInstructorCourse(data.result.items);
@@ -46,7 +46,7 @@ export default function InstructorCourses({params}) {
       const fetchEmployees = async () => {
         if(userData){
         try{
-        const { data } = await axios.get(`http://localhost:5134/api/Employee/GetAllEmployee`);
+        const { data } = await axios.get(`https://localhost:7116/api/Employee/GetAllEmployee`);
         console.log(data);
         setEmployees(data.result.items);
       }

@@ -18,8 +18,8 @@ export default function CreateCourse({setOpen}) {
     description:'', 
     price:0,
     category: '',
-    SubAdminId:userId,
-    InstructorId:0,
+    subAdminId:userId,
+    instructorId:'',
     startDate:'',
     Deadline:'',
     limitNumberOfStudnet:'',
@@ -41,8 +41,8 @@ const onSubmit = async (values) => {
     formData.append('description', values.description);
     formData.append('price', values.price);
     formData.append('category', values.category);
-    formData.append('SubAdminId', values.SubAdminId);
-    formData.append('InstructorId', values.InstructorId);
+    formData.append('subAdminId', values.subAdminId);
+    formData.append('instructorId', values.instructorId);
     formData.append('startDate', values.startDate);
     formData.append('Deadline', values.Deadline);
     formData.append('limitNumberOfStudnet', values.limitNumberOfStudnet);
@@ -52,9 +52,8 @@ const onSubmit = async (values) => {
       formData.append('image', values.image);
     }
    
-    const { data } = await axios.post('http://localhost:5134/api/CourseContraller/CreateCourse',formData,{headers :{Authorization:`Bearer ${userToken}`}});
+    const { data } = await axios.post('https://localhost:7116/api/CourseContraller/CreateCourse',formData,{headers :{Authorization:`Bearer ${userToken}`}});
     
-   if(data.isSuccess){
     console.log(data);
     console.log('course created');
     formik.resetForm();
@@ -65,8 +64,6 @@ const onSubmit = async (values) => {
       icon: "success"
     });
 
-    
-}
   } catch (error) {
     if (error.isAxiosError) {
       const requestConfig = error.config;
@@ -120,19 +117,19 @@ const inputs =[
     
   
   {
-      type : 'number',
-      id:'SubAdminId',
-      name:'SubAdminId',
-      title:`SubAdmin Id: ${userId}`,
-      value:formik.values.SubAdminId,
+      type : 'text',
+      id:'subAdminId',
+      name:'subAdminId',
+      title:`SubAdmin Id`,
+      value:formik.values.subAdminId,
       disabled: true,
   },
   {
-    type : 'number',
-    id:'InstructorId',
-    name:'InstructorId',
+    type : 'text',
+    id:'instructorId',
+    name:'instructorId',
     title:'Instructor Id',
-    value:formik.values.InstructorId,
+    value:formik.values.instructorId,
 },
 {
   type : 'date',

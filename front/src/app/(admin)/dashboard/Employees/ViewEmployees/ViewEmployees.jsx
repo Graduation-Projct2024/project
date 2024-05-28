@@ -53,10 +53,11 @@ export default function ViewEmployees() {
       const handleClose = () => {
         setOpen(false);
       };
+      console.log(employees)
       const fetchEmployees = async (pageNum = pageNumber, pageSizeNum = pageSize)  => {
         if(userData){
         try{
-        const { data } = await axios.get(`http://localhost:5134/api/Employee/GetAllEmployee?pageNumber=${pageNum}&pageSize=${pageSize}`);
+        const { data } = await axios.get(`https://localhost:7116/api/Employee/GetAllEmployee?pageNumber=${pageNum}&pageSize=${pageSize}`);
         // setLoading(false)
       //  console.log(data);
         setEmployees(data.result.items);
@@ -281,7 +282,7 @@ export default function ViewEmployees() {
       <table className="table">
         <thead>
           <tr>
-            <th scope="col">ID</th>
+            <th scope="col">#</th>
             <th scope="col">Name</th>
             <th scope="col">Email</th>
             <th scope="col">Role</th>
@@ -293,9 +294,9 @@ export default function ViewEmployees() {
         </thead>
         <tbody>
           {filteredEmployees.length ? (
-            filteredEmployees.map((employee) => (
-              <tr key={employee.id}>
-                <th scope="row">{employee.id}</th>
+            filteredEmployees.map((employee,index) => (
+              <tr key={++index}>
+                <th scope="row">{index}</th>
                 <td>
                   {employee.fName} {employee.lName}
                 </td>

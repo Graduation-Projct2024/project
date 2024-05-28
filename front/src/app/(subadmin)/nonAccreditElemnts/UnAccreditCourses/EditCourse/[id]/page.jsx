@@ -48,8 +48,7 @@ export default function EditCourse({id,name, price,  category , InstructorId , s
           formData.append('image', updatedData.image);
         }
 
-        const { data } = await axios.put(`http://localhost:5134/api/CourseContraller/EditCourse?id=${id}`, formData, { headers: { Authorization: `Bearer ${userToken}` } });
-        if (data.isSuccess) {
+        const { data } = await axios.put(`https://localhost:7116/api/CourseContraller/EditCourse?id=${id}`, formData, { headers: { Authorization: `Bearer ${userToken}` } });
           console.log('Profile Updated');
           formik.resetForm();
           setOpenUpdate(false);
@@ -58,7 +57,6 @@ export default function EditCourse({id,name, price,  category , InstructorId , s
             text: "You can see the data updated in non-accredit courses page",
             icon: "success"
           });
-        }
       } catch (error) {
         console.error('Error updating employee:', error);
       }

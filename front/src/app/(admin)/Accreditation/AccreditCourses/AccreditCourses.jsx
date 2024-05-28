@@ -22,7 +22,7 @@ export default function AccreditCourses() {
   const fetchCoursesForAccredit = async (pageNum = pageNumber, pageSizeNum = pageSize)=> {
     if(userData){
     try{
-    const { data } = await axios.get(`http://localhost:5134/api/CourseContraller/GetAllCoursesForAccredit?pageNumber=${pageNum}&pageSize=${pageSize}`);
+    const { data } = await axios.get(`https://localhost:7116/api/CourseContraller/GetAllCoursesForAccredit?pageNumber=${pageNum}&pageSize=${pageSize}`);
     console.log(data);
     setAccreditCourses(data.result.items);
     setTotalPages(data.result.totalPages);
@@ -64,7 +64,7 @@ export default function AccreditCourses() {
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
-            const { data } = await axios.patch(`http://localhost:5134/api/CourseContraller/accreditCourse?courseId=${courseId}&Status=${Status}`, {},
+            const { data } = await axios.patch(`https://localhost:7116/api/CourseContraller/accreditCourse?courseId=${courseId}&Status=${Status}`, {},
               {
                 headers: {
                   Authorization: `Bearer ${userToken}`,
