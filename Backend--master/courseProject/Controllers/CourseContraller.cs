@@ -104,7 +104,7 @@ namespace courseProject.Controllers
         [Authorize(Policy = "SubAdmin , Main-SubAdmin")]
 
         // a create course , created by subAdmin or main subAdmin
-        public async Task<ActionResult<ApiResponce>> createCourse( CourseForCreateDTO model, Guid? StudentId)
+        public async Task<ActionResult<ApiResponce>> createCourse([FromForm] CourseForCreateDTO model, Guid? StudentId)
         {
          
 
