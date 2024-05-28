@@ -37,7 +37,7 @@ const handleClickOpen = () => {
     if(userData){
     try{
     const { data } = await axios.get(`https://localhost:7116/api/CourseContraller/GetAllAccreditCourses?pageNumber=${pageNum}&pageSize=${pageSize}`);
-    console.log(data.result);
+    // console.log(data.result);
     setCourses(data.result.items);
     setTotalPages(data.result.totalPages);
   }

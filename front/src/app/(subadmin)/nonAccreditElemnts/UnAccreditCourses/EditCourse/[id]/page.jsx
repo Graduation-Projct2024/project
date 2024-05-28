@@ -23,9 +23,22 @@ const formatDate = (dateString) => {
   return `${year}-${month}-${day}`;
 };
 
-export default function EditCourse({id,name, price,  category , InstructorId , startDate , Deadline , totalHours , limitNumberOfStudnet , description , image , setOpenUpdate}) {
+export default function EditCourse({id,name, price,  category , instructorId , startDate , Deadline , totalHours , limitNumberOfStudnet , description , image , setOpenUpdate}) {
 
   const { userData, userToken } = useContext(UserContext);
+  let [instructors,setInstructors] = useState([]);
+  const [selectedIns, setSelectedIns] = useState(instructorId || '');
+  const fetchIns = async ()=>{
+    const {data} = await axios.get('https://localhost:7116/api/Instructor/GetAllInstructorsList',{headers :{Authorization:`Bearer ${userToken}`}});
+    // console.log(data)
+     setInstructors(data.result);
+  }
+  // console.log(instructors)
+
+  useEffect(() => {
+    fetchIns();
+  }, [instructors,userData]);
+
 
   const handleFieldChange = (event) => {
     formik.setFieldValue('image', event.target.files[0]);
@@ -38,12 +51,13 @@ export default function EditCourse({id,name, price,  category , InstructorId , s
         formData.append('name', updatedData.name);
         formData.append('price', updatedData.price);
         formData.append('category', updatedData.category);
-        formData.append('InstructorId', updatedData.InstructorId);
+        // formData.append('instructorId', updatedData.instructorId);
         formData.append('startDate', updatedData.startDate);
         formData.append('Deadline', updatedData.Deadline);
         formData.append('totalHours', updatedData.totalHours);
         formData.append('limitNumberOfStudnet', updatedData.limitNumberOfStudnet);
         formData.append('description', updatedData.description);
+        formData.append('instructorId', selectedIns);
         if (updatedData.image) {
           formData.append('image', updatedData.image);
         }
@@ -68,7 +82,7 @@ export default function EditCourse({id,name, price,  category , InstructorId , s
       name: name || '',
       price: price || '',
       category: category || '',
-      InstructorId: InstructorId || '',
+      instructorId: instructorId || '',
       startDate: formatDate(startDate) || '',
       Deadline: formatDate(Deadline) || '',
       totalHours: totalHours || '',
@@ -77,7 +91,8 @@ export default function EditCourse({id,name, price,  category , InstructorId , s
       image: image || null,
     },
     onSubmit,
-    validationSchema:editUndefinedCourse
+    validationSchema:editUndefinedCourse,
+    enableReinitialize: true,
   });
 
   useEffect(() => {
@@ -85,7 +100,7 @@ export default function EditCourse({id,name, price,  category , InstructorId , s
       name,
       price,
       category,
-      InstructorId,
+      instructorId,
       startDate: formatDate(startDate),
       Deadline: formatDate(Deadline),
       totalHours,
@@ -93,7 +108,8 @@ export default function EditCourse({id,name, price,  category , InstructorId , s
       description,
       image,
     });
-  }, [name, price, category, InstructorId, startDate, Deadline, totalHours, limitNumberOfStudnet, description, image]);
+    setSelectedIns(instructorId);
+  }, [name, price, category, instructorId, startDate, Deadline, totalHours, limitNumberOfStudnet, description, image]);
 
   const inputs = [
     {
@@ -117,13 +133,13 @@ export default function EditCourse({id,name, price,  category , InstructorId , s
       title: 'Category',
       value: formik.values.category,
     },
-    {
-      type: 'number',
-      id: 'InstructorId',
-      name: 'InstructorId',
-      title: 'InstructorId',
-      value: formik.values.InstructorId,
-    },
+    // {
+    //   type: 'number',
+    //   id: 'InstructorId',
+    //   name: 'InstructorId',
+    //   title: 'InstructorId',
+    //   value: formik.values.InstructorId,
+    // },
     {
       type: 'date',
       id: 'startDate',
@@ -204,6 +220,27 @@ export default function EditCourse({id,name, price,  category , InstructorId , s
     <form onSubmit={formik.handleSubmit} encType="multipart/form-data" >
       <div className="row justify-content-center">
           {renderInputs}
+
+          <div className="col-md-8 pb-4">
+            <select
+          className="form-select p-3"
+          aria-label="Default select example"
+          value={selectedIns}
+          onChange={(e) => {
+            formik.setFieldValue('instructorId', e.target.value);
+            setSelectedIns(e.target.value);
+          }}
+          name="instructorId"
+        >
+          <option value="" disabled>
+            Select Instructor
+          </option>
+          {instructors.map((instructor) => (
+            <option key={instructor.id} value={instructor.id}>{instructor.name}</option>
+          ))}
+        </select>
+          </div>
+          
         {textAraeInput}
         
       </div>
@@ -212,7 +249,7 @@ export default function EditCourse({id,name, price,  category , InstructorId , s
       <Button sx={{px:2}} variant="contained"
               className="m-2 btn primaryBg"
               type="submit"
-              disabled={formik.isSubmitting || Object.keys(formik.errors).length > 0 || Object.keys(formik.touched).length === 0 }
+              disabled={formik.isSubmitting || Object.keys(formik.errors).length > 0 || Object.keys(formik.touched).length === 0 || !selectedIns}
             >
               Update
             </Button>

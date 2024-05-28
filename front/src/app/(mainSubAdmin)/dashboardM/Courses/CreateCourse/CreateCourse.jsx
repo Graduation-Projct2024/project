@@ -15,7 +15,7 @@ export default function CreateCourse({setOpen}) {
   const [selectedIns, setSelectedIns] = useState('');
   const fetchIns = async ()=>{
     const {data} = await axios.get('https://localhost:7116/api/Instructor/GetAllInstructorsList',{headers :{Authorization:`Bearer ${userToken}`}});
-    console.log(data)
+    // console.log(data)
      setInstructors(data.result);
   }
   // console.log(instructors)
@@ -29,8 +29,8 @@ export default function CreateCourse({setOpen}) {
     description:'', 
     price:0,
     category: '',
-    SubAdminId:userId,
-    instructorId:0,
+    subAdminId:userId,
+    instructorId:'',
     startDate:'',
     Deadline:'',
     limitNumberOfStudnet:'',
@@ -52,7 +52,7 @@ const onSubmit = async (values) => {
     formData.append('description', values.description);
     formData.append('price', values.price);
     formData.append('category', values.category);
-    formData.append('SubAdminId', values.SubAdminId);
+    formData.append('subAdminId', values.subAdminId);
     formData.append('startDate', values.startDate);
     formData.append('Deadline', values.Deadline);
     formData.append('limitNumberOfStudnet', values.limitNumberOfStudnet);
@@ -143,10 +143,10 @@ const inputs =[
 },
 {
   type : 'number',
-  id:'SubAdminId',
-  name:'SubAdminId',
+  id:'subAdminId',
+  name:'subAdminId',
   title:`SubAdmin Id`,
-  value:formik.values.SubAdminId,
+  value:formik.values.subAdminId,
   disabled: true,
 },
 {

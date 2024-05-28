@@ -71,7 +71,6 @@ export const editUndefinedCourse = yup.object({
    name:yup.string().required('name is required'),
    price:yup.string().required('price is required'),
    category:yup.string().required('category is required'),
-   InstructorId:yup.string().required('InstructorId is required'),
    startDate:yup.string().required('startDate is required'),
    Deadline:yup.string().required('Deadline is required'),
    totalHours:yup.string().required('totalHours is required'),
