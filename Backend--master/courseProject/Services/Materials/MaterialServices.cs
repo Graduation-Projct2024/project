@@ -166,11 +166,13 @@ namespace courseProject.Services.Materials
             return material;           
         }
 
-        public async Task<ErrorOr<ArrayList>> GetAllMaterialInTheCourse(Guid courseId)
+        public async Task<ErrorOr<ArrayList>> GetAllMaterialInTheCourse(Guid? courseId , Guid? consultationId)
         {
             var getCourse = await unitOfWork.CourseRepository.GetCourseByIdAsync(courseId);
-            if (getCourse == null) return ErrorCourse.NotFound;
-            var AlMaterials = await unitOfWork.materialRepository.GetAllMaterialInSameCourse(courseId);
+            if (getCourse == null && courseId!=null) return ErrorCourse.NotFound;
+            var getConsultation = await unitOfWork.StudentRepository.GetConsultationById(consultationId);
+            if (getConsultation == null && consultationId!=null) return ErrorLectures.NotFound;
+            var AlMaterials = await unitOfWork.materialRepository.GetAllMaterial(courseId , consultationId);
 
             ArrayList arrayList = new ArrayList();
 

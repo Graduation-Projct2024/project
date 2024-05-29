@@ -11,5 +11,7 @@ namespace courseProject.Core.IGenericRepository
     {
         public Task<CourseMaterial> GetMaterialByIdAsync(Guid materialId);
         public Task<IEnumerable<CourseMaterial>> GetAllMaterialInSameCourse(Guid CourseId);
+
+        public Task<IReadOnlyList<CourseMaterial>> GetAllMaterial(Guid? Courseid , Guid? consultationId);
     }
 }

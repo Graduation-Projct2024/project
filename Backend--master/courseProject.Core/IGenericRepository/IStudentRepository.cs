@@ -21,7 +21,7 @@ namespace courseProject.Core.IGenericRepository
         public Task<IReadOnlyList<StudentConsultations>> GetAllConsultations();
         public Task<List<StudentConsultations>> GetAllStudentsInPublicConsulations(Guid consultationId);
         //   public Task<List<StudentConsultations>> GetStudentInPrivateConsulations(int consultationId);
-        public Task<Consultation> GetConsultationById(Guid consultationId);
+        public Task<Consultation> GetConsultationById(Guid? consultationId);
         public Task<IReadOnlyList<StudentConsultations>> GetAllOtherPrivateConsultationsAsync(Guid studentId);
         public Task<IReadOnlyList<StudentConsultations>> GetAllBookedPrivateConsultationsAsync(Guid studentId);
         public Task addFeedbackAsync(Feedback feedback);

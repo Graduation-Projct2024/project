@@ -9,7 +9,7 @@ namespace courseProject.Core.IGenericRepository
 {
     public interface ICourseRepository<T> :IGenericRepository1<Course>
     {
-        public  Task<T> GetCourseByIdAsync(Guid id);
+        public  Task<T> GetCourseByIdAsync(Guid? id);
         public Task<int> GetNumberOfStudentsInTHeCourseAsync(Guid courseId);
         public Task EditCourseAfterAccreditAsync(Guid courseId);
         public Task UpdateStudentCourse(StudentCourse studentCourse);

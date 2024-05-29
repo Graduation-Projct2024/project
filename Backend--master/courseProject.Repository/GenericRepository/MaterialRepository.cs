@@ -27,6 +27,11 @@ namespace courseProject.Repository.GenericRepository
             
         }
 
+        public async Task<IReadOnlyList<CourseMaterial>> GetAllMaterial(Guid? Courseid, Guid? consultationId)
+        {
+            return await dbContext.courseMaterials.Where(x => x.courseId == Courseid || x.consultationId == consultationId).ToListAsync();
+        }
+
         public async Task<IEnumerable<CourseMaterial>> GetAllMaterialInSameCourse(Guid courseId)
         {
             
