@@ -1,4 +1,5 @@
 ﻿using courseProject.Core.Models;
+using courseProject.Core.Models.DTO.EmployeesDTO;
 using courseProject.Core.Models.DTO.UsersDTO;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
@@ -64,7 +65,31 @@ namespace courseProject.Common
             material.pdfUrl = Url + material.pdfUrl;
 
         }
+        public static async void EditImageInEmployeeDTO(IReadOnlyList<EmployeeDto>? employees)
+        {
+            foreach (var employee in employees)
+            {
+                if (employee.ImageUrl != null)
+                {
+                    employee.ImageUrl = Url + employee.ImageUrl;
+                }
+            }
+           
 
+        }
+
+        public static async void EditImageInStudents(IReadOnlyList<Student>? students)
+        {
+            foreach (var student in students)
+            {
+                if (student.ImageUrl != null)
+                {
+                    student.ImageUrl = Url + student.ImageUrl;
+                }
+            }
+
+
+        }
         public static bool IsValidTimeFormat(string time)
         {
             return Regex.IsMatch(time, @"^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$");

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using courseProject.Common;
 using courseProject.Core.IGenericRepository;
 using courseProject.Core.Models;
 using courseProject.Core.Models.DTO.EmployeesDTO;
@@ -26,7 +27,22 @@ namespace courseProject.Services.Employees
             this.instructorServices = instructorServices;
         }
 
-       
+
+        public async Task<IReadOnlyList<EmployeeDto>> getAllEmployees()
+        {
+            var SubAdmins = await unitOfWork.SubAdminRepository.GetAllEmployeeAsync();
+            var instructors = await unitOfWork.instructorRepositpry.GetAllEmployeeAsync();
+
+            var mapperSubAdmin = mapper.Map<IReadOnlyList<SubAdmin>, IReadOnlyList<EmployeeDto>>(SubAdmins);
+            CommonClass.EditImageInEmployeeDTO(mapperSubAdmin);
+            var mapperInstructor = mapper.Map<IReadOnlyList<Instructor>, IReadOnlyList<EmployeeDto>>(instructors);
+            CommonClass.EditImageInEmployeeDTO(mapperInstructor);
+            var allEmployees = (mapperSubAdmin.Concat(mapperInstructor)).OrderBy(x => x.Id).ToList();
+            return allEmployees;
+        }
+
+
+
         public async Task<ErrorOr<Created>> CreateEmployee(EmployeeForCreate employee)
         {
             bool ifUserIsUniqe = unitOfWork.UserRepository.isUniqeUser(employee.email);
@@ -179,5 +195,7 @@ namespace courseProject.Services.Employees
 
             return Result.Updated;
         }
+
+       
     }
 }

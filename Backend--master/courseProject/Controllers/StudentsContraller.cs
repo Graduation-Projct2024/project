@@ -66,21 +66,21 @@ namespace courseProject.Controllers
         }
 
 
-        [HttpGet("contact")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(404)]
-        [ProducesResponseType(400)]
-        [Authorize(Policy = "Admin")]
-        public async Task<ActionResult<IReadOnlyList<Student>>> GetAllStudentsForContactAsync([FromQuery] PaginationRequest? paginationRequest)
-        {
-            var students = await studentServices.GetAllStudentsForContact();
-            return Ok(new ApiResponce
-            {
-                Result =
-                (Pagination<ContactDto>.CreateAsync(students, paginationRequest.pageNumber, paginationRequest.pageSize)).Result
-            });
+        //[HttpGet("contact")]
+        //[ProducesResponseType(200)]
+        //[ProducesResponseType(404)]
+        //[ProducesResponseType(400)]
+        //[Authorize(Policy = "Admin")]
+        //public async Task<ActionResult<IReadOnlyList<Student>>> GetAllStudentsForContactAsync([FromQuery] PaginationRequest? paginationRequest)
+        //{
+        //    var students = await studentServices.GetAllStudentsForContact();
+        //    return Ok(new ApiResponce
+        //    {
+        //        Result =
+        //        (Pagination<ContactDto>.CreateAsync(students, paginationRequest.pageNumber, paginationRequest.pageSize)).Result
+        //    });
 
-        }
+        //}
 
 
         

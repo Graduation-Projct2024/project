@@ -10,6 +10,7 @@
         public string phoneNumber { get; set; }
         public string? gender { get; set; }
         public string? address { get; set; }
+        public string? ImageUrl { get; set; }
 
 
 

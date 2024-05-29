@@ -42,7 +42,7 @@ namespace courseProject.Authentication.EnrolledInCourse
                 var userId = context.User.FindFirst("UserId")?.Value;
                 if (userId != null)
                 {
-                    var enrolled = await dbContext.studentCourses.AnyAsync(sc => sc.courseId == courseId && (sc.StudentId.ToString() == userId));
+                    var enrolled = await dbContext.studentCourses.AnyAsync(sc => sc.courseId == courseId &&  (sc.StudentId.ToString() == userId));
                     var foundInstructor = await dbContext.courses.AnyAsync(c => c.Id == courseId && c.InstructorId.ToString() == userId);
                     if (enrolled || foundInstructor)
                     {
