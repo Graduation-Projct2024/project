@@ -7,9 +7,12 @@ export default function ViewWeeklyHours({id}) {
     const [weeklyHours, setWeeklyHours] = useState([]);
 
     const fetchWeeklyHours = async () => {
-        if(userData){
+        if(userData&&userToken){
         try{
-        const { data } = await axios.get(`http://localhost:5134/api/Employee/GetInstructorOfficeHours?Instructorid=${id}`);
+        const { data } = await axios.get(`https://localhost:7116/api/Instructor/GetInstructorOfficeHours?Instructorid=${id}`,
+        {headers :{Authorization:`Bearer ${userToken}`}}
+
+        );
         console.log(data);
         setWeeklyHours(data.result);
       }
@@ -21,7 +24,7 @@ export default function ViewWeeklyHours({id}) {
 
       useEffect(() => {
         fetchWeeklyHours();
-      }, [weeklyHours,userData]);
+      }, [weeklyHours,userData, userToken]);
 
       const renderWeeklyHours = () => {
         const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];

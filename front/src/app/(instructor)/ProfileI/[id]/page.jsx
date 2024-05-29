@@ -14,6 +14,7 @@ import Layout from '../../instructorLayout/Layout';
 import WeeklyHours from './WeeklyHours';
 import ViewWeeklyHours from './ViewWeeklyHours';
 import Education from './Education.jsx';
+import Feedback from './Feedback.jsx';
 
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, useMediaQuery, useTheme } from '@mui/material';
 import Tabs from '@mui/material/Tabs';
@@ -57,14 +58,13 @@ const handleCloseUpdate = () => {
     if(userData){
     try {
       //setLoading(false)
-      const {data} = await axios.get(`http://localhost:5134/api/UserAuth/GetProfileInfo?id=${params.id}`,
+      const {data} = await axios.get(`https://localhost:7116/api/UserAuth/GetProfileInfo?id=${params.id}`,
       {headers :{Authorization:`Bearer ${userToken}`}}
      
       );
-      if(data.isSuccess){
       setUser(data.result);
       //setLoading(false)
-      }}
+      }
       catch (error) {
       console.log(error)
       }}
@@ -214,7 +214,7 @@ const handleCloseUpdate = () => {
         <TabPanel value="1"><Education /></TabPanel>
         <TabPanel value="2"><ViewWeeklyHours id={params.id}/>
       <WeeklyHours id = {params.id}/></TabPanel>
-        <TabPanel value="3">Item Four</TabPanel>
+        <TabPanel value="3"><Feedback/></TabPanel>
 
       </TabContext>
     </Box>

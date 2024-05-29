@@ -47,16 +47,15 @@ export default function Education() {
   };
   const handleDelete = async () => {
     try {
-      const { data } = await axios.delete(`http://localhost:5134/api/Employee/DeleteAnInstructorSkill?InstructorId=${userId}&SkillId=${skillId}`, {
+      const { data } = await axios.delete(`https://localhost:7116/api/Skill/DeleteAnInstructorSkill?InstructorId=${userId}&SkillId=${skillId}`, {
         headers: { Authorization: `Bearer ${userToken}` }
       });
-      if (data.isSuccess) {
         setOpen(false);
         setOpenAlert(true);
         setInstructorSkills(instructorSkills.filter(skill => skill.id !== skillId));
         setSelectedSkills(selectedSkills.filter(skill => skill.id !== skillId));
         setSelectedSkillIds(selectedSkills.filter(skill => skill.id !== skillId).map(skill => skill.id));
-      }
+      
     } catch (error) {
       console.log(error);
     }
@@ -65,10 +64,8 @@ export default function Education() {
   const getAllSkills = async () => {
     if (userId) {
       try {
-        const { data } = await axios.get(`http://localhost:5134/api/Employee/GetAllSkillOptionsToInstructor?instructorId=${userId}`,{ headers: { Authorization: `Bearer ${userToken}` } });
-        if (data.isSuccess) {
+        const { data } = await axios.get(`https://localhost:7116/api/Skill/GetAllSkillOptionsToInstructor?instructorId=${userId}`,{ headers: { Authorization: `Bearer ${userToken}` } });
           setAllSkills(data.result || []);
-        }
       } catch (error) {
         console.log(error);
       }
@@ -78,7 +75,7 @@ export default function Education() {
   const getInstructorSkills = async () => {
     if (userId) {
       try {
-        const { data } = await axios.get(`http://localhost:5134/api/Employee/GetAllInstructorSkills?instructorId=${userId}`, {
+        const { data } = await axios.get(`https://localhost:7116/api/Skill/GetAllInstructorSkills?instructorId=${userId}`, {
           headers: { Authorization: `Bearer ${userToken}`}
         });
         if (data) {
@@ -97,16 +94,15 @@ export default function Education() {
     if (userId) {
       try {
         const { data } = await axios.post(
-          `http://localhost:5134/api/Employee/selectAnInstructorSkills?instructorId=${userId}`,
+          `https://localhost:7116/api/Skill/selectAnInstructorSkills?instructorId=${userId}`,
           formData,
           { headers: { Authorization: `Bearer ${userToken}` },'Content-Type':'application/problem+json','Content-Type':'charset=utf-8' } // Authorization token as the third element
         );
-        if(data.isSuccess){
           setSelectedSkills([]);
           setSelectedSkillIds([]);
           setOpenAlert(true);
 
-        }
+        
         console.log(data);
       } catch (error) {
         console.log(error);

@@ -345,10 +345,12 @@ import { addWeeklyHours } from '@/component/validation/validation';
 import { Button } from '@mui/material';
 import axios from 'axios';
 import { useFormik } from 'formik';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import Swal from 'sweetalert2';
+import { UserContext } from '@/context/user/User';
 
 export default function WeeklyHours({id}) {
+  const {userToken, setUserToken, userData}=useContext(UserContext);
 
  const[hours,setHours] = useState([{}])
  const [selectedDay, setSelectedDay] = useState('');
@@ -366,9 +368,11 @@ const onSubmit = async (hours) => {
       formData.append('startTime', hours.startTime);
       formData.append('endTime', hours.endTime);
       formData.append('day', selectedDay); // Use selectedGender from state
-      const { data } = await axios.post(`http://localhost:5134/api/Employee/AddInstructorOfficeHours?InstructorId=${id}`, formData,);
+      const { data } = await axios.post(`https://localhost:7116/api/Instructor/AddInstructorOfficeHours?InstructorId=${id}`, formData,
+      {headers :{Authorization:`Bearer ${userToken}`}}
+
+      );
       
-     if(data.isSuccess){
       console.log(data);
       console.log('tttt');
       formik.resetForm();
@@ -377,9 +381,8 @@ const onSubmit = async (hours) => {
         text: "See it above",
         icon: "success"
       });
-  }
+  
 
-      console.log('jhbgyvftrgybuhnjimkjhb');
     } catch (error) {
       // Handle the error here
       console.error('Error submitting form:', error);

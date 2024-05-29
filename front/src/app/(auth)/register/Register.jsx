@@ -1,6 +1,6 @@
 
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import * as yup from "yup";
 import axios from "axios";
 import { useFormik } from "formik";
@@ -12,6 +12,9 @@ import Alert from '@mui/material/Alert';
 
 export default function Register() {
   const [open, setOpen] = React.useState(false);
+  const [errors, setErrors] = React.useState();
+  const [result, setResult] = React.useState();
+
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -27,6 +30,7 @@ export default function Register() {
     role:""
   };
   const onSubmit = async (users) => {
+    try{
 console.log("test")
 const formData = new FormData();
 formData.append("userName", users.userName);
@@ -41,10 +45,20 @@ const { data } = await axios.post(
  {headers: {
   'Content-Type': 'multipart/form-data','Content-Type': 'application/json',}}
 );
+console.log(data);
+setResult(data.result);
+ if(data.isSuccess){
   console.log("test");
 //   formik.resetForm();
 setOpen(true);
-  };
+ }}catch(error){
+console.log(error.response.data.errors);
+// setErrors(error.response.data.errors);
+setErrors(error.response.data.errors.errorMassages);
+ 
+  }
+  }
+
   const validationSchema = yup.object({
     userName: yup
       .string()
@@ -55,13 +69,11 @@ setOpen(true);
     password: yup
       .string()
       .required("password is required")
-      .min(3, "must be at least 3 character")
-      .max(15, "must be at max 15 character"),
+      .min(8, "must be at least 8 character"),
       confirmPassword: yup
-      .string()
-      .required("password is required")
-      .min(3, "must be at least 3 character")
-      .max(15, "must be at max 15 character"),
+    .string()
+    .required("Confirm password is required")
+    .oneOf([yup.ref('password'), null], 'Passwords must match')
    
   });
 
@@ -115,7 +127,8 @@ setOpen(true);
       key={index}
     />
   ));
-
+  useEffect(() => {
+  }, [errors]); 
   return (
     <>
     <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
@@ -142,6 +155,7 @@ setOpen(true);
               Register
             </button>
         </div>
+        {errors&&<p className='text-danger'>{errors}</p>}
       </form>
     </div>
     </>
