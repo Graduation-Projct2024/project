@@ -62,6 +62,7 @@ namespace courseProject.Services.Courses
         public async Task<ErrorOr<Course>> GetCourseById(Guid courseId)
         {           
             var getCourse = await unitOfWork.CourseRepository.GetCourseByIdAsync(courseId);
+            CommonClass.EditImageInFor(null, getCourse);
             //if (getCourse == null) return ErrorCourse.NotFound;
             return getCourse is null ? ErrorCourse.NotFound : getCourse;
         }

@@ -23,6 +23,7 @@ namespace courseProject.Configuration
         public static IServiceCollection AddApplication (this IServiceCollection services)
         {
             services.AddScoped(typeof(IGenericRepository1<>), typeof(GenericRepository1<>));
+            services.AddTransient<IEmailService, SmtpEmailService>();
             services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
            
             //  services.AddScoped(typeof(ISubAdminRepository), typeof(SubAdminRepository));

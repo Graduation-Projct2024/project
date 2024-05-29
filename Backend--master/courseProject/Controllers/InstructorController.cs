@@ -61,7 +61,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        [Authorize]
+       
         public async Task<ActionResult<ApiResponce>> GetInstructorsForDropDownList()
         {
             return Ok(new ApiResponce { Result=await instructorServices.GetAllInstructorsList()});
