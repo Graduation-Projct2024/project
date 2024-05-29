@@ -117,12 +117,12 @@ export default function Page() {
           </TableHead>
           <TableBody>
             {lectures.length ? (
-              lectures.map((lecture, index) => (
-                <StyledTableRow key={index}>
+              lectures.map((lecture) => (
+                <StyledTableRow key={lecture.id}>
                   <StyledTableCell component="th" scope="row">
-                  {/* <Link href={`myLectures/${course.id}`}>   {lecture.name}</Link> */}
+                  <Link  href={`myLectures/${lecture.id}`}>{lecture.name}</Link>
                   </StyledTableCell>
-                  <StyledTableCell align="center">{lecture.date}</StyledTableCell>
+                  <StyledTableCell align="center">{lecture.date.split(' ')[0]}</StyledTableCell>
                 </StyledTableRow>
               ))
             ) : (

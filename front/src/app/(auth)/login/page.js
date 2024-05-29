@@ -59,7 +59,8 @@ export default function page() {
 
     const { data } = await axios.post(
       "https://localhost:7116/api/UserAuth/Login",
-      users
+      users,
+
     );
     console.log(data);
       setOpen(true);

@@ -156,19 +156,23 @@ const handleCloseViewTaskDialog = () => {
     const [materials, setMaterials] = useState([]);
     console.log(useParams());
     const { courseId } = useParams();
+    console.log(courseId);
     const [courseName, setCourseName]=useState();
     const getCourses = async () => {
-
+if(userToken){
       const data = await axios.get(
-        `http://localhost:5134/api/CourseContraller/GetCourseById?id=${courseId}`
+        `https://localhost:7116/api/CourseContraller/GetCourseById?id=${courseId}`,
+        {},
+        {headers :{Authorization:`Bearer ${userToken}`}}
+
       );
     
       setCourseName(data.data.result.name);
-    };
+    }};
     const getCourseMaterial = async () => {
       if(userToken){
         const { data } = await axios.get(
-          `http://localhost:5134/api/MaterialControllar/GetAllMaterial?CourseId=${courseId}`,
+          `https://localhost:7116/api/MaterialControllar/GetAllMaterial?CourseId=${courseId}`,
           {headers :{Authorization:`Bearer ${userToken}`}}
 
           
@@ -186,7 +190,7 @@ const handleCloseViewTaskDialog = () => {
         if(userToken){
 
         const data = await axios.get(
-          `http://localhost:5134/api/StudentsContraller/GetCourseParticipants?Courseid=${courseId}&pageNumber=${pageNum}&pageSize=${pageSize}`,
+          `https://localhost:7116/api/StudentsContraller/GetCourseParticipants?Courseid=${courseId}&pageNumber=${pageNum}&pageSize=${pageSize}`,
           {headers :{Authorization:`Bearer ${userToken}`}}
 
         );

@@ -36,7 +36,6 @@ function Layout(props) {
   const { window } = props;
   const { children, title } = props;
   let { userToken, setUserToken ,userData,setUserData,userId,setUserId} = React.useContext(UserContext);
-  let { userToken, setUserToken ,userData,setUserData,userId, setUserId} = React.useContext(UserContext);
 const sidebarItems = [
   {
     name: "Dashboard",
