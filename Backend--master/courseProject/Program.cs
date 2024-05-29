@@ -20,6 +20,8 @@ using FluentValidation.AspNetCore;
 using System.Reflection;
 using FluentValidation;
 using courseProject.Common;
+using courseProject.Core.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace courseProject
 {
@@ -51,6 +53,7 @@ namespace courseProject
             builder.Services
                    .AddApplication()
                    .AddServices()
+                  // .AddIdentities()
                    .AddInfrastucture(builder.Configuration)
                    .AddAuthenticationAndAuthorization(builder.Configuration);
 
