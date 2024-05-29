@@ -36,7 +36,8 @@ namespace courseProject.Repository.GenericRepository
 
             var smtpClient = new SmtpClient(SmtpServer)
             {
-                Port =int.Parse( port),
+              //  Port =int.Parse(port),
+                UseDefaultCredentials=false,
                 Credentials = new NetworkCredential(fromEmail, fromEmailPassword),
                 EnableSsl = true,
             };

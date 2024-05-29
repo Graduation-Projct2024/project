@@ -172,9 +172,9 @@ const filteredSkills = Array.isArray(skills) ? skills.filter((skill) => {
         </thead>
         <tbody>
           {filteredSkills.length ? (
-            filteredSkills.map((skill) => (
+            filteredSkills.map((skill,index) => (
               <tr key={skill.id}>
-                <th scope="row">{skill.id}</th>
+                <th scope="row">{++index}</th>
                 <td>{skill.name}</td>
               </tr>
             ))

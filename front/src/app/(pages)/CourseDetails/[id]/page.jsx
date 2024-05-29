@@ -9,16 +9,20 @@ import { UserContext } from '@/context/user/User';
 import axios from 'axios';
 export default function CourseDetails({params}) {
   console.log(params.id)
-  const {userToken, setUserToken, userData,userId}=useContext(UserContext);
   let [course,setCourse] = useState({});
+  let [instructors,setInstructors] = useState([]);
+  let[instructor,setInstructor] = useState({});
+//  const fetchIns = async ()=>{
+//     const {data} = await axios.get('https://localhost:7116/api/Instructor/GetAllInstructorsList');
+//     // console.log(data)
+//      setInstructors(data.result);
+//   }
   const getCourse =async ()=>{
     try {
       //setLoading(false)
-      const {data} = await axios.get(`http://localhost:5134/api/CourseContraller/GetCourseById?id=${params.id}`,);
-        if(data.isSuccess){
+      const {data} = await axios.get(`https://localhost:7116/api/CourseContraller/GetCourseById?id=${params.id}`,);
         console.log(data);
         setCourse(data.result);
-      }
     }
       catch (error) {
       console.log(error)
@@ -26,9 +30,18 @@ export default function CourseDetails({params}) {
       
   }
   console.log(course)
+
   useEffect(() => {
     getCourse();
-  }, []);
+    // fetchIns();
+  }, [course]);
+
+//   useEffect(() => {
+//     const ins = instructors.find(ins => ins.id == params.instructorId);
+//     if(ins) {
+//         setInstructor(ins);
+//     }
+// }, [instructors, params.instructorId]);
   
 
 
@@ -99,7 +112,7 @@ export default function CourseDetails({params}) {
 
               </div>
             </div>
-            <div className="col-lg-4">
+            <div className="col-lg-4 pb-5">
               <div className="sidebar">
                 <div className="sidebar-widget widget-information">
                   <div className="info-price pb-3">

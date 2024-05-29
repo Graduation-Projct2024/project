@@ -35,7 +35,7 @@ namespace courseProject.Repository.GenericRepository
 
         public async Task updateCourse(Course course)
         {
-             dbContext.Update(course);
+            dbContext.Entry(course).State = EntityState.Modified;
         }
         public async Task updateEvent(Event model)
         {

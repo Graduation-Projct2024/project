@@ -53,7 +53,7 @@ export default function ViewEmployees() {
       const handleClose = () => {
         setOpen(false);
       };
-      console.log(employees)
+      // console.log(employees)
       const fetchEmployees = async (pageNum = pageNumber, pageSizeNum = pageSize)  => {
         if(userData){
         try{

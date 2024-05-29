@@ -1,7 +1,7 @@
 
 'use client';
 import { useFormik } from 'formik';
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import * as yup from "yup";
 import axios from 'axios';
 import './style.css';
@@ -16,7 +16,7 @@ import Layout from '@/app/(pages)/Layout/Layout';
 
 export default function page() {
   const [open, setOpen] = React.useState(false);
-
+  let [errmsg,setErrmsg] = useState()
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -27,11 +27,28 @@ export default function page() {
   
   const {userToken, setUserToken,userData, setUserData}=useContext(UserContext);
   const router = useRouter();
-  // if(userToken){
-  //   router.push('/dashboard');
-  // }
 
-
+  
+  useEffect(() => {
+    if(userData && userToken){
+      if ( userData.role=="admin") {
+      router.push('/dashboard');
+    }
+    else if (userData.role=="subadmin") {
+      router.push('/dashboardS');
+    }
+    else if ( userData.role=="main-subadmin") {
+      router.push('/dashboardM');
+    }
+    else if ( userData.role=="instructor") {
+      router.push('/myDashboard');
+    }
+    else if ( userData.role=="student") {
+      router.push('/MyDashboard');
+    }
+    }
+    
+  }, [userToken,userData, router]);
     const [isActive, setIsActive] = useState(false);
   
     const handleRegisterClick = () => {
@@ -51,9 +68,10 @@ export default function page() {
     password: yup
       .string()
       .required("password is required")
-      .min(3, "must be at least 3 character")
+      .min(8, "must be at least 8 character")
       .max(20, "must be at max 20 character"),
   });
+
   const onSubmit = async (users) => {
     console.log(users);
 
@@ -62,7 +80,13 @@ export default function page() {
       users,
 
     );
-    console.log(data);
+     if(data.errorMassages != null){
+        setErrmsg(data.errorMassages)
+        
+        // console.log(data.errorMassages)
+      }
+      else{
+        console.log(data);
       setOpen(true);
       localStorage.setItem("userToken", data.result.token);
       setUserToken(data.result.token);
@@ -83,6 +107,8 @@ export default function page() {
         if(data.result.user.role == "main-subadmin") {
           router.push('/dashboardM');
           }
+      }
+    
   };
 
   const formik=useFormik(
@@ -141,6 +167,8 @@ export default function page() {
       <h1 className='pb-3'>Log In</h1>
       
         {renderInputs}
+        {/* {console.log(errmsg)} */}
+        
         <div className="text-center mt-3 loginActions">
               <button
                 className="m-2 btn "
@@ -151,6 +179,7 @@ export default function page() {
               </button>
               {/* <Link  to='/sendCode'>Forget Password?</Link> */}
             </div>
+            <p className='text-danger'>{errmsg}</p>
     </form>
   </div>
   <div className="toggle-container">

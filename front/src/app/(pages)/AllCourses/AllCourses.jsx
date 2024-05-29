@@ -12,7 +12,7 @@ export default function AllCourses() {
     const fetchCourses = async () => {
         try {
           const { data } = await axios.get(
-            `http://localhost:5134/api/CourseContraller`
+            `https://localhost:7116/api/CourseContraller/GetAllAccreditCourses?pageNumber=1&pageSize=100`
           );
           console.log(data);
           setCourses(data.result.items);

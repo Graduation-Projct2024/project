@@ -75,7 +75,7 @@ const handleCloseUpdate = () => {
 // };
 useEffect(() => {
   fetchCourses();
-}, [userData, pageNumber, pageSize]);  // Fetch courses on mount and when page or size changes
+}, [courses,userData, pageNumber, pageSize]);  // Fetch courses on mount and when page or size changes
 
 const handlePageSizeChange = (event) => {
   setPageSize(event.target.value);
@@ -166,9 +166,9 @@ const handlePageChange = (event, value) => {
         </thead>
         <tbody>
           {filteredCourses.length ? (
-            filteredCourses.map((course) => (
+            filteredCourses.map((course,index) => (
               <tr key={course.id}>
-                <th scope="row">{course.id}</th>
+                <th scope="row">{++index}</th>
                 <td>{course.name}</td>
                 <td>{course.price}</td>
                 <td>{course.category}</td>

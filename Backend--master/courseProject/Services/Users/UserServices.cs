@@ -39,7 +39,7 @@ namespace courseProject.Services.Users
         {
             var verify = await unitOfWork.UserRepository.GetUserByEmail(loginRequestDTO.email);
 
-            if (verify.IsVerified == false) return ErrorUser.UnVarified;
+            if (verify!=null && verify.IsVerified == false) return ErrorUser.UnVarified;
 
 
             var loginResponse = await unitOfWork.UserRepository.LoginAsync(loginRequestDTO);

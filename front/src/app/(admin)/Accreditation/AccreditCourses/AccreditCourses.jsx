@@ -3,7 +3,7 @@ import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react'
 import '../../dashboard/dashboard.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowUpFromBracket, faEye, faFilter } from '@fortawesome/free-solid-svg-icons'
+import { faArrowUpFromBracket, faEye, faFilter, faSquareCheck, faSquareXmark } from '@fortawesome/free-solid-svg-icons'
 import Link from 'next/link';
 import { UserContext } from '@/context/user/User';
 import { FormControl, InputLabel, MenuItem, Pagination, Select, Stack } from '@mui/material';
@@ -181,36 +181,46 @@ const filteredAccreditCourses = Array.isArray(accreditCourses) ? accreditCourses
       <table className="table">
         <thead>
           <tr>
-            <th scope="col">ID</th>
+            <th scope="col">#</th>
             <th scope="col">Name</th>
             <th scope="col">Price</th>
             <th scope="col">Category</th>
             <th scope="col">Start Date</th>
-            <th scope="col">End Date</th>
-            <th scope="col">Option</th>
+            <th scope="col">Instructor</th>
+            <th scope="col">SubAdmin</th>
+            <th scope="col">Hours</th>
+            <th scope="col">Action</th>
           </tr>
         </thead>
         <tbody>
           {filteredAccreditCourses.length ? (
-            filteredAccreditCourses.map((course) => (
+            filteredAccreditCourses.map((course,index) => (
               <tr key={course.id} /*className={course.status === 'accredit' ? 'accredit-row' : course.status === 'reject' ? 'reject-row' : ''}*/>
-                {console.log(course.id)}
-                {console.log(course.imageUrl)}
-                <th scope="row">{course.id}</th>
+                {/* {console.log(course.id)} */}
+                {/* {console.log(course.imageUrl)} */}
+                <th scope="row">{++index}</th>
                 <td>{course.name}</td>
                 <td>{course.price}</td>
                 <td>{course.category}</td>
                 <td>{course.startDate}</td>
-                <td>{course.endDate}</td>
+                <td>{course.instructorFName} {course.instructorLName}</td>
+                <td>{course.subAdminFName} {course.subAdminLName}</td>
+                <td>{course.totalHours}</td>
                 <td className="d-flex gap-1">
                   {/* <Link href={"/Profile"}>
                     <button type="button" className="border-0 bg-white ">
                       <FontAwesomeIcon icon={faEye} className="edit-pen" />
                     </button>
                   </Link> */}
-                  <button type="button" className="btn accredit" onClick={()=>accreditCourse(course.id,'accredit')} disabled = {course.status == 'accredit' || course.status == 'reject'} >Accredit</button>  
+                  <button type="button" className="btn accredit" onClick={()=>accreditCourse(course.id,'accredit')} disabled = {course.status == 'accredit' || course.status == 'reject'} >
+                  {/* <FontAwesomeIcon icon={faSquareCheck} className='fs-2'/> */}
+                  Accredit
+                  </button>  
                 {/* <Link href='/dashboard' className='text-decoration-none acc'>Accredit </Link> */}
-                <button type="button" className="btn accredit" onClick={()=>accreditCourse(course.id,"reject")} disabled = {course.status == 'accredit' || course.status == 'reject'} >Reject</button>
+                <button type="button" className="btn accredit" onClick={()=>accreditCourse(course.id,"reject")} disabled = {course.status == 'accredit' || course.status == 'reject'} >
+                {/* <FontAwesomeIcon icon={faSquareXmark} className='fs-2'/> */}
+                Reject
+                </button>
 
                 </td>
               </tr>

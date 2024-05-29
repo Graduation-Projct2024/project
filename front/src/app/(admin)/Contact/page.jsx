@@ -123,7 +123,7 @@ return matchesSearchTerm ;
 
       <div className="row">
         {filteredContacts ? filteredContacts.map((contact)=>(
-          <div key={contact.id} className="col-md-4">
+          <div key={contact.email} className="col-md-4">
                     <div className="card text-center mb-3" style={{ width: "18rem" }}>
                       <div className="card-body m-3">
                       <img src={contact.imageUrl ? contact.imageUrl : "./user1.png"} 

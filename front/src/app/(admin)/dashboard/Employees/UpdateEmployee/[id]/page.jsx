@@ -13,20 +13,20 @@ export default function UpdateEmployee({id , fName , lName , email, gender, phon
     const [selectedGender, setSelectedGender] = useState(gender);
     const {userToken, setUserToken, userData,userId}=useContext(UserContext);
 
-    useEffect(() => {
-      const fetchEmployeeData = async () => {
-        if(userData){
-        try {
-          const { data } = await axios.get(`http://localhost:5134/api/Employee/GetEmployeeById?id=${id}`);
-         // console.log(data.result);
-          setEmployeeData(data.result);
-        } catch (error) {
-          console.error('Error fetching employee data:', error);
-        }}
-      };
+    // useEffect(() => {
+    //   const fetchEmployeeData = async () => {
+    //     if(userData){
+    //     try {
+    //       const { data } = await axios.get(`http://localhost:5134/api/Employee/GetEmployeeById?id=${id}`);
+    //      // console.log(data.result);
+    //       setEmployeeData(data.result);
+    //     } catch (error) {
+    //       console.error('Error fetching employee data:', error);
+    //     }}
+    //   };
 
-      fetchEmployeeData();
-    }, [id]);
+    //   fetchEmployeeData();
+    // }, [id]);
 
     const onSubmit = async (updatedData) => {
       if(userData){
