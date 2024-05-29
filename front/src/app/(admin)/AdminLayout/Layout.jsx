@@ -31,6 +31,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { Avatar, Stack } from '@mui/material';
 import AdbIcon from '@mui/icons-material/Adb';
 import './Layout.css'
+import HomeIcon from '@mui/icons-material/Home';
 import { UserContext } from '@/context/user/User';
 import AdminRoute from '@/app/(auth)/protectedRoute/AdminRoute';
 import CategoryIcon from '@mui/icons-material/Category';
@@ -42,6 +43,12 @@ function Layout(props) {
   const { children, title } = props;
   let { userToken, setUserToken ,userData,setUserData,userId,setUserId} = React.useContext(UserContext);
 const sidebarItems = [
+  {
+    name: "Home",
+    href: "/",
+    icon: HomeIcon,
+    
+  },
   {
     name: "Dashboard",
     href: "/dashboard",

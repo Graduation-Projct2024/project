@@ -31,6 +31,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { Avatar, Stack } from '@mui/material';
 import AdbIcon from '@mui/icons-material/Adb';
 import './Layout.css'
+import HomeIcon from '@mui/icons-material/Home';
 import { UserContext } from '@/context/user/User';
 import MainSubAdminRoute from '@/app/(auth)/protectedRoute/MainSubAdminRoute';
 const drawerWidth = 240;
@@ -45,6 +46,12 @@ function Layout(props) {
   const router = useRouter();
   
   const sidebarItems = [
+    {
+      name: "Home",
+      href: "/",
+      icon: HomeIcon,
+      
+    },
   {
     name: "Dashboard",
     href: "/dashboardM",

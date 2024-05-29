@@ -18,11 +18,13 @@ import { useRouter } from 'next/navigation'
 const pages = ['About','AllCourses', 'Contact'];
 const settings = ['Login', 'Register'];
 import './navbar.css'
-export default function Navbar() {
+import { UserContext } from '@/context/user/User';
+export default function Navbar({role}) {
   const router = useRouter();
 
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const {userToken, setUserToken,userData, setUserData,setUserId,userId}=useContext(UserContext);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -37,6 +39,14 @@ export default function Navbar() {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const logout = () => {
+    localStorage.removeItem("userToken");
+    setUserToken(null);
+    setUserData(null);
+    setUserId(null);
+    router.push("/login");
   };
 
 
@@ -95,6 +105,7 @@ export default function Navbar() {
                 display: { xs: 'block', md: 'none' },
               }}
             >
+
               {pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
                   <Typography textAlign="center">{page}</Typography>
@@ -123,6 +134,54 @@ export default function Navbar() {
             LOGO
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+            {console.log(role)}
+            {userToken  && ((role == "admin" &&
+              <Button
+              key='1'
+              onClick={handleCloseNavMenu}
+              sx={{ my: 2, color: 'white', display: 'block' }}
+            >
+               <Link href="/dashboard" color="inherit" underline='none' >Dashboard</Link>
+              
+            </Button>) || (role == "main-subadmin" &&
+              <Button
+              key='1'
+              onClick={handleCloseNavMenu}
+              sx={{ my: 2, color: 'white', display: 'block' }}
+            >
+               <Link href="/dashboardM" color="inherit" underline='none' >Dashboard</Link>
+              
+            </Button>)||
+            (role == "subadmin" &&
+            <Button
+            key='1'
+            onClick={handleCloseNavMenu}
+            sx={{ my: 2, color: 'white', display: 'block' }}
+          >
+             <Link href="/dashboardS" color="inherit" underline='none' >Dashboard</Link>
+            
+          </Button>)||
+          (role == "instructor" &&
+          <Button
+          key='1'
+          onClick={handleCloseNavMenu}
+          sx={{ my: 2, color: 'white', display: 'block' }}
+        >
+           <Link href="/myDashboard" color="inherit" underline='none' >Dashboard</Link>
+          
+        </Button>)||
+        (role == "student" &&
+        <Button
+        key='1'
+        onClick={handleCloseNavMenu}
+        sx={{ my: 2, color: 'white', display: 'block' }}
+      >
+         <Link href="/MyDashboard" color="inherit" underline='none' >Dashboard</Link>
+        
+      </Button>)
+                    
+          )
+            }
             {pages.map((page) => (
               <Button
                 key={page}
@@ -138,7 +197,10 @@ export default function Navbar() {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-             <Avatar alt="Remy Sharp" />
+             {/* <Avatar alt="Remy Sharp" /> */}
+             {userData&&userData.imageUrl?(  
+            <Avatar alt="profile picture" src={userData.imageUrl} sx={{ width: 50, height: 50,mr:5 ,}} />
+            ):(<Avatar alt="Remy Sharp" sx={{ width: 50, height: 50,mr:5 ,}} />)} 
                 
               </IconButton>
             </Tooltip>
@@ -160,11 +222,15 @@ export default function Navbar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
+             
+              {!userToken? <>{(settings.map((setting) => (
                 <MenuItem key={setting} onClick={handleCloseUserMenu}>
                   <Link href='/login' color="inherit"  underline='none'>{setting}</Link>
                 </MenuItem>
-              ))}
+              )))}</>: (<MenuItem onClick={logout} >
+              Log out
+            </MenuItem>)}
+
             </Menu>
           </Box>
         </Toolbar>

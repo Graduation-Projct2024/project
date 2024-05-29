@@ -6,7 +6,7 @@ import { UserContext } from '@/context/user/User';
 import { Button } from '@mui/material';
 import axios from 'axios';
 import { useFormik } from 'formik';
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Swal from 'sweetalert2';
 
 
@@ -18,6 +18,18 @@ const formatDate = (dateString) => {
 export default function EditCourse({courseId , startDate , Deadline , InstructorId , limitNumberOfStudnet , description , image , setOpenUpdate}) {
 
   const { userData, userToken } = useContext(UserContext);
+  let [instructors,setInstructors] = useState([]);
+  const [selectedIns, setSelectedIns] = useState(InstructorId || '');
+  const fetchIns = async ()=>{
+    const {data} = await axios.get('https://localhost:7116/api/Instructor/GetAllInstructorsList',{headers :{Authorization:`Bearer ${userToken}`}});
+    // console.log(data)
+     setInstructors(data.result);
+  }
+  // console.log(instructors)
+
+  useEffect(() => {
+    fetchIns();
+  }, [instructors,userData]);
 
   const handleFieldChange = (event) => {
     formik.setFieldValue('image', event.target.files[0]);
@@ -27,17 +39,17 @@ export default function EditCourse({courseId , startDate , Deadline , Instructor
     if (userData) {
       try {
         const formData = new FormData();
-        formData.append('InstructorId', updatedData.InstructorId);
+        // formData.append('InstructorId', updatedData.InstructorId);
         formData.append('startDate', updatedData.startDate);
         formData.append('Deadline', updatedData.Deadline);
         formData.append('limitNumberOfStudnet', updatedData.limitNumberOfStudnet);
         formData.append('description', updatedData.description);
+        formData.append('InstructorId', selectedIns);
         if (updatedData.image) {
           formData.append('image', updatedData.image);
         }
 
         const { data } = await axios.put(`https://localhost:7116/api/CourseContraller/EditOnCourseAfterAccredit?courseId=${courseId}`, formData, { headers: { Authorization: `Bearer ${userToken}` } });
-        if (data.isSuccess) {
           formik.resetForm();
           setOpenUpdate(false);
           Swal.fire({
@@ -45,7 +57,6 @@ export default function EditCourse({courseId , startDate , Deadline , Instructor
             text: "You can see the data updated in courses page",
             icon: "success"
           });
-        }
       } catch (error) {
         console.error('Error updating Course:', error);
       }
@@ -74,16 +85,17 @@ export default function EditCourse({courseId , startDate , Deadline , Instructor
       description,
       image,
     });
+    setSelectedIns(InstructorId);
   }, [InstructorId, startDate, Deadline, limitNumberOfStudnet, description, image]);
 
   const inputs = [
-    {
-      type: 'number',
-      id: 'InstructorId',
-      name: 'InstructorId',
-      title: 'InstructorId',
-      value: formik.values.InstructorId,
-    },
+    // {
+    //   type: 'number',
+    //   id: 'InstructorId',
+    //   name: 'InstructorId',
+    //   title: 'InstructorId',
+    //   value: formik.values.InstructorId,
+    // },
     {
       type: 'number',
       id: 'limitNumberOfStudnet',
@@ -155,7 +167,27 @@ export default function EditCourse({courseId , startDate , Deadline , Instructor
 
   return (
     <form onSubmit={formik.handleSubmit} encType="multipart/form-data" >
+      
       <div className="row justify-content-center">
+        <div className="col-md-6 pb-4">
+            <select
+          className="form-select p-3"
+          aria-label="Default select example"
+          value={selectedIns}
+          onChange={(e) => {
+            formik.setFieldValue('InstructorId', e.target.value);
+            setSelectedIns(e.target.value);
+          }}
+          name="InstructorId"
+        >
+          <option value="" disabled>
+            Select Instructor
+          </option>
+          {instructors.map((instructor) => (
+            <option key={instructor.id} value={instructor.id}>{instructor.name}</option>
+          ))}
+        </select>
+          </div>
           {renderInputs}
         {textAraeInput}
         

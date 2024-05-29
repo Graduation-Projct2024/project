@@ -1,7 +1,7 @@
 
 'use client';
 import { useFormik } from 'formik';
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import * as yup from "yup";
 import axios from 'axios';
 import './style.css';
@@ -27,11 +27,28 @@ export default function page() {
   
   const {userToken, setUserToken,userData, setUserData}=useContext(UserContext);
   const router = useRouter();
-  // if(userToken){
-  //   router.push('/dashboard');
-  // }
 
-
+  
+  useEffect(() => {
+    if(userData && userToken){
+      if ( userData.role=="admin") {
+      router.push('/dashboard');
+    }
+    else if (userData.role=="subadmin") {
+      router.push('/dashboardS');
+    }
+    else if ( userData.role=="main-subadmin") {
+      router.push('/dashboardM');
+    }
+    else if ( userData.role=="instructor") {
+      router.push('/myDashboard');
+    }
+    else if ( userData.role=="student") {
+      router.push('/MyDashboard');
+    }
+    }
+    
+  }, [userToken,userData, router]);
     const [isActive, setIsActive] = useState(false);
   
     const handleRegisterClick = () => {
@@ -51,9 +68,10 @@ export default function page() {
     password: yup
       .string()
       .required("password is required")
-      .min(3, "must be at least 3 character")
+      .min(8, "must be at least 8 character")
       .max(20, "must be at max 20 character"),
   });
+
   const onSubmit = async (users) => {
     console.log(users);
 

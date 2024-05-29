@@ -188,7 +188,7 @@ const handleClickOpen = () => {
       <table className="table">
   <thead>
     <tr>
-      <th scope="col">ID</th>
+      <th scope="col">#</th>
       <th scope="col">Name</th>
       <th scope="col">Price</th>
       <th scope="col">Category</th>
@@ -200,12 +200,12 @@ const handleClickOpen = () => {
   </thead>
   <tbody>
   {filteredCourses.length ? (
-    filteredCourses.map((course) =>(
+    filteredCourses.map((course,index) =>(
       
       <tr key={course.id}>
-        {console.log(course.id)}
-        {console.log(course.imageUrl)}
-      <th scope="row">{course.id}</th>
+        {/* {console.log(course.id)}
+        {console.log(course.imageUrl)} */}
+      <th scope="row">{++index}</th>
       <td>{course.name}</td>
       <td>{course.price}</td>
       <td>{course.category}</td>

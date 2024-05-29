@@ -29,6 +29,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { Avatar, Stack } from '@mui/material';
 import AdbIcon from '@mui/icons-material/Adb';
 import './Layout.css'
+import HomeIcon from '@mui/icons-material/Home';
 import { UserContext } from '@/context/user/User';
 import SubAdminRoute from '@/app/(auth)/protectedRoute/SubAdminRoute';
 import ReportOutlinedIcon from '@mui/icons-material/ReportOutlined';
@@ -45,6 +46,12 @@ function Layout(props) {
   const router = useRouter();
   
   const sidebarItems = [
+    {
+      name: "Home",
+      href: "/",
+      icon: HomeIcon,
+      
+    },
   {
     name: "Dashboard",
     href: "/dashboardS",
