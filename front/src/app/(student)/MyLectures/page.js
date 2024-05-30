@@ -117,7 +117,7 @@ export default function page() {
               lectures.map((lecture) => (
                 <StyledTableRow key={lecture.consultationId}>
                   <StyledTableCell component="th" scope="row">
-                  <Link href={`MyLectures/${lecture.consultationId}`}>   {lecture.name}</Link>
+                  <Link href={`MyLectures/${lecture.consultationId}`}>{lecture.name}</Link>
                   </StyledTableCell>
                   <StyledTableCell align="center">{lecture.date}</StyledTableCell>
                 </StyledTableRow>

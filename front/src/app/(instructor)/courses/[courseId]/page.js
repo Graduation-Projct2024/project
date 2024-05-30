@@ -261,10 +261,10 @@ if(userToken){
           {"ADD NEW"}
         </DialogTitle>
         
-        <AddTask open={openTaskDialog} onClose={handleCloseTaskDialog} handleCloseAdd={handleClose} courseId={courseId}/>
-        <AddFile open={openFileDialog} onClose={handleCloseFileDialog} handleCloseAdd={handleClose} courseId={courseId} />
-        <AddLink open={openLinkDialog} onClose={handleCloseLinkDialog} handleCloseAdd={handleClose} courseId={courseId}/>
-        <AddAnnouncement open={openAnnouncementDialog} onClose={handleCloseAnnouncementDialog} handleCloseAdd={handleClose} courseId={courseId} />
+        <AddTask open={openTaskDialog} onClose={handleCloseTaskDialog} handleCloseAdd={handleClose} type='courseId' Id={courseId}/>
+        <AddFile open={openFileDialog} onClose={handleCloseFileDialog} handleCloseAdd={handleClose} type='courseId' Id={courseId} />
+        <AddLink open={openLinkDialog} onClose={handleCloseLinkDialog} handleCloseAdd={handleClose} type='courseId' Id={courseId}/>
+        <AddAnnouncement open={openAnnouncementDialog} onClose={handleCloseAnnouncementDialog} type='courseId' handleCloseAdd={handleClose} Id={courseId} />
 
         <DialogContent>
         <Stack

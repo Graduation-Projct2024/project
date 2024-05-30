@@ -45,17 +45,17 @@ console.log( courses.startDate)
 console.log( courses.endDate)
 
 const { data } = await axios.post(
-  `http://localhost:5134/api/StudentsContraller/RequestToCreateCustomCourse?studentid=${userId}`,
+  `https://localhost:7116/api/Request/RequestToCreateCustomCourse?studentid=${userId}`,
  formData,
  {headers: {
-  'Content-Type': 'application/json', 'Content-Type': 'charset=utf-8'}}
+  'Content-Type': 'application/json', 'Content-Type': 'charset=utf-8',
+  'Authorization':`Bearer ${userToken}`
+}}
 );
- if(data.isSuccess){
   console.log("test");
-//   formik.resetForm();
 setOpen(true);
 
-  }
+  
   };
   const validationSchema = yup.object({
     name: yup
