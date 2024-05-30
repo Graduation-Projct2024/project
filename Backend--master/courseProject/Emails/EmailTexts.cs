@@ -3,7 +3,7 @@
     public class EmailTexts
     {
 
-        public static string VerificationBode(string UserName, string VerificationCode)
+        public static string VerificationCode(string UserName, string VerificationCode)
         {
             var body = $@"
                     <html>
@@ -17,6 +17,9 @@
                             <p style='font-size: 18px;'>Best regards,</p>
                             
                         </div>
+<div class=""footer"">
+            <p>&copy; 2024 Course Academy. All rights reserved.</p>
+        </div>
                     </body>
                     </html>";
 
