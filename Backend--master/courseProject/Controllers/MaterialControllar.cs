@@ -60,7 +60,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        [Authorize(Policy = "Instructor")]
+       // [Authorize(Policy = "Instructor")]
         public async Task<ActionResult<ApiResponce>> AddFile([FromForm] FileDTO fileDTO)
         {
             var addfile = await materialServices.AddFile(fileDTO);

@@ -10,7 +10,7 @@ namespace courseProject.Core.Models.DTO.FeedbacksDTO
     public class FeedbackDTO
     {
         public string content { get; set; }
-
+        public int? range { get; set; }
 
     }
 }

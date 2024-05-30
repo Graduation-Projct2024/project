@@ -25,6 +25,11 @@ namespace courseProject.Authentication.MaterialInEnrolledCourse
             var routeData = httpContext.GetRouteData();
             var MaterialIdAsString = httpContext.Request.Query["Id"].FirstOrDefault()
                                    ?? routeData?.Values["Id"]?.ToString();
+
+          
+
+
+
             if (!string.IsNullOrEmpty(MaterialIdAsString) && Guid.TryParse(MaterialIdAsString, out var MaterialId))
             {
                 //var materials = await dbContext.courseMaterials.ToListAsync();
