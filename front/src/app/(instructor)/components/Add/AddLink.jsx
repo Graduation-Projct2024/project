@@ -28,7 +28,7 @@ export default function AddLink({ open, onClose ,handleCloseAdd, courseId}) {
     linkUrl: "",
   };
   const onSubmit = async (tasks) => {
-console.log("test")
+    try{
 const formData = new FormData();
 formData.append("name", tasks.name);
 formData.append("linkUrl", tasks.linkUrl);
@@ -36,7 +36,7 @@ formData.append("courseId", courseId);
 formData.append("InstructorId",userData.userId);
 
 const { data } = await axios.post(
-  "http://localhost:5134/api/MaterialControllar/AddLink",
+  "https://localhost:7116/api/MaterialControllar/AddLink",
   formData,
   {headers: {
   'Authorization':`Bearer ${userToken}`,
@@ -45,14 +45,15 @@ const { data } = await axios.post(
   }}
 
 );
- if(data.isSuccess){
   console.log("test");
  formik.resetForm();
  setAlertOpen(true);
  onClose(); 
  handleCloseAdd();
-
-  }
+    }catch(error){
+      console.log(error);
+    }
+  
   };
   const validationSchema = yup.object({
     name: yup

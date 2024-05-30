@@ -31,15 +31,14 @@ export default function AddAnnouncement({ open, onClose,handleCloseAdd, courseId
     description: "",
   };
   const onSubmit = async (tasks) => {
-console.log("test")
-const formData = new FormData();
+try{const formData = new FormData();
 formData.append("name", tasks.name);
 formData.append("description", tasks.description);
 formData.append("courseId", courseId);
 formData.append("instructorId",userData.userId);
 
 const { data } = await axios.post(
-  "http://localhost:5134/api/MaterialControllar/AddAnnouncement",
+  "https://localhost:7116/api/MaterialControllar/AddAnnouncement",
   formData,
   {headers: {
     'Authorization':`Bearer ${userToken}`,
@@ -48,13 +47,14 @@ const { data } = await axios.post(
   }}
 
 );
- if(data.isSuccess){
   console.log("test");
  formik.resetForm();
  onClose(); 
  handleCloseAdd();
  setAlertOpen(true);
 
+  }catch(error){
+    console.log(error);
   }
   };
   const validationSchema = yup.object({

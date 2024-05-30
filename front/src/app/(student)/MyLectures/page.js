@@ -47,9 +47,9 @@ export default function page() {
   const getLectures = async (pageNum = pageNumber, pageSizeNum = pageSize) => {
     if (userId) {
       try {
-        const response = await axios.post(
-          `http://localhost:5134/api/StudentsContraller/GetAllConsultations?studentId=${userId}&pageNumber=${pageNum}&pageSize=${pageSizeNum}`,
-          {},{ headers: { Authorization: `Bearer ${userToken}` } }
+        const response = await axios.get(
+          `https://localhost:7116/api/Lectures/GetAllConsultations?studentId=${userId}&pageNumber=${pageNum}&pageSize=${pageSizeNum}`,
+          { headers: { Authorization: `Bearer ${userToken}` } }
         );
         console.log(response);
         setLectures(response.data.result.items);
@@ -114,10 +114,10 @@ export default function page() {
           </TableHead>
           <TableBody>
             {lectures.length ? (
-              lectures.map((lecture, index) => (
-                <StyledTableRow key={index}>
+              lectures.map((lecture) => (
+                <StyledTableRow key={lecture.consultationId}>
                   <StyledTableCell component="th" scope="row">
-                  {/* <Link href={`myLectures/${course.id}`}>   {lecture.name}</Link> */}
+                  <Link href={`myLectures/${lecture.consultationId}`}>   {lecture.name}</Link>
                   </StyledTableCell>
                   <StyledTableCell align="center">{lecture.date}</StyledTableCell>
                 </StyledTableRow>

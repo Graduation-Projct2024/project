@@ -13,13 +13,18 @@ import Grid from '@mui/system/Unstable_Grid';
 import Button from '@mui/material/Button';
 import Rating from "@mui/material/Rating";
 import './style.css'
-import { useRouter } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
+
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import { UserContext } from "../../../../context/user/User.jsx";
 export default function page() {
   const {userToken, setUserToken, userData}=useContext(UserContext);
-  const router = useRouter();
+  const searchParams = useSearchParams();
+  console.log(searchParams.get('isEnrolled'));
+  let isEnrolled = searchParams.get('isEnrolled')
+
+console.log(isEnrolled);
   const [open, setOpen] = React.useState(false);
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -29,25 +34,30 @@ export default function page() {
     setOpen(false);
   };
   const [course, setCourse] = useState([]);
+
   const [isLoading, setIsLoading] = useState(false);
   const { courseId } = useParams();
   const getCourses = async () => {
-
+try{
     const data = await axios.get(
-      `http://localhost:5134/api/CourseContraller/GetCourseById?id=${courseId}`
+      `https://localhost:7116/api/CourseContraller/GetCourseById?id=${courseId}`
     );
   
     console.log(data.data.result);
-      setCourse(data.data.result);
-  };
+    setCourse(data.data.result);
+  }catch(error){
+    console.log(error);
+  }};
+
   const [studentId, setStudentId]=useState(null);
   const enrollCourse = async () => {
+    try{
     const formData = new FormData();
 
     formData.append("courseId", courseId);
 formData.append("studentId", userData.userId);
     const data = await axios.post(
-      `http://localhost:5134/api/StudentsContraller/EnrollInCourse`,formData,
+      `https://localhost:7116/api/StudentCourse/EnrollInCourse`,formData,
      { headers: {
         'Content-Type': 'multipart/form-data','Content-Type': 'application/json',Authorization: `Bearer ${userToken}`
       }
@@ -55,16 +65,17 @@ formData.append("studentId", userData.userId);
     );
     // router.push(`/MyCourses/${courseId}`);
     setOpen(true);
-
     console.log(data);
-  };
+  }catch(error){
+    console.log(error);
+  }};
 
   useEffect(() => {
     if(userData){
       setStudentId(userData.userId);
     }
     getCourses();
-  }, [userData]);
+  }, [userData, course, isEnrolled]);
   if (isLoading) {
     return (
       <Box sx={{ display: "flex", justifyContent: "center" }}>
@@ -96,7 +107,7 @@ formData.append("studentId", userData.userId);
               width={300}
               height={250}
               className="rounded"
-              src={`${course.imageUrl}`}
+              src={`https://localhost:7116/${course.imageUrl}`}
               alt="course Image"
             />
           </Box>
@@ -108,7 +119,7 @@ formData.append("studentId", userData.userId);
             <Typography variant="h6">Started At :{course.startDate}</Typography>
             <Typography variant="h6">Online</Typography>
             <Typography variant="h6">Instructor :{course.instructorId}</Typography>
-            <Button onClick={enrollCourse} variant="contained" sx={{mt:2}}>Enroll Now!</Button>
+            {isEnrolled=='true'?(<Button disabled variant="contained" sx={{mt:2}}>Enroll Now!</Button>):(<Button onClick={enrollCourse} variant="contained" sx={{mt:2}}>Enroll Now!</Button>)}
 
           </Box>
         </Grid>

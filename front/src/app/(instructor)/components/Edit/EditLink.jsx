@@ -46,7 +46,7 @@ formData.append("courseId", courseId);
 formData.append("instructorId", userData.userId);
 
 const { data } = await axios.put(
- `http://localhost:5134/api/MaterialControllar/EditLink?id=${materialID}`,
+ `https://localhost:7116/api/MaterialControllar/EditLink?id=${materialID}`,
   formData,
  { headers: {
   'Authorization':`Bearer ${userToken}`,
@@ -54,13 +54,12 @@ const { data } = await axios.put(
     'Content-Type': 'multipart/form-data','Content-Type': 'application/json',
 }}
 );
- if(data.isSuccess){
   console.log(data);
  formik.resetForm();
  setAlertOpen(true);
  router.back();
 
-  }}
+  }
   catch (error) {
     if (error.isAxiosError) {
       const requestConfig = error.config;

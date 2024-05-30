@@ -15,12 +15,12 @@ console.log(userToken);
   const getCourses = async () => {
     if(userData){
       try{
-        const data = await axios.get(
-          `http://localhost:5134/api/StudentsContraller/GetAllEnrolledCoursesForAStudent?studentid=${userData.userId}`
+        const {data} = await axios.get(
+          `https://localhost:7116/api/CourseContraller/GetAllEnrolledCoursesForAStudent?studentid=${userData.userId}&pageNumber=1&pageSize=10`,{headers :{Authorization:`Bearer ${userToken}`}}
         );
-      
-        console.log(data.data.result);
-        setCourses(data.data.result);
+        console.log(data.result);
+         setCourses(data.result.items);
+        console.log(courses);
 
       }catch(error){
         console.log(error);

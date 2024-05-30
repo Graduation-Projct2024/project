@@ -18,22 +18,24 @@ console.log(useParams())
 const{materialId, courseId}=useParams();
     const getMaterial=async()=>{
       if(userToken){
-        const {data}= await axios.get(`http://localhost:5134/api/MaterialControllar/GetMaterialById?id=${materialId}`,
+        try{
+        const {data}= await axios.get(`https://localhost:7116/api/MaterialControllar/GetMaterialById?id=${materialId}`,
         {headers :{Authorization:`Bearer ${userToken}`}}
 
         )
       
-      if(data.isSuccess==true){
         setType(data.result.type);
         setName(data.result.name);
 
         console.log(data)
-      }
+        }catch(error){
+          console.log(error);
+        }
     }
     }
     useEffect(() => {
         getMaterial();
-      }, [userToken]);
+      }, [userToken,type]);
     
   return (
    

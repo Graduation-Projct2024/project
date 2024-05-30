@@ -50,7 +50,7 @@ export default function Page() {
     if (userId) {
       try {
         const response = await axios.get(
-          `http://localhost:5134/api/Employee/GetAllLectureRequest?instructorId=${userId}&pageNumber=${pageNum}&pageSize=${pageSizeNum}`,
+          `https://localhost:7116/api/Lectures/GetAllLectureRequest?instructorId=${userId}&pageNumber=${pageNum}&pageSize=${pageSizeNum}`,
           { headers: { Authorization: `Bearer ${userToken}` } }
         );
         console.log(response);

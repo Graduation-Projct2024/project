@@ -37,18 +37,17 @@ export default function LectureDetails({ open, onClose, lectureID}) {
   const getLectures = async () => {
     try {
       if (lectureID) {
-        const response = await axios.post(
-          `http://localhost:5134/api/StudentsContraller/GetConsultationById?consultationId=${lectureID}`,
-          {},
+        const response = await axios.get(
+          `https://localhost:7116/api/Lectures/GetConsultationById?consultationId=${lectureID}`,
+          
 
           {headers :{Authorization:`Bearer ${userToken}`}}
 
         );
 
-        if (response.data.isSuccess) {
 console.log(response);
 setLecture(response.data.result);
-        }
+        
       }
     } catch (error) {
       console.error('Error fetching lectures:', error);

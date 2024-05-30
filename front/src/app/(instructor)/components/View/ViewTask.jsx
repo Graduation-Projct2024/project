@@ -88,21 +88,24 @@ export default function ViewTask({ materialID , courseId}) {
 
  const getMaterial=async()=>{
   if(userToken){
-  const {data}= await axios.get(`http://localhost:5134/api/MaterialControllar/GetMaterialById?id=${materialID}`,
+    try{
+  const {data}= await axios.get(`https://localhost:7116/api/MaterialControllar/GetMaterialById?id=${materialID}`,
   {headers :{Authorization:`Bearer ${userToken}`}}
 
   )
 
-if(data.isSuccess==true){
   setMaterial(data.result);
   setLoading(false);
   console.log(data)
-}
+    }
+    catch(error){
+      console.log(error);
+    }
   }
  }
  const getSubmission=async()=>{
   if(userToken){
-  const {data}= await axios.get(`http://localhost:5134/api/Employee/GetAllSubmissionForTask?taskId=${materialID}`,
+  const {data}= await axios.get(`https://localhost:7116/api/Submissions/GetAllSubmissionForTask?taskId=${materialID}`,
   {headers :{Authorization:`Bearer ${userToken}`}}
 
   )
@@ -114,7 +117,7 @@ if(data.isSuccess==true){
  }
  }
  const deleteMaterial=async()=>{
-  const {data}= await axios.delete(`http://localhost:5134/api/MaterialControllar/DeleteMaterial?id=${materialID}`,
+  const {data}= await axios.delete(`https://localhost:7116/api/MaterialControllar/DeleteMaterial?id=${materialID}`,
   {headers :{Authorization:`Bearer ${userToken}`}}
 
   )
