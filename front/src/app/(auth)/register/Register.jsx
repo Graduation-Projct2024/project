@@ -47,11 +47,10 @@ const { data } = await axios.post(
 );
 console.log(data);
 setResult(data.result);
- if(data.isSuccess){
   console.log("test");
 //   formik.resetForm();
 setOpen(true);
- }}catch(error){
+ }catch(error){
 console.log(error.response.data.errors);
 // setErrors(error.response.data.errors);
 setErrors(error.response.data.errors.errorMassages);
@@ -133,7 +132,7 @@ setErrors(error.response.data.errors.errorMassages);
     <>
     <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert
-          onClose={handleClose}
+          // onClose={handleClose}
           severity="success"
           variant="filled"
           sx={{ width: '100%' }}
