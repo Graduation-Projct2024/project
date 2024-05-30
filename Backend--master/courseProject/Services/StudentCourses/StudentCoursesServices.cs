@@ -7,6 +7,8 @@ using ErrorOr;
 using Microsoft.AspNetCore.JsonPatch;
 using System.Linq.Expressions;
 using System.Net;
+using courseProject.Emails;
+using courseProject.Repository.GenericRepository;
 
 namespace courseProject.Services.StudentCourses
 {
@@ -14,11 +16,13 @@ namespace courseProject.Services.StudentCourses
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
+        private readonly IEmailService emailService;
 
-        public StudentCoursesServices(IUnitOfWork unitOfWork , IMapper mapper)
+        public StudentCoursesServices(IUnitOfWork unitOfWork , IMapper mapper , IEmailService emailService)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
+            this.emailService = emailService;
         }
 
        
@@ -57,9 +61,10 @@ namespace courseProject.Services.StudentCourses
             if (status.ToLower() == "reject")
             {
                 await unitOfWork.StudentRepository.RemoveTheRejectedRequestToJoinCourse(getStudentCourse);
-                await unitOfWork.EmailService.SendEmailAsync(studentEmail , "Join Course" , $"Dear {studentName} ,Your request to join the course {courseName} has been Rejected");
+                
+                await emailService.SendVerificationEmail (studentEmail , "Course Application Status", EmailTexts.RejectInCourse(studentName , courseName , "Course Academy"));
             }
-            await unitOfWork.EmailService.SendEmailAsync(studentEmail, "Join Course", $"Dear {studentName} ,Your request to join the course {courseName} has been Accepted");
+            await emailService.SendVerificationEmail(studentEmail, "Course Application Status", EmailTexts.GetAcceptanceEmailHtml(studentName, courseName, "Course Academy"));
 
             await unitOfWork.CourseRepository.saveAsync();
 

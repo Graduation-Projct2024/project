@@ -22,6 +22,7 @@ using FluentValidation;
 using courseProject.Common;
 using courseProject.Core.Models;
 using Microsoft.AspNetCore.Identity;
+using courseProject.Emails;
 
 namespace courseProject
 {
@@ -57,7 +58,7 @@ namespace courseProject
                    .AddInfrastucture(builder.Configuration)
                    .AddAuthenticationAndAuthorization(builder.Configuration);
 
-
+            builder. Services.AddEmailInfrastucture (builder. Configuration);
             builder.Services.AddHttpClient();
 
             //validations 

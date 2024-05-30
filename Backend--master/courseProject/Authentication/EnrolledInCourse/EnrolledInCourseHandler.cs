@@ -51,7 +51,7 @@ namespace courseProject.Authentication.EnrolledInCourse
                 {
                     var enrolled = await dbContext.studentCourses.AnyAsync(sc => sc.courseId == courseOConsultationId &&  (sc.StudentId.ToString() == userId));
                     var foundInstructor = await dbContext.courses.AnyAsync(c => c.Id == courseOConsultationId && c.InstructorId.ToString() == userId);
-                    var checkConsultation = await dbContext.courseMaterials.AnyAsync(cm => cm.consultationId == courseOConsultationId && cm.InstructorId.ToString() == userId);
+                    var checkConsultation = await dbContext.consultations.AnyAsync(cm => cm.Id == courseOConsultationId && cm.InstructorId.ToString() == userId);
                     var studentInConsultation = await dbContext.StudentConsultations.AnyAsync(cm => cm.consultationId == courseOConsultationId && cm.StudentId.ToString() == userId);
                     if (enrolled || foundInstructor || checkConsultation || studentInConsultation)
                     {

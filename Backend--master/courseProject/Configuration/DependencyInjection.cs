@@ -3,6 +3,7 @@ using courseProject.Authentication.EnrolledInCourse;
 using courseProject.Authentication.MaterialInEnrolledCourse;
 using courseProject.Core.IGenericRepository;
 using courseProject.Core.Models;
+using courseProject.Emails;
 using courseProject.MappingProfile;
 using courseProject.Repository.Data;
 using courseProject.Repository.GenericRepository;
@@ -25,7 +26,7 @@ namespace courseProject.Configuration
         public static IServiceCollection AddApplication (this IServiceCollection services)
         {
             services.AddScoped(typeof(IGenericRepository1<>), typeof(GenericRepository1<>));
-            services.AddTransient<IEmailService, SmtpEmailService>();
+          //  services.AddTransient<IEmailService, EmailService>();
             services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
            
             //  services.AddScoped(typeof(ISubAdminRepository), typeof(SubAdminRepository));

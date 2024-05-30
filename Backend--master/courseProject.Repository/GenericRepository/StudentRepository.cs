@@ -192,5 +192,10 @@ namespace courseProject.Repository.GenericRepository
         {
              dbContext.studentCourses.Remove(studentCourse);
         }
+
+        public async Task searchStudent(string query)
+        {
+            //await dbContext.students.ContainsAsync<Student>(query).Result;
+        }
     }
 }
