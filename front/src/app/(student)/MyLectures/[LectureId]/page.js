@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import axios from 'axios';
 import { useParams } from 'next/navigation.js';
 import AssignmentIcon from '@mui/icons-material/Assignment';
@@ -25,6 +25,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import Layout from '../../studentLayout/Layout.jsx';
+import { UserContext } from '../../../../context/user/User.jsx';
 
 export default function page() {
     const contents=[
@@ -66,6 +67,7 @@ export default function page() {
 
         }
 ];
+const {userToken, setUserToken, userData}=useContext(UserContext);
 
 const [open, setOpen] = React.useState(false);
   const theme = useTheme();
@@ -81,54 +83,62 @@ const [materialId, setMaterialId]=useState();
     setOpen(false);
   };
     const [materials, setMaterials] = useState([]);
-    console.log(useParams());
-    const { courseId } = useParams();
+    // console.log(useParams());
+    const { LectureId } = useParams();
     const getCourseMaterial = async () => {
+      if(userToken&&LectureId){
+        try{
         const { data } = await axios.get(
-          `http://localhost:5134/api/MaterialControllar/GetAllMaterial?CourseId=${courseId}`
+          `https://localhost:7116/api/MaterialControllar/GetAllMaterial?=${LectureId}`,
+          {headers :{Authorization:`Bearer ${userToken}`}}
+
           
         );
         console.log(data);
         setMaterials(data);
         console.log(materials);
+      }catch(error){
+        console.log(error);
+      }
+     } };
+      const [lecture, setLecture]=useState();
+      const getLecture = async () => {
+        if(userToken&&LectureId){
+  try{
+        const data = await axios.get(
+          `https://localhost:7116/api/Lectures/GetConsultationById?consultationId=${LectureId}`,
+          {headers :{Authorization:`Bearer ${userToken}`}}
 
-      };
-      const [courseName, setCourseName]=useState();
-      const getCourses = async () => {
-  
-        const data = await axios.get(
-          `http://localhost:5134/api/CourseContraller/GetCourseById?id=${courseId}`
-        );
-      
-        setCourseName(data.data.result.name);
-      };
-      useEffect(() => {
-        getCourseMaterial();
-        getCourses();
-      }, []);
-      const [participants, setParticipants]= useState();
-      const getParticipants = async () => {
-  
-        const data = await axios.get(
-          `http://localhost:5134/api/StudentsContraller/GetCourseParticipants?Courseid=${courseId}`
         );
       console.log(data);
-        setParticipants(data.data.result);
-      };
+      setLecture(data.data.result);
+      }catch(error){
+        console.log(error);
+      }
+      }};
       useEffect(() => {
         getCourseMaterial();
-        getCourses();
-        getParticipants();
-      }, []);
+        getLecture();
+      }, [userToken, LectureId]);
+      const [participants, setParticipants]= useState();
+      // const getParticipants = async () => {
+  
+      //   const data = await axios.get(
+      //     `http://localhost:5134/api/StudentsContraller/GetCourseParticipants?Courseid=${consultationId}`
+      //   );
+      // console.log(data);
+      //   setParticipants(data.data.result);
+      // };
+
   return (
-    <Layout title={courseName}>
+    <Layout title={lecture?.name}>
     <div>
   <ul className="nav nav-tabs" id="myTab" role="tablist">
     <li className="nav-item" role="presentation">
       <button className="nav-link active" id="content-tab" data-bs-toggle="tab" data-bs-target="#content-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Content</button>
     </li>
     <li className="nav-item" role="presentation">
-      <button className="nav-link" id="Participants-tab" data-bs-toggle="tab" data-bs-target="#Participants-tab-pane" type="button" role="tab" aria-controls="Participants-tab-pane" aria-selected="false">Participants</button>
+      <button className="nav-link" id="Details-tab" data-bs-toggle="tab" data-bs-target="#Details-tab-pane" type="button" role="tab" aria-controls="Details-tab-pane" aria-selected="false">Details</button>
     </li>
    
   </ul>
@@ -221,7 +231,7 @@ const [materialId, setMaterialId]=useState();
 
 
     </div>
-    <div className="tab-pane fade" id="Participants-tab-pane" role="tabpanel" aria-labelledby="Participants-tab" tabIndex={0}>
+    <div className="tab-pane fade" id="Details-tab-pane" role="tabpanel" aria-labelledby="Details-tab" tabIndex={0}>
     <div className='mt-5 ms-5'>
     {participants?.map((participant, index)=>( 
     <Box
