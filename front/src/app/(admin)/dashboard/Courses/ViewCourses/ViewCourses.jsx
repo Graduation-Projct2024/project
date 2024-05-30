@@ -218,7 +218,7 @@ const handlePageChange = (event, value) => {
        </DialogActions>
         </Dialog>
         <Tooltip title="View Course details" placement="top">
-                  <Link href={"/Profile"}>
+                  <Link href={`CourseDetails/${course.id}`}>
                     <button
                       type="button"
                       className="edit-pen border-0 bg-white "

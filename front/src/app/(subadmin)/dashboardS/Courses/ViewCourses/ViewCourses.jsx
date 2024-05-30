@@ -229,7 +229,7 @@ const handleClickOpen = () => {
                       </div>
                     </div>
                   </div> */}
-      <Link href={'/Profile'}>
+      <Link href={`CourseDetails/${course.id}`}>
       <Tooltip title="View course details" placement="top">
         <button  type="button" className='border-0 bg-white '>
         <FontAwesomeIcon icon={faEye}  className='edit-pen'/>

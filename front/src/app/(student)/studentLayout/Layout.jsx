@@ -28,6 +28,7 @@ import { Avatar, Stack } from '@mui/material';
 import AdbIcon from '@mui/icons-material/Adb';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import './style.css'
+import HomeIcon from '@mui/icons-material/Home';
 import { UserContext } from '../../../context/user/User.jsx';
 import StudentRoute from '../../(auth)/protectedRoute/StudentRoute.jsx';
 const drawerWidth = 260;
@@ -38,6 +39,12 @@ function Layout(props) {
   
   let { userToken, setUserToken ,userData,setUserData,userId, setUserId} = React.useContext(UserContext);
 const sidebarItems = [
+  {
+    name: "Home",
+    href: "/",
+    icon: HomeIcon,
+    
+  },
   {
     name: "Dashboard",
     href: "/MyDashboard",

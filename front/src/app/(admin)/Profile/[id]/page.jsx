@@ -42,9 +42,8 @@ const handleCloseUpdate = () => {
     if(userData){
     try {
       //setLoading(false)
-      const {data} = await axios.get(`https://localhost:7116/api/UserAuth/GetProfileInfo?id=${userId}`,
+      const {data} = await axios.get(`https://localhost:7116/api/UserAuth/GetProfileInfo?id=${params.id}`,
       {headers :{Authorization:`Bearer ${userToken}`}}
-
       );
       console.log(data);
       setUser(data.result);

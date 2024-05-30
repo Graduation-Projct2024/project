@@ -24,6 +24,18 @@ body{
     animation-iteration-count: infinite;
     animation-timing-function: linear
 }
+.shape2{
+    position: absolute;
+    right: 20%;
+    bottom: 20%;
+    z-index: -1
+}
+.shape2 .shape1a{
+    animation-name: rotateme;
+    animation-duration: 10s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear
+}
 @keyframes rotateme {
     0% {
         transform: rotate(0deg)    ;
@@ -263,3 +275,40 @@ body{
     -ms-border-radius: 10px;
     -o-border-radius: 10px;
 }
+.crsIns{
+    color: #4C5372;
+}
+.crsInsContent img{
+    width: 150px;
+    height: 150px;
+    line-height: 50px;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+    padding: 10px;
+    border: 1px solid #4C5372;
+}
+.crsInsContent h4{
+    color: #4C5372;
+}
+.social{
+    width: 30px;
+      height: 30px;
+      line-height: 30px;
+      text-align: center;
+      border: 1px solid;
+      border-radius: 50%;
+      color: #4C5372;
+      list-style: none !important;
+      transition: 0.5s;
+      cursor: pointer;
+      padding: 0;
+   
+  }
+  .social:hover{
+    background-color: #4C5372;
+    color: #FFFDF6;
+    transform: rotate(360deg);
+  }
