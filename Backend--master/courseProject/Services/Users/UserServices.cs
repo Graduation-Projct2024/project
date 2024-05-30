@@ -5,6 +5,7 @@ using courseProject.Core.Models;
 using courseProject.Core.Models.DTO.LoginDTO;
 using courseProject.Core.Models.DTO.RegisterDTO;
 using courseProject.Core.Models.DTO.UsersDTO;
+using courseProject.Emails;
 using courseProject.ServiceErrors;
 using ErrorOr;
 using Microsoft.AspNetCore.Mvc;
@@ -18,12 +19,14 @@ namespace courseProject.Services.Users
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
         private readonly IMemoryCache memoryCache;
+        private readonly IEmailService emailService;
 
-        public UserServices(IUnitOfWork unitOfWork, IMapper mapper, IMemoryCache memoryCache)
+        public UserServices(IUnitOfWork unitOfWork, IMapper mapper, IMemoryCache memoryCache , IEmailService emailService)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
             this.memoryCache = memoryCache;
+            this.emailService = emailService;
         }
 
 
@@ -82,7 +85,7 @@ namespace courseProject.Services.Users
                 memoryCache.Set(cacheKey, verificationCode, TimeSpan.FromHours(2));
               //  await unitOfWork.EmailService.SendEmailAsync(model.email, "Your Verification Code", $" Hi {model.userName} , Your code is: {verificationCode}");
 
-               //  unitOfWork.EmailService.SendVerificationEmail(model.email,verificationCode);
+                 await emailService.SendVerificationEmail(model.email, "Your Verification Code" ,EmailTexts.VerificationCode( model.userName,verificationCode));
                 if (success1 > 0 && success2 > 0)
                 {
                     await transaction.CommitAsync();
