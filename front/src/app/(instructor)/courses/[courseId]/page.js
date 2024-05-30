@@ -154,9 +154,9 @@ const handleCloseViewTaskDialog = () => {
     setOpen(false);
   };
     const [materials, setMaterials] = useState([]);
-    console.log(useParams());
+    // console.log(useParams());
     const { courseId } = useParams();
-    console.log(courseId);
+    // console.log(courseId);
     const [courseName, setCourseName]=useState();
     const getCourses = async () => {
 if(userToken){
@@ -177,9 +177,9 @@ if(userToken){
 
           
         );
-        console.log(data);
-        setMaterials(data);
-        console.log(materials);
+        // console.log(data);
+        setMaterials(data.result);
+        // console.log(materials);
       }
       };
       const [participants, setParticipants]= useState();
@@ -198,16 +198,12 @@ if(userToken){
         setParticipants(data.data.result.items);
         setTotalPages(data.data.result.totalPages);
       }};
+
       useEffect(() => {
         getCourseMaterial();
         getCourses();
-        // getParticipants();
-      }, [materials,userToken]);
-
-
-      useEffect(() => {
         getParticipants();
-      }, [participants, pageNumber, pageSize]);  // Fetch courses on mount and when page or size changes
+      }, [participants, pageNumber, pageSize,materials,userToken]);  // Fetch courses on mount and when page or size changes
       
       const handlePageSizeChange = (event) => {
         setPageSize(event.target.value);
@@ -299,7 +295,7 @@ if(userToken){
           </Button>
         </DialogActions>
       </Dialog>
-   {materials.map((material)=>( 
+   {materials&& materials?.map((material)=>( 
 
    <Box
       height={70}

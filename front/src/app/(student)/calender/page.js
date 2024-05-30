@@ -39,7 +39,7 @@ export default function CalendarPage() {
   const [lecture, setLecture] = useState();
   const [lectureID, setLectureID] = useState();
 
-  const [skill, setSkill] = useState(1);
+  const [skill, setSkill] = useState();
   const [start, setStart] = useState('00:00');
   const [end, setEnd] = useState('01:00');
   const [status, setStatus] = useState('private');
@@ -62,11 +62,16 @@ function getCurrentDateFormatted(date) {
     endTime:""
   };
   const[instructors, setInstructors]=React.useState();
-  const getInstructors = async () => {
-   
+  
+
+    const getInstructors = async () => {
+        let currntDate=getCurrentDateFormatted(date);
+        if(userToken&&skill){
+// console.log(`skill ${skill} , start: ${start}, end: ${end}, currntDate ${currntDate}`)
     try {
+
       const response = await axios.post(
-        `http://localhost:5134/api/Employee/GetListOfInstructorForLectures?skillId=${skill}&startTime=${start}&endTime=${end}&date=${getCurrentDateFormatted(date)}`,
+        `https://localhost:7116/api/Instructor/GetListOfInstructorForLectures?skillId=${skill}&startTime=${start}&endTime=${end}&date=${currntDate}`,
         {},
         {
           headers: {
@@ -75,22 +80,21 @@ function getCurrentDateFormatted(date) {
           }
         }
       );
-  
-      if (response.data.isSuccess) {
-        setInstructors(response.data.result);
-      } else {
-        console.error('Error in response:', response.data);
-      }
+ setInstructors(response.data.result.value);
+        // console.error('Error in response:', response.data);
+      
     } catch (error) {
       console.error('Error fetching instructors:', error);
-    }
-  };
+    }}}
+  ;
   
   const[skills, setSkills]=React.useState();
   const getSkills = async () => {
-    const data = await axios.get(
-      `http://localhost:5134/api/Employee/GetAllSkillOptions`,
-      {},
+    if(userToken){
+    try{
+      const data = await axios.get(
+      
+      `https://localhost:7116/api/Skill/GetAllSkillOptions`,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -99,10 +103,12 @@ function getCurrentDateFormatted(date) {
         }
 
     );
-    //console.log(data.data.result);
-  
     setSkills(data.data.result);
-  };
+    setSkill(data.data.result[0].id);
+  }catch(error){
+    console.log(error);
+  }
+   } };
   function convertDateFormat(dateString) {
     // Split the date string into date and time parts
     const [datePart, timePart] = dateString.split(' ');
@@ -117,15 +123,12 @@ function getCurrentDateFormatted(date) {
   const getLectures = async () => {
     try {
       if (userId) {
-        const response = await axios.post(
-          `http://localhost:5134/api/StudentsContraller/GetAllConsultations?studentId=${userId}`,
-          {},
+        const response = await axios.get(
+          `https://localhost:7116/api/Lectures/GetAllConsultations?studentId=${userId}`,
 
           {headers :{Authorization:`Bearer ${userToken}`}}
 
         );
-
-        if (response.data.isSuccess) {
           const parsedEvents = response.data.result.items.map(event => ({
             title: event.name,
             id:event.consultationId,
@@ -135,7 +138,7 @@ function getCurrentDateFormatted(date) {
           }));
           setLecture(parsedEvents);
           //console.log(`yut${response.data.result[0].date} ${response.data.result[0].startTime}`)
-        }
+        
       }
     } catch (error) {
       console.error('Error fetching lectures:', error);
@@ -144,6 +147,7 @@ function getCurrentDateFormatted(date) {
  // console.log(lecture);
 
   const onSubmit = async (lectures) => {
+    try{
     const [startHour, startMinute] = lectures.startTime.split(':').map(Number);
     const [endHour, endMinute] = lectures.endTime.split(':').map(Number);
 
@@ -168,20 +172,22 @@ formData.append("InstructorId", selectedInstructor);
 
 
 const { data } = await axios.post(
-  `http://localhost:5134/api/StudentsContraller/BookALecture?studentId=${userId}&date=${date}&startTime=${lectures.startTime}&endTime=${lectures.endTime}`,
+  `https://localhost:7116/api/Lectures/BookALecture?studentId=${userId}&date=${date}&startTime=${lectures.startTime}&endTime=${lectures.endTime}`,
   formData,
   {headers: {
-    'Content-Type': 'application/problem+json; charset=utf-8'
+    'Content-Type': 'application/problem+json; charset=utf-8',
+    'Authorization':`Bearer ${userToken}`
   }}
 
 );
- if(data.isSuccess){
   setAlertOpen(true);
   setOpen(false);
  formik.resetForm();
  //setAlertOpen(true);
 
 
+  }catch(error){
+    console.log(error);
   }
   };
   const validationSchema = yup.object({
@@ -377,7 +383,7 @@ const textAraeInput = (
     if (calendarRef.current) {
       calendarRef.current.getApi().setOption('dayMaxEventRows', 3);
     }
-  }, [status, date, selectedInstructor, lecture, skill, start, end, instructors, skillName]);
+  }, [{status, date, selectedInstructor, lecture, skill, start, end, instructors, skillName, userToken}]);
   return (
     <Layout title='Book a Lecture'>
       <LectureDetails open={openDetails} onClose={handleCloseDetailskDialog} lectureID={lectureID} />

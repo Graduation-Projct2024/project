@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import Layout from '../studentLayout/Layout.jsx'
 import axios from 'axios';
 import Card from '@mui/material/Card';
@@ -15,24 +15,38 @@ import Button from '@mui/material/Button';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import './style.css'
+import { UserContext } from '@/context/user/User';
+import { useRouter } from 'next/navigation'
+
 export default function page() {
   const [page, setPage] = useState(1);
+  const {userToken, setUserToken, userData,userId}=useContext(UserContext);
+  const router = useRouter();
 const [role, setRole]=useState('student');
     const [courses, setCourses] = useState([]);
     const getCourses = async () => {
+      if(userId&&userToken){
+        try{
       const data = await axios.get(
-        `http://localhost:5134/api/CourseContraller?pageNumber=1&pageSize=10`
+        `https://localhost:7116/api/CourseContraller/GetAllCoursesToStudent?studentId=${userId}`,
+        {headers :{Authorization:`Bearer ${userToken}`}}
+
       );
     
       console.log(data);
        setCourses(data.data.result.items);
+    }catch(error){
+      console.log(error);
+    }}
     };
-  console.log(courses)
 
-
+    const handleClick = (course) => {
+      router.push(`/Courses/${course.id}?isEnrolled=${course.isEnrolled}`);
+    };
+    
   useEffect(() => {
     getCourses();
-  }, [page]);
+  }, [page,userId,userToken]);
 if (role=='student'){
   return (
     <Layout title='Courses'>
@@ -47,7 +61,7 @@ if (role=='student'){
               mb={2}
               m={2}
             >
-                       <Link href={`Courses/${course.id}`}>
+                       <Button onClick={()=>handleClick(course)}>
 <Card sx={{ maxWidth: 230 , borderRadius: 3, height:200 , display:'inline-block', m:2}}  key={course.id}>
       <CardActionArea>
        
@@ -73,7 +87,7 @@ if (role=='student'){
       </CardActionArea>
         
       </Card>
-      </Link>
+      </Button>
             </Box>
            ))
            ) : (

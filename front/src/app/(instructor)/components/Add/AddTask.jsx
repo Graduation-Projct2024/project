@@ -54,19 +54,18 @@ formData.append("instructorId", userData.userId);
 if(userToken){
 const { data } = await axios.post(
  
-  "http://localhost:5134/api/MaterialControllar/AddTask",
+  "https://localhost:7116/api/MaterialControllar/AddTask",
   formData,
   {headers :{Authorization:`Bearer ${userToken}`}}
 
 
 );
- if(data.isSuccess){
   console.log("test");
  formik.resetForm();
  onClose(); 
  handleCloseAdd();
  setAlertOpen(true);
- }
+ 
 
   }}
   catch (error) {

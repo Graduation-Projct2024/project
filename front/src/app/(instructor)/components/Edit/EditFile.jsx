@@ -50,20 +50,19 @@ formData.append("courseId", courseId);
 formData.append("instructorId", userData.userId);
 
 const { data } = await axios.put(
- `http://localhost:5134/api/MaterialControllar/EditFile?id=${materialID}`,
+ `https://localhost:7116/api/MaterialControllar/EditFile?id=${materialID}`,
   formData,
   {headers :{Authorization:`Bearer ${userToken}`}}
 
 
 
 );
- if(data.isSuccess){
   console.log(data);
  formik.resetForm();
  setAlertOpen(true);
  router.back();
 
-  }}
+  }
   catch (error) {
     if (error.isAxiosError) {
       const requestConfig = error.config;

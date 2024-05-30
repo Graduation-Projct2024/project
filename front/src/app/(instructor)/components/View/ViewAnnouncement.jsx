@@ -57,27 +57,34 @@ const handleClose = () => {
  };
  const getMaterial=async()=>{
   if(userToken){
-  const {data}= await axios.get(`http://localhost:5134/api/MaterialControllar/GetMaterialById?id=${materialID}`,
+    try{
+  const {data}= await axios.get(`https://localhost:7116/api/MaterialControllar/GetMaterialById?id=${materialID}`,
   {headers :{Authorization:`Bearer ${userToken}`}}
 
   )
 
-if(data.isSuccess==true){
   setMaterial(data.result);
   setLoading(false);
   console.log(data)
-}
+
   }
+catch(error){
+  console.log(error);
+}}
  }
  const deleteMaterial=async()=>{
-  const {data}= await axios.delete(`http://localhost:5134/api/MaterialControllar/DeleteMaterial?id=${materialID}`,
+  try{
+  const {data}= await axios.delete(`https://localhost:7116/api/MaterialControllar/DeleteMaterial?id=${materialID}`,
   {headers :{Authorization:`Bearer ${userToken}`}}
 
   )
   setOpenAlert(true);
   setOpen(false);
   router.back();
- }
+ }catch(error){
+
+  console.log(error);
+ }}
  const handleEdit =()=>{
   setIsEditing(!isEditing);
  }

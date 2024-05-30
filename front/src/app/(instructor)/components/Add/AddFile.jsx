@@ -36,8 +36,8 @@ export default function AddFile({ open, onClose,handleCloseAdd ,courseId }) {
     pdf: "",
   };
   const onSubmit = async (tasks) => {
-console.log("test")
-const formData = new FormData();
+try{
+  const formData = new FormData();
 formData.append("name", tasks.name);
 formData.append("description", tasks.description);
 formData.append("pdf", tasks.pdf);
@@ -46,20 +46,21 @@ formData.append("InstructorId",userData.userId);
 console.log(tasks.pdf)
 
 const { data } = await axios.post(
-  "http://localhost:5134/api/MaterialControllar/AddFile",
+  "https://localhost:7116/api/MaterialControllar/AddFile",
  
   formData,
   {headers :{Authorization:`Bearer ${userToken}`}}
 
 
 );
- if(data.isSuccess){
   console.log("test");
  formik.resetForm();
  setAlertOpen(true);
  onClose(); 
  handleCloseAdd();
 
+  }catch(error){
+    console.log(error);
   }
   };
   const validationSchema = yup.object({
