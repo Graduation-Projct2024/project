@@ -48,9 +48,10 @@ namespace courseProject.Authentication.MaterialInEnrolledCourse
                     {
 
                         var enrolledInCourse = await dbContext.studentCourses.AnyAsync(sc => sc.courseId == courseId && (sc.StudentId == userId || sc.Course.InstructorId == userId));
-                        var enrolledInConsultation = await dbContext.courseMaterials.AnyAsync(cm => cm.consultationId == consultationId && cm.InstructorId == userId);
+                        var enrolledInConsultation = await dbContext.consultations.AnyAsync(cm => cm.Id == consultationId && cm.InstructorId == userId);
+                        var studentInConsultation = await dbContext.StudentConsultations.AnyAsync(cm => cm.consultationId == consultationId && cm.StudentId == userId);
 
-                        if (enrolledInCourse || enrolledInConsultation)
+                        if (enrolledInCourse || enrolledInConsultation || studentInConsultation)
                         {
                             context.Succeed(requirement);
                             return;

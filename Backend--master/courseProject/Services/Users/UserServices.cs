@@ -80,7 +80,9 @@ namespace courseProject.Services.Users
 
                 var cacheKey = $"VerificationCodeFor-{model.email}";
                 memoryCache.Set(cacheKey, verificationCode, TimeSpan.FromHours(2));
-                await unitOfWork.EmailService.SendEmailAsync(model.email, "Your Verification Code", $" Hi {model.userName} , Your code is: {verificationCode}");
+              //  await unitOfWork.EmailService.SendEmailAsync(model.email, "Your Verification Code", $" Hi {model.userName} , Your code is: {verificationCode}");
+
+               //  unitOfWork.EmailService.SendVerificationEmail(model.email,verificationCode);
                 if (success1 > 0 && success2 > 0)
                 {
                     await transaction.CommitAsync();
@@ -122,7 +124,7 @@ namespace courseProject.Services.Users
             string verificationCode = await unitOfWork.UserRepository.GenerateSecureVerificationCode(6);
             var cacheKey = $"VerificationCodeFor-{email}";
             memoryCache.Set(cacheKey, verificationCode, TimeSpan.FromHours(2));
-            await unitOfWork.EmailService.SendEmailAsync(email, "Your Verification Code", $" Hi {getUser.userName} , Your code is: {verificationCode}");
+          //  await unitOfWork.EmailService.SendEmailAsync(email, "Your Verification Code", $" Hi {getUser.userName} , Your code is: {verificationCode}");
             return Result.Success;
         }
 

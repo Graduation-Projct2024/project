@@ -33,7 +33,7 @@ namespace courseProject.Repository.GenericRepository
             CourseRepository = new CourseRepository(dbContext);
             materialRepository = new MaterialRepository(dbContext);
             eventRepository = new EventRepository(dbContext);
-            EmailService = new SmtpEmailService(configuration);
+     //       EmailService = new SmtpEmailService(configuration);
 
         }
 

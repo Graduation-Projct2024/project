@@ -80,7 +80,7 @@ namespace courseProject.Controllers
         {
             var registeUser = await userServices.Register(model);
             if (registeUser.IsError) return Ok(new ApiResponce { ErrorMassages=registeUser.FirstError.Description});
-            return Ok(new ApiResponce { Result = "You have been registered successfully" });
+            return Ok(new ApiResponce { Result = model});
         }
             
                     
