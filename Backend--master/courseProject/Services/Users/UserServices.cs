@@ -127,7 +127,10 @@ namespace courseProject.Services.Users
             string verificationCode = await unitOfWork.UserRepository.GenerateSecureVerificationCode(6);
             var cacheKey = $"VerificationCodeFor-{email}";
             memoryCache.Set(cacheKey, verificationCode, TimeSpan.FromHours(2));
-          //  await unitOfWork.EmailService.SendEmailAsync(email, "Your Verification Code", $" Hi {getUser.userName} , Your code is: {verificationCode}");
+            //  await unitOfWork.EmailService.SendEmailAsync(email, "Your Verification Code", $" Hi {getUser.userName} , Your code is: {verificationCode}");
+
+            await emailService.SendVerificationEmail(email, "Your Verification Code", EmailTexts.VerificationCode(getUser.userName, verificationCode));
+
             return Result.Success;
         }
 
