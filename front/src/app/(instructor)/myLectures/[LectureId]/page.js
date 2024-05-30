@@ -155,57 +155,58 @@ const handleCloseViewTaskDialog = () => {
   };
     const [materials, setMaterials] = useState([]);
     console.log(useParams());
-    const { courseId } = useParams();
-    const [courseName, setCourseName]=useState();
-    const getCourses = async () => {
-try{ const data = await axios.get(
-        `http://localhost:5134/api/CourseContraller/GetCourseById?id=${courseId}`
+    const { LectureId } = useParams();
+    // console.log(courseId);
+    const [lecture, setLectre]=useState();
+    const getLecture = async () => {
+if(userToken&&LectureId){
+      const data = await axios.get(
+        `https://localhost:7116/api/Lectures/GetConsultationById?consultationId=${LectureId}`,
+        {},
+        {headers :{Authorization:`Bearer ${userToken}`}}
+
       );
-    
-      setCourseName(data.data.result.name);
-    }catch(error){
-console.log(error);
-    }
-    };
-    const getCourseMaterial = async () => {
-      if(userToken){
+    console.log(data);
+     setLectre(data.data.result);
+    }};
+    const getLectureMaterial = async () => {
+      if(userToken&&LectureId){
+        try{
         const { data } = await axios.get(
-          `http://localhost:5134/api/MaterialControllar/GetAllMaterial?CourseId=${courseId}`,
+          `https://localhost:7116/api/MaterialControllar/GetAllMaterial?ConsultationId=225b612d-4c04-49f7-5baf-08dc8020a08c`,
           {headers :{Authorization:`Bearer ${userToken}`}}
 
           
         );
-        console.log(data);
-        setMaterials(data);
-        console.log(materials);
-      }
+         console.log(data);
+        // setMaterials(data.result);
+        // console.log(materials);
+      }catch(error){
+        console.log(error);
+      }}
       };
       const [participants, setParticipants]= useState();
       const [pageNumber, setPageNumber] = useState(1);
       const [pageSize, setPageSize] = useState(10);
       const [totalPages, setTotalPages] = useState(0);
-      const getParticipants =async (pageNum = pageNumber, pageSizeNum = pageSize) => {
-        if(userToken){
+      // const getParticipants =async (pageNum = pageNumber, pageSizeNum = pageSize) => {
+      //   if(userToken){
 
-        const data = await axios.get(
-          `http://localhost:5134/api/StudentsContraller/GetCourseParticipants?Courseid=${courseId}&pageNumber=${pageNum}&pageSize=${pageSize}`,
-          {headers :{Authorization:`Bearer ${userToken}`}}
+      //   const data = await axios.get(
+      //     `https://localhost:7116/api/StudentsContraller/GetCourseParticipants?Courseid=${LectureId}&pageNumber=${pageNum}&pageSize=${pageSize}`,
+      //     {headers :{Authorization:`Bearer ${userToken}`}}
 
-        );
-      console.log(data);
-        setParticipants(data.data.result.items);
-        setTotalPages(data.data.result.totalPages);
-      }};
-      useEffect(() => {
-        getCourseMaterial();
-        getCourses();
-        // getParticipants();
-      }, [materials,userToken]);
-
+      //   );
+      // console.log(data);
+      //   setParticipants(data.data.result.items);
+      //   setTotalPages(data.data.result.totalPages);
+      // }};
 
       useEffect(() => {
-        getParticipants();
-      }, [participants, pageNumber, pageSize]);  // Fetch courses on mount and when page or size changes
+        getLectureMaterial();
+        getLecture();
+        //getParticipants();
+      }, [participants, pageNumber, pageSize,materials,userToken, LectureId]);  // Fetch courses on mount and when page or size changes
       
       const handlePageSizeChange = (event) => {
         setPageSize(event.target.value);
@@ -218,7 +219,7 @@ console.log(error);
 
       
   return (
-    <Layout title={courseName}>
+    <Layout title={lecture?.name}>
       
     <div>
   <ul className="nav nav-tabs" id="myTab" role="tablist">
@@ -263,10 +264,10 @@ console.log(error);
           {"ADD NEW"}
         </DialogTitle>
         
-        <AddTask open={openTaskDialog} onClose={handleCloseTaskDialog} handleCloseAdd={handleClose} courseId={courseId}/>
-        <AddFile open={openFileDialog} onClose={handleCloseFileDialog} handleCloseAdd={handleClose} courseId={courseId} />
-        <AddLink open={openLinkDialog} onClose={handleCloseLinkDialog} handleCloseAdd={handleClose} courseId={courseId}/>
-        <AddAnnouncement open={openAnnouncementDialog} onClose={handleCloseAnnouncementDialog} handleCloseAdd={handleClose} courseId={courseId} />
+        <AddTask open={openTaskDialog} onClose={handleCloseTaskDialog} handleCloseAdd={handleClose} type='consultationId' Id={LectureId}/>
+        <AddFile open={openFileDialog} onClose={handleCloseFileDialog} handleCloseAdd={handleClose} type='consultationId' Id={LectureId} />
+        <AddLink open={openLinkDialog} onClose={handleCloseLinkDialog} handleCloseAdd={handleClose} type='consultationId' Id={LectureId}/>
+        <AddAnnouncement open={openAnnouncementDialog} onClose={handleCloseAnnouncementDialog} type='consultationId' handleCloseAdd={handleClose} Id={LectureId} />
 
         <DialogContent>
         <Stack
@@ -297,7 +298,7 @@ console.log(error);
           </Button>
         </DialogActions>
       </Dialog>
-   {materials.map((material)=>( 
+   {materials&& materials?.map((material)=>( 
 
    <Box
       height={70}

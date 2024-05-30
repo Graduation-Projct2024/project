@@ -17,7 +17,7 @@ import TextArea from '../../../../component/input/TextArea.jsx';
 
 import { UserContext } from '../../../../context/user/User.jsx';
 import './style.css'
-export default function AddTask({ open, onClose ,handleCloseAdd, courseId}) {
+export default function AddTask({ open, onClose ,handleCloseAdd,type, Id}) {
   const {userToken, setUserToken, userData}=useContext(UserContext);
 
   const handelFieldChang = (event) => {
@@ -47,8 +47,12 @@ formData.append("name", tasks.name);
 formData.append("description", tasks.description);
 formData.append("DeadLine", tasks.DeadLine);
 formData.append("pdf", tasks.pdf);
-console.log(tasks.pdf)
-formData.append("courseId", courseId);
+if(type=='courseId'){
+  formData.append("courseId", Id);
+}else{
+  formData.append("consultationId", Id);
+
+}
 formData.append("instructorId", userData.userId);
 
 if(userToken){

@@ -15,7 +15,7 @@ import WeeklyHours from './WeeklyHours';
 import ViewWeeklyHours from './ViewWeeklyHours';
 import Education from './Education.jsx';
 import Feedback from './Feedback.jsx';
-
+import About from './About.jsx';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, useMediaQuery, useTheme } from '@mui/material';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -210,7 +210,7 @@ const handleCloseUpdate = () => {
 
           </TabList>
         </Box>
-        <TabPanel value="0" active>About me</TabPanel>
+        <TabPanel value="0" active><About /></TabPanel>
         <TabPanel value="1"><Education /></TabPanel>
         <TabPanel value="2"><ViewWeeklyHours id={params.id}/>
       <WeeklyHours id = {params.id}/></TabPanel>
