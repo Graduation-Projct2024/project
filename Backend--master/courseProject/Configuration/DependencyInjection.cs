@@ -2,6 +2,7 @@
 using courseProject.Authentication.EnrolledInCourse;
 using courseProject.Authentication.MaterialInEnrolledCourse;
 using courseProject.Core.IGenericRepository;
+using courseProject.Core.Models;
 using courseProject.MappingProfile;
 using courseProject.Repository.Data;
 using courseProject.Repository.GenericRepository;
@@ -9,6 +10,7 @@ using courseProject.Services.Courses;
 using courseProject.Services.Skill;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Runtime.CompilerServices;
@@ -23,6 +25,7 @@ namespace courseProject.Configuration
         public static IServiceCollection AddApplication (this IServiceCollection services)
         {
             services.AddScoped(typeof(IGenericRepository1<>), typeof(GenericRepository1<>));
+            services.AddTransient<IEmailService, SmtpEmailService>();
             services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
            
             //  services.AddScoped(typeof(ISubAdminRepository), typeof(SubAdminRepository));
@@ -183,7 +186,6 @@ namespace courseProject.Configuration
                 }
                 );
 
-              
 
 
 
@@ -195,5 +197,40 @@ namespace courseProject.Configuration
 
             return services;
         }
+
+
+
+
+
+
+       // public static IServiceCollection AddIdentities(this IServiceCollection services)
+       // {
+
+       //     services.AddIdentity<User, IdentityRole>()
+       //.AddEntityFrameworkStores<projectDbContext>()
+       //.AddDefaultTokenProviders();
+
+
+
+       //     services.AddIdentityCore<User>()
+       //          .AddRoles<IdentityRole>()
+       //       // .addIdentity<User , IdentityRole>
+       //       //   .AddEntityFrameworkStores<projectDbContext>()
+       //          .AddDefaultTokenProviders()
+       //          .AddSignInManager<SignInManager<User>>();
+
+       //     services.Configure<IdentityOptions>(options =>
+       //     {
+       //         options.Password.RequireDigit = false;
+       //         options.Password.RequireLowercase = false;
+       //         options.Password.RequireNonAlphanumeric = false;
+       //         options.Password.RequireUppercase = false;
+       //         options.Password.RequiredLength = 8;
+       //         options.Password.RequiredUniqueChars = 1;
+       //     }
+       //     );
+
+       //     return services;
+       // }
     }
 }

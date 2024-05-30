@@ -66,7 +66,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        [Authorize(Policy = "Student")]
+       // [Authorize(Policy = "Student")]
 
         //this is to retrive all courses to students to enroll in
         public async Task<ActionResult<ApiResponce>> GetAllCoursesToStudent(Guid studentId, [FromQuery] PaginationRequest paginationRequest)

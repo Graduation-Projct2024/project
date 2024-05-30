@@ -1,5 +1,5 @@
 'use client'
-import React, { useContext, useEffect, useState } from 'react'
+import  { useContext, useEffect, useState } from 'react'
 import './Contact.css'
 import Layout from '../AdminLayout/Layout'
 import '../dashboard/dashboard.css'
@@ -12,155 +12,188 @@ import '../Profile/[id]/Profile.css'
 import { faArrowUpFromBracket, faEye, faFilter } from '@fortawesome/free-solid-svg-icons'
 import { UserContext } from '@/context/user/User'
 import { FormControl, InputLabel, MenuItem, Pagination, Select, Stack, Tooltip } from '@mui/material'
+import '../../../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js'
 
-export default function page() {
-  const {userToken, setUserToken, userData}=useContext(UserContext);
-  const [pageNumber, setPageNumber] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
-  const [totalPages, setTotalPages] = useState(0);
+// export default function page() {
+//   const {userToken, setUserToken, userData}=useContext(UserContext);
+//   const [pageNumber, setPageNumber] = useState(1);
+//   const [pageSize, setPageSize] = useState(10);
+//   const [totalPages, setTotalPages] = useState(0);
 
-  let [contacts,setContact] = useState([]);
-  const fetchContacts = async (pageNum = pageNumber, pageSizeNum = pageSize) => {
-    if(userData){
-    try{
-    const { data } = await axios.get(`https://localhost:7116/api/Employee/GetAllEmployeeForContact?pageNumber=${pageNum}&pageSize=${pageSize}`,
-    {
-        headers: {
-            Authorization: `Bearer ${userToken}`,
-        },
-    });
-    console.log(data);
-    setContact(data.result.items);
-    setTotalPages(data.result.totalPages);
-  }
-    catch(error){
-      console.log(error);
-    }
-  }
-  };
+//   let [contacts,setContact] = useState([]);
+//   const fetchContacts = async (pageNum = pageNumber, pageSizeNum = pageSize) => {
+//     if(userData){
+//     try{
+//     const { data } = await axios.get(`https://localhost:7116/api/Employee/GetAllEmployee?pageNumber=${pageNum}&pageSize=${pageSize}`,
+//     {
+//         headers: {
+//             Authorization: `Bearer ${userToken}`,
+//         },
+//     });
+//     console.log(data);
+//     setContact(data.result.items);
+//     setTotalPages(data.result.totalPages);
+//   }
+//     catch(error){
+//       console.log(error);
+//     }
+//   }
+//   };
 
 
-  useEffect(() => {
-    fetchContacts();
-  }, [userData, pageNumber, pageSize]);
+//   useEffect(() => {
+//     fetchContacts();
+//   }, [userData, pageNumber, pageSize]);
 
-  const handlePageSizeChange = (event) => {
-    setPageSize(event.target.value);
-    setPageNumber(1); // Reset to the first page when page size changes
-  };
+//   const handlePageSizeChange = (event) => {
+//     setPageSize(event.target.value);
+//     setPageNumber(1); // Reset to the first page when page size changes
+//   };
   
-  const handlePageChange = (event, value) => {
-    setPageNumber(value);
-  };
+//   const handlePageChange = (event, value) => {
+//     setPageNumber(value);
+//   };
 
-  const [searchTerm, setSearchTerm] = useState('');
+//   const [searchTerm, setSearchTerm] = useState('');
 
-  const handleSearch = (event) => {
-    setSearchTerm(event.target.value);
-  };
+//   const handleSearch = (event) => {
+//     setSearchTerm(event.target.value);
+//   };
 
-  const filteredContacts = contacts.filter((contact) => {
-const matchesSearchTerm =
-  Object.values(contact).some(
-    (value) =>
-      typeof value === 'string' && value.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+//   const filteredContacts = contacts.filter((contact) => {
+// const matchesSearchTerm =
+//   Object.values(contact).some(
+//     (value) =>
+//       typeof value === 'string' && value.toLowerCase().includes(searchTerm.toLowerCase())
+//   );
 
-return matchesSearchTerm ;
-});
+// return matchesSearchTerm ;
+// });
 
-  return (
-    <Layout title="Contacts">
-       <div className="filter py-2 text-end border-top mt-4">
-        <nav className="navbar">
-          <div className="container justify-content-end">
-                <form className="d-flex" role="search">
-                <input
-                    className="form-control me-2"
-                    type="search"
-                    placeholder="Search"
-                    aria-label="Search"
-                    value={searchTerm}
-                    onChange={handleSearch}
-                />
-                 <FormControl fullWidth className="w-50">
-        <InputLabel id="page-size-select-label">Page Size</InputLabel>
-        <Select
-        className="justify-content-center"
-          labelId="page-size-select-label"
-          id="page-size-select"
-          value={pageSize}
-          label="Page Size"
-          onChange={handlePageSizeChange}
-        >
-          <MenuItem value={5}>5</MenuItem>
-          <MenuItem value={10}>10</MenuItem>
-          <MenuItem value={20}>20</MenuItem>
-          <MenuItem value={50}>50</MenuItem>
-        </Select>
-      </FormControl>
-                <div className="icons d-flex gap-2 pt-3">
+//   return (
+//     <Layout title="Contacts">
+//        <div className="filter py-2 text-end border-top mt-4">
+//         <nav className="navbar">
+//           <div className="container justify-content-end">
+//                 <form className="d-flex" role="search">
+//                 <input
+//                     className="form-control me-2"
+//                     type="search"
+//                     placeholder="Search"
+//                     aria-label="Search"
+//                     value={searchTerm}
+//                     onChange={handleSearch}
+//                 />
+//                  <FormControl fullWidth className="w-50">
+//         <InputLabel id="page-size-select-label">Page Size</InputLabel>
+//         <Select
+//         className="justify-content-center"
+//           labelId="page-size-select-label"
+//           id="page-size-select"
+//           value={pageSize}
+//           label="Page Size"
+//           onChange={handlePageSizeChange}
+//         >
+//           <MenuItem value={5}>5</MenuItem>
+//           <MenuItem value={10}>10</MenuItem>
+//           <MenuItem value={20}>20</MenuItem>
+//           <MenuItem value={50}>50</MenuItem>
+//         </Select>
+//       </FormControl>
+//                 <div className="icons d-flex gap-2 pt-3">
                     
-                    <div className="dropdown">
-  <button className="dropdown-toggle border-0 bg-white edit-pen" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-    <FontAwesomeIcon icon={faFilter} />
-  </button>
-  <ul className="dropdown-menu">
+//                     <div className="dropdown">
+//   <button className="dropdown-toggle border-0 bg-white edit-pen" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+//     <FontAwesomeIcon icon={faFilter} />
+//   </button>
+//   <ul className="dropdown-menu">
  
-  </ul>
-</div>
-<FontAwesomeIcon icon={faArrowUpFromBracket} />
+//   </ul>
+// </div>
+// <FontAwesomeIcon icon={faArrowUpFromBracket} />
                     
-                </div>
-                </form>
+//                 </div>
+//                 </form>
                
 
-            </div>
-        </nav>
+//             </div>
+//         </nav>
         
-      </div>
+//       </div>
      
 
-      <div className="row">
-        {filteredContacts ? filteredContacts.map((contact)=>(
-          <div key={contact.email} className="col-md-4">
-                    <div className="card text-center mb-3" style={{ width: "18rem" }}>
-                      <div className="card-body m-3">
-                      <img src={contact.imageUrl ? contact.imageUrl : "./user1.png"} 
-           className="pho pb-3 img-fluid" 
-           alt="Profile" 
-           onError={(e) => { 
-             console.error("Error loading image:", contact.imageUrl); 
-             e.target.onerror = null; // prevents looping
-             e.target.src = "./user1.png"; // default image if error
-           }} />                    
-                      <h4 className="card-title contactName">{contact.userName} {contact.lName}</h4>
+//       <div className="row">
+//         {filteredContacts ? filteredContacts.map((contact)=>(
+//           <div key={contact.email} className="col-md-4">
+//                     <div className="card text-center mb-3" style={{ width: "18rem" }}>
+//                       <div className="card-body m-3">
+//                       <img src={contact.imageUrl ? contact.imageUrl : "./user1.png"} 
+//            className="pho pb-3 img-fluid" 
+//            alt="Profile" 
+//            onError={(e) => { 
+//              console.error("Error loading image:", contact.imageUrl); 
+//              e.target.onerror = null; // prevents looping
+//              e.target.src = "./user1.png"; // default image if error
+//            }} />                    
+//                       <h4 className="card-title contactName">{contact.fName} {contact.lName}</h4>
                         
-                        <div className="d-flex justify-content-center gap-3 pt-3">
-                        <Tooltip title="phone" placement="top">
-                          <Link className='social' href={`tel:${contact.phone}`}><FontAwesomeIcon icon={faPhone} /></Link></Tooltip>
-                        <Tooltip title="Email" placement="top">
-                          <Link className='social' href={`mailto:${contact.email}`}><FontAwesomeIcon icon={faEnvelope} /></Link></Tooltip>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-        )) : <h1>No Data</h1>}
+//                         <div className="d-flex justify-content-center gap-3 pt-3">
+//                         <Tooltip title="phone" placement="top">
+//                           <Link className='social' href={`tel:${contact.phoneNumber}`}><FontAwesomeIcon icon={faPhone} /></Link></Tooltip>
+//                         <Tooltip title="Email" placement="top">
+//                           <Link className='social' href={`mailto:${contact.email}`}><FontAwesomeIcon icon={faEnvelope} /></Link></Tooltip>
+//                         </div>
+//                       </div>
+//                     </div>
+//                   </div>
+//         )) : <h1>No Data</h1>}
        
-      </div>
-       <Stack spacing={2} sx={{ width: '100%', maxWidth: 500, margin: '0 auto' }}>
+//       </div>
+//        <Stack spacing={2} sx={{ width: '100%', maxWidth: 500, margin: '0 auto' }}>
      
-      <Pagination
-      className="pb-3"
-        count={totalPages}
-        page={pageNumber}
-        onChange={handlePageChange}
-        variant="outlined"
-        color="secondary"
-        showFirstButton
-        showLastButton
-      />
-    </Stack>
+//       <Pagination
+//       className="pb-3"
+//         count={totalPages}
+//         page={pageNumber}
+//         onChange={handlePageChange}
+//         variant="outlined"
+//         color="secondary"
+//         showFirstButton
+//         showLastButton
+//       />
+//     </Stack>
+//     </Layout>
+//   );
+// }
+
+import React from 'react'
+import EmployeeContacts from './EmployeeContacts'
+import StudentContacts from './StudentContacts'
+
+export default function page() {
+  return (
+    <Layout title = "Contscts">
+       <div>
+  <nav>
+    <div className="nav nav-tabs" id="nav-tab" role="tablist">
+      <button className="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Employees</button>
+      <button className="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Students</button>
+
+    </div>
+  </nav>
+
+
+  <div className="tab-content" id="nav-tabContent">
+    <div className="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabIndex={0}>
+      <EmployeeContacts/>
+    </div>
+    <div className="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabIndex={0}>
+      <StudentContacts/>
+    </div>
+  </div>
+</div>
+
     </Layout>
-  );
+    
+  )
 }

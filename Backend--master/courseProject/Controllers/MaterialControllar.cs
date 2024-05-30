@@ -192,9 +192,9 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "EnrolledInCourse")]
-        public async Task<ActionResult<ApiResponce>> GetAllMaterialInTheCourseAsync([FromQuery] Guid CourseId )
+        public async Task<ActionResult<ApiResponce>> GetAllMaterialInTheCourseAsync( Guid? CourseId  , Guid? ConsultationId)
         {
-            var AllMaterials = await materialServices.GetAllMaterialInTheCourse(CourseId);
+            var AllMaterials = await materialServices.GetAllMaterialInTheCourse(CourseId , ConsultationId);
             if (AllMaterials.IsError) return NotFound(new ApiResponce { ErrorMassages=AllMaterials.FirstError.Description});
             return Ok(new ApiResponce { Result = AllMaterials.Value });
         }

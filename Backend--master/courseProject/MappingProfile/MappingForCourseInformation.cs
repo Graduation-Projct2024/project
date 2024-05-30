@@ -4,6 +4,7 @@ using courseProject.Controllers;
 using courseProject.core.Models;
 using courseProject.Core.Models;
 using courseProject.Core.Models.DTO.CoursesDTO;
+using courseProject.Core.Models.DTO.LecturesDTO;
 using courseProject.Core.Models.DTO.MaterialsDTO;
 using courseProject.Core.Models.DTO.StudentsDTO;
 
@@ -65,6 +66,7 @@ namespace courseProject.MappingProfile
             CreateMap<FileDTO, CourseMaterial>();
             CreateMap<AnnouncementDTO, CourseMaterial>();
             CreateMap<LinkDTO, CourseMaterial>();
+      //      CreateMap<Consultation, LecturesForRetriveDTO>();
          //   CreateMap<CourseMaterial, TaskForRetriveDTO>();
             //  .ForMember(x => x.pdfUrl, o => o.MapFrom(y => $"http://localhost:5134/{y.pdfUrl}"));
            // CreateMap<CourseMaterial, FileForRetriveDTO>();

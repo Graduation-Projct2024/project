@@ -17,7 +17,7 @@ namespace courseProject.Services.Materials
         public Task<ErrorOr<Updated>> EDitLink(Guid id, LinkDTO linkDTO);
         public Task<ErrorOr<Deleted>> DeleteMaterial(Guid id);
         public Task<ErrorOr<CourseMaterial>> GetMaterialById(Guid id);
-        public Task<ErrorOr<ArrayList>> GetAllMaterialInTheCourse(Guid courseId);
+        public Task<ErrorOr<ArrayList>> GetAllMaterialInTheCourse(Guid? courseId, Guid? consultationId);
 
     }
 }

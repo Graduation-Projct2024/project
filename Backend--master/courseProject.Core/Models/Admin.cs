@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
 namespace courseProject.Core.Models
 {
-    public class Admin
+    public class Admin 
     {
         [Key]
         [ForeignKey("User")]       

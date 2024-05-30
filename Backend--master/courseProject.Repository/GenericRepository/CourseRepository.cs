@@ -21,7 +21,7 @@ namespace courseProject.Repository.GenericRepository
 
         
 
-        public async Task<Course> GetCourseByIdAsync(Guid id)
+        public async Task<Course> GetCourseByIdAsync(Guid? id)
         {
            return  await dbContext.courses.Include(x=>x.Instructor).ThenInclude(x=>x.user)
                 .Include(x=>x.SubAdmin).ThenInclude(x=>x.user)

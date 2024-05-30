@@ -149,7 +149,7 @@ namespace courseProject.Repository.GenericRepository
                 .Include(x=>x.Student).ThenInclude(x=>x.user).ToListAsync();
         }
 
-        public async Task<Consultation> GetConsultationById(Guid consultationId)
+        public async Task<Consultation> GetConsultationById(Guid? consultationId)
         {
            return await dbContext.consultations.Include(x=>x.student).ThenInclude(x=>x.user)
                 .Include(x=>x.instructor).ThenInclude(x=>x.user).FirstOrDefaultAsync(x=>x.Id==consultationId);

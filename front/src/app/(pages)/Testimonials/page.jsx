@@ -21,7 +21,7 @@ export default function Testimonials() {
   let [contacts,setContacts] = useState([]);
   const fetchContacts = async () => {
     try{
-    const { data } = await axios.get(`https://localhost:7116/api/Employee/GetAllEmployeeForContact?pageNumber=1&pageSize=100`);
+    const { data } = await axios.get(`https://localhost:7116/api/Employee/GetAllEmployee?pageNumber=1&pageSize=1000`);
 
     console.log(data);
     setContacts(data.result.items);
@@ -119,7 +119,7 @@ export default function Testimonials() {
         >
 
            {contacts.length? contacts.map((contact)=>(
-            <div> {contact.role == "instructor" &&
+            <div> {contact.type == "instructor" &&
           <SwiperSlide key={contact.id} className='py-5' >
                      <div className="col-md-4">
                     <div className="card text-center mb-3" style={{ width: "18rem" }}>
@@ -132,7 +132,7 @@ export default function Testimonials() {
              e.target.onerror = null; // prevents looping
              e.target.src = "./user1.png"; // default image if error
            }} />                          
-                      <h4 className="card-title contactName">{contact.userName} {contact.lName}</h4>
+                      <h4 className="card-title contactName">{contact.fName} {contact.lName}</h4>
                         
                         <div className="d-flex justify-content-center gap-3 pt-3 border-top">
                           <Link className='social' href="#"><FontAwesomeIcon icon={faLinkedinIn} /></Link>

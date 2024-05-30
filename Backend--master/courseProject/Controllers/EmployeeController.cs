@@ -55,39 +55,30 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]      
         public async Task<ActionResult<ApiResponce>> GetAllEmployeeAsync([FromQuery] PaginationRequest paginationRequest)
-        {         
-            
-                var SubAdmins = await subAdminServices.GetAllSubAdmins();
-                var instructors = await instructorServices.GetAllInstructors();
-                
-                var mapperSubAdmin = mapper.Map<IReadOnlyList<SubAdmin>, IReadOnlyList<EmployeeDto>>(SubAdmins);             
-                var mapperInstructor = mapper.Map<IReadOnlyList<Instructor>, IReadOnlyList<EmployeeDto>>(instructors);             
-                var allEmployees = (mapperSubAdmin.Concat(mapperInstructor)).OrderBy(x=>x.Id).ToList();          
-                return Ok(new ApiResponce { Result = (Pagination<EmployeeDto>.CreateAsync(allEmployees, paginationRequest.pageNumber, paginationRequest.pageSize)).Result });
-                
-          
-
+        {
+            var allEmployees = await employeeServices.getAllEmployees();         
+            return Ok(new ApiResponce { Result = (Pagination<EmployeeDto>.CreateAsync(allEmployees, paginationRequest.pageNumber, paginationRequest.pageSize)).Result });               
         }
 
 
-        [HttpGet("GetAllEmployeeForContact")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(404)]
-        [ProducesResponseType(400)]
+        //[HttpGet("GetAllEmployeeForContact")]
+        //[ProducesResponseType(200)]
+        //[ProducesResponseType(404)]
+        //[ProducesResponseType(400)]
         
-        public async Task<ActionResult<ApiResponce>> GetAllEmployeeForContactAsync([FromQuery] PaginationRequest paginationRequest)
-        {
-            var subAdmins = await subAdminServices.GetAllSubAdmins();
-            var instructors = await instructorServices.GetAllInstructors();
+        //public async Task<ActionResult<ApiResponce>> GetAllEmployeeForContactAsync([FromQuery] PaginationRequest paginationRequest)
+        //{
+        //    var subAdmins = await subAdminServices.GetAllSubAdmins();
+        //    var instructors = await instructorServices.GetAllInstructors();
 
            
-            var mapperSubAdmin = mapper.Map<IReadOnlyList<SubAdmin>, IReadOnlyList<ContactDto>>(subAdmins);
-            var mapperInstructor = mapper.Map<IReadOnlyList<Instructor>, IReadOnlyList<ContactDto>>(instructors);
-            var allEmployees = (mapperSubAdmin.Concat(mapperInstructor)).ToList();
+        //    var mapperSubAdmin = mapper.Map<IReadOnlyList<SubAdmin>, IReadOnlyList<ContactDto>>(subAdmins);
+        //    var mapperInstructor = mapper.Map<IReadOnlyList<Instructor>, IReadOnlyList<ContactDto>>(instructors);
+        //    var allEmployees = (mapperSubAdmin.Concat(mapperInstructor)).ToList();
          
-            return Ok(new ApiResponce { Result = (Pagination<ContactDto>.CreateAsync(allEmployees, paginationRequest.pageNumber, paginationRequest.pageSize)).Result });
+        //    return Ok(new ApiResponce { Result = (Pagination<ContactDto>.CreateAsync(allEmployees, paginationRequest.pageNumber, paginationRequest.pageSize)).Result });
 
-        }
+        //}
 
 
 
