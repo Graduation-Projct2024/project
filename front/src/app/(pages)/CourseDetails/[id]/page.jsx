@@ -3,20 +3,25 @@ import React, { useContext, useEffect, useState } from 'react'
 import Layout from '../../Layout/Layout'
 import '../CourseDetails.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faClock, faCode, faHourglassHalf, faLayerGroup, faPersonChalkboard, faStopwatch, faUser, faUserGraduate } from '@fortawesome/free-solid-svg-icons'
+import { faClock, faCode, faEnvelope, faHourglassHalf, faLayerGroup, faPersonChalkboard, faStopwatch, faUser, faUserGraduate } from '@fortawesome/free-solid-svg-icons'
 import '../../../../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js'
 import { UserContext } from '@/context/user/User';
 import axios from 'axios';
+import { faCss3, faFacebookF, faGithub, faLinkedinIn } from '@fortawesome/free-brands-svg-icons'
 export default function CourseDetails({params}) {
+  const {userToken, setUserToken, userData,userId}=useContext(UserContext);
+
   console.log(params.id)
   let [course,setCourse] = useState({});
   let [instructors,setInstructors] = useState([]);
   let[instructor,setInstructor] = useState({});
-//  const fetchIns = async ()=>{
-//     const {data} = await axios.get('https://localhost:7116/api/Instructor/GetAllInstructorsList');
-//     // console.log(data)
-//      setInstructors(data.result);
-//   }
+  let[role,setRole] = useState();
+ const fetchIns = async ()=>{
+    const {data} = await axios.get('https://localhost:7116/api/Employee/GetAllEmployee?pageNumber=1&pageSize=1000');
+    // console.log(data)
+     setInstructors(data.result.items);
+  }
+  // console.log(instructors)
   const getCourse =async ()=>{
     try {
       //setLoading(false)
@@ -29,20 +34,29 @@ export default function CourseDetails({params}) {
       }
       
   }
-  console.log(course)
+  // console.log(course)
 
   useEffect(() => {
     getCourse();
-    // fetchIns();
+    fetchIns();
   }, [course]);
 
-//   useEffect(() => {
-//     const ins = instructors.find(ins => ins.id == params.instructorId);
-//     if(ins) {
-//         setInstructor(ins);
-//     }
-// }, [instructors, params.instructorId]);
-  
+  useEffect(() => {
+    if (course && instructors.length > 0) {
+      const courseInstructor = instructors.find(ins => ins.id === course.instructorId);
+      if (courseInstructor) {
+        setInstructor(courseInstructor);
+      }
+    }
+  }, [course, instructors]);
+
+  useEffect(() => {
+    if (userData){
+      setRole(userData.role)
+    }
+  }, [userData]);
+  // console.log(role)
+
 
 
   return (
@@ -51,6 +65,10 @@ export default function CourseDetails({params}) {
         <h2 className='courseDetailsTitle'>Course Details</h2>
         <div className="shape1">
           <FontAwesomeIcon icon={faCode} style={{color: "#4c5372",}} className='shape1a fs-3'/>
+          {/* <img src="/tag.png" alt="tag" /> */}
+        </div>
+        <div className="shape2">
+          <FontAwesomeIcon icon={faCss3} style={{color: "#4c5372",}} className='shape1a fs-3'/>
           {/* <img src="/tag.png" alt="tag" /> */}
         </div>
       </div>
@@ -67,11 +85,11 @@ export default function CourseDetails({params}) {
                 <div className="courses-details-admin d-flex">
   <div className="admin-author d-flex justify-content-between align-items-center">
     <div className="author-thumb">
-      <img src="/user.jpg" alt="Author" className='Iimage' />
+      <img src={instructor.imageUrl} alt="Author" className='Iimage' />
     </div>
     <div className="author-content">
       <a className="name" href="#">{course.instructorName}</a>
-      <span className="Enroll">{course.limitNumberOfStudnet} Enrolled Students</span>
+      <span className="Enroll">{course.limitNumberOfStudnet}  Students</span>
       {console.log(course.limitNumberOfStudnet)}
     </div>
   </div>
@@ -99,7 +117,27 @@ export default function CourseDetails({params}) {
                       <p>{course.description}</p>
                     </div>
                     <div className="tab-pane fade" id="nav-Ins" role="tabpanel" aria-labelledby="nav-Ins-tab" tabIndex={1}>
-                      rrrrrrrr
+                      
+                      <div className="courseIns text-center">
+                        <h3 className='crsIns'>Course Instructor:</h3>
+                      <div className="crsInsContent d-flex gap-2 flex-column justify-content-center align-items-center">
+                          <img src={instructor.imageUrl} alt="instructor" className='' />
+                          <h4>{course.instructorName}</h4>
+                          <ul className='d-flex pe-4 gap-2'>
+                            <li className=' social'><FontAwesomeIcon icon={faLinkedinIn} /></li>
+                            <li className=' social'><FontAwesomeIcon icon={faGithub} /></li>
+                            <li className=' social'><FontAwesomeIcon icon={faFacebookF} /></li>
+                            <li className=' social'><FontAwesomeIcon icon={faEnvelope} /></li>
+                          </ul>
+                          <p>{instructor.skillDescription}</p>
+                          {/* <ul className='d-flex gap-2 pe-4'>
+                            <li className='social'>j</li>
+                            <li className='social'>k</li>
+                            <li className='social'>k</li>
+                          </ul> */}
+                      </div>
+                      </div>
+                      
                     </div>
                     <div className="tab-pane fade" id="nav-reviwe" role="tabpanel" aria-labelledby="nav-reviwe-tab" tabIndex={2}>
                       sssss
@@ -152,9 +190,12 @@ export default function CourseDetails({params}) {
                       </li>
                     </ul>
                   </div>
-                  <div className="info-btn">
+                  {userData && role == "student"&&
+                    <div className="info-btn">
                     <a href="#" className="btn btn-primary btn-hover-dark enroll">Enroll Now</a>
                   </div>
+                  }
+                  
                 </div>
               </div>
             </div>

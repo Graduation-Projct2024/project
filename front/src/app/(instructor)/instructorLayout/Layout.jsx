@@ -27,6 +27,7 @@ import { Avatar, Stack } from '@mui/material';
 import AdbIcon from '@mui/icons-material/Adb';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import './style.css'
+import HomeIcon from '@mui/icons-material/Home';
 import { UserContext } from '../../../context/user/User.jsx';
 import InstuctorRoute from '../../(auth)/protectedRoute/InstuctorRoute.jsx';
 
@@ -37,6 +38,12 @@ function Layout(props) {
   const { children, title } = props;
   let { userToken, setUserToken ,userData,setUserData,userId,setUserId} = React.useContext(UserContext);
 const sidebarItems = [
+  {
+    name: "Home",
+    href: "/",
+    icon: HomeIcon,
+    
+  },
   {
     name: "Dashboard",
     href: "/myDashboard",
