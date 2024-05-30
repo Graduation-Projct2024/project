@@ -146,10 +146,11 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize]
-        public async Task<ActionResult<ApiResponce>> changePassword (Guid userId , string NewPassword)
+        public async Task<ActionResult<ApiResponce>> changePassword (ChengePasswordDTO chengePasswordDTO)
         {
-            var changedPass = await userServices.changePassword(userId, NewPassword);
-            if (changedPass.IsError) return NotFound(new ApiResponce { ErrorMassages=changedPass.FirstError.Description});
+            var changedPass = await userServices.changePassword(chengePasswordDTO);
+            if (changedPass.FirstError.Type==ErrorOr.ErrorType.NotFound) return NotFound(new ApiResponce { ErrorMassages=changedPass.FirstError.Description});
+            else if (changedPass.FirstError.Type == ErrorOr.ErrorType.Unexpected) return Ok(new ApiResponce { ErrorMassages = changedPass.FirstError.Description });
             return Ok(new ApiResponce { Result="Password Changed Successfully."});
         }
 

@@ -3,6 +3,7 @@ using courseProject.Core.Models.DTO.LoginDTO;
 using courseProject.Core.Models.DTO.RegisterDTO;
 using courseProject.Core.Models.DTO.UsersDTO;
 using ErrorOr;
+
 using Microsoft.AspNetCore.Mvc;
 
 namespace courseProject.Services.Users
@@ -17,7 +18,7 @@ namespace courseProject.Services.Users
         public Task<ErrorOr<Success>> reSendTheVerificationCode(string email);
         public Task<ErrorOr<Updated>> EditUserProfile(Guid id,  ProfileDTO profile);
         public Task<ErrorOr<UserInfoDTO>> GetProfileInfo(Guid id);
-        public Task<ErrorOr<Updated>> changePassword(Guid userId, string NewPassword);
+        public Task<ErrorOr<Updated>> changePassword(ChengePasswordDTO changePasswordDTO);
 
     }
 }

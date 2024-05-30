@@ -10,7 +10,7 @@ using courseProject.ServiceErrors;
 using ErrorOr;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
-using System.Net;
+using BC = BCrypt.Net.BCrypt;
 
 namespace courseProject.Services.Users
 {
@@ -236,12 +236,13 @@ namespace courseProject.Services.Users
             return usermapper;
         }
 
-        public async Task<ErrorOr<Updated>> changePassword(Guid userId, string NewPassword)
+        public async Task<ErrorOr<Updated>> changePassword(ChengePasswordDTO chengePasswordDTO)
         {
-            var getUser = await unitOfWork.UserRepository.getUserByIdAsync(userId);
+            var getUser = await unitOfWork.UserRepository.getUserByIdAsync(chengePasswordDTO.UserId);
             if (getUser == null) return ErrorUser.NotFound;
+            if (getUser.password != BC.HashPassword(chengePasswordDTO.password)) return ErrorUser.IncorrectPassword;
             
-            getUser.password = BCrypt.Net.BCrypt.HashPassword(NewPassword);
+            getUser.password = BC.HashPassword(chengePasswordDTO.Newpassword);
             await unitOfWork.UserRepository.UpdateUser(getUser);
             await unitOfWork.UserRepository.saveAsync();
             return Result.Updated;
