@@ -296,8 +296,8 @@ export default function ViewEmployees() {
         <tbody>
           {filteredEmployees.length ? (
             filteredEmployees.map((employee,index) => (
-              <tr key={++index}>
-                <th scope="row">{index}</th>
+              <tr key={employee.id}>
+                <th scope="row">{++index}</th>
                 <td>
                   {employee.fName} {employee.lName}
                 </td>

@@ -26,7 +26,6 @@ import AddIcCallIcon from '@mui/icons-material/AddIcCall';
 import { deepPurple ,purple} from '@mui/material/colors';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 import Link from '@mui/material/Link';
-import { useRouter } from 'next/navigation'
 import LogoutIcon from '@mui/icons-material/Logout';
 import { Avatar, Stack } from '@mui/material';
 import AdbIcon from '@mui/icons-material/Adb';
@@ -35,10 +34,12 @@ import HomeIcon from '@mui/icons-material/Home';
 import { UserContext } from '@/context/user/User';
 import AdminRoute from '@/app/(auth)/protectedRoute/AdminRoute';
 import CategoryIcon from '@mui/icons-material/Category';
+import { useRouter } from 'next/navigation';
 const drawerWidth = 240;
 
 
 function Layout(props) {
+  const router = useRouter();
   const { window } = props;
   const { children, title } = props;
   let { userToken, setUserToken ,userData,setUserData,userId,setUserId} = React.useContext(UserContext);
@@ -84,7 +85,7 @@ const sidebarItems = [
 ];
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
-  const router = useRouter();
+  // const router = useRouter();
   const handleDrawerClose = () => {
     setIsClosing(true);
     setMobileOpen(false);
@@ -128,25 +129,36 @@ const sidebarItems = [
       <List sx={{ my:7, pt:5 }} >
               {sidebarItems.map(({ name, href, icon: Icon }) =>{
                 return(
-                <ListItem key={name} 
-                // color={deepPurple[50]}
+                // <ListItem key={name} 
+                // // color={deepPurple[50]}
+                // >
+                //   <Link  className={`sidebar__link ${
+                //     router.pathname === href ? "sidebar__link--active" : ""
+                //   }`}
+                //   href={href}
+                //   // color={deepPurple[50]}
+                //   underline='none'>
+                //   <ListItemButton >
+                //     <ListItemIcon >
+                //     <Icon
+                //      sx={{/*color:deepPurple[50]*/}}
+                //      />
+                //     </ListItemIcon>
+                //     <ListItemText  primary={name} />
+                //   </ListItemButton>
+                //   </Link>
+                // </ListItem>
+                <ListItem key={name}>
+                <ListItemButton 
+                  className={`sidebar__link ${router.pathname === href ? "sidebar__link--active" : ""}`}
+                  onClick={() => router.push(href)}
                 >
-                  <Link  className={`sidebar__link ${
-                    router.pathname === href ? "sidebar__link--active" : ""
-                  }`}
-                  href={href}
-                  // color={deepPurple[50]}
-                  underline='none'>
-                  <ListItemButton >
-                    <ListItemIcon >
-                    <Icon
-                     sx={{/*color:deepPurple[50]*/}}
-                     />
-                    </ListItemIcon>
-                    <ListItemText  primary={name} />
-                  </ListItemButton>
-                  </Link>
-                </ListItem>
+                  <ListItemIcon>
+                    <Icon sx={{/*color: deepPurple[50]*/ }} />
+                  </ListItemIcon>
+                  <ListItemText primary={name} />
+                </ListItemButton>
+              </ListItem>
                 )
                 })}
             </List>
