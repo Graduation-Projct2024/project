@@ -11,11 +11,10 @@ import './style.css'
 import { UserContext } from '../../../../context/user/User.jsx';
 import { useRouter } from 'next/navigation'
 
-export default function EditLink({materialID, name, linkURL, courseId }) {
+export default function EditLink({materialID, name, linkURL, type, Id }) {
   const router = useRouter();
 
   const {userToken, setUserToken, userData}=useContext(UserContext);
-console.log(courseId)
   const handelFieldChang = (event) => {
     formik.setFieldValue("pdf", event.target.files[0]);
 
@@ -42,7 +41,7 @@ const formData = new FormData();
 formData.append("name", tasks.name);
 formData.append("linkUrl", tasks.linkUrl);
 console.log(tasks.pdf)
-formData.append("courseId", courseId);
+formData.append(type , Id);
 formData.append("instructorId", userData.userId);
 
 const { data } = await axios.put(

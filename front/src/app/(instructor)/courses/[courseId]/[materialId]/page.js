@@ -40,10 +40,10 @@ const{materialId, courseId}=useParams();
   return (
    
     <Layout title={name}>
-       {type=='Task'&& <ViewTask  materialID={materialId} courseId={courseId}/>} 
-       {type=='Announcement'&& <ViewAnnouncement  materialID={materialId} courseId={courseId}/>}
-       {type=='File'&& <ViewFile  materialID={materialId} courseId={courseId}/>}
-       {type=='Link'&& <ViewLink materialID={materialId} courseId={courseId}/>}
+       {type=='Task'&& <ViewTask  materialID={materialId} type='courseId' Id={courseId}/>} 
+       {type=='Announcement'&& <ViewAnnouncement  materialID={materialId} type='courseId' Id={courseId}/>}
+       {type=='File'&& <ViewFile  materialID={materialId}  type='courseId' Id={courseId}/>}
+       {type=='Link'&& <ViewLink materialID={materialId}  type='courseId' Id={courseId}/>}
 
     </Layout>
   )

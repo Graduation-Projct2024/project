@@ -15,7 +15,7 @@ import Input from '../../../../component/input/Input.jsx';
 import TextArea from '../../../../component/input/TextArea.jsx';
 
 import { UserContext } from '../../../../context/user/User.jsx';
-export default function AddFile({ open, onClose,handleCloseAdd ,courseId }) {
+export default function AddFile({ open, onClose,handleCloseAdd ,type ,Id }) {
   const {userToken, setUserToken, userData}=useContext(UserContext);
 
   const handelFieldChang = (event) => {
@@ -41,7 +41,7 @@ try{
 formData.append("name", tasks.name);
 formData.append("description", tasks.description);
 formData.append("pdf", tasks.pdf);
-formData.append("courseId", courseId);
+formData.append(type, Id);
 formData.append("InstructorId",userData.userId);
 console.log(tasks.pdf)
 

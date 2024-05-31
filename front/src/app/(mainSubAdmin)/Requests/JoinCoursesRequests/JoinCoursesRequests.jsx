@@ -89,7 +89,7 @@ export default function JoinCoursesRequests() {
                 });
     
               console.log(data, status);
-              if (status == "joined") {
+              if (status == "joind") {
                 Swal.fire({
                   title: `This student enrolled to this course Successfully`,
                   text: "Request Accepted",
@@ -238,7 +238,7 @@ const filteredRequestsToJoinCourses = Array.isArray(joinCoursesReq) ? joinCourse
                       <FontAwesomeIcon icon={faEye} className="edit-pen" />
                     </button>
                   </Link> */}
-                  <button type="button" className="btn accredit" onClick={()=>joinCourse(req.courseId,req.studentId,'joined')} >Accept</button>  
+                  <button type="button" className="btn accredit" onClick={()=>joinCourse(req.courseId,req.studentId,'joind')} >Accept</button>  
                 {/* <Link href='/dashboard' className='text-decoration-none acc'>Accredit </Link> */}
                 <button type="button" className="btn accredit" onClick={()=>joinCourse(req.courseId,req.studentId,'reject')} >Reject</button>
 

@@ -14,11 +14,10 @@ import './style.css'
 import { UserContext } from '../../../../context/user/User.jsx';
 import { useRouter } from 'next/navigation'
 
-export default function EditTask({materialID, name, description, deadLine, pdf, courseId }) {
+export default function EditTask({materialID, name, description, deadLine, pdf, type, Id }) {
   const router = useRouter();
 
   const {userToken, setUserToken, userData}=useContext(UserContext);
-console.log(courseId)
   const handelFieldChang = (event) => {
     formik.setFieldValue("pdf", event.target.files[0]);
 
@@ -48,7 +47,7 @@ formData.append("description", tasks.description);
 formData.append("DeadLine", tasks.DeadLine);
 formData.append("pdf", tasks.pdf);
 console.log(tasks.pdf)
-formData.append("courseId", courseId);
+formData.append(type, Id);
 formData.append("instructorId", userData.userId);
 
 const { data } = await axios.put(

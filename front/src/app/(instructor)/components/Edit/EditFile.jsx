@@ -13,7 +13,7 @@ import './style.css'
 import { UserContext } from '../../../../context/user/User.jsx';
 import { useRouter } from 'next/navigation'
 
-export default function EditFile({materialID, name, description, pdf, courseId }) {
+export default function EditFile({materialID, name, description, pdf, type , Id }) {
   const router = useRouter();
 console.log(description)
   const {userData, userToken}=useContext(UserContext);
@@ -46,7 +46,7 @@ formData.append("description", tasks.description);
 formData.append("DeadLine", tasks.DeadLine);
 formData.append("pdf", tasks.pdf);
 console.log(tasks.pdf)
-formData.append("courseId", courseId);
+formData.append(type, Id);
 formData.append("instructorId", userData.userId);
 
 const { data } = await axios.put(

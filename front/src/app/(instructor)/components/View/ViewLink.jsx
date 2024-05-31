@@ -29,7 +29,7 @@ import EditLink from '../Edit/EditLink.jsx';
 import { useRouter } from 'next/navigation'
 import { UserContext } from '../../../../context/user/User.jsx';
 
-export default function ViewLink({ materialID , courseId}) {
+export default function ViewLink({ materialID , type, Id}) {
  const [material, setMaterial]=useState(null);
  const [loading ,setLoading]=useState(true);
  const [isEditing, setIsEditing] = useState(false);
@@ -172,7 +172,7 @@ if (loading) {
       </Dialog>
   
       {isEditing?(
-    <EditLink materialID={materialID} name={material.name} linkURL={material.linkUrl} courseId={courseId}/>
+    <EditLink materialID={materialID} name={material.name} linkURL={material.linkUrl} type={type} Id={Id}/>
 
 ):(
   <div className='link mt-5 pt-5 ms-5'> 

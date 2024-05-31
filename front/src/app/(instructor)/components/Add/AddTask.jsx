@@ -47,12 +47,8 @@ formData.append("name", tasks.name);
 formData.append("description", tasks.description);
 formData.append("DeadLine", tasks.DeadLine);
 formData.append("pdf", tasks.pdf);
-if(type=='courseId'){
-  formData.append("courseId", Id);
-}else{
-  formData.append("consultationId", Id);
+formData.append(type, Id);
 
-}
 formData.append("instructorId", userData.userId);
 
 if(userToken){

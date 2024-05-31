@@ -58,7 +58,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 
-export default function ViewTask({ materialID , courseId}) {
+export default function ViewTask({ materialID , type, Id}) {
 
   const router = useRouter();
  const [material, setMaterial]=useState(null);
@@ -215,7 +215,7 @@ if (loading) {
         </Stack>
       </Dialog>
     {isEditing?(
-    <EditTask materialID={materialID} name={material.name} description={material.description}  deadLine={material.deadLine} pdf={material.pdfUrl} courseId={courseId}/>
+    <EditTask materialID={materialID} name={material.name} description={material.description}  deadLine={material.deadLine} pdf={material.pdfUrl} type={type} Id={Id}/>
 
 ):(
 <div className='mt-5 pt-5 ms-5 task'>

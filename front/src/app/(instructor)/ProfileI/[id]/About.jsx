@@ -5,13 +5,19 @@ import { UserContext } from '@/context/user/User';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import * as yup from "yup";
-import { Button } from '@mui/material';
+import Paper from '@mui/material/Paper';
+import Button from '@mui/material/Button';
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import IconButton from '@mui/material/IconButton';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+import Box from '@mui/material/Box';
 
 export default function About() {
     const {userToken, setUserToken, userData, userId}=useContext(UserContext);
-    const [bio, setBio] = React.useState(false);
+    const [bio, setBio] = React.useState();
+    const [isEditing, setIsEditing] = useState(false);
+
     const [Alertopen, setAlertOpen] = React.useState(false);
     const getBio = async () => {
         if (userId) {
@@ -23,6 +29,9 @@ export default function About() {
         }
      }
     };
+    const handleEdit =()=>{
+      setIsEditing(!isEditing);
+     }
     const handleClose = (event, reason) => {
       if (reason === 'clickaway') {
         return;
@@ -30,8 +39,8 @@ export default function About() {
   
       setAlertOpen(false);
     };
-    const initialValues = {
-        skillDescription: "",
+    let initialValues = {
+        skillDescription: `${bio}`
     };
     const onSubmit = async (description) => {
       try{
@@ -51,8 +60,7 @@ export default function About() {
   );
    formik.resetForm();
    setAlertOpen(true);
-   onClose(); 
-   handleCloseAdd();
+   setIsEditing(false);
       }catch(error){
         console.log(error);
       }
@@ -76,17 +84,18 @@ export default function About() {
         type: "text",
         name: "skillDescription",
         title: "About me",
-        value: formik.values.name,
+        value: formik.values.skillDescription,
       },
 
    
     ];
+    console.log(inputs[0].value);
     const renderInputs = inputs.map((input, index) => (
       <TextArea
         type={input.type}
         id={input.id}
         name={input.name}
-        value={input.value}
+        value={bio}
         title={input.title}
         onChange={input.onChange || formik.handleChange}
         onBlur={formik.handleBlur}
@@ -97,7 +106,7 @@ export default function About() {
     ));
     useEffect(()=>{
         getBio();
-    },[userId, bio])
+    },[userId, bio, isEditing])
     
   return (
     <>
@@ -108,35 +117,49 @@ export default function About() {
           variant="filled"
           sx={{ width: '100%' }}
         >
-          Bio Added successfully!
+          Bio Updated successfully!
         </Alert>
       </Snackbar>
-      <div className='p-5'>
-        <h2 className='pr '>Bio</h2>
-          {bio&&<p>{bio}</p>}
-    
-    
-     </div>
-    <div className='p-5'>
-    <h2 className='pr '>Update Bio</h2>
-        <form onSubmit={formik.handleSubmit} className="row justify-content-center">
+      <Paper
+    sx={{
+      display: 'flex',
+      flexDirection: 'column',
+      listStyle: 'none',
+      p: 1,
+      m: 5,
+    }}
+    component="ul"
+  >
+    <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+      <IconButton aria-label="Edit" onClick={handleEdit}>
+        <ModeEditIcon color="success" />
+      </IconButton>
+    </Box>
+    <Box sx={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap'}}>
+      {isEditing?(<form onSubmit={formik.handleSubmit} className="row justify-content-center w-100">
             
-          {renderInputs}
-           
-          <div className='text-center mt-3'>
-          <Button sx={{px:2}} variant="contained"
-                  className="m-2 btn primaryBg"
-                  type="submit"
-                  disabled={!formik.isValid}
+            {renderInputs}
+             
+            <div className='text-center mt-3'>
+            <Button sx={{px:2}} variant="contained"
+                    className="m-2 btn primaryBg"
+                    type="submit"
+                    disabled={!formik.isValid}
+  
+                  >
+                    Update
+                  </Button>
+            </div>
+      
+      
+          </form>):(   
+          <div>
+            <h2 className='pr '>Bio</h2>
+             {bio&&<p>{bio}</p>}
+          </div>)}
+    </Box>
+  </Paper>
 
-                >
-                  Add
-                </Button>
-          </div>
-    
-    
-        </form>
-        </div>
         </>
   )
 }
