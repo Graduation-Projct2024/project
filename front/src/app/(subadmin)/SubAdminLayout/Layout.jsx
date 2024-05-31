@@ -128,25 +128,36 @@ function Layout(props) {
       <List sx={{ my:7, pt:5 }} >
               {sidebarItems.map(({ name, href, icon: Icon }) =>{
                 return(
-                <ListItem key={name} 
-                // color={deepPurple[50]}
+                // <ListItem key={name} 
+                // // color={deepPurple[50]}
+                // >
+                //   <Link  className={`sidebar__link ${
+                //     router.pathname === href ? "sidebar__link--active" : ""
+                //   }`}
+                //   href={href}
+                //   // color={deepPurple[50]}
+                //   underline='none'>
+                //   <ListItemButton >
+                //     <ListItemIcon >
+                //     <Icon
+                //      sx={{/*color:deepPurple[50]*/}}
+                //      />
+                //     </ListItemIcon>
+                //     <ListItemText  primary={name} />
+                //   </ListItemButton>
+                //   </Link>
+                // </ListItem>
+                <ListItem key={name}>
+                <ListItemButton 
+                  className={`sidebar__link ${router.pathname === href ? "sidebar__link--active" : ""}`}
+                  onClick={() => router.push(href)}
                 >
-                  <Link  className={`sidebar__link ${
-                    router.pathname === href ? "sidebar__link--active" : ""
-                  }`}
-                  href={href}
-                  // color={deepPurple[50]}
-                  underline='none'>
-                  <ListItemButton >
-                    <ListItemIcon >
-                    <Icon
-                     sx={{/*color:deepPurple[50]*/}}
-                     />
-                    </ListItemIcon>
-                    <ListItemText  primary={name} />
-                  </ListItemButton>
-                  </Link>
-                </ListItem>
+                  <ListItemIcon>
+                    <Icon sx={{/*color: deepPurple[50]*/ }} />
+                  </ListItemIcon>
+                  <ListItemText primary={name} />
+                </ListItemButton>
+              </ListItem>
                 )
                 })}
             </List>

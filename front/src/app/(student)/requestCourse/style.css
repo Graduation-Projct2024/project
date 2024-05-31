@@ -13,3 +13,6 @@
 .css-u6xhno-MuiStack-root>:not(style):not(style) {
     width:90%;
 }
+.css-10hburv-MuiTypography-root,.css-i4bv87-MuiSvgIcon-root{
+    color: #fffdf6;
+  }

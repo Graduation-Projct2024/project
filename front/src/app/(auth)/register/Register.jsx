@@ -9,12 +9,15 @@ import Link from '@mui/material/Link';
 import Input from '../../../component/input/Input.jsx';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+import { useRouter } from 'next/navigation';
 
 export default function Register() {
   const [open, setOpen] = React.useState(false);
   const [errors, setErrors] = React.useState();
   const [result, setResult] = React.useState();
+  let [errmsg,setErrmsg] = useState()
 
+  const router = useRouter()
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -45,12 +48,19 @@ const { data } = await axios.post(
  {headers: {
   'Content-Type': 'multipart/form-data','Content-Type': 'application/json',}}
 );
+if(data.errorMassages != null){
+  setErrmsg(data.errorMassages)
+  
+  // console.log(data.errorMassages)
+}
+else{
 console.log(data);
 setResult(data.result);
   console.log("test");
 //   formik.resetForm();
 setOpen(true);
- }catch(error){
+router.push(`/RegisterCode?email=${users.email}`);
+ }}catch(error){
 console.log(error.response.data.errors);
 // setErrors(error.response.data.errors);
 setErrors(error.response.data.errors.errorMassages);
@@ -155,6 +165,7 @@ setErrors(error.response.data.errors.errorMassages);
             </button>
         </div>
         {errors&&<p className='text-danger'>{errors}</p>}
+        <p className='text-danger'>{errmsg}</p>
       </form>
     </div>
     </>

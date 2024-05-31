@@ -61,6 +61,9 @@ export const addSkills = yup.object({
    skillName:yup.string().required('Skill name is Required'),
 })
 
+export const addCode = yup.object({
+   code:yup.string().required('code is Required'),
+})
 export const editEvent = yup.object({
    name:yup.string().required('name is required'),
    category:yup.string().required('category is required'),
