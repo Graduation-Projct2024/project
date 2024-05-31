@@ -207,9 +207,9 @@ const filteredRequestsToJoinCourses = Array.isArray(joinCoursesReq) ? joinCourse
     <tr>
       <th scope="col">ID</th>
       <th scope="col">Student name</th>
-      <th scope="col">Student ID</th>
+      {/* <th scope="col">Student ID</th> */}
       <th scope="col">Course name</th>
-      <th scope="col">Course Id</th>
+      {/* <th scope="col">Course Id</th> */}
       <th scope="col">Enrollment date</th>
       <th scope="col">Action</th>
     </tr>
@@ -220,9 +220,9 @@ const filteredRequestsToJoinCourses = Array.isArray(joinCoursesReq) ? joinCourse
         <tr key={index}>
         <th scope="row">{index + 1}</th>
       <td>{req.studentName}</td>
-      <td>{req.studentId}</td>
+      {/* <td>{req.studentId}</td> */}
       <td>{req.courseName}</td>
-      <td>{req.courseId}</td>
+      {/* <td>{req.courseId}</td> */}
       <td>{req.enrollDate}</td>
       {/* <td className='d-flex gap-1'>
 

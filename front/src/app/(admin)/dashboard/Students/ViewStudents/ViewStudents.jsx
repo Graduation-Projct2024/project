@@ -118,7 +118,7 @@ return matchesSearchTerm ;
       <table className="table">
   <thead>
     <tr>
-      <th scope="col">ID</th>
+      <th scope="col">#</th>
       <th scope="col">Name</th>
       <th scope="col">Email</th>
       {/* <th scope="col">Gender</th>
@@ -129,9 +129,9 @@ return matchesSearchTerm ;
   </thead>
   <tbody>
   {filteredStudents.length ? (
-    filteredStudents.map((student) =>(
+    filteredStudents.map((student,index) =>(
       <tr key={student.studentId}>
-      <th scope="row">{student.studentId}</th>
+      <th scope="row">{++index}</th>
       <td>{student.userName}</td>
       <td>{student.email}</td>
       {/* <td>{student.gender}</td>
