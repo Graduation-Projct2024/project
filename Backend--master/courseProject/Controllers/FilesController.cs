@@ -31,7 +31,7 @@ namespace courseProject.Controllers
             }
 
             var bytes = await System.IO.File.ReadAllBytesAsync(filepath);
-            return File(bytes, contenttype, Path.GetFileName(filepath));
+            return File( bytes, contenttype, Path.GetFileName(filepath));
         }
     }
 }

@@ -13,6 +13,8 @@ namespace courseProject.Validations.Users
                 .MinimumLength(8).WithMessage("The password minimum length is 8 charecter")
                 .MaximumLength(25).WithMessage("The password is too long");
 
+           
+
         }
     }
 }
