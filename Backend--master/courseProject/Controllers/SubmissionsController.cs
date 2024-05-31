@@ -44,9 +44,9 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "MaterialInEnrolledCourseForStudent")]
-        public async Task<ActionResult<ApiResponce>> AddTaskByStudent(Guid Studentid, Guid taskid, [FromForm] SubmissionsDTO submissions)
+        public async Task<ActionResult<ApiResponce>> AddTaskByStudent(Guid Studentid, Guid Id, [FromForm] SubmissionsDTO submissions)
         {
-            var addedTask = await submissionServices.AddTaskSubmission(Studentid, taskid, submissions);
+            var addedTask = await submissionServices.AddTaskSubmission(Studentid, Id, submissions);
             if (addedTask.IsError) return NotFound(new ApiResponce { ErrorMassages = addedTask.FirstError.Description });
             return Ok(new ApiResponce {Result="The Task Is Added Successfully" });
         }
