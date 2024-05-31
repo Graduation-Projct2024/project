@@ -41,24 +41,25 @@ export default function AddTaskSubmission({materialID}) {
     pdf: "",
   };
   const onSubmit = async (tasks) => {
-console.log("test")
-const formData = new FormData();
+try{const formData = new FormData();
 formData.append("description", tasks.description);
 formData.append("pdf", tasks.pdf);
 
 const { data } = await axios.post(
-  `http://localhost:5134/api/StudentsContraller/AddTaskSubmission?Studentid=${userData.userId}&taskid=${materialID}`,
- 
+  `https://localhost:7116/api/Submissions/AddTaskSubmission?Studentid=${userData.userId}&taskid=${materialID}
+  `,
   formData,
+  {headers :{Authorization:`Bearer ${userToken}`}}
+
 
 );
- if(data.isSuccess){
-  console.log("test");
  formik.resetForm();
  setAlertOpen(true);
  router.back();
 
-  }
+}catch(error){
+  console.log(data);
+}
   };
   const validationSchema = yup.object({
       description: yup.string(),

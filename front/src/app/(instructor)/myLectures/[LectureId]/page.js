@@ -162,7 +162,6 @@ const handleCloseViewTaskDialog = () => {
 if(userToken&&LectureId){
       const data = await axios.get(
         `https://localhost:7116/api/Lectures/GetConsultationById?consultationId=${LectureId}`,
-        {},
         {headers :{Authorization:`Bearer ${userToken}`}}
 
       );

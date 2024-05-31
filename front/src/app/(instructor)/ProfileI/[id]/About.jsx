@@ -48,7 +48,7 @@ export default function About() {
   formData.append("skillDescription", description.skillDescription);
 
   
-  const { data } = await axios.put(
+  const { data } = await axios.patch(
     `https://localhost:7116/api/Instructor/AddASkillDescription?instructorId=${userId}`,
     formData,
     {headers: {
