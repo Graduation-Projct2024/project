@@ -138,46 +138,52 @@ export default function Navbar({role}) {
             {userToken  && ((role == "admin" &&
               <Button
               key='1'
-              onClick={handleCloseNavMenu}
+              // onClick={handleCloseNavMenu}
+              onClick={() => router.push('/dashboard')}
               sx={{ my: 2, color: 'white', display: 'block' }}
             >
-               <Link href="/dashboard" color="inherit" underline='none' >Dashboard</Link>
-              
+               {/* <Link href="/dashboard" color="inherit" underline='none' >Dashboard</Link> */}
+               Dashboard
             </Button>) || (role == "main-subadmin" &&
               <Button
               key='1'
-              onClick={handleCloseNavMenu}
+              // onClick={handleCloseNavMenu}
+              onClick={() => router.push('/dashboardM')}
               sx={{ my: 2, color: 'white', display: 'block' }}
             >
-               <Link href="/dashboardM" color="inherit" underline='none' >Dashboard</Link>
-              
+               {/* <Link href="/dashboardM" color="inherit" underline='none' >Dashboard</Link> */}
+               Dashboard
             </Button>)||
             (role == "subadmin" &&
             <Button
             key='1'
-            onClick={handleCloseNavMenu}
+            // onClick={handleCloseNavMenu}
+            onClick={() => router.push('/dashboardS')}
             sx={{ my: 2, color: 'white', display: 'block' }}
           >
-             <Link href="/dashboardS" color="inherit" underline='none' >Dashboard</Link>
-            
+             {/* <Link href="/dashboardS" color="inherit" underline='none' >Dashboard</Link> */}
+             Dashboard
           </Button>)||
           (role == "instructor" &&
           <Button
           key='1'
-          onClick={handleCloseNavMenu}
+          // onClick={handleCloseNavMenu}
+          onClick={() => router.push('/myDashboard')}
           sx={{ my: 2, color: 'white', display: 'block' }}
         >
-           <Link href="/myDashboard" color="inherit" underline='none' >Dashboard</Link>
+           {/* <Link href="/myDashboard" color="inherit" underline='none' >Dashboard</Link> */}
+           Dashboard
           
         </Button>)||
         (role == "student" &&
         <Button
         key='1'
-        onClick={handleCloseNavMenu}
+        // onClick={handleCloseNavMenu}
+        onClick={() => router.push('/MyDashboard')}
         sx={{ my: 2, color: 'white', display: 'block' }}
       >
-         <Link href="/MyDashboard" color="inherit" underline='none' >Dashboard</Link>
-        
+         {/* <Link href="/MyDashboard" color="inherit" underline='none' >Dashboard</Link> */}
+         Dashboard
       </Button>)
                     
           )
@@ -185,11 +191,12 @@ export default function Navbar({role}) {
             {pages.map((page) => (
               <Button
                 key={page}
-                onClick={handleCloseNavMenu}
+                // onClick={handleCloseNavMenu}
+                onClick={() => router.push(`/${page}`)}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
-                 <Link href={`/${page}`} color="inherit" underline='none' >{page}</Link>
-                
+                 {/* <Link href={`/${page}`} color="inherit" underline='none' >{page}</Link> */}
+                {page}
               </Button>
             ))}
           </Box>

@@ -130,7 +130,7 @@ border-top: 1px solid #D9D9D9;
     padding-left: 10px;
 }
 
-.courses-button a {
+.courses-button .viewDetailsButton {
     font-size: 15px;
     background-color: #4C5372;
     color: #fffdf6;
@@ -140,13 +140,13 @@ border-top: 1px solid #D9D9D9;
     transition: .3s;
     padding-left: 10px;
     }
-    .courses-button a:hover {
+    .courses-button .viewDetailsButton:hover {
         background-color: #fffdf6 !important;
         color: #4C5372 !important;
         border: #4C5372 1px solid !important;
     }
 
 
-.courses-button a:hover{
+.courses-button .viewDetailsButton:hover{
     color: #7C7E9D;
 }
