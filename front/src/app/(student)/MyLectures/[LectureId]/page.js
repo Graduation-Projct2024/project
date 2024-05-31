@@ -240,7 +240,7 @@ export default function page() {
                 {material.type == "Announcement" && (
                   <MessageIcon sx={{ fontSize: 50 }} />
                 )}
-                <Link href={`${courseId}/${material.id}`} underline="none">
+                <Link href={`${LectureId}/${material.id}`} underline="none">
                   <Typography variant="h6"> {material.name}</Typography>
                 </Link>
               </Box>

@@ -29,7 +29,7 @@ import Alert from '@mui/material/Alert';
 import { useRouter } from 'next/navigation'
 import { UserContext } from '../../../../context/user/User.jsx';
 
-export default function ViewAnnouncement({ materialID , courseId}) {
+export default function ViewAnnouncement({ materialID , type, Id}) {
  const [material, setMaterial]=useState(null);
  const router = useRouter();
  const {userToken, setUserToken, userData}=useContext(UserContext);
@@ -174,7 +174,7 @@ if (loading) {
     </div>
   </Stack>
   {isEditing?(
-    <EditAnnouncement materialID={materialID} name={material.name} description={material.description} courseId={courseId}/>
+    <EditAnnouncement materialID={materialID} name={material.name} description={material.description} type={type} Id={Id}/>
 
 ):(
     <List sx={{ ...style,  maxWidth: 'none' }} aria-label="mailbox folders">

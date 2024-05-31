@@ -12,7 +12,7 @@ import { UserContext } from '../../../../context/user/User.jsx';
 import { useRouter } from 'next/navigation'
 import TextArea from '../../../../component/input/TextArea.jsx';
 
-export default function EditAnnouncement({materialID, name, description, courseId }) {
+export default function EditAnnouncement({materialID, name, description, type ,Id }) {
   const {userData, userToken}=useContext(UserContext);
 console.log(materialID)
 const router = useRouter();
@@ -37,7 +37,7 @@ const router = useRouter();
 const formData = new FormData();
 formData.append("name", tasks.name);
 formData.append("description", tasks.description);
-formData.append("courseId", courseId);
+formData.append(type, Id);
 formData.append("instructorId", userData.userId);
 
 const { data } = await axios.put(

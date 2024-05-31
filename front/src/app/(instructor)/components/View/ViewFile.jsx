@@ -30,7 +30,7 @@ import EditFile from '../Edit/EditFile.jsx';
 import { useRouter } from 'next/navigation'
 import { UserContext } from '../../../../context/user/User.jsx';
 
-export default function ViewFile({ materialID ,courseId }) {
+export default function ViewFile({ materialID ,type, Id }) {
  const [material, setMaterial]=useState(null);
  const [loading ,setLoading]=useState(true);
  const [isEditing, setIsEditing] = useState(false);
@@ -170,7 +170,7 @@ if (loading) {
     </div>
   </Stack>
   {isEditing?(
-    <EditFile materialID={materialID} name={material.name} description={material.description} courseId={courseId}/>
+    <EditFile materialID={materialID} name={material.name} description={material.description} type={type} Id={Id}/>
 
 ):(
   <div className ='material'>

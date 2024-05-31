@@ -15,7 +15,7 @@ import TextArea from '../../../../component/input/TextArea.jsx';
 
 import { UserContext } from '../../../../context/user/User.jsx';
 
-export default function AddAnnouncement({ open, onClose,handleCloseAdd, courseId }) {
+export default function AddAnnouncement({ open, onClose,handleCloseAdd, type ,Id }) {
   const {userToken, setUserToken, userData}=useContext(UserContext);
 
   const [Alertopen, setAlertOpen] = React.useState(false);
@@ -34,7 +34,7 @@ export default function AddAnnouncement({ open, onClose,handleCloseAdd, courseId
 try{const formData = new FormData();
 formData.append("name", tasks.name);
 formData.append("description", tasks.description);
-formData.append("courseId", courseId);
+formData.append(type, Id);
 formData.append("instructorId",userData.userId);
 
 const { data } = await axios.post(

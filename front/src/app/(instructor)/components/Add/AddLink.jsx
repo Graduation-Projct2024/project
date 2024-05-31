@@ -12,7 +12,7 @@ import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import Input from '../../../../component/input/Input.jsx';
 import { UserContext } from '../../../../context/user/User.jsx';
-export default function AddLink({ open, onClose ,handleCloseAdd, courseId}) {
+export default function AddLink({ open, onClose ,handleCloseAdd,type, Id}) {
   const {userToken, setUserToken, userData}=useContext(UserContext);
 
   const [Alertopen, setAlertOpen] = React.useState(false);
@@ -32,7 +32,7 @@ export default function AddLink({ open, onClose ,handleCloseAdd, courseId}) {
 const formData = new FormData();
 formData.append("name", tasks.name);
 formData.append("linkUrl", tasks.linkUrl);
-formData.append("courseId", courseId);
+formData.append(type ,Id);
 formData.append("InstructorId",userData.userId);
 
 const { data } = await axios.post(

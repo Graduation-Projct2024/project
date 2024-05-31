@@ -2,6 +2,7 @@ import React from 'react'
 import TextField from '@mui/material/TextField';
 
 export default function TextArea({type='text',name,id,value,title,onChange,errors,onBlur,touched,}) {
+  console.log(value);
   return (
     <div className="col-md-12">
         <div className="form-floating mb-3">
