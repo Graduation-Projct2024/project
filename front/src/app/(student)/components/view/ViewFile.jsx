@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Link from '@mui/material/Link';
 import Button from '@mui/material/Button';
 import { useQuery } from "react-query";
@@ -11,7 +11,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 import axios from 'axios';
 import fileDownload from 'js-file-download'
-
+import { UserContext } from '../../../../context/user/User.jsx';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -20,21 +20,30 @@ import CircularProgress from "@mui/material/CircularProgress";
 import './style.css'
 export default function ViewFile({ materialID }) {
  const [material, setMaterial]=useState(null);
+ const {userToken, setUserToken, userData}=useContext(UserContext);
+
  const [loading ,setLoading]=useState(true);
  const getMaterial=async()=>{
-  const {data}= await axios.get(`http://localhost:5134/api/MaterialControllar/GetMaterialById?id=${materialID}`)
+  if(userToken){
+    try{
+  const {data}= await axios.get(`https://localhost:7116/api/MaterialControllar/GetMaterialById?id=${materialID}`,
+  {headers :{Authorization:`Bearer ${userToken}`}}
 
-if(data.isSuccess==true){
+  )
+
   setMaterial(data.result);
   setLoading(false);
   console.log(data)
-}
 
+  }
+catch(error){
+  console.log(error);
+}}
  }
  useEffect(() => {
     getMaterial();
   
-}, [materialID]);
+}, [materialID, userToken]);
 
 
   const style = {
@@ -48,19 +57,24 @@ if(data.isSuccess==true){
   };
 
   const DownloadMaterial = async () => {
-    let cleanUrl = material.pdfUrl.replace("http://localhost:5134/", "");
-    let fileName = material.pdfUrl.replace("http://localhost:5134/Files\\", "");
+    let cleanUrl = material.pdfUrl.replace("https://localhost:7116/", "");
+    let fileName = material.pdfUrl.replace("https://localhost:7116/Files\\", "");
   
     console.log(fileName);
   
     const { data } = await axios.get(
-      `http://localhost:5134/api/Genaric/DownloadFile?filename=${cleanUrl}`,
-    {  responseType: 'blob'},
+      `https://localhost:7116/api/Files/DownloadFile?filename=${cleanUrl}`,
+      {
+        responseType: 'blob',
+        headers: {
+          'Authorization': `Bearer ${userToken}`
+        }
+      }
     );
   
     fileDownload(data, fileName);
   };
-
+  
 if (loading) {
   return (
     <Box sx={{ display: "flex", justifyContent: "center" }}>

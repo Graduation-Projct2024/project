@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Link from '@mui/material/Link';
 import Button from '@mui/material/Button';
 import { useQuery } from "react-query";
@@ -15,23 +15,33 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import CircularProgress from "@mui/material/CircularProgress";
+import { UserContext } from '../../../../context/user/User.jsx';
+
 export default function ViewAnnouncement({ materialID }) {
  const [material, setMaterial]=useState(null);
+ const {userToken, setUserToken, userData}=useContext(UserContext);
  const [loading ,setLoading]=useState(true);
  const getMaterial=async()=>{
-  const {data}= await axios.get(`http://localhost:5134/api/MaterialControllar/GetMaterialById?id=${materialID}`)
+  if(userToken){
+    try{
+  const {data}= await axios.get(`https://localhost:7116/api/MaterialControllar/GetMaterialById?id=${materialID}`,
+  {headers :{Authorization:`Bearer ${userToken}`}}
 
-if(data.isSuccess==true){
+  )
+
   setMaterial(data.result);
   setLoading(false);
   console.log(data)
-}
 
+  }
+catch(error){
+  console.log(error);
+}}
  }
  useEffect(() => {
     getMaterial();
   
-}, [materialID]);
+}, [materialID, userToken]);
 
 
   const style = {

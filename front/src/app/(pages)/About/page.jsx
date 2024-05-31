@@ -23,11 +23,15 @@ import axios from 'axios';
 export default function page() {
   const [instructors, setInstructors] = useState([]);
   const getInstructors = async () => {
-    const data = await axios.get(
-      `http://localhost:5134/api/Employee/GetAllEmployeeForContact`
-    );
-    setInstructors(data.data.result.items);
-    
+    try{
+      const { data } = await axios.get(`https://localhost:7116/api/Employee/GetAllEmployee?pageNumber=1&pageSize=1000`);
+  
+      console.log(data);
+      setInstructors(data.result.items);
+    }
+      catch(error){
+        console.log(error);
+      }
     
   };
   useEffect(() => {

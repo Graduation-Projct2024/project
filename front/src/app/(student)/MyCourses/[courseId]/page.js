@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import axios from 'axios';
 import { useParams } from 'next/navigation.js';
 import AssignmentIcon from '@mui/icons-material/Assignment';
@@ -25,8 +25,11 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import Layout from '../../studentLayout/Layout.jsx';
+import { UserContext } from '../../../../context/user/User.jsx';
 
 export default function page() {
+  const {userToken, setUserToken, userData}=useContext(UserContext);
+
     const contents=[
         {
             title:'Task 1',
@@ -84,42 +87,51 @@ const [materialId, setMaterialId]=useState();
     console.log(useParams());
     const { courseId } = useParams();
     const getCourseMaterial = async () => {
+      if(userToken){
         const { data } = await axios.get(
-          `http://localhost:5134/api/MaterialControllar/GetAllMaterial?CourseId=${courseId}`
+          `https://localhost:7116/api/MaterialControllar/GetAllMaterial?CourseId=${courseId}`,
+          {headers :{Authorization:`Bearer ${userToken}`}}
+
           
         );
-        console.log(data);
-        setMaterials(data);
-        console.log(materials);
+        // console.log(data);
+        setMaterials(data.result);
+        // console.log(materials);
+      }
 
       };
       const [courseName, setCourseName]=useState();
       const getCourses = async () => {
-  
-        const data = await axios.get(
-          `http://localhost:5134/api/CourseContraller/GetCourseById?id=${courseId}`
-        );
-      
-        setCourseName(data.data.result.name);
+        if(userToken){
+          const data = await axios.get(
+            `https://localhost:7116/api/CourseContraller/GetCourseById?id=${courseId}`,
+            {},
+            {headers :{Authorization:`Bearer ${userToken}`}}
+    
+          );
+        
+          setCourseName(data.data.result.name);
+        }
       };
-      useEffect(() => {
-        getCourseMaterial();
-        getCourses();
-      }, []);
+     
       const [participants, setParticipants]= useState();
       const getParticipants = async () => {
+        if(userToken){
+
+          const data = await axios.get(
+            `https://localhost:7116/api/StudentsContraller/GetCourseParticipants?Courseid=${courseId}`,
+            {headers :{Authorization:`Bearer ${userToken}`}}
   
-        const data = await axios.get(
-          `http://localhost:5134/api/StudentsContraller/GetCourseParticipants?Courseid=${courseId}`
-        );
-      console.log(data);
-        setParticipants(data.data.result);
+          );
+        console.log(data);
+          setParticipants(data.data.result.items);
+        }
       };
       useEffect(() => {
         getCourseMaterial();
         getCourses();
         getParticipants();
-      }, []);
+      }, [userToken]);
   return (
     <Layout title={courseName}>
     <div>
