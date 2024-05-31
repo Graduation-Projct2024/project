@@ -5,9 +5,12 @@ import './AllCourses.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import Link from 'next/link';
+import { Button } from '@mui/material';
+import { useRouter } from 'next/navigation';
 
 export default function AllCourses() {
     const [courses, setCourses] = useState([]);
+    const router = useRouter()
 
     const fetchCourses = async () => {
         try {
@@ -58,7 +61,8 @@ export default function AllCourses() {
                     <div className="category row align-items-center">
                       <p className='col-6 pt-4 pe-5'>{course.category}</p>
                       <div className="courses-button col-6 justify-content-end pt-2 ps-4">
-                                <Link href={`CourseDetails/${course.id}`} className = "text-decoration-none btn btn-dark p-3">View Details</Link>
+                                {/* <Link href={`CourseDetails/${course.id}`} className = "text-decoration-none btn btn-dark p-3">View Details</Link> */}
+                                <Button className='viewDetailsButton p-2'  onClick={() => router.push(`CourseDetails/${course.id}`)}>View Details</Button>
                       </div>
                     </div>
                 </div>
