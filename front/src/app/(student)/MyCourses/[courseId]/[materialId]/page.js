@@ -8,6 +8,7 @@ import { useParams } from 'next/navigation.js';
 import Layout from '../../../studentLayout/Layout.jsx';
 import axios from 'axios';
 import { UserContext } from '../../../../../context/user/User.jsx';
+import './style.css'
 
 export default function page() {
   const {userToken, setUserToken, userData}=useContext(UserContext);
@@ -30,6 +31,7 @@ const{materialId, courseId}=useParams();
         console.log(data)
         }catch(error){
           console.log(error);
+          throw new Error ('There is an error')
         }
     }
     }

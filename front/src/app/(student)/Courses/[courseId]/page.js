@@ -19,6 +19,7 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import { UserContext } from "../../../../context/user/User.jsx";
 export default function page() {
+  
   const {userToken, setUserToken, userData}=useContext(UserContext);
   const searchParams = useSearchParams();
   console.log(searchParams.get('isEnrolled'));
@@ -33,7 +34,7 @@ console.log(isEnrolled);
 
     setOpen(false);
   };
-  const [course, setCourse] = useState([]);
+  const [course, setCourse] = useState({});
 
   const [isLoading, setIsLoading] = useState(false);
   const { courseId } = useParams();
@@ -55,7 +56,7 @@ try{
     const formData = new FormData();
 
     formData.append("courseId", courseId);
-formData.append("studentId", userData.userId);
+    formData.append("studentId", userData.userId);
     const data = await axios.post(
       `https://localhost:7116/api/StudentCourse/EnrollInCourse`,formData,
      { headers: {

@@ -17,3 +17,7 @@ body{
     color: #4C5372;
     font-family:  "Nunito", sans-serif;
 }
+.resendCode button{
+    color: #4C5372;
+    width: fit-content;
+}

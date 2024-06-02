@@ -45,6 +45,12 @@ export const editProfile = yup.object({
    LName:yup.string().required('Last Name is required'),
    
 })
+
+
+export const addFeedback = yup.object({
+   content:yup.string().required('Feedback content is required'),
+   
+})
 export const editCourse = yup.object({
    InstructorId:yup.string().required('InstructorId is required'),
    startDate:yup.string().required('startDate is required'),
@@ -64,6 +70,14 @@ export const addSkills = yup.object({
 export const addCode = yup.object({
    code:yup.string().required('code is Required'),
 })
+
+
+export const changePss = yup.object({
+   password:yup.string().required('Old password is required'),
+   newpassword:yup.string().required('new password is required').min(8,'New Password must have at least 8 characters'),
+})
+
+
 export const editEvent = yup.object({
    name:yup.string().required('name is required'),
    category:yup.string().required('category is required'),

@@ -86,8 +86,10 @@ const [materialId, setMaterialId]=useState();
     const [materials, setMaterials] = useState([]);
     console.log(useParams());
     const { courseId } = useParams();
+
     const getCourseMaterial = async () => {
       if(userToken){
+        try{
         const { data } = await axios.get(
           `https://localhost:7116/api/MaterialControllar/GetAllMaterial?CourseId=${courseId}`,
           {headers :{Authorization:`Bearer ${userToken}`}}
@@ -98,6 +100,10 @@ const [materialId, setMaterialId]=useState();
         setMaterials(data.result);
         // console.log(materials);
       }
+    catch(error){
+      throw new Error('not Authhhhh')
+    }
+    }
 
       };
       const [courseName, setCourseName]=useState();
