@@ -26,7 +26,7 @@ namespace courseProject.Core.IGenericRepository
         public Task<IReadOnlyList<StudentConsultations>> GetAllBookedPrivateConsultationsAsync(Guid studentId);
         public Task addFeedbackAsync(Feedback feedback);
         public Task <IReadOnlyList<Feedback>> GetAllFeedbacksAsync();
-        public Task<IReadOnlyList<Feedback>> GetFeedbacksByTypeAsync(string type);
+        public Task<IReadOnlyList<Feedback>> GetFeedbacksByTypeAsync(string type, Guid? instructorId=null, Guid? courseId=null);
         public Task<Feedback> GetFeedbackByIdAsync(Guid id);
         public Task<Student> getStudentByIdAsync(Guid? id);
         public Task<IReadOnlyList<StudentConsultations>> GetAllLectureByStudentIdAsync(Guid StudentId);

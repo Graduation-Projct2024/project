@@ -74,6 +74,13 @@ namespace courseProject.Services.Events
             var events = await unitOfWork.eventRepository.GetAllEventsAsync();
             
             events = events.OrderByDescending(x => x.dateOfAdded).ToList();
+            foreach (var _event in events)
+            {
+                if (_event.ImageUrl != null)
+                {
+                    _event.ImageUrl = await unitOfWork.FileRepository.GetFileUrl(_event.ImageUrl);
+                }
+            }
             var mapperEvent = mapper.Map<IReadOnlyList<Event>, IReadOnlyList<EventDto>>(events);
             return mapperEvent;
         }

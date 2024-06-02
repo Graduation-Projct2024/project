@@ -11,7 +11,7 @@ namespace courseProject.MappingProfile
         {
             CreateMap<Event , EventDto>()
                 .ForMember(x=>x.subAdminName , o=>o.MapFrom(y=>y.SubAdmin.user.userName))
-                .ForMember(x => x.ImageUrl, o => o.MapFrom(y => $"http://localhost:7116/{y.ImageUrl}"))
+                .ForMember(x => x.ImageUrl, o => o.MapFrom(y => $"https://localhost:7116/{y.ImageUrl}"))
                 .ForMember(x => x.dateOfEvent, o => o.MapFrom(y => y.dateOfEvent.HasValue ? y.dateOfEvent.Value.ToString("dd/MM/yyyy") : null));
 
             CreateMap<EventForCreateDTO, Event>();

@@ -29,7 +29,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(400)]
         [Authorize(Policy = "MainSubAdmin")]
         //not try
-        public async Task<ActionResult<ApiResponce>> GetAllRequestFromStudentsToJoinCourses([FromQuery] PaginationRequest paginationRequest)
+        public async Task<IActionResult> GetAllRequestFromStudentsToJoinCourses([FromQuery] PaginationRequest paginationRequest)
         {
             
              var getRequests = await requestServices.GetAllRequestToJoinCourses();

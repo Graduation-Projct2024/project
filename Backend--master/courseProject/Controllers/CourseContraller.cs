@@ -54,7 +54,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(400)]
         
         //get all accredits courses
-        public async Task<ActionResult<ApiResponce>> GetAllCoursesAsync([FromQuery] PaginationRequest paginationRequest)
+        public async Task<IActionResult> GetAllCoursesAsync([FromQuery] PaginationRequest paginationRequest)
         {
             var getCourses = await courseServices.GetAllCourses();
             var mapperCourse = mapper.Map<IReadOnlyList<Course>, IReadOnlyList<CourseInformationDto>>(getCourses);          
@@ -69,14 +69,13 @@ namespace courseProject.Controllers
         [Authorize(Policy = "Student")]
 
         //this is to retrive all courses to students to enroll in
-        public async Task<ActionResult<ApiResponce>> GetAllCoursesToStudent(Guid studentId, [FromQuery] PaginationRequest paginationRequest)
+        public async Task<IActionResult> GetAllCoursesToStudent(Guid studentId, [FromQuery] PaginationRequest paginationRequest)
         {
 
                 var courses = await courseServices.GetAllCoursesToStudent(studentId);
                 var mapperCourse = mapper.Map<IReadOnlyList<Course>, IReadOnlyList<CourseInfoForStudentsDTO>>(courses);
-            return new ApiResponce { Result = (Pagination<CourseInfoForStudentsDTO>.CreateAsync(mapperCourse, paginationRequest.pageNumber, paginationRequest.pageSize)).Result };
-                 
-           
+            return Ok( new ApiResponce { Result = (Pagination<CourseInfoForStudentsDTO>.CreateAsync(mapperCourse, paginationRequest.pageNumber, paginationRequest.pageSize)).Result });
+                            
         }
 
         [HttpGet("GetAllCoursesForAccredit")]
@@ -85,11 +84,11 @@ namespace courseProject.Controllers
         [ProducesResponseType(400)]
 
         //get all courses
-        public async Task<ActionResult<ApiResponce>> GetAllCoursesForAccreditAsync([FromQuery] PaginationRequest paginationRequest)
+        public async Task<IActionResult> GetAllCoursesForAccreditAsync([FromQuery] PaginationRequest paginationRequest)
         {
             var courses = await courseServices.GetAllCoursesForAccreditAsync();
             var mapperCourse = mapper.Map<IReadOnlyList<Course>, IReadOnlyList<CourseAccreditDTO>>(courses);
-            return new ApiResponce { Result = (Pagination<CourseAccreditDTO>.CreateAsync(mapperCourse, paginationRequest.pageNumber, paginationRequest.pageSize)).Result };           
+            return Ok( new ApiResponce { Result = (Pagination<CourseAccreditDTO>.CreateAsync(mapperCourse, paginationRequest.pageNumber, paginationRequest.pageSize)).Result });           
             
         }
 
@@ -104,7 +103,7 @@ namespace courseProject.Controllers
         [Authorize(Policy = "SubAdmin , Main-SubAdmin")]
 
         // a create course , created by subAdmin or main subAdmin
-        public async Task<ActionResult<ApiResponce>> createCourse([FromForm] CourseForCreateDTO model, Guid? StudentId)
+        public async Task<IActionResult> createCourse([FromForm] CourseForCreateDTO model, Guid? StudentId)
         {
          
 
@@ -113,7 +112,7 @@ namespace courseProject.Controllers
 
             var createCourse = await courseServices.createCourse(courseMapped, requestMapped, StudentId);
             if (createCourse.IsError) return NotFound( new ApiResponce { ErrorMassages =  createCourse.FirstError.Description });
-            return new ApiResponce { Result="The Course Is Created Successfully"};
+            return Ok( new ApiResponce { Result="The Course Is Created Successfully"});
             
 
         }
@@ -129,7 +128,7 @@ namespace courseProject.Controllers
         [Authorize(Policy = "Admin")]
 
         // this to change the status of courses to reject or accredit
-        public async Task<ActionResult<ApiResponce>> EditCourseStatus(Guid courseId, string Status)
+        public async Task<IActionResult> EditCourseStatus(Guid courseId, string Status)
         {
             var updateStatus = await courseServices.accreditCourse(courseId, Status);
             if (updateStatus.IsError) return NotFound(new ApiResponce
@@ -148,7 +147,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "Admin")]
-        public async Task<ActionResult<ApiResponce>> EditOnCourseAfterAccreditByAdmin(Guid courseId, [FromForm] EditCourseAfterAccreditDTO editedCourse)
+        public async Task<IActionResult> EditOnCourseAfterAccreditByAdmin(Guid courseId, [FromForm] EditCourseAfterAccreditDTO editedCourse)
         {
 
             var courseService = await courseServices.EditOnCourseAfterAccredit(courseId, editedCourse);
@@ -167,7 +166,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(400)]
 
         // get course by it's id
-        public async Task<ActionResult<ApiResponce>> GetCourseById(Guid id)
+        public async Task<IActionResult> GetCourseById(Guid id)
         {
 
             var course = await courseServices.GetCourseById(id);
@@ -186,7 +185,7 @@ namespace courseProject.Controllers
         [Authorize(Policy = "SubAdmin , Main-SubAdmin")]
 
         // edit course by who created before the admin accredit or reject the course
-        public async Task<ActionResult<ApiResponce>> EditCourseBeforeAccredit(Guid id,[FromForm] CourseForEditDTO course)
+        public async Task<IActionResult> EditCourseBeforeAccredit(Guid id,[FromForm] CourseForEditDTO course)
         {
           
             
@@ -205,7 +204,7 @@ namespace courseProject.Controllers
         [Authorize(Policy = "SubAdmin , Main-SubAdmin")]
 
         // get all undefinded course created by a subAdmin depend on his id
-        public async Task<ActionResult<ApiResponce>> GetALlUndefinedCoursesForSubAdmins(Guid subAdminId , [FromQuery] PaginationRequest paginationRequest)
+        public async Task<IActionResult> GetALlUndefinedCoursesForSubAdmins(Guid subAdminId , [FromQuery] PaginationRequest paginationRequest)
         {          
                 var getCourses = await courseServices.GetALlUndefinedCoursesForSubAdmins(subAdminId);
             if(getCourses.IsError) return NotFound(new ApiResponce { ErrorMassages =  getCourses.FirstError.Description  });
@@ -218,7 +217,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "Admin , Instructor")]
-        public async Task<ActionResult<ApiResponce>> GetAllCoursesByInstructorId(Guid Instructorid, [FromQuery] PaginationRequest paginationRequest)
+        public async Task<IActionResult> GetAllCoursesByInstructorId(Guid Instructorid, [FromQuery] PaginationRequest paginationRequest)
         {
 
             var getCourses = await courseServices.GetAllCoursesByInstructor(Instructorid);
@@ -235,7 +234,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(400)]
         [Authorize(Policy = "Main-SubAdmin , Student")]
         // not try
-        public async Task<ActionResult<ApiResponce>> GetAllCustomCoursesToMainSubAdmin([FromQuery] PaginationRequest paginationRequest)
+        public async Task<IActionResult> GetAllCustomCoursesToMainSubAdmin([FromQuery] PaginationRequest paginationRequest)
         {
 
             var GetCustomCourses = await courseServices.GetAllCustomCourses();
@@ -251,7 +250,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(400)]
         [Authorize(Policy = "Main-SubAdmin , Student")]
         //not try
-        public async Task<ActionResult<ApiResponce>> GetCustomCourseById(Guid id)
+        public async Task<IActionResult> GetCustomCourseById(Guid id)
         {
 
             var GetCustomCourse = await courseServices.GetCustomCoursesById(id);
@@ -266,7 +265,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "Student")]
-        public async Task<ActionResult<ApiResponce>> GetEnrolledCourses(Guid studentid, [FromQuery] PaginationRequest paginationRequest)
+        public async Task<IActionResult> GetEnrolledCourses(Guid studentid, [FromQuery] PaginationRequest paginationRequest)
         {
 
             var enrolledCourses = await courseServices.GetAllEnrolledCourses(studentid);

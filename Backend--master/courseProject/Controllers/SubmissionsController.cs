@@ -30,7 +30,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(400)]
         [Authorize(Policy = "Instructor")]
         // not try
-        public async Task<ActionResult<ApiResponce>> GetAllSubmissionUsingTaskId(Guid taskId, [FromQuery] PaginationRequest paginationRequest)
+        public async Task<IActionResult> GetAllSubmissionUsingTaskId(Guid taskId, [FromQuery] PaginationRequest paginationRequest)
         {
             var getSubmissions = await submissionServices.GetAllSubmissionForTask(taskId);
             if (getSubmissions.IsError) return NotFound(new ApiResponce { ErrorMassages=getSubmissions.FirstError.Description});
@@ -44,7 +44,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "MaterialInEnrolledCourseForStudent")]
-        public async Task<ActionResult<ApiResponce>> AddTaskByStudent(Guid Studentid, Guid Id, [FromForm] SubmissionsDTO submissions)
+        public async Task<IActionResult> AddTaskByStudent(Guid Studentid, Guid Id, [FromForm] SubmissionsDTO submissions)
         {
             var addedTask = await submissionServices.AddTaskSubmission(Studentid, Id, submissions);
             if (addedTask.IsError) return NotFound(new ApiResponce { ErrorMassages = addedTask.FirstError.Description });

@@ -29,7 +29,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "Student")]
-        public async Task<ActionResult<ApiResponce>> EnrollInCourseAsync(StudentCourseDTO studentCourseDTO)
+        public async Task<IActionResult> EnrollInCourseAsync(StudentCourseDTO studentCourseDTO)
         {
             var enrolledCourse = await studentCoursesServices.EnrollInCourse(studentCourseDTO);
             if (enrolledCourse.FirstError.Type == ErrorOr.ErrorType.NotFound)
@@ -49,7 +49,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "MainSubAdmin")]
-        public async Task<ActionResult<ApiResponce>> ApprovalForTheStudentToJoinTheCourse(Guid courseId, Guid studentId, string status)
+        public async Task<IActionResult> ApprovalForTheStudentToJoinTheCourse(Guid courseId, Guid studentId, string status)
         {
             var editedStatus = await studentCoursesServices.ApprovelToJoinCourse(courseId, studentId, status);
             if (editedStatus.IsError) return NotFound(new ApiResponce { ErrorMassages = editedStatus.FirstError.Description });

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using courseProject.core.Models;
+using courseProject.Core.IGenericRepository;
 using courseProject.Core.Models;
 using courseProject.Core.Models.DTO.CoursesDTO;
 using courseProject.Core.Models.DTO.FeedbacksDTO;
@@ -12,9 +13,10 @@ namespace courseProject.MappingProfile
 {
     public class MappingProfileForStudentsInformation: Profile
     {
+      
 
-
-         public  MappingProfileForStudentsInformation (){
+        public  MappingProfileForStudentsInformation ()
+        {
                 CreateMap<Student, StudentsInformationDto>()
                     .ForMember(x => x.userName, o => o.MapFrom(y => y.user.userName))
                     .ForMember(x => x.email, o => o.MapFrom(y => y.user.email));
@@ -22,7 +24,7 @@ namespace courseProject.MappingProfile
             CreateMap<Student, ContactDto>()
                     .ForMember(x => x.userName, o => o.MapFrom(y => y.user.userName))
                     .ForMember(x => x.email, o => o.MapFrom(y => y.user.email))
-                    .ForMember(x => x.ImageUrl, o => o.MapFrom(y => $"http://localhost:7116/{y.ImageUrl}"));
+                    .ForMember(x => x.ImageUrl, o => o.MapFrom(y => $"https://localhost:7116/{y.ImageUrl}"));
 
 
             CreateMap<RegistrationRequestDTO, Student>();
@@ -42,11 +44,12 @@ namespace courseProject.MappingProfile
             CreateMap<Student_Task_Submissions, StudentSubmissionDTO>()
                 .ForMember(x => x.userName, o => o.MapFrom(y => y.Student.user.userName))
                 .ForMember(x => x.LName, o => o.MapFrom(y => y.Student.LName))
-                .ForMember(x => x.email, o => o.MapFrom(y => y.Student.user.email))
-                .ForMember(x => x.pdfUrl, o => {
-                    o.PreCondition(src => src.pdfUrl != null);
-                    o.MapFrom(y => $"http://localhost:7116/{y.pdfUrl}");
-                    });
+                .ForMember(x => x.email, o => o.MapFrom(y => y.Student.user.email));
+                //.ForMember(x => x.pdfUrl, o =>
+                // {
+                //     o.PreCondition(src => src.pdfUrl != null);
+                //     o.MapFrom(y => unitOfWork.FileRepository.GetFileUrl( y.pdfUrl));
+                // });
 
 
             CreateMap<BookALectureDTO, Consultation>();
@@ -89,6 +92,7 @@ namespace courseProject.MappingProfile
                 .ForMember(x => x.StudentName, o => o.MapFrom(y => y.Student.user.userName + " " + y.Student.LName))
                 .ForMember(x => x.CourseName, o => o.MapFrom(y => y.Course.name))
                 .ForMember(x => x.EnrollDate, o => o.MapFrom(y => y.EnrollDate.Date.ToString("dd/MM/yyyy")));
+            
         }
 
 

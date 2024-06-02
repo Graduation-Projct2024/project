@@ -44,7 +44,13 @@ namespace courseProject.Repository.Data
                    
                 }
                 );
+            modelBuilder.Entity<MaterialFiles>(
+               mf =>
+               {
+                   mf.HasKey(x => new { x.materialId, x.pdfUrl });
 
+               }
+               );
 
             modelBuilder.Entity<User>()
        .HasMany(u => u.feedbacks)  // User has many Feedbacks
@@ -195,6 +201,6 @@ namespace courseProject.Repository.Data
         public DbSet<StudentConsultations> StudentConsultations { get; set; }
         public DbSet<Skills> Skills { get; set; }
         public DbSet<InstructorSkills> InstructorSkills { get; set;}
-        
+        public DbSet<MaterialFiles> MaterialFiles { get; set; }
     }
 }

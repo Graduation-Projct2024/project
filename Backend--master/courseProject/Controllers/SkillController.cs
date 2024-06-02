@@ -36,12 +36,12 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "Admin")]
-        public async Task<ActionResult<ApiResponce>> AddSkillOptionsByAdmin(string skillName)
+        public async Task<IActionResult> AddSkillOptionsByAdmin(string skillName)
         {
             var addSkill = await skillsServices.AddSkillByAdmin(skillName);
             response.Result = addSkill.Value;
             if (addSkill.IsError == true) response.ErrorMassages=addSkill.FirstError.Description;
-            return response;
+            return Ok( response);
         }
 
 
@@ -50,10 +50,10 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "Admin , Student")]
-        public async Task<ActionResult<ApiResponce>> GetAllOptions()
+        public async Task<IActionResult> GetAllOptions()
         {
             
-            return new ApiResponce { Result = await skillsServices.getAllSkillesAddedByAdmin() };
+            return Ok( new ApiResponce { Result = await skillsServices.getAllSkillesAddedByAdmin() });
 
         }
 
@@ -63,10 +63,10 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize("Instructor")]
-        public async Task<ActionResult<ApiResponce>> GetAllOptionsToInstructorDropdown(Guid instructorId)
+        public async Task<IActionResult> GetAllOptionsToInstructorDropdown(Guid instructorId)
         {
            
-            return new ApiResponce { Result= await skillsServices.getAllSkillOptionsToInstructor(instructorId) };
+            return Ok( new ApiResponce { Result= await skillsServices.getAllSkillOptionsToInstructor(instructorId) });
 
         }
 
@@ -75,16 +75,18 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "Instructor")]
-        public async Task<ActionResult<ApiResponce>> SelectASkillsByInstructor(Guid instructorId, [FromForm] ListIntegerDTO array)
+        public async Task<IActionResult> SelectASkillsByInstructor(Guid instructorId, [FromForm] ListIntegerDTO array)
         {
             
            var selectNewSkill = await skillsServices.chooseANewSkillToInstructor(instructorId, array);
-            if (selectNewSkill.IsError)
+            if (selectNewSkill.FirstError.Type == ErrorOr.ErrorType.NotFound)
             {
-               return new ApiResponce { ErrorMassages =  (selectNewSkill.FirstError.Description)  };
-                
+                return NotFound(new ApiResponce { ErrorMassages = (selectNewSkill.FirstError.Description) });
+
             }
-            return new ApiResponce { Result= "The skills is added successfully"};
+            else if((selectNewSkill.FirstError.Type == ErrorOr.ErrorType.Validation))
+                return Ok(new ApiResponce { ErrorMassages = (selectNewSkill.FirstError.Description) });
+            return Ok( new ApiResponce { Result= "The skills is added successfully"});
 
         }
 
@@ -107,12 +109,12 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize]
-        public async Task<ActionResult<ApiResponce>> GetAllInstructorSkills(Guid instructorId)
+        public async Task<IActionResult> GetAllInstructorSkills(Guid instructorId)
         {
 
             var getAllHisSkills = await skillsServices.GetAllInstructorSkills(instructorId);
-            if (getAllHisSkills.IsError) return new ApiResponce { ErrorMassages =  getAllHisSkills.FirstError.Description  };
-            return new ApiResponce { Result = getAllHisSkills.Value };
+            if (getAllHisSkills.IsError) return NotFound( new ApiResponce { ErrorMassages =  getAllHisSkills.FirstError.Description  });
+            return Ok( new ApiResponce { Result = getAllHisSkills.Value });
         }
 
     }

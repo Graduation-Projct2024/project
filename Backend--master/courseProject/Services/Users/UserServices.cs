@@ -231,14 +231,14 @@ namespace courseProject.Services.Users
           
             if (usermapper.ImageUrl != null)
             {
-                CommonClass.ImageTOHttp(usermapper);
+                usermapper.ImageUrl= await unitOfWork.FileRepository.GetFileUrl(usermapper.ImageUrl);
             }
             return usermapper;
         }
 
-        public async Task<ErrorOr<Updated>> changePassword(ChengePasswordDTO chengePasswordDTO)
+        public async Task<ErrorOr<Updated>> changePassword(Guid UserId, ChengePasswordDTO chengePasswordDTO)
         {
-            var getUser = await unitOfWork.UserRepository.getUserByIdAsync(chengePasswordDTO.UserId);
+            var getUser = await unitOfWork.UserRepository.getUserByIdAsync(UserId);
             if (getUser == null) return ErrorUser.NotFound;
             if (getUser.password != BC.HashPassword(chengePasswordDTO.password)) return ErrorUser.IncorrectPassword;
             

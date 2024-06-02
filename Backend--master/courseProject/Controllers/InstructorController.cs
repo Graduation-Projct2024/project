@@ -29,7 +29,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy ="Instructor")]
-        public async Task<ActionResult<ApiResponce>> AddOfficeHours(Guid InstructorId, [FromForm] WorkingHourDTO _Working_Hours)
+        public async Task<IActionResult> AddOfficeHours(Guid InstructorId, [FromForm] WorkingHourDTO _Working_Hours)
         {
 
            var addHours = await instructorServices.AddOfficeHours(InstructorId, _Working_Hours);
@@ -47,7 +47,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize]
-        public async Task<ActionResult<ApiResponce>> GetInstructorOfficeHourById(Guid Instructorid)
+        public async Task<IActionResult> GetInstructorOfficeHourById(Guid Instructorid)
         {
 
            var getHours = await instructorServices.GetInstructorOfficeHours(Instructorid);
@@ -62,7 +62,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
        
-        public async Task<ActionResult<ApiResponce>> GetInstructorsForDropDownList()
+        public async Task<IActionResult> GetInstructorsForDropDownList()
         {
             return Ok(new ApiResponce { Result=await instructorServices.GetAllInstructorsList()});
         }
@@ -73,7 +73,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize]
-        public async Task<ActionResult<ApiResponce>> GetAllIinstructorsWithAllOfficeHours()
+        public async Task<IActionResult> GetAllIinstructorsWithAllOfficeHours()
         {           
             return Ok(new ApiResponce {Result = await instructorServices.GetAllInstructorsOfficeHours() });
         }
@@ -84,7 +84,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy ="Student")]
-        public async Task<ActionResult<ApiResponce>> GetAListOfInstrcutorsForBookALectures(Guid skillId, string startTime, string endTime, DateTime date)
+        public async Task<IActionResult> GetAListOfInstrcutorsForBookALectures(Guid skillId, string startTime, string endTime, DateTime date)
         {
             var getInstructors = await instructorServices.GetListOfInstructorForLectures(skillId, startTime, endTime, date);
             if (getInstructors.IsError) return Ok(new ApiResponce { ErrorMassages = getInstructors.FirstError.Description });

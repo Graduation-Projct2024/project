@@ -29,7 +29,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(400)]
         [Authorize(Policy = "Student")]
        //not try
-        public async Task<ActionResult<ApiResponce>> AddInstructorFeedback(Guid studentId, Guid InstructorId, FeedbackDTO Feedback)
+        public async Task<IActionResult> AddInstructorFeedback(Guid studentId, Guid InstructorId, FeedbackDTO Feedback)
         {
             var addedFeddback = await feedbackServices.AddInstructorFeedback(studentId, InstructorId, Feedback);
             if (addedFeddback.IsError) return NotFound(new ApiResponce { ErrorMassages = addedFeddback.FirstError.Description });
@@ -43,7 +43,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "Student")]
-        public async Task<ActionResult<ApiResponce>> AddCourseFeedback(Guid studentId, Guid courseId, FeedbackDTO Feedback)
+        public async Task<IActionResult> AddCourseFeedback(Guid studentId, Guid courseId, FeedbackDTO Feedback)
         {
             var addedFeddback = await feedbackServices.AddCourseFeedback(studentId, courseId, Feedback);
             if (addedFeddback.FirstError.Type==ErrorOr.ErrorType.NotFound) return NotFound(new ApiResponce { ErrorMassages = addedFeddback.FirstError.Description });
@@ -57,7 +57,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "Student")]
-        public async Task<ActionResult<ApiResponce>> AddGeneralFeedback(Guid studentId, FeedbackDTO Feedback)
+        public async Task<IActionResult> AddGeneralFeedback(Guid studentId, FeedbackDTO Feedback)
         {
             var addedFeddback = await feedbackServices.AddGeneralFeedback(studentId, Feedback);
             if (addedFeddback.IsError) return NotFound(new ApiResponce { ErrorMassages = addedFeddback.FirstError.Description });
@@ -70,7 +70,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<ApiResponce>> GetAllGeneralFeedback([FromQuery] PaginationRequest paginationRequest)
+        public async Task<IActionResult> GetAllGeneralFeedback([FromQuery] PaginationRequest paginationRequest)
         {
             var getFeedback = await feedbackServices.GetAllGeneralFeedback();
             
@@ -82,9 +82,9 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<ApiResponce>> GetAllInstructorFeedback([FromQuery] PaginationRequest paginationRequest)
+        public async Task<IActionResult> GetAllInstructorFeedback(Guid? instructorId , [FromQuery] PaginationRequest paginationRequest)
         {
-            var getFeedback = await feedbackServices.GetAllInstructorFeedback();
+            var getFeedback = await feedbackServices.GetAllInstructorFeedback(instructorId);
 
             return Ok(new ApiResponce { Result = (Pagination<FeedbackForRetriveDTO>.CreateAsync(getFeedback, paginationRequest.pageNumber, paginationRequest.pageSize)).Result });
 
@@ -95,9 +95,9 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<ApiResponce>> GetAllCourseFeedback([FromQuery] PaginationRequest paginationRequest)
+        public async Task<IActionResult> GetAllCourseFeedback(Guid? courseId,[FromQuery] PaginationRequest paginationRequest)
         {
-            var getFeedback = await feedbackServices.GetAllCourseFeedback();
+            var getFeedback = await feedbackServices.GetAllCourseFeedback(courseId);
 
             return Ok(new ApiResponce { Result = (Pagination<FeedbackForRetriveDTO>.CreateAsync(getFeedback, paginationRequest.pageNumber, paginationRequest.pageSize)).Result });
 
@@ -108,7 +108,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<ApiResponce>> GetAllFeedback([FromQuery] PaginationRequest paginationRequest)
+        public async Task<IActionResult> GetAllFeedback([FromQuery] PaginationRequest paginationRequest)
         {
             var getFeedback = await feedbackServices.GetAllFeedback();
 
@@ -121,7 +121,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<ApiResponce>> GetFeedbackById(Guid id)
+        public async Task<IActionResult> GetFeedbackById(Guid id)
         {
 
             var getFeedback = await feedbackServices.GetFeedbackById(id);

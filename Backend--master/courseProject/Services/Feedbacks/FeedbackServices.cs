@@ -74,23 +74,23 @@ namespace courseProject.Services.Feedbacks
 
         public async Task<IReadOnlyList<FeedbackForRetriveDTO>> GetAllGeneralFeedback()
         {
-            var getFeedback = await unitOfWork.StudentRepository.GetFeedbacksByTypeAsync("general-feedback");
+            var getFeedback = await unitOfWork.StudentRepository.GetFeedbacksByTypeAsync("general-feedback" );
           
             var feedbackMapper = mapper.Map<IReadOnlyList<Feedback>, IReadOnlyList<FeedbackForRetriveDTO>>(getFeedback);
             return feedbackMapper;
         }
 
-        public async Task<IReadOnlyList<FeedbackForRetriveDTO>> GetAllInstructorFeedback()
+        public async Task<IReadOnlyList<FeedbackForRetriveDTO>> GetAllInstructorFeedback(Guid? instructorId)
         {
-            var getFeedback = await unitOfWork.StudentRepository.GetFeedbacksByTypeAsync("instructor-feedback");
+            var getFeedback = await unitOfWork.StudentRepository.GetFeedbacksByTypeAsync("instructor-feedback",instructorId);
            
             var feedbackMapper = mapper.Map<IReadOnlyList<Feedback>, IReadOnlyList<FeedbackForRetriveDTO>>(getFeedback);
             return feedbackMapper;
         }
 
-        public async Task<IReadOnlyList<FeedbackForRetriveDTO>> GetAllCourseFeedback()
+        public async Task<IReadOnlyList<FeedbackForRetriveDTO>> GetAllCourseFeedback(Guid? courseId)
         {
-            var getFeedback = await unitOfWork.StudentRepository.GetFeedbacksByTypeAsync("course-feedback");
+            var getFeedback = await unitOfWork.StudentRepository.GetFeedbacksByTypeAsync("course-feedback" ,null, courseId);
             
             var feedbackMapper = mapper.Map<IReadOnlyList<Feedback>, IReadOnlyList<FeedbackForRetriveDTO>>(getFeedback);
             return feedbackMapper;

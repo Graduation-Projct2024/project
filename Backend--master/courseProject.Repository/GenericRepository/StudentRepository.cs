@@ -11,6 +11,7 @@ using System.Data.SqlTypes;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace courseProject.Repository.GenericRepository
 {
@@ -78,9 +79,25 @@ namespace courseProject.Repository.GenericRepository
             return await dbContext.feedbacks.Include(x => x.User).Include(x => x.User.student).ToListAsync();
         }
 
-        public async Task<IReadOnlyList<Feedback>> GetFeedbacksByTypeAsync(string type)
+        public async Task<IReadOnlyList<Feedback>> GetFeedbacksByTypeAsync(string type , Guid? instructorId , Guid? courseId)
         {
-            return await dbContext.feedbacks.Include(x=>x.User).ThenInclude(x=>x.student).Where(x=>x.type==type).ToListAsync();
+            // Start with the base query
+            var query =  dbContext.feedbacks.Include(x => x.User).ThenInclude(x => x.student).Where(x => x.type == type);
+
+            // Apply filters conditionally based on instructorId and courseId
+            if (instructorId != null)
+            {
+                // Filter by instructorId
+                query = query.Where(x => x.InstructorId == instructorId);
+            }
+            else if (courseId != null)
+            {
+                // Filter by courseId
+                query = query.Where(x => x.CourseId == courseId);
+            }
+
+            // Execute the query and return the result
+            return await query.ToListAsync();
         }
 
         public async Task<Feedback> GetFeedbackByIdAsync(Guid id)
@@ -157,10 +174,13 @@ namespace courseProject.Repository.GenericRepository
 
         public async Task<IReadOnlyList<Course>> GetAllCoursesAsync(Guid studentId)
         {
-            var allCourses= await dbContext.courses.Include(x => x.studentCourses) .Include(x=>x.Instructor)
-                                                                                        .ThenInclude(x=>x.user)
-                                                                                   .Include(x=>x.SubAdmin)
-                                                                                         .ThenInclude(x=>x.user). ToListAsync();
+            var allCourses= await dbContext.courses
+                .Where(x=>x.status.ToLower()=="accredit")
+                .Include(x => x.studentCourses) 
+                .Include(x=>x.Instructor).ThenInclude(x=>x.user)
+                .Include(x=>x.SubAdmin).ThenInclude(x=>x.user)
+                . ToListAsync();
+
             if (allCourses.Count > 0)
             {
 

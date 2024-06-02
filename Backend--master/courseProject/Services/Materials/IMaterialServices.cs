@@ -11,13 +11,14 @@ namespace courseProject.Services.Materials
         public Task<ErrorOr<Created>> AddFile(FileDTO fileDTO);
         public Task<ErrorOr<Created>> AddAnnouncement(AnnouncementDTO AnnouncementDTO);
         public Task<ErrorOr<Created>> AddLink(LinkDTO linkDTO);
-        public Task<ErrorOr<Updated>> EditTask(Guid id, TaskDTO taskDTO);
-        public Task<ErrorOr<Updated>> EditFile(Guid id, FileDTO fileDTO);
-        public Task<ErrorOr<Updated>> EditAnnouncement(Guid id, AnnouncementDTO AnnouncementDTO);
-        public Task<ErrorOr<Updated>> EDitLink(Guid id, LinkDTO linkDTO);
+        public Task<ErrorOr<Updated>> EditTask(Guid id, TaskForEditDTO taskDTO);
+        public Task<ErrorOr<Updated>> EditFile(Guid id, FileToEditDTO fileDTO);
+        public Task<ErrorOr<Updated>> EditAnnouncement(Guid id, AnnouncementForEditDTO AnnouncementDTO);
+        public Task<ErrorOr<Updated>> EDitLink(Guid id, LinkForEditDTO linkDTO);
         public Task<ErrorOr<Deleted>> DeleteMaterial(Guid id);
         public Task<ErrorOr<CourseMaterial>> GetMaterialById(Guid id);
         public Task<ErrorOr<ArrayList>> GetAllMaterialInTheCourse(Guid? courseId, Guid? consultationId);
+        public Task<ErrorOr<Deleted>> deleteFiles(Guid materialId);
 
     }
 }
