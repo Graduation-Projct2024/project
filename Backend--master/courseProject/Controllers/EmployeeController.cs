@@ -54,7 +54,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]      
-        public async Task<ActionResult<ApiResponce>> GetAllEmployeeAsync([FromQuery] PaginationRequest paginationRequest)
+        public async Task<IActionResult> GetAllEmployeeAsync([FromQuery] PaginationRequest paginationRequest)
         {
             var allEmployees = await employeeServices.getAllEmployees();         
             return Ok(new ApiResponce { Result = (Pagination<EmployeeDto>.CreateAsync(allEmployees, paginationRequest.pageNumber, paginationRequest.pageSize)).Result });               
@@ -87,15 +87,15 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy ="Admin")]
-        public async Task<ActionResult<ApiResponce>> CreateEmployee([FromForm]EmployeeForCreate model)
+        public async Task<IActionResult> CreateEmployee([FromForm]EmployeeForCreate model)
         {
           
             var createEmployee = await employeeServices.CreateEmployee(model);
             if (createEmployee.FirstError.Type == ErrorOr.ErrorType.Failure) return BadRequest(new ApiResponce { 
                 ErrorMassages= createEmployee.FirstError.Description } );
 
-            else if (createEmployee.FirstError.Type == ErrorOr.ErrorType.Validation) return new ApiResponce { 
-                ErrorMassages =  createEmployee.FirstError.Description  };
+            else if (createEmployee.FirstError.Type == ErrorOr.ErrorType.Validation) return Ok( new ApiResponce { 
+                ErrorMassages =  createEmployee.FirstError.Description  });
 
              return Ok(new ApiResponce { Result="The employee is create successfully" } );
         }
@@ -107,7 +107,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<ApiResponce>> GetById(Guid id)
+        public async Task<IActionResult> GetById(Guid id)
         {
 
             var getEmployee = await employeeServices.GetEmployeeById(id);
@@ -121,7 +121,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy ="Admin")]
-        public async Task<ActionResult<ApiResponce>> updateEmployee(Guid id,[FromForm] EmployeeForUpdateDTO EmpolyeeModel)
+        public async Task<IActionResult> updateEmployee(Guid id,[FromForm] EmployeeForUpdateDTO EmpolyeeModel)
         {
             var updateEmployee = await employeeServices.UpdateEmployeeFromAdmin(id, EmpolyeeModel);
             if(updateEmployee.FirstError.Type==ErrorOr.ErrorType.NotFound) 
@@ -140,10 +140,12 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy ="Admin")]
-        public async Task<ActionResult<ApiResponce>> EditRole (Guid userId ,string role)
+        public async Task<IActionResult> EditRole (Guid userId ,string role)
         {
             var editRole = await employeeServices.EditRole(userId, role);
-            if (editRole.IsError) return (new ApiResponce {ErrorMassages=editRole.FirstError.Description });
+            if (editRole.FirstError.Type==ErrorOr.ErrorType.NotFound) return NotFound(new ApiResponce {ErrorMassages=editRole.FirstError.Description });
+            else if (editRole.FirstError.Type == ErrorOr.ErrorType.Validation) return Ok(new ApiResponce { ErrorMassages = editRole.FirstError.Description });
+
             return Ok(new ApiResponce { Result = "The role is edited successfully" });
         }
 

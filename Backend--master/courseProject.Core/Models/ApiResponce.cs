@@ -10,8 +10,8 @@ namespace courseProject.Core.Models
     public class ApiResponce
     {
       
-        public string ErrorMassages { get; set; }
-        public object Result { get; set; }
+        public string ErrorMassages { get; set; }// Error messages if any
+        public object Result { get; set; }// The result of the API call
 
     }
 }

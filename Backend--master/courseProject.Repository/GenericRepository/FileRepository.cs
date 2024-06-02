@@ -36,7 +36,7 @@ namespace courseProject.Repository.GenericRepository
                 //var Id = Convert.ToString(httpContextAccessor.HttpContext.User.FindFirst("UserId"));
                 //int.TryParse(Id, out int id);
                 var extension = Path.GetExtension(file.FileName);
-                fileName = DateTimeOffset.Now.Ticks.ToString();
+                fileName =fileName+"_" +DateTimeOffset.Now.Ticks ;
                 fileName += extension;
                  uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "Files\\");
 
@@ -63,6 +63,63 @@ namespace courseProject.Repository.GenericRepository
         }
 
 
+        public async Task<List<string>> UploadFiles(List<IFormFile> files)
+        {
+            var fileNames = new List<string>();
+            var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "Files\\");
+
+            try
+            {
+                if (files == null || files.Count == 0)
+                {
+                    return null;
+                }
+
+                if (!Directory.Exists(uploadPath))
+                {
+                    Directory.CreateDirectory(uploadPath);
+                }
+
+                foreach (var file in files)
+                {
+                    if (file == null || file.Length == 0)
+                    {
+                        fileNames.Add("Error: File is empty or null");
+                        continue;
+                    }
+
+                    var extension = Path.GetExtension(file.FileName);
+                    var fileName = DateTimeOffset.Now.Ticks.ToString() + extension;
+                    var exactPath = Path.Combine(uploadPath, fileName);
+
+                    using (var fileStream = new FileStream(exactPath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(fileStream);
+                    }
+
+                    fileNames.Add(fileName);
+                }
+            }
+            catch (Exception ex)
+            {
+                fileNames.Add($"Error: {ex.Message}");
+            }
+
+            return fileNames;
+        }
+
+
+        public async Task<string> GetFileUrl(string fileName)
+        {
+            var scheme = httpContextAccessor.HttpContext?.Request.Scheme ?? string.Empty; // http or https
+            var host = httpContextAccessor.HttpContext?.Request.Host; //  localhost:7116
+            var pathBase = httpContextAccessor.HttpContext?.Request.PathBase ?? string.Empty;
+
+            
+            var fileUrl = $"{scheme}://{host}{pathBase}/{fileName}";
+
+            return fileUrl;
+        }
 
         public async Task<List<string>> UploadFilesAsync(List<IFormFile> files)
         {

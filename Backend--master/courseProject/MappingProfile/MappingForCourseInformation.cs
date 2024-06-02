@@ -2,6 +2,7 @@
 using courseProject.Common;
 using courseProject.Controllers;
 using courseProject.core.Models;
+using courseProject.Core.IGenericRepository;
 using courseProject.Core.Models;
 using courseProject.Core.Models.DTO.CoursesDTO;
 using courseProject.Core.Models.DTO.LecturesDTO;
@@ -12,7 +13,9 @@ namespace courseProject.MappingProfile
 {
     public class MappingForCourseInformation : Profile
     {
-      //  private Common.IsNotDefaultClassForMapping IsNotDefaultClass;
+      
+
+        //  private Common.IsNotDefaultClassForMapping IsNotDefaultClass;
         public MappingForCourseInformation()
         {
             //IsNotDefaultClass = new Common.IsNotDefaultClassForMapping();
@@ -41,7 +44,7 @@ namespace courseProject.MappingProfile
                 .ForMember(x => x.InstructorLName, o => o.MapFrom(y => y.Instructor.LName))
                 .ForMember(x => x.endDate, o => o.MapFrom(y => y.endDate.HasValue ? y.endDate.Value.ToString("dd/MM/yyyy") : null))
                 .ForMember(x => x.startDate, o => o.MapFrom(y => y.startDate.HasValue ? y.startDate.Value.ToString("dd/MM/yyyy") : null));
-                //.ForMember(x => x.ImageUrl, o => o.MapFrom(y => $"http://localhost:5134/{y.ImageUrl}"));
+               // .ForMember(x => x.ImageUrl, o => o.MapFrom( y =>  unitOfWork.FileRepository.GetFileUrl(y.ImageUrl))); 
 
 
             CreateMap<CourseForCreateDTO, Course>();
@@ -62,16 +65,24 @@ namespace courseProject.MappingProfile
 
 
             CreateMap<TaskDTO, CourseMaterial>();
-
+            CreateMap<TaskForEditDTO, CourseMaterial>().ForAllMembers(opts => opts.Condition((src, dest, srcMember, destMember) =>
+            IsNotDefaultClassForMapping.IsNotDefault(srcMember)));
             CreateMap<FileDTO, CourseMaterial>();
+
+            CreateMap<FileToEditDTO, CourseMaterial>().ForAllMembers(opts => opts.Condition((src, dest, srcMember, destMember) =>
+           IsNotDefaultClassForMapping.IsNotDefault(srcMember)));
             CreateMap<AnnouncementDTO, CourseMaterial>();
+            CreateMap<AnnouncementForEditDTO, CourseMaterial>().ForAllMembers(opts => opts.Condition((src, dest, srcMember, destMember) =>
+         IsNotDefaultClassForMapping.IsNotDefault(srcMember)));
             CreateMap<LinkDTO, CourseMaterial>();
-      //      CreateMap<Consultation, LecturesForRetriveDTO>();
-         //   CreateMap<CourseMaterial, TaskForRetriveDTO>();
+            CreateMap<LinkForEditDTO, CourseMaterial>().ForAllMembers(opts => opts.Condition((src, dest, srcMember, destMember) =>
+         IsNotDefaultClassForMapping.IsNotDefault(srcMember)));
+            //      CreateMap<Consultation, LecturesForRetriveDTO>();
+            //   CreateMap<CourseMaterial, TaskForRetriveDTO>();
             //  .ForMember(x => x.pdfUrl, o => o.MapFrom(y => $"http://localhost:5134/{y.pdfUrl}"));
-           // CreateMap<CourseMaterial, FileForRetriveDTO>();
-              //  .ForMember(x => x.pdfUrl, o => o.MapFrom(y => $"http://localhost:5134/{y.pdfUrl}"));
-           /// CreateMap<CourseMaterial, AnnouncementForRetriveDTO>();
+            // CreateMap<CourseMaterial, FileForRetriveDTO>();
+            //  .ForMember(x => x.pdfUrl, o => o.MapFrom(y => $"http://localhost:5134/{y.pdfUrl}"));
+            /// CreateMap<CourseMaterial, AnnouncementForRetriveDTO>();
             //CreateMap<CourseMaterial, LinkForRetriveDTO>();
             //  .ForMember(x=>x.pdf , o=>o.MapFrom(y=>y.pdfUrl));
 
@@ -90,8 +101,7 @@ namespace courseProject.MappingProfile
             CreateMap<EditCourseAfterAccreditDTO, Course>()
            .ForAllMembers(opts => opts.Condition((src, dest, srcMember, destMember) =>
             IsNotDefaultClassForMapping.IsNotDefault(srcMember)));
-            
-
+          
         }
     }
 }

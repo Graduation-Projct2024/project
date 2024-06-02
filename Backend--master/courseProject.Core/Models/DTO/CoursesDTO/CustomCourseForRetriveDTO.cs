@@ -13,7 +13,7 @@ namespace courseProject.Core.Models.DTO.CoursesDTO
         public string description { get; set; }
         public string? startDate { get; set; }
         public string? endDate { get; set; }
-        public int StudentId { get; set; }
+        public Guid StudentId { get; set; }
         public string StudentFName { get; set; }
         public string? StudentLName { get; set; }
     }

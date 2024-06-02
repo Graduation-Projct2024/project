@@ -27,7 +27,14 @@ namespace courseProject.Services.Students
         public async Task<IReadOnlyList<StudentsInformationDto>> GetAllStudents()
         {
             var Students = await unitOfWork.StudentRepository.GetAllStudentsAsync();
-            CommonClass.EditImageInStudents(Students);
+            foreach(var student in Students)
+            {
+                if (student.ImageUrl != null)
+                {
+                    student.ImageUrl = await unitOfWork.FileRepository.GetFileUrl(student.ImageUrl);
+                }
+            }
+          //  CommonClass.EditImageInStudents(Students);
             var mappedStudentDTO = mapper.Map<IReadOnlyList<Student>, IReadOnlyList<StudentsInformationDto>>(Students);
             return mappedStudentDTO;
         }

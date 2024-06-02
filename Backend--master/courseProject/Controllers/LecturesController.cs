@@ -32,7 +32,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(204)]
         [Authorize(Policy = "Main-SubAdmin ,Instructor , Student")]
         //not try
-        public async Task<ActionResult<ApiResponce>> GetAllLecturesByInstructorId(Guid instructorId, [FromQuery] PaginationRequest paginationRequest)
+        public async Task<IActionResult> GetAllLecturesByInstructorId(Guid instructorId, [FromQuery] PaginationRequest paginationRequest)
         {
 
             var GetLectures = await lectureServices.GetAllLecturesByInstructorId(instructorId);
@@ -50,11 +50,11 @@ namespace courseProject.Controllers
         [ProducesResponseType(400)]
         [Authorize(Policy = "Student")]
         //not try
-        public async Task<ActionResult<ApiResponce>> BooKLectureByStudent(Guid studentId, DateTime date, string startTime, string endTime, [FromForm] BookALectureDTO bookALecture)
+        public async Task<IActionResult> BooKLectureByStudent(Guid studentId, DateTime date, string startTime, string endTime, [FromForm] BookALectureDTO bookALecture)
         {
             var lecture = await lectureServices.BookALecture(studentId , date, startTime, endTime, bookALecture);
             if (lecture.FirstError.Type==ErrorOr.ErrorType.NotFound) return NotFound(new ApiResponce {ErrorMassages=lecture.FirstError.Description });
-            else if (lecture.FirstError.Type == ErrorOr.ErrorType.Validation) return (new ApiResponce { ErrorMassages = lecture.FirstError.Description });
+            else if (lecture.FirstError.Type == ErrorOr.ErrorType.Validation) return Ok(new ApiResponce { ErrorMassages = lecture.FirstError.Description });
             return Ok(new ApiResponce { Result = "The Lecture is Created Successfully" });
         }
 
@@ -66,7 +66,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(400)]
         [Authorize(Policy = "Student")]
         //not try
-        public async Task<ActionResult<ApiResponce>> JoinToAPublicLecture(Guid StudentId, Guid ConsultaionId)
+        public async Task<IActionResult> JoinToAPublicLecture(Guid StudentId, Guid ConsultaionId)
         {
             var JoinedLecture = await lectureServices.JoinToPublicLecture(StudentId, ConsultaionId);
             if (JoinedLecture.IsError) return NotFound(new ApiResponce {ErrorMassages=JoinedLecture.FirstError.Description });
@@ -79,7 +79,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize]
-        public async Task<ActionResult<ApiResponce>> GetAllConsultation(Guid studentId, [FromQuery] PaginationRequest paginationRequest)
+        public async Task<IActionResult> GetAllConsultation(Guid studentId, [FromQuery] PaginationRequest paginationRequest)
         {
             var getLectures = await lectureServices.GetAllConsultations(studentId);
             if (getLectures.IsError) return NotFound(new ApiResponce { ErrorMassages=getLectures.FirstError.Description });         
@@ -93,7 +93,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize]
-        public async Task<ActionResult<ApiResponce>> GetAConsultationById(Guid consultationId)
+        public async Task<IActionResult> GetAConsultationById(Guid consultationId)
         {
 
             var getConsultation = await lectureServices.GetConsultationById(consultationId);

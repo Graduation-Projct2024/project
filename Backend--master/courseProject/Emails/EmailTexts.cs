@@ -17,7 +17,7 @@
                             <p style='font-size: 18px;'>Best regards,</p>
                             
                         </div>
-<div class=""footer"">
+<div class=""footer""style='text-align: center';>
             <p>&copy; 2024 Course Academy. All rights reserved.</p>
         </div>
                     </body>

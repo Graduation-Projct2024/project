@@ -89,7 +89,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<ApiResponce>> AddCode(string email, string code)
+        public async Task<IActionResult> AddCode(string email, string code)
         {
             var codeAdded = await userServices.addCodeVerification(email, code);
             if(codeAdded.FirstError.Type==ErrorOr.ErrorType.NotFound) return NotFound(new ApiResponce { ErrorMassages=codeAdded.FirstError.Description });
@@ -103,7 +103,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<ActionResult<ApiResponce>> reSendTheVerificationCode(string email)
+        public async Task<IActionResult> reSendTheVerificationCode(string email)
         {
             var recendCode = await userServices.reSendTheVerificationCode(email);
             if (recendCode.FirstError.Type == ErrorOr.ErrorType.NotFound) return NotFound(new ApiResponce { ErrorMassages = recendCode.FirstError.Description });
@@ -118,7 +118,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize]
-        public async Task<ActionResult<ApiResponce>> EditProfileAsync(Guid id,[FromForm] ProfileDTO profile)
+        public async Task<IActionResult> EditProfileAsync(Guid id,[FromForm] ProfileDTO profile)
         {
             var updatedProfile = await userServices.EditUserProfile(id, profile);
             if (updatedProfile.FirstError.Type == ErrorOr.ErrorType.NotFound) return NotFound(new ApiResponce { ErrorMassages = updatedProfile.FirstError.Description });
@@ -132,7 +132,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize]
-        public async Task<ActionResult<ApiResponce>> GetUserInfo(Guid id)
+        public async Task<IActionResult> GetUserInfo(Guid id)
         {
             var getUser = await userServices.GetProfileInfo(id);
             if (getUser.IsError) return NotFound(new ApiResponce {ErrorMassages=getUser.FirstError.Description });
@@ -146,9 +146,9 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize]
-        public async Task<ActionResult<ApiResponce>> changePassword (ChengePasswordDTO chengePasswordDTO)
+        public async Task<IActionResult> changePassword (Guid UserId ,ChengePasswordDTO chengePasswordDTO)
         {
-            var changedPass = await userServices.changePassword(chengePasswordDTO);
+            var changedPass = await userServices.changePassword( UserId, chengePasswordDTO);
             if (changedPass.FirstError.Type==ErrorOr.ErrorType.NotFound) return NotFound(new ApiResponce { ErrorMassages=changedPass.FirstError.Description});
             else if (changedPass.FirstError.Type == ErrorOr.ErrorType.Unexpected) return Ok(new ApiResponce { ErrorMassages = changedPass.FirstError.Description });
             return Ok(new ApiResponce { Result="Password Changed Successfully."});

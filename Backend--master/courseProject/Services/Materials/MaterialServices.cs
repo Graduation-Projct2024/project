@@ -5,6 +5,7 @@ using courseProject.Core.Models;
 using courseProject.Core.Models.DTO.MaterialsDTO;
 using courseProject.ServiceErrors;
 using ErrorOr;
+using Microsoft.EntityFrameworkCore;
 using System.Collections;
 using System.Net;
 
@@ -25,7 +26,7 @@ namespace courseProject.Services.Materials
 
         public async Task<ErrorOr<Created>> AddTask(TaskDTO taskDTO)
         {
-            await unitOfWork.FileRepository.UploadFile1(taskDTO.pdf);
+           var uploadedFileNames=await unitOfWork.FileRepository.UploadFiles(taskDTO.pdf);
             var taskMapped = mapper.Map<TaskDTO, CourseMaterial>(taskDTO);
             taskMapped.type = "Task";            
             var getcourses = await unitOfWork.instructorRepositpry.GetAllCoursesGivenByInstructorIdAsync(taskDTO.InstructorId);
@@ -34,25 +35,41 @@ namespace courseProject.Services.Materials
             {
                 return ErrorUser.Unauthorized;
             }
-            taskMapped.pdfUrl = "Files\\" + await unitOfWork.FileRepository.UploadFile1(taskDTO.pdf);
             await unitOfWork.instructorRepositpry.AddMaterial(taskMapped);
             var success = await unitOfWork.instructorRepositpry.saveAsync();
+            MaterialFiles materialFiles = new MaterialFiles();
+            materialFiles.materialId = taskMapped.Id;
+            foreach (var file in uploadedFileNames)
+            {
+                materialFiles.pdfUrl = "Files\\" + file;
+                await unitOfWork.materialRepository.AddMaterialFiles(materialFiles);
+                await unitOfWork.materialRepository.saveAsync();
+            }
+          
             return Result.Created;
         }
 
 
         public async Task<ErrorOr<Created>> AddFile(FileDTO fileDTO)
         {
-            await unitOfWork.FileRepository.UploadFile1(fileDTO.pdf);
+            var uploadedFileNames = await unitOfWork.FileRepository.UploadFiles(fileDTO.pdf);
             var fileMapped = mapper.Map<FileDTO, CourseMaterial>(fileDTO);
             fileMapped.type = "File";
             var getcourses = await unitOfWork.instructorRepositpry.GetAllCoursesGivenByInstructorIdAsync(fileDTO.InstructorId);
             var getConsultations = await unitOfWork.instructorRepositpry.GetAllConsultationRequestByInstructorIdAsync(fileDTO.InstructorId);
             if (!getcourses.Any(x => x.Id == fileDTO.courseId) && !getConsultations.Any(x => x.Id == fileDTO.consultationId))
                 return ErrorUser.Unauthorized;
-            fileMapped.pdfUrl = "Files\\" + await unitOfWork.FileRepository.UploadFile1(fileDTO.pdf);
+   
             await unitOfWork.instructorRepositpry.AddMaterial(fileMapped);
             var success = await unitOfWork.instructorRepositpry.saveAsync();
+            MaterialFiles materialFiles = new MaterialFiles();
+            materialFiles.materialId = fileMapped.Id;
+            foreach (var file in uploadedFileNames)
+            {
+                materialFiles.pdfUrl = "Files\\" + file;
+                await unitOfWork.materialRepository.AddMaterialFiles(materialFiles);
+                await unitOfWork.materialRepository.saveAsync();
+            }
             return Result.Created;
         }
 
@@ -82,7 +99,7 @@ namespace courseProject.Services.Materials
             return Result.Created;
         }
 
-        public async Task<ErrorOr<Updated>> EditTask(Guid id, TaskDTO taskDTO)
+        public async Task<ErrorOr<Updated>> EditTask(Guid id, TaskForEditDTO taskDTO)
         {
             
             var TaskToUpdate = await unitOfWork.materialRepository.GetMaterialByIdAsync(id);
@@ -91,15 +108,45 @@ namespace courseProject.Services.Materials
 
             var Taskmapper = mapper.Map(taskDTO, TaskToUpdate);
             Taskmapper.Id = id;
-            Taskmapper.type = "Task";
-            Taskmapper.pdfUrl = "Files\\" + await unitOfWork.FileRepository.UploadFile1(taskDTO.pdf);
+            Taskmapper.type = "Task";       
             await unitOfWork.instructorRepositpry.EditMaterial(Taskmapper);
-
             var success1 = await unitOfWork.instructorRepositpry.saveAsync();
+         
+            if (taskDTO.pdf.Any())
+            {
+                var uploadedFileNames = await unitOfWork.FileRepository.UploadFiles(taskDTO.pdf);
+              
+                foreach (var file in uploadedFileNames)
+                {
+                    var newMaterialFile = new MaterialFiles
+                    {
+                        materialId = id,
+                        pdfUrl = "Files\\" + file
+                    };
+
+                  
+                    await unitOfWork.materialRepository.AddMaterialFiles(newMaterialFile);
+                    await unitOfWork.materialRepository.saveAsync();
+
+                }
+
+                
+
+            }
+
+
+            
             return Result.Updated;
         }
 
-        public async Task<ErrorOr<Updated>> EditFile(Guid id, FileDTO fileDTO)
+
+       
+
+
+
+
+
+            public async Task<ErrorOr<Updated>> EditFile(Guid id, FileToEditDTO fileDTO)
         {
            
             var FileToUpdate = await unitOfWork.materialRepository.GetMaterialByIdAsync(id);
@@ -109,14 +156,32 @@ namespace courseProject.Services.Materials
             var filemapper = mapper.Map(fileDTO, FileToUpdate);
             filemapper.Id = id;
             filemapper.type = "File";
-            filemapper.pdfUrl = "Files\\" + await unitOfWork.FileRepository.UploadFile1(fileDTO.pdf);
             await unitOfWork.instructorRepositpry.EditMaterial(filemapper);
 
             var success1 = await unitOfWork.instructorRepositpry.saveAsync();
+
+            if (fileDTO.pdf.Any())
+            {
+                var uploadedFileNames = await unitOfWork.FileRepository.UploadFiles(fileDTO.pdf);
+
+                foreach (var file in uploadedFileNames)
+                {
+                    var newMaterialFile = new MaterialFiles
+                    {
+                        materialId = id,
+                        pdfUrl = "Files\\" + file
+                    };
+
+                    await unitOfWork.materialRepository.AddMaterialFiles(newMaterialFile);
+                    await unitOfWork.materialRepository.saveAsync();
+
+                }
+
+            }
             return Result.Updated;
         }
 
-        public async Task<ErrorOr<Updated>> EditAnnouncement(Guid id, AnnouncementDTO AnnouncementDTO)
+        public async Task<ErrorOr<Updated>> EditAnnouncement(Guid id, AnnouncementForEditDTO AnnouncementDTO)
         {
            
             var AnnouncementToUpdate = await unitOfWork.materialRepository.GetMaterialByIdAsync(id);
@@ -132,7 +197,7 @@ namespace courseProject.Services.Materials
             return Result.Updated;
         }
 
-        public async Task<ErrorOr<Updated>> EDitLink(Guid id, LinkDTO linkDTO)
+        public async Task<ErrorOr<Updated>> EDitLink(Guid id, LinkForEditDTO linkDTO)
         {
            
             var LinkToUpdate = await unitOfWork.materialRepository.GetMaterialByIdAsync(id);
@@ -162,7 +227,17 @@ namespace courseProject.Services.Materials
         {
             var material = await unitOfWork.materialRepository.GetMaterialByIdAsync(id);
             if (material == null) return ErrorMaterial.NotFound;
-            CommonClass.EditFileInMaterial(material);
+            if (material.MaterialFiles != null && material.MaterialFiles.Any())
+            {
+                foreach (var file in material.MaterialFiles)
+                {
+                    if (!string.IsNullOrEmpty(file.pdfUrl))
+                    {
+                        file.pdfUrl = await unitOfWork.FileRepository.GetFileUrl(file.pdfUrl);
+                    }
+                }
+            }
+           
             return material;           
         }
 
@@ -176,13 +251,34 @@ namespace courseProject.Services.Materials
 
             ArrayList arrayList = new ArrayList();
 
+
             foreach (var material in AlMaterials)
             {
-                CommonClass.EditFileInMaterial(material);
+             
+                    foreach (var file in material.MaterialFiles)
+                    {
+                        if (!string.IsNullOrEmpty(file.pdfUrl))
+                        {
+                            file.pdfUrl = await unitOfWork.FileRepository.GetFileUrl(file.pdfUrl);
+                        }
+                    }
+                               
                 arrayList.Add(material);
                 
             }
             return arrayList;
+        }
+
+        public async Task<ErrorOr<Deleted>> deleteFiles(Guid materialId)
+        {
+            var getFiles = await unitOfWork.materialRepository.GetMaterialFilesByMaterialId(materialId);
+            foreach (var file in getFiles)
+            {
+                await unitOfWork.materialRepository.DeleteFilesById(file);
+                await unitOfWork.materialRepository.saveAsync();
+
+            }
+            return Result.Deleted;
         }
     }
 }
