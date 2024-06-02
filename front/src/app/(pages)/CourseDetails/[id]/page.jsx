@@ -8,10 +8,19 @@ import '../../../../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js'
 import { UserContext } from '@/context/user/User';
 import axios from 'axios';
 import { faCss3, faFacebookF, faGithub, faLinkedinIn } from '@fortawesome/free-brands-svg-icons'
+import { useSearchParams } from 'next/navigation'
+import Swal from 'sweetalert2'
 export default function CourseDetails({params}) {
   const {userToken, setUserToken, userData,userId}=useContext(UserContext);
 
-  console.log(params.id)
+  // console.log(params.id)
+  // const searchParams = useSearchParams();
+  // console.log(searchParams.get('isEnrolled'));
+  // let isEnrolled = searchParams.get('isEnrolled')
+  // let[isEnrolled,setIsEnrolled] = useState(null);
+  // console.log(params.isEnrolled)
+
+
   let [course,setCourse] = useState({});
   let [instructors,setInstructors] = useState([]);
   let[instructor,setInstructor] = useState({});
@@ -26,7 +35,7 @@ export default function CourseDetails({params}) {
     try {
       //setLoading(false)
       const {data} = await axios.get(`https://localhost:7116/api/CourseContraller/GetCourseById?id=${params.id}`,);
-        console.log(data);
+        // console.log(data);
         setCourse(data.result);
     }
       catch (error) {
@@ -36,10 +45,15 @@ export default function CourseDetails({params}) {
   }
   // console.log(course)
 
+  // useEffect(()=>{
+  //   const params = new URLSearchParams(window.location.search);
+  //   setIsEnrolled(params.get('isEnrolled'));
+  // },[]);
+
   useEffect(() => {
     getCourse();
     fetchIns();
-  }, [course]);
+  }, [course,userData]);
 
   useEffect(() => {
     if (course && instructors.length > 0) {
@@ -90,7 +104,7 @@ export default function CourseDetails({params}) {
     <div className="author-content">
       <a className="name" href="#">{course.instructorName}</a>
       <span className="Enroll">{course.limitNumberOfStudnet}  Students</span>
-      {console.log(course.limitNumberOfStudnet)}
+      {/* {console.log(course.limitNumberOfStudnet)} */}
     </div>
   </div>
   {/* <div className="admin-rating">
@@ -190,11 +204,12 @@ export default function CourseDetails({params}) {
                       </li>
                     </ul>
                   </div>
-                  {userData && role == "student"&&
+                  {/* {userData && role == "student"&&
                     <div className="info-btn">
-                    <a href="#" className="btn btn-primary btn-hover-dark enroll">Enroll Now</a>
+                    
+                    <button onClick={enrollCourse}  className="btn btn-primary btn-hover-dark enroll">Enroll Now</button>
                   </div>
-                  }
+                  } */}
                   
                 </div>
               </div>

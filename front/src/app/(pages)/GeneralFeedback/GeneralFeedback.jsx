@@ -6,8 +6,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import AddCommentIcon from '@mui/icons-material/AddComment';
 import { UserContext } from '@/context/user/User';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, useMediaQuery, useTheme } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, Tooltip, useMediaQuery, useTheme } from '@mui/material';
 import AddGeneralFeedback from './AddGeneralFeedback';
+import axios from 'axios';
 export default function GeneralFeedback() {
     const {userToken, setUserToken, userData,userId}=useContext(UserContext);
     const [role,setRole] = useState();
@@ -28,6 +29,27 @@ export default function GeneralFeedback() {
             setOpen(false);
           };
 
+         
+      const [feedbacks, setFeedbacks] = useState([]);
+ const fetchFeedbacks = async ()  => {
+        if(userData){
+        try{
+        const { data } = await axios.get(`https://localhost:7116/api/Feedback/GetAllGeneralFeedback?pageNumber=1&pageSize=20`);
+        
+        setFeedbacks(data.result.items);
+
+      }
+        catch(error){
+         console.log(error);
+        }
+      }
+      };
+useEffect(() => {
+  fetchFeedbacks();
+      }, [feedbacks,userData]);
+
+
+
   return (
     <div className="generalFeedback py-5">
       <div className="container">
@@ -46,9 +68,11 @@ export default function GeneralFeedback() {
                 </h3>
                 {userData && role == "student" && (
                   <div className="addFeedback">
+                    <Tooltip title="Add Feedback" placement="top">
                     <Button  onClick={handleClickOpen}>
                       <AddCommentIcon className="addFeedIcon" />
                     </Button>
+                    </Tooltip>
                   </div>
                 )}
                 <Dialog
@@ -163,20 +187,17 @@ export default function GeneralFeedback() {
                 loop={true}
                 className="row justify-content-center align-items-center"
               >
-                <SwiperSlide className="py-3">
+                {feedbacks.length?feedbacks.map((feedback)=>
+<SwiperSlide className="py-3">
                   <div className="singleFeedbackContent">
                     <div className="feedbackPara">
                       <p className="contentfeed">
-                        Lorem ipsum dolor sit amet consectetur, adipisicing
-                        elit. Optio harum debitis ea praesentium iste et quam,
-                        quo sapiente perspiciatis! Recusandae atque asperiores
-                        ad nulla iusto provident sunt dolore exercitationem
-                        neque?
+                        {feedback.content}
                       </p>
                     </div>
                     <div className="userInfo d-flex align-items-center">
                       <img src="/user.jpg" alt="writer photo" />
-                      <p className="pt-3 writerName">Jason Stathum</p>
+                      <p className="pt-3 writerName">{feedback.name}</p>
                       <ul className="d-flex gap-1 align-items-center pt-3">
                         <li className="list-unstyled">
                           <FontAwesomeIcon
@@ -184,12 +205,14 @@ export default function GeneralFeedback() {
                             style={{ color: "#FFD43B" }}
                           />
                         </li>
-                        <li className="list-unstyled">(4.9)</li>
+                        <li className="list-unstyled">({feedback.range})</li>
                       </ul>
                     </div>
                   </div>
                 </SwiperSlide>
-                <SwiperSlide className="py-5">hhhhhh</SwiperSlide>
+                ):<>No Feedbacks</>}
+                
+               
               </Swiper>
             </div>
           </div>

@@ -62,7 +62,7 @@ export default function AllCourses() {
                       <p className='col-6 pt-4 pe-5'>{course.category}</p>
                       <div className="courses-button col-6 justify-content-end pt-2 ps-4">
                                 {/* <Link href={`CourseDetails/${course.id}`} className = "text-decoration-none btn btn-dark p-3">View Details</Link> */}
-                                <Button className='viewDetailsButton p-2'  onClick={() => router.push(`CourseDetails/${course.id}`)}>View Details</Button>
+                                <Button className='viewDetailsButton p-2'  onClick={() => router.push(`CourseDetails/${course.id}?isEnrolled=${course.isEnrolled}`)}>View Details</Button>
                       </div>
                     </div>
                 </div>

@@ -43,7 +43,7 @@ export default function page() {
   const [pageSize, setPageSize] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
   const [lectures, setLectures] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
   const getLectures = async (pageNum = pageNumber, pageSizeNum = pageSize) => {
     if (userId) {
       try {
@@ -56,9 +56,9 @@ export default function page() {
         setTotalPages(response.data.result.totalPages);
       } catch (error) {
         console.error('Error fetching lectures:', error);
-      } finally {
-        setLoading(false);
-      }
+      }// } finally {
+      //   setLoading(false);
+      // }
     }
   };
 
@@ -75,9 +75,9 @@ export default function page() {
     setPageNumber(value);
   };
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  // if (loading) {
+  //   return <div>Loading...</div>;
+  // }
   
   return (
     <Layout title='My Lectures'>

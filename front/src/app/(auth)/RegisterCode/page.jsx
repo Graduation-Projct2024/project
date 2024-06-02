@@ -43,6 +43,12 @@ export default function page() {
     code: '',
 };
 
+const resendCode = async()=>{
+  const {data} = await axios.get(`https://localhost:7116/api/UserAuth/reSendCode?email=${email}`);
+  console.log(data);
+  
+}
+
 const onSubmit = async (values) => {
       try {
         const { data } = await axios.post(
@@ -85,51 +91,76 @@ const onSubmit = async (values) => {
     )}
   </div> */}
 
-  <div className="registerCode pb-5">
-    <div className="container">
-      <div className="addCodeWrapper">
-        <div className="row align-items-center">
-          <div className="col-lg-6">
-            <div className="addCodeImage">
-              <img src="/layer.png" alt="courseAcademy" className='img-fluid' />
-            </div>
-          </div>
-          <div className="col-lg-6">
-            <div className="addCodeForm">
-              <div className="title text-center pb-4">
-                <h2 className='titleColor'>Insert code from your Email</h2>
+      <div className="registerCode pb-5">
+        <div className="container">
+          <div className="addCodeWrapper">
+            <div className="row align-items-center">
+              <div className="col-lg-6">
+                <div className="addCodeImage">
+                  <img
+                    src="/layer.png"
+                    alt="courseAcademy"
+                    className="img-fluid"
+                  />
+                </div>
               </div>
-              <div className="formRegCode">
-              <form onSubmit={formik.handleSubmit} className='row justify-content-center align-items-center flex-column'>
-                <div className="form-floating mb-3 col-lg-6">
-  <input type="text" className="form-control" id="floatingInput"  name="code"
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.skillName} />
+              <div className="col-lg-6">
+                <div className="addCodeForm">
+                  <div className="title text-center pb-4">
+                    <h2 className="titleColor">Insert code from your Email</h2>
+                  </div>
+                  <div className="formRegCode">
+                    <form
+                      onSubmit={formik.handleSubmit}
+                      className="row justify-content-center align-items-center flex-column"
+                    >
+                      <div className="form-floating mb-3 col-lg-6">
+                        <input
+                          type="text"
+                          className="form-control"
+                          id="floatingInput"
+                          name="code"
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          value={formik.values.skillName}
+                        />
 
-  <label htmlFor="floatingInput">Code</label>
-  {formik.touched.code && formik.errors.code ? (
-                        <p className='text text-danger'> {formik.errors.code}</p>
-                    ) : null}
-</div>
-<div className='text-center mt-3'>
-      <Button sx={{px:2}} variant="contained"
-              className="m-2 btn primaryBg"
-              type="submit"
-              disabled={formik.isSubmitting || Object.keys(formik.errors).length > 0 || Object.keys(formik.touched).length === 0 }
-            >
-              click!
-            </Button>
-      </div>
-                </form>
+                        <label htmlFor="floatingInput">Code</label>
+                        {formik.touched.code && formik.errors.code ? (
+                          <p className="text text-danger">
+                            {" "}
+                            {formik.errors.code}
+                          </p>
+                        ) : null}
+                      </div>
+                      <div className="resendCode row justify-content-center">
+                          <p className='text-center'>Dont receive any code?</p>
+                          <button onClick={resendCode} className='border-0 bg-transparent'>re-send code</button>
+                      </div>
+                      
+                      <div className="text-center mt-3">
+                        <Button
+                          sx={{ px: 2 }}
+                          variant="contained"
+                          className="m-2 btn primaryBg"
+                          type="submit"
+                          disabled={
+                            formik.isSubmitting ||
+                            Object.keys(formik.errors).length > 0 ||
+                            Object.keys(formik.touched).length === 0
+                          }
+                        >
+                          click!
+                        </Button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
     </Layout>
-    
-  )
+  );
 }
