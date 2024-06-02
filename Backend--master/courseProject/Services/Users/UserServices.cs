@@ -240,12 +240,34 @@ namespace courseProject.Services.Users
         {
             var getUser = await unitOfWork.UserRepository.getUserByIdAsync(UserId);
             if (getUser == null) return ErrorUser.NotFound;
-            if (getUser.password != BC.HashPassword(chengePasswordDTO.password)) return ErrorUser.IncorrectPassword;
+            if (!BC.Verify(chengePasswordDTO.password, getUser.password)) return ErrorUser.IncorrectPassword;
             
             getUser.password = BC.HashPassword(chengePasswordDTO.Newpassword);
             await unitOfWork.UserRepository.UpdateUser(getUser);
             await unitOfWork.UserRepository.saveAsync();
             return Result.Updated;
+        }
+
+        public async Task<ErrorOr<Success>> GetUserByEmail(string email)
+        {
+            var getUser = await unitOfWork.UserRepository.GetUserByEmail(email);
+            if(getUser == null) return ErrorUser.NotFound;
+            string verificationCode = await unitOfWork.UserRepository.GenerateSecureVerificationCode(6);
+            var cacheKey = $"VerificationCodeFor-{email}";
+            memoryCache.Set(cacheKey, verificationCode, TimeSpan.FromHours(2));
+            //  await unitOfWork.EmailService.SendEmailAsync(email, "Your Verification Code", $" Hi {getUser.userName} , Your code is: {verificationCode}");
+
+            await emailService.SendVerificationEmail(email, "Reset Password", EmailTexts.ForgetPassword(getUser.userName, verificationCode));
+
+            return Result.Success;
+        }
+
+        public async Task<ErrorOr<Success>> forgetPassword(string email, ForgetPasswordDTO forgetPassword )
+        {
+            var getUser = await unitOfWork.UserRepository.GetUserByEmail(email);
+            if( getUser == null) return ErrorUser.NotFound;
+            getUser.password = forgetPassword.password;
+            return Result.Success;
         }
     }
 }
