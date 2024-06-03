@@ -4,12 +4,14 @@ import { UserContext } from '@/context/user/User';
 import { Button } from '@mui/material';
 import axios from 'axios';
 import { useFormik } from 'formik';
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import Swal from 'sweetalert2';
 
 export default function ChangePassword({setOpenChange}) {
 
   const { userData,userToken,userId } = useContext(UserContext);
+  let [errmsg,setErrmsg] = useState()
+
   // console.log(userToken)
   const initialValues={
     password: '',
@@ -23,15 +25,21 @@ export default function ChangePassword({setOpenChange}) {
               formData.append(`userId`, userId)
               formData.append('password', values.password);
               formData.append('newpassword', values.newpassword);
-              const { data } = await axios.patch(`https://localhost:7116/api/UserAuth/changePassword`,
+              const { data } = await axios.patch(`https://localhost:7116/api/UserAuth/changePassword?UserId=${userId}`,
               formData,
                 {
                   headers: {
-                    Authorization: `Bearer ${userToken}`,
-                  },
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${userToken}`
+                  }
                 });
-    
-              console.log(data);
+                if(data.errorMassages != null){
+                  setErrmsg(data.errorMassages)
+                  
+                  // console.log(data.errorMassages)
+                }
+                else{
+                   console.log(data);
               formik.resetForm();
               setOpenChange(false);
               
@@ -40,6 +48,8 @@ export default function ChangePassword({setOpenChange}) {
                   text: "Request Accepted",
                   icon: "success"
                 });
+                }
+             
               
     
             } catch (error) {
@@ -88,7 +98,7 @@ export default function ChangePassword({setOpenChange}) {
             )
   return (
     <>
-      <form onSubmit={formik.handleSubmit} className="row justify-content-center">
+      <form onSubmit={formik.handleSubmit} className="row justify-content-center w-100 flex-column align-items-center">
 
       {renderInputs}
        
@@ -102,6 +112,7 @@ export default function ChangePassword({setOpenChange}) {
               Change!
             </Button>
       </div>
+      <p className='text-danger text-center'>{errmsg}</p>
     </form>
     </>
   )

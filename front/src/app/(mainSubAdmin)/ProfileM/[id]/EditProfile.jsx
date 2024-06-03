@@ -234,7 +234,6 @@ export default function EditProfile({ id, FName, LName, gender, phoneNumber, Dat
       }
 
       const { data } = await axios.put(`https://localhost:7116/api/UserAuth/EditProfile?id=${id}`, formData,{headers :{Authorization:`Bearer ${userToken}`}},);
-      if (data.isSuccess) {
         console.log('Profile Updated');
         formik.resetForm();
         setOpenUpdate(false);
@@ -243,7 +242,7 @@ export default function EditProfile({ id, FName, LName, gender, phoneNumber, Dat
           text: "You can see the data updated in your profile",
           icon: "success"
         });
-      }
+      
     } catch (error) {
       console.error('Error updating employee:', error);
     }
