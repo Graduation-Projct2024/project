@@ -145,14 +145,37 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        [Authorize]
+      //  [Authorize]
         public async Task<IActionResult> changePassword (Guid UserId ,ChengePasswordDTO chengePasswordDTO)
         {
             var changedPass = await userServices.changePassword( UserId, chengePasswordDTO);
             if (changedPass.FirstError.Type==ErrorOr.ErrorType.NotFound) return NotFound(new ApiResponce { ErrorMassages=changedPass.FirstError.Description});
-            else if (changedPass.FirstError.Type == ErrorOr.ErrorType.Unexpected) return Ok(new ApiResponce { ErrorMassages = changedPass.FirstError.Description });
+            else if (changedPass.FirstError.Type == ErrorOr.ErrorType.Validation) return Ok(new ApiResponce { ErrorMassages = changedPass.FirstError.Description });
             return Ok(new ApiResponce { Result="Password Changed Successfully."});
         }
 
+
+        [HttpPost("AddEmailForForgetPassword")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> addEmail (EmailDTO emailDTO)
+        {
+            var user = await userServices.GetUserByEmail(emailDTO.email);
+            if (user.IsError) return NotFound(new ApiResponce { ErrorMassages=user.FirstError.Description});
+            return Ok(new ApiResponce { Result=emailDTO.email});
+        }
+
+
+        [HttpPatch("ForgetPassword")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> ForgetPassword(string email ,ForgetPasswordDTO forgetPassword)
+        {
+            var addPassword = await userServices.forgetPassword(email, forgetPassword);
+            if (addPassword.IsError) return NotFound(new ApiResponce { ErrorMassages=addPassword.FirstError.Description});
+            return Ok(new ApiResponce {Result= "The password has been modified successfully" });
+        }
     }
 }

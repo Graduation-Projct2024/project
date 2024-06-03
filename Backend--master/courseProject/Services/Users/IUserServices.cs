@@ -19,6 +19,8 @@ namespace courseProject.Services.Users
         public Task<ErrorOr<Updated>> EditUserProfile(Guid id,  ProfileDTO profile);
         public Task<ErrorOr<UserInfoDTO>> GetProfileInfo(Guid id);
         public Task<ErrorOr<Updated>> changePassword(Guid UserId, ChengePasswordDTO changePasswordDTO);
+        public Task<ErrorOr<Success>> GetUserByEmail (string email);
+        public Task<ErrorOr<Success>> forgetPassword(string email, ForgetPasswordDTO forgetPassword);
 
     }
 }

@@ -29,7 +29,7 @@ namespace courseProject.ServiceErrors
             description:"The Email or Password are Incorrect."
             );
 
-        public static Error IncorrectPassword => Error.Unexpected(
+        public static Error IncorrectPassword => Error.Validation(
             code:"Password.InCorrect",
             description:"The password is incorrect."
             );
