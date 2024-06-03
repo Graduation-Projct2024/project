@@ -29,6 +29,7 @@ import './style.css'
 import EditFile from '../Edit/EditFile.jsx';
 import { useRouter } from 'next/navigation'
 import { UserContext } from '../../../../context/user/User.jsx';
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 
 export default function ViewFile({ materialID ,type, Id }) {
  const [material, setMaterial]=useState(null);
@@ -175,24 +176,39 @@ if (loading) {
 ):(
   <div className ='material'>
 
-    <List sx={{ ...style, width: '80%', maxWidth: 'none' }} aria-label="mailbox folders">
-    <ListItem sx={{p:4}} >
-    <Typography bold sx={{mr:3}}>Title :</Typography>
-    <Typography>{material.name}</Typography>
-  </ListItem>
-  <Divider component="li" />
-  <ListItem sx={{p:4}} >
-  <div style={{ display: 'flex', alignItems: 'center' }}>
-    <Typography bold sx={{mr:5}}>Description:</Typography>
-    <Typography>{material.description}</Typography>
-    </div>
-  </ListItem>
-  <Divider component="li" />
-  <ListItem sx={{p:4}} >
-    <Typography bold sx={{mr:3}}>File :</Typography>
-    <Link download target='_blank'  href={`${material.pdfUrl}`}>{material.name}</Link>
-  </ListItem>
-</List>
+<List sx={{ ...style, width: '80%', maxWidth: 'none', mt: 7, mb: 5 }} aria-label="mailbox folders">
+      <ListItem sx={{ p: 3 }}>
+        <Typography sx={{ mr: 3, fontWeight: 'bold' }}>File title :</Typography>
+        <Typography>{material.name}</Typography>
+      </ListItem>
+      <Divider component="li" />
+      <ListItem sx={{ p: 3 }}>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <Typography sx={{ mr: 3, fontWeight: 'bold' }}>File Description:</Typography>
+          <Typography>{material.description}</Typography>
+        </div>
+      </ListItem>
+      <Divider component="li" />
+    
+      <ListItem sx={{ p: 3 }}>
+        <Typography sx={{ mr: 3, fontWeight: 'bold' }}>File :</Typography>
+        {material.materialFiles?.length ? (
+             material.materialFiles.map((file, index) => (
+              <Box key={index} sx={{ display: 'flex', alignItems: 'center', border: '1px solid', p: 1, mb: 1 }}>
+                <PictureAsPdfIcon sx={{ mr: 1, color:'#4c5372' }} />
+                <Link target='_blank' href={`${file.pdfUrl}`}>
+                  File {index + 1}
+                </Link>
+              </Box>
+         ))
+        ) : (
+          <Link target='_blank' href={`https://localhost:7116/${material.pdfUrl}`}>
+          {material.name}
+        </Link>
+          )
+        }
+      </ListItem>
+    </List>
 </div>
 )}
   </>

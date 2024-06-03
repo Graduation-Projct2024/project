@@ -17,10 +17,12 @@ import TextArea from '../../../../component/input/TextArea.jsx';
 import { UserContext } from '../../../../context/user/User.jsx';
 export default function AddFile({ open, onClose,handleCloseAdd ,type ,Id }) {
   const {userToken, setUserToken, userData}=useContext(UserContext);
+  const [files, setFiles] = useState([]);
 
-  const handelFieldChang = (event) => {
-    console.log(event);
-    formik.setFieldValue("pdf", event.target.files[0]);
+  const handleFieldChange = (event) => {
+    const newFiles = Array.from(event.target.files);
+    setFiles((prevFiles) => [...prevFiles, ...newFiles]);
+    formik.setFieldValue("pdf", [...files, ...newFiles]);
   };
   const [Alertopen, setAlertOpen] = React.useState(false);
   const handleClose = (event, reason) => {
@@ -40,7 +42,9 @@ try{
   const formData = new FormData();
 formData.append("name", tasks.name);
 formData.append("description", tasks.description);
-formData.append("pdf", tasks.pdf);
+tasks.pdf.forEach(file => {
+  formData.append("pdf", file);
+});
 formData.append(type, Id);
 formData.append("InstructorId",userData.userId);
 console.log(tasks.pdf)
@@ -90,7 +94,8 @@ const { data } = await axios.post(
       type: "file",
       name: "pdf",
       title: "Upload File",
-      onChange: handelFieldChang,
+      multiple: true,
+      onChange: handleFieldChange,
     },
     {
       id: "description",
@@ -160,6 +165,15 @@ const textAraeInput = (
       <form onSubmit={formik.handleSubmit} encType="multipart/form-data">        
         {renderInputs}
         {textAraeInput}
+        <Button variant="contained" component="label">
+                Add More Files
+                <input
+                  type="file"
+                  multiple
+                  hidden
+                  onChange={handleFieldChange}
+                />
+              </Button>
         <div className="text-center mt-3">
         <Button sx={{px:2}} variant="contained"
               className="m-2 btn "
