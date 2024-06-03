@@ -1,3 +1,4 @@
+'use client';
 import Footer from '@/component/footer/Footer'
 import Navbar from '@/component/navbar/Navbar'
 import { UserContext } from '@/context/user/User';

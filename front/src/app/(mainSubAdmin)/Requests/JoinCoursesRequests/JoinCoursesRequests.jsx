@@ -14,14 +14,14 @@ export default function JoinCoursesRequests() {
     const [pageNumber, setPageNumber] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [totalPages, setTotalPages] = useState(0);
-    console.log(joinCoursesReq)
+    // console.log(joinCoursesReq)
 
     const fetchRequestsForJoinCourses = async (pageNum = pageNumber, pageSizeNum = pageSize) => {
       if(userData){
       try{
       const { data } = await axios.get(`https://localhost:7116/api/Request/GetAllRequestToJoinCourses?pageNumber=${pageNum}&pageSize=${pageSize}`,{headers :{Authorization:`Bearer ${userToken}`}});
       // setLoading(false)
-      console.log(data);
+      // console.log(data);
 
       setJoinCoursesReq(data.result.items);
       setTotalPages(data.result.totalPages);

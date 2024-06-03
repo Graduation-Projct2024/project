@@ -525,7 +525,6 @@ const textAraeInput = (
         value={selectedInstructor}
         onChange={(e) => {
           formik.handleChange(e);
-          // console.log(e.target.value);
           setSelectedInstructor(e.target.value);
           
         }}

@@ -172,7 +172,7 @@ if(userToken&&LectureId){
       if(userToken&&LectureId){
         try{
         const { data } = await axios.get(
-          `https://localhost:7116/api/MaterialControllar/GetAllMaterial?ConsultationId=225b612d-4c04-49f7-5baf-08dc8020a08c`,
+          `https://localhost:7116/api/MaterialControllar/GetAllMaterial?ConsultationId=${LectureId}`,
           {headers :{Authorization:`Bearer ${userToken}`}}
 
           

@@ -110,10 +110,8 @@ export default function ViewTask({ materialID , type, Id}) {
 
   )
 
-if(data.isSuccess==true){
-   setSubmission(data.result);
-  console.log(data)
-}
+   setSubmission(data.result.items);
+console.log(data);
  }
  }
  const deleteMaterial=async()=>{

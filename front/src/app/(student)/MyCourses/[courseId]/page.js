@@ -29,6 +29,7 @@ import { UserContext } from '../../../../context/user/User.jsx';
 
 export default function page() {
   const {userToken, setUserToken, userData}=useContext(UserContext);
+  const [error, setError] = useState(null);
 
     const contents=[
         {
@@ -99,6 +100,9 @@ const [materialId, setMaterialId]=useState();
         // console.log(data);
         setMaterials(data.result);
         // console.log(materials);
+      }catch(error){
+        throw new Error('auth is required');
+      }
       }
     catch(error){
       throw new Error('not Authhhhh')

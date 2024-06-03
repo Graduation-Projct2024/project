@@ -35,7 +35,7 @@ const handleCloseDisplay = () => {
       try{
       const { data } = await axios.get(`https://localhost:7116/api/CourseContraller/GetAllCustomCourses?pageNumber=${pageNum}&pageSize=${pageSize}`,{headers :{Authorization:`Bearer ${userToken}`}});
       // setLoading(false)
-      // console.log(data.result);
+       console.log(data);
       setCustomCourses(data.result.items);
       setTotalPages(data.result.totalPages);
     }
