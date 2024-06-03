@@ -185,7 +185,7 @@
                 <table width='100%' cellpadding='0' cellspacing='0' style='max-width: 600px; margin: 0 auto;'>
                     <tr>
                         <td style='background-color: #f5f5f5; padding: 20px; text-align: center;'>
-                            <h1 style='color: #333; font-size: 24px; margin: 0;'>Password Reset Verification Code</h1>
+                            <h1 style='color: #333; font-size: 24px; margin: 0;'>Password Reset Code</h1>
                         </td>
                     </tr>
                     <tr>
