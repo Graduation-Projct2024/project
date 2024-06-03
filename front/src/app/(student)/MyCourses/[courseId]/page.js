@@ -29,6 +29,7 @@ import { UserContext } from '../../../../context/user/User.jsx';
 
 export default function page() {
   const {userToken, setUserToken, userData}=useContext(UserContext);
+  const [error, setError] = useState(null);
 
     const contents=[
         {
@@ -88,6 +89,7 @@ const [materialId, setMaterialId]=useState();
     const { courseId } = useParams();
     const getCourseMaterial = async () => {
       if(userToken){
+        try{
         const { data } = await axios.get(
           `https://localhost:7116/api/MaterialControllar/GetAllMaterial?CourseId=${courseId}`,
           {headers :{Authorization:`Bearer ${userToken}`}}
@@ -97,6 +99,9 @@ const [materialId, setMaterialId]=useState();
         // console.log(data);
         setMaterials(data.result);
         // console.log(materials);
+      }catch(error){
+        throw new Error('auth is required');
+      }
       }
 
       };

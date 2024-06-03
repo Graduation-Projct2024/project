@@ -1,0 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+h2{
+   font-family: 'Nunito', 'sans-serif';
+
+font-size: 36px;
+
+font-weight: 900;
+
+line-height: 43.2px;
+
+color: #4c5372;
+
+
+}
+h3{
+   font-family: 'Nunito', 'sans-serif';
+font-size:20px;
+   
+   font-weight: 900;
+   
+   line-height: 43.2px;
+   
+   color: #4c5372;
+}
+h4{
+   font-family: 'Nunito', 'sans-serif';
+
+font-size: 28px;
+
+font-weight: 800;
+
+line-height: 27.6px;
+
+color: rgb(34, 22, 56);
+
+
+}
+.css-aym9vq-MuiButtonBase-root-MuiTab-root.Mui-selected {
+    color: #4c5372;
+}
+
+.css-sh22l5-MuiButtonBase-root-MuiAccordionSummary-root{
+    font-family: 'Nunito', 'sans-serif';
+    font-size:20px;
+       
+       font-weight: 1000 !important;
+       
+       line-height: 43.2px;
+       
+       color: #4c5372; 
+}
+.css-ree4sk-MuiPaper-root-MuiAccordion-root{
+    border: 1px solid rgba(0, 0, 0, .125);
+    border-radius: 5px;
+    margin-bottom: 15px;
+    box-shadow: 2px 8px 20px 0 rgba(25, 42, 70, .13);
+}
+.Accordion-body{
+    width:80%;
+    margin:auto;
+}
