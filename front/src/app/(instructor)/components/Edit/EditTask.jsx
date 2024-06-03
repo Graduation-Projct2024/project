@@ -18,9 +18,12 @@ export default function EditTask({materialID, name, description, deadLine, pdf, 
   const router = useRouter();
 
   const {userToken, setUserToken, userData}=useContext(UserContext);
-  const handelFieldChang = (event) => {
-    formik.setFieldValue("pdf", event.target.files[0]);
+  const [files, setFiles] = useState([]);
 
+  const handleFieldChange = (event) => {
+    const newFiles = Array.from(event.target.files);
+    setFiles((prevFiles) => [...prevFiles, ...newFiles]);
+    formik.setFieldValue("pdf", [...files, ...newFiles]);
   };
   const [Alertopen, setAlertOpen] = React.useState(false);
   const handleClose = (event, reason) => {
@@ -45,8 +48,9 @@ const formData = new FormData();
 formData.append("name", tasks.name);
 formData.append("description", tasks.description);
 formData.append("DeadLine", tasks.DeadLine);
-formData.append("pdf", tasks.pdf);
-console.log(tasks.pdf)
+tasks.pdf.forEach(file => {
+  formData.append("pdf", file);
+});console.log(tasks.pdf)
 formData.append(type, Id);
 formData.append("instructorId", userData.userId);
 
@@ -107,8 +111,9 @@ const { data } = await axios.put(
       id: "pdf",
       type: "file",
       name: "pdf",
+      multiple: true,
       title: "Upload File",
-      onChange: handelFieldChang,
+      onChange: handleFieldChange,
     },
     {
       id: "description",
@@ -164,7 +169,17 @@ const textAraeInput = (
           <div className="form-container edit EditTask">
       <form onSubmit={formik.handleSubmit} encType="multipart/form-data">        
         {renderInputs}
+        <Button variant="contained" component="label">
+                Add More Files
+                <input
+                  type="file"
+                  multiple
+                  hidden
+                  onChange={handleFieldChange}
+                />
+              </Button>
         {textAraeInput}
+
         <div className="text-center mt-3">
         <Button sx={{px:2}} variant="contained"
               className="m-2  "

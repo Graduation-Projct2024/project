@@ -194,7 +194,6 @@ if(userToken){
           {headers :{Authorization:`Bearer ${userToken}`}}
 
         );
-      console.log(data);
         setParticipants(data.data.result.items);
         setTotalPages(data.data.result.totalPages);
       }};

@@ -60,7 +60,7 @@ export default function Navbar({role}) {
             variant="h6"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
+            href="/"
             className='pe-5'
             sx={{
               mr: 2,

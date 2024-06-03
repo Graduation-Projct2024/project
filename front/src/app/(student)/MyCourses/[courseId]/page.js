@@ -104,11 +104,6 @@ const [materialId, setMaterialId]=useState();
         throw new Error('auth is required');
       }
       }
-    catch(error){
-      throw new Error('not Authhhhh')
-    }
-    }
-
       };
       const [courseName, setCourseName]=useState();
       const getCourses = async () => {
