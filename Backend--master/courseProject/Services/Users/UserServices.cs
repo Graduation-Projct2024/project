@@ -266,7 +266,9 @@ namespace courseProject.Services.Users
         {
             var getUser = await unitOfWork.UserRepository.GetUserByEmail(email);
             if( getUser == null) return ErrorUser.NotFound;
-            getUser.password = forgetPassword.password;
+            getUser.password = BC.HashPassword(forgetPassword.password);
+            await unitOfWork.UserRepository.UpdateUser(getUser);
+            await unitOfWork.UserRepository.saveAsync();
             return Result.Success;
         }
     }
