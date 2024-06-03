@@ -1,10 +1,11 @@
 'use client'
 import { UserContext } from '@/context/user/User';
-import { faArrowUpFromBracket, faFilter } from '@fortawesome/free-solid-svg-icons';
+import { faArrowUpFromBracket, faEye, faFilter } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FormControl, InputLabel, MenuItem, Pagination, Select, Stack } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Pagination, Select, Stack, useMediaQuery, useTheme } from '@mui/material';
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react'
+import SingleCustomCourse from './[id]/SingleCustomCourse';
 
 export default function CustomCoursesRequest() {
 
@@ -15,6 +16,18 @@ export default function CustomCoursesRequest() {
     const [pageSize, setPageSize] = useState(10);
     const [totalPages, setTotalPages] = useState(0);
   
+    const [openDisplay, setOpenDisplay] = React.useState(false);
+const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+  const [courseId, setCourseId] = useState(null);
+const handleClickOpenDisplay = (id) => {
+  setCourseId(id);
+    console.log(id)
+    setOpenDisplay(true);
+};
+const handleCloseDisplay = () => {
+  setOpenDisplay(false);
+};
   
 
     const fetchRequestsForCustomCourses = async (pageNum = pageNumber, pageSizeNum = pageSize) => {
@@ -118,35 +131,63 @@ export default function CustomCoursesRequest() {
       <table className="table">
   <thead>
     <tr>
-      <th scope="col">ID</th>
+      <th scope="col">#</th>
       <th scope="col">Name</th>
       <th scope="col">Start date</th>
       <th scope="col">End date</th>
-      <th scope="col">Student Id</th>
       <th scope="col">Student Name</th>
-      <th scope="col">Description</th>
-      {/* <th scope="col">Option</th> */}
+      <th scope="col">Action</th>
     </tr>
   </thead>
   <tbody>
   {filteredCustomCourses.length ? (
-    filteredCustomCourses.map((course) =>(
+    filteredCustomCourses.map((course,index) =>(
       <tr key={course.id}>
-      <th scope="row">{course.id}</th>
+      <th scope="row">{++index}</th>
       <td>{course.name}</td>
       <td>{course.startDate}</td>
       <td>{course.endDate}</td>
-      <td>{course.studentId}</td>
       <td>{course.studentFName} {course.studentLName}</td>
-      <td>{course.description}</td>
-      {/* <td className='d-flex gap-1'>
+      <td className='d-flex gap-1'>
+      <button className="border-0 bg-white" type="button" onClick={() => handleClickOpenDisplay(course.id)}>
+                <FontAwesomeIcon icon={faEye} className="edit-pen" />
+            </button>
+            <Dialog
+        fullScreen={fullScreen}
+        open={openDisplay && courseId === course.id}
+        onClose={handleCloseDisplay}
+        aria-labelledby="responsive-dialog-title"
+        sx={{
+          "& .MuiDialog-container": {
+            "& .MuiPaper-root": {
+              width: "100%",
+              maxWidth: "600px!important",  
+              height: "400px!important",            },
+          },
+          
+        }}
+        >
+          <DialogTitle id="responsive-dialog-title" className='primaryColor fw-bold' >
+          {"Custom course details"}
+        </DialogTitle>
 
-      <Link href={`/Profile/${course.studentId}`}>
-        <button  type="button" className='edit-pen border-0 bg-white '>
-        <FontAwesomeIcon icon={faEye} />
-        </button>
-        </Link>
-        </td> */}
+        <DialogContent>
+        <Stack
+   direction="row"
+   spacing={1}
+   sx={{ justifyContent: 'center',  alignContent: 'center'}}
+    >
+<SingleCustomCourse id = {course.id}/>
+     </Stack>
+        </DialogContent>
+        <DialogActions>
+         
+         <Button onClick={handleCloseDisplay} autoFocus>
+           Cancle
+         </Button>
+       </DialogActions>
+        </Dialog>
+        </td>
 
     </tr>
       ))): (
