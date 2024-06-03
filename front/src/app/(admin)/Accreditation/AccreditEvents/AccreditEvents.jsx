@@ -204,7 +204,7 @@ const  filteredAccreditEvents= Array.isArray(accreditEvents) ? accreditEvents.fi
       <table className="table">
         <thead>
           <tr>
-            <th scope="col">ID</th>
+            <th scope="col">#</th>
             <th scope="col">Name</th>
             <th scope="col">Content</th>
             <th scope="col">Category</th>
@@ -215,10 +215,10 @@ const  filteredAccreditEvents= Array.isArray(accreditEvents) ? accreditEvents.fi
         </thead>
         <tbody>
           {filteredAccreditEvents.length ? (
-            filteredAccreditEvents.map((event) => (
+            filteredAccreditEvents.map((event,index) => (
                <tr key={event.id} /*className={event.accredited ? "accredited-row" : ""}*/>
               {/* <tr key={event.id} style={{ backgroundColor: accreditRow(event) ? 'green' : (rejectRow(event) ? 'red' : 'white') }}> */}
-                <th scope="row">{event.id}</th>
+                <th scope="row">{++index}</th>
                 <td>{event.name}</td>
                 <td>{event.content}</td>
                 <td>{event.eventCategory}</td>

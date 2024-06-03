@@ -17,7 +17,7 @@ namespace courseProject.Core.Models.DTO.MaterialsDTO
         public string? description { get; set; }
 
 
-        [NotMapped] public IFormFile pdf { get; set; }
+        [NotMapped] public List<IFormFile> pdf { get; set; }
 
         public Guid? courseId { get; set; }
         public Guid? consultationId { get; set; }

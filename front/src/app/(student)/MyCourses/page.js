@@ -8,10 +8,13 @@ import Link from '@mui/material/Link';
 import './style.css'
 import Layout from '../studentLayout/Layout.jsx';
 import { UserContext } from '../../../context/user/User.jsx';
+import { Button } from '@mui/material';
+import { useRouter } from 'next/navigation';
 export default function page() {
   const {userToken, setUserToken, userData}=useContext(UserContext);
 console.log(userToken);
   const [courses, setCourses] = useState([]);
+  const router = useRouter();
   const getCourses = async () => {
     if(userData){
       try{
@@ -57,8 +60,8 @@ console.log(userToken);
         />  
         <Typography variant='h5'>{course.course.name }</Typography>
       {  console.log(course.courseId)}
-        <Link href={`MyCourses/${course.courseId}`}> <ArrowCircleRightIcon sx={{ fontSize: 40 }} /></Link>
-         
+        {/* <Link href={`MyCourses/${course.courseId}`}> <ArrowCircleRightIcon sx={{ fontSize: 40 }} /></Link> */}
+         <Button onClick={()=>router.push(`MyCourses/${course.courseId}`)}><ArrowCircleRightIcon sx={{ fontSize: 40 }} /></Button>
         </Box>
         ))
         ) : (

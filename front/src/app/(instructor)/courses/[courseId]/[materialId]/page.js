@@ -8,6 +8,7 @@ import { useParams } from 'next/navigation.js';
 import Layout from '../../../instructorLayout/Layout.jsx';
 import axios from 'axios';
 import { UserContext } from '../../../../../context/user/User.jsx';
+import '../style.css'
 
 export default function page() {
   const {userToken, setUserToken, userData}=useContext(UserContext);

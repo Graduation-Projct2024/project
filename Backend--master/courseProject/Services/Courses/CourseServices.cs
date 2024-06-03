@@ -52,7 +52,14 @@ namespace courseProject.Services.Courses
         public async Task<IReadOnlyList<Course>> GetAllCourses()
         {
             var courses = await unitOfWork.CourseRepository.GetAllCoursesAsync();
-            CommonClass.EditImageInFor(courses, null);
+            foreach(var course in courses)
+            {
+                if(course.ImageUrl != null)
+                {
+                    course.ImageUrl=await unitOfWork.FileRepository.GetFileUrl(course.ImageUrl);
+                }
+            }
+          ///  CommonClass.EditImageInFor(courses, null);
             return courses;
             
         }
@@ -62,7 +69,12 @@ namespace courseProject.Services.Courses
         public async Task<ErrorOr<Course>> GetCourseById(Guid courseId)
         {           
             var getCourse = await unitOfWork.CourseRepository.GetCourseByIdAsync(courseId);
-            CommonClass.EditImageInFor(null, getCourse);
+            if (getCourse.ImageUrl != null)
+            {
+                getCourse.ImageUrl = await unitOfWork.FileRepository.GetFileUrl(getCourse.ImageUrl);
+            }
+           
+        //    CommonClass.EditImageInFor(null, getCourse);
             //if (getCourse == null) return ErrorCourse.NotFound;
             return getCourse is null ? ErrorCourse.NotFound : getCourse;
         }
@@ -70,7 +82,14 @@ namespace courseProject.Services.Courses
         public async Task<IReadOnlyList<Course>> GetAllCoursesToStudent(Guid studentId)
         {
             var courses = await unitOfWork.StudentRepository.GetAllCoursesAsync(studentId);
-            CommonClass.EditImageInFor(courses, null);
+            foreach (var course in courses)
+            {
+                if (course.ImageUrl != null)
+                {
+                    course.ImageUrl = await unitOfWork.FileRepository.GetFileUrl(course.ImageUrl);
+                }
+            }
+       //     CommonClass.EditImageInFor(courses, null);
             return courses;
             
         }
@@ -79,7 +98,14 @@ namespace courseProject.Services.Courses
         {
             var courses = await unitOfWork.CourseRepository.GetAllCoursesForAccreditAsync();          
             courses = courses.OrderByDescending(x => x.dateOfAdded).ToList();
-            CommonClass.EditImageInFor(courses, null);
+            foreach (var course in courses)
+            {
+                if (course.ImageUrl != null)
+                {
+                    course.ImageUrl = await unitOfWork.FileRepository.GetFileUrl(course.ImageUrl);
+                }
+            }
+        //    CommonClass.EditImageInFor(courses, null);
             return courses;
         }
 
@@ -159,7 +185,14 @@ namespace courseProject.Services.Courses
             var SubAdminFound = await unitOfWork.UserRepository.ViewProfileAsync(subAdminId, "subadmin");
             if (SubAdminFound == null) return ErrorSubAdmin.NotFound;
             var allUndefinedCourses = await unitOfWork.CourseRepository.GetAllUndefinedCoursesBySubAdminIdAsync(subAdminId);
-            CommonClass.EditImageInFor(allUndefinedCourses, null);
+            foreach (var course in allUndefinedCourses)
+            {
+                if (course.ImageUrl != null)
+                {
+                    course.ImageUrl = await unitOfWork.FileRepository.GetFileUrl(course.ImageUrl);
+                }
+            }
+          //  CommonClass.EditImageInFor(allUndefinedCourses, null);
             return allUndefinedCourses.ToErrorOr() ;
 
             
@@ -170,8 +203,14 @@ namespace courseProject.Services.Courses
             var instructorFound = await unitOfWork.UserRepository.ViewProfileAsync(instructorId, "instructor");
             if (instructorFound == null) return ErrorInstructor.NotFound;
             var courseFond = await unitOfWork.instructorRepositpry.GetAllCoursesGivenByInstructorIdAsync(instructorId);
-            
-            CommonClass.EditImageInFor(courseFond, null);
+            foreach (var course in courseFond)
+            {
+                if (course.ImageUrl != null)
+                {
+                    course.ImageUrl = await unitOfWork.FileRepository.GetFileUrl(course.ImageUrl);
+                }
+            }
+          //  CommonClass.EditImageInFor(courseFond, null);
             return courseFond.ToErrorOr();
             
         }
@@ -200,7 +239,14 @@ namespace courseProject.Services.Courses
             var enrolledCourses = await unitOfWork.StudentRepository.GetAllCoursesForStudentAsync(studentId);
             
             var courseFound = enrolledCourses.Select(x => x.Course).ToList();
-            CommonClass.EditImageInFor(courseFound, null);
+            foreach (var course in courseFound)
+            {
+                if (course.ImageUrl != null)
+                {
+                    course.ImageUrl = await unitOfWork.FileRepository.GetFileUrl(course.ImageUrl);
+                }
+            }
+         //   CommonClass.EditImageInFor(courseFound, null);
             return enrolledCourses.ToErrorOr();
         }
     }

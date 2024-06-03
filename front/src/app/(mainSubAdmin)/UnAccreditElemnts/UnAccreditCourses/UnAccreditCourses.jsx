@@ -132,7 +132,7 @@ const handleCloseUpdate = () => {
       <table className="table">
         <thead>
           <tr>
-            <th scope="col">ID</th>
+            <th scope="col">#</th>
             <th scope="col">Name</th>
             <th scope="col">Price</th>
             <th scope="col">Category</th>
@@ -146,9 +146,9 @@ const handleCloseUpdate = () => {
         </thead>
         <tbody>
           {filteredCoursesBeforeAccreditation.length ? (
-            filteredCoursesBeforeAccreditation.map((course) => (
+            filteredCoursesBeforeAccreditation.map((course,index) => (
               <tr key={course.id}>
-                <th scope="row">{course.id}</th>
+                <th scope="row">{++index}</th>
                 <td>{course.name}</td>
                 <td>{course.price}</td>
                 <td>{course.category}</td>

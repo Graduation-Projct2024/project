@@ -12,6 +12,9 @@ import Layout from '../../SubAdminLayout/Layout';
 import '../../../../../node_modules/bootstrap/dist/js/bootstrap.bundle'
 import { UserContext } from '@/context/user/User';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, Tooltip, useMediaQuery, useTheme } from '@mui/material';
+import ChangePassword from '@/app/(auth)/ChangePassword/ChangePassword';
+import SyncLockIcon from '@mui/icons-material/SyncLock';
+
 
 export default function page({params}) {
   const {userToken, setUserToken, userData,userId}=useContext(UserContext);
@@ -23,6 +26,16 @@ export default function page({params}) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
   const [userIdP, setUserIdP] = useState(null);
+  const [openChange, setOpenChange] = React.useState(false);
+
+const handleClickOpenChange = (id) => {
+  setUserIdP(id);
+  console.log(id)
+  setOpenChange(true);
+};
+const handleCloseChange = () => {
+setOpenChange(false);
+};
 
 const handleClickOpenUpdate = (id) => {
     setUserIdP(id);
@@ -79,25 +92,7 @@ const handleCloseUpdate = () => {
               {userData && params.id == userId &&<Tooltip title="Update profile" placement="top"><button className="border-0 bg-white" type="button" onClick={() => handleClickOpenUpdate(params.id)}>
                 <FontAwesomeIcon icon={faPen} className="edit-pen" />
             </button></Tooltip> } 
-            </div>
-            
-            {/* <div className="col-xl-6 col-lg-12">
-              
-            </div> */}
-            {/* <div className="modal fade" id={`exampleModal2-${params.id}`} tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div className="modal-dialog modal-dialog-centered modal-lg">
-                      <div className="modal-content row justify-content-center">
-                        <div className="modal-body text-center ">
-                          <h2>Edit Profile Info</h2>
-                          <div className="row">
-                            {userData &&
-                            <EditProfile id={params.id}  FName = {userData.userName} LName= {userData.lName}  gender = {userData.gender} phoneNumber = {userData.phoneNumber} DateOfBirth = {userData.dateOfBirth} address= {userData.address} image = {userData.imageUrl}/>
-                            }</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div> */}
-                  <Dialog
+<Dialog
         fullScreen={fullScreen}
         open={openUpdate}
         onClose={handleCloseUpdate}
@@ -133,6 +128,58 @@ const handleCloseUpdate = () => {
          </Button>
        </DialogActions>
         </Dialog>
+
+        {userData && params.id == userId && (
+                  <Tooltip title="Change password?" placement="top">
+                    <button
+                      className="border-0 bg-white"
+                      type="button"
+                      onClick={() => handleClickOpenChange(params.id)}
+                    >
+                      <SyncLockIcon className="edit-pen" />
+                    </button>
+                  </Tooltip>
+                )}
+                 <Dialog
+                  fullScreen={fullScreen}
+                  open={openChange}
+                  onClose={handleCloseChange}
+                  aria-labelledby="responsive-dialog-title"
+                  sx={{
+                    "& .MuiDialog-container": {
+                      "& .MuiPaper-root": {
+                        width: "100%",
+                        maxWidth: "500px!important",
+                        height: "400px!important",
+                      },
+                    },
+                  }}
+                >
+                  <DialogTitle
+                    id="responsive-dialog-title"
+                    className="primaryColor fw-bold"
+                  >
+                    {"Cahnge Password"}
+                  </DialogTitle>
+
+                  <DialogContent>
+                    <Stack
+                      direction="row"
+                      spacing={1}
+                      sx={{ justifyContent: "center", alignContent: "center" }}
+                    >
+                      <ChangePassword userId={params.id} setOpenChange={setOpenChange}/>
+                    </Stack>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={handleCloseChange} autoFocus>
+                      Cancle
+                    </Button>
+                  </DialogActions>
+                </Dialog>
+            </div>
+           
+                  
              <div className="d-flex ps-xl-4 pt-3 gap-2 role justify-content-xl-start fs-5 fw-bold justify-content-lg-center justify-content-md-center justify-content-sm-center justify-content-center">
                 <FontAwesomeIcon icon={faUser} className='pt-1'/>
                 <p className='text-uppercase'>{user.role}</p>

@@ -13,5 +13,9 @@ namespace courseProject.Core.IGenericRepository
         public Task<IEnumerable<CourseMaterial>> GetAllMaterialInSameCourse(Guid CourseId);
 
         public Task<IReadOnlyList<CourseMaterial>> GetAllMaterial(Guid? Courseid , Guid? consultationId);
+        public  Task AddMaterialFiles(MaterialFiles materialFiles);
+        public Task<IReadOnlyList<MaterialFiles>> GetMaterialFilesByMaterialId(Guid materialId);      
+
+        public  Task DeleteFilesById(MaterialFiles file);
     }
 }

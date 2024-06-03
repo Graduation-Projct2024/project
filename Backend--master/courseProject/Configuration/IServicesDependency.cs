@@ -5,6 +5,8 @@ using courseProject.Services.Feedbacks;
 using courseProject.Services.Instructors;
 using courseProject.Services.Lectures;
 using courseProject.Services.Materials;
+using courseProject.Services.Reports.EXCEL;
+using courseProject.Services.Reports.PDF;
 using courseProject.Services.Requests;
 using courseProject.Services.Skill;
 using courseProject.Services.StudentCourses;
@@ -35,7 +37,9 @@ namespace courseProject.Configuration
             services.AddScoped<IStudentServices, StudentServices>();
             services.AddScoped<ISubmissionServices, SubmissionServices>();
             services.AddScoped<IFeedbackServices, FeedbackServices>();
-          
+            services.AddScoped<IPdfServices, PdfServices>();
+            services.AddScoped<IExcelServices, ExcelServices>();
+
 
             return services;
         }

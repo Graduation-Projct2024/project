@@ -33,7 +33,15 @@ namespace courseProject.Services.Submissions
             var GetSubmissions = await unitOfWork.instructorRepositpry.GetAllSubmissionsByTaskIdAsync(taskId);
            
             var submissionMapper = mapper.Map<IReadOnlyList<Student_Task_Submissions>, IReadOnlyList<StudentSubmissionDTO>>(GetSubmissions);
-
+          
+         
+            foreach (var submission in submissionMapper )
+            {
+                if (submission.pdfUrl != null)
+                {
+                    submission.pdfUrl = await unitOfWork.FileRepository.GetFileUrl(submission.pdfUrl);
+                }
+            }
             return submissionMapper.ToErrorOr();
         }
 
@@ -54,10 +62,10 @@ namespace courseProject.Services.Submissions
             }
             await unitOfWork.StudentRepository.SubmitTaskAsync(student_Task);
              await unitOfWork.StudentRepository.saveAsync();
-            if (submissions.pdf != null)
-            {
-                student_Task.pdfUrl = "http://localhost:5134/" + student_Task.pdfUrl;
-            }
+            ////if (submissions.pdf != null)
+            ////{
+            ////    student_Task.pdfUrl = "http://localhost:5134/" + student_Task.pdfUrl;
+            ////}
             return Result.Created;
         }
     }

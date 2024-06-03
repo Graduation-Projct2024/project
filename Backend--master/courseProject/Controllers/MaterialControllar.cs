@@ -47,7 +47,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy ="Instructor")]
-        public async Task<ActionResult<ApiResponce>> AddTask( [FromForm] TaskDTO taskDTO)
+        public async Task<IActionResult> AddTask( [FromForm] TaskDTO taskDTO)
         {
             var addTask = await materialServices.AddTask(taskDTO);
             if (addTask.IsError) return Unauthorized();
@@ -61,7 +61,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "Instructor")]
-        public async Task<ActionResult<ApiResponce>> AddFile([FromForm] FileDTO fileDTO)
+        public async Task<IActionResult> AddFile([FromForm] FileDTO fileDTO)
         {
             var addfile = await materialServices.AddFile(fileDTO);
             if (addfile.IsError) return Unauthorized();
@@ -74,7 +74,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy ="Instructor")]
-        public async Task<ActionResult<ApiResponce>> AddAnnouncement( AnnouncementDTO AnnouncementDTO)
+        public async Task<IActionResult> AddAnnouncement( AnnouncementDTO AnnouncementDTO)
         {
 
             var addAnnouncement = await materialServices.AddAnnouncement(AnnouncementDTO);
@@ -89,7 +89,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "Instructor")]
-        public async Task<ActionResult<ApiResponce>> AddLink( LinkDTO linkDTO)
+        public async Task<IActionResult> AddLink( LinkDTO linkDTO)
         {
 
             var addLink = await materialServices.AddLink(linkDTO);
@@ -107,8 +107,9 @@ namespace courseProject.Controllers
         [ProducesResponseType(400)]
         [Authorize(Policy ="InstructorwhoGiveTheMaterial")]
         //not try
-        public async Task<ActionResult<ApiResponce>> EditTask(Guid id, [FromForm] TaskDTO taskDTO)
+        public async Task<IActionResult> EditTask(Guid id, [FromForm] TaskForEditDTO taskDTO)
         {
+            await materialServices.deleteFiles(id);
             var editedTask = await materialServices.EditTask(id, taskDTO);
             if (editedTask.IsError) return NotFound(new ApiResponce { ErrorMassages=editedTask.FirstError.Description});
             return Ok(new ApiResponce { Result = "The task is updated successfully" });
@@ -122,8 +123,9 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "InstructorwhoGiveTheMaterial")]
-        public async Task<ActionResult<ApiResponce>> EditFile(Guid id, [FromForm] FileDTO fileDTO)
+        public async Task<IActionResult> EditFile(Guid id, [FromForm] FileToEditDTO fileDTO)
         {
+            await materialServices.deleteFiles(id);
             var editedFile = await materialServices.EditFile(id, fileDTO);
             if (editedFile.IsError) return NotFound(new ApiResponce { ErrorMassages = editedFile.FirstError.Description });
             return Ok(new ApiResponce { Result = "The file is updated successfully" });
@@ -137,7 +139,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "InstructorwhoGiveTheMaterial")]
-        public async Task<ActionResult<ApiResponce>> EditAnnouncement(Guid id, AnnouncementDTO AnnouncementDTO)
+        public async Task<IActionResult> EditAnnouncement(Guid id, AnnouncementForEditDTO AnnouncementDTO)
         {
             var editedAnnouncement = await materialServices.EditAnnouncement(id, AnnouncementDTO);
             if (editedAnnouncement.IsError) return NotFound(new ApiResponce { ErrorMassages = editedAnnouncement.FirstError.Description });
@@ -152,7 +154,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "InstructorwhoGiveTheMaterial")]
-        public async Task<ActionResult<ApiResponce>> EditLink(Guid id,  LinkDTO linkDTO)
+        public async Task<IActionResult> EditLink(Guid id,  LinkForEditDTO linkDTO)
         {
             var editedLink = await materialServices.EDitLink(id, linkDTO);
             if (editedLink.IsError) return NotFound(new ApiResponce { ErrorMassages = editedLink.FirstError.Description });
@@ -166,7 +168,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "InstructorwhoGiveTheMaterial")]
-        public async Task<ActionResult<ApiResponce>> DeleteMaterial(Guid id)
+        public async Task<IActionResult> DeleteMaterial(Guid id)
         {
             var materail = await materialServices.DeleteMaterial(id);
             if (materail.IsError) return NotFound(new ApiResponce { ErrorMassages= materail.FirstError.Description} );
@@ -179,7 +181,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "MaterialInEnrolledCourse")]
-        public async Task<ActionResult> GetMaterialByIdAsync(Guid id)
+        public async Task<IActionResult> GetMaterialByIdAsync(Guid id)
         {
             var material = await materialServices.GetMaterialById(id);
             if (material.IsError) return NotFound(material.FirstError.Description);
@@ -192,7 +194,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "EnrolledInCourse")]
-        public async Task<ActionResult<ApiResponce>> GetAllMaterialInTheCourseAsync( Guid? CourseId  , Guid? ConsultationId)
+        public async Task<IActionResult> GetAllMaterialInTheCourseAsync( Guid? CourseId  , Guid? ConsultationId)
         {
             var AllMaterials = await materialServices.GetAllMaterialInTheCourse(CourseId , ConsultationId);
             if (AllMaterials.IsError) return NotFound(new ApiResponce { ErrorMassages=AllMaterials.FirstError.Description});
@@ -200,6 +202,17 @@ namespace courseProject.Controllers
         }
 
 
+
+
+        //[HttpDelete("DeleteMaterialFiles")]
+        //[ProducesResponseType(200)]
+        //[ProducesResponseType(404)]
+        //[ProducesResponseType(400)]
+        //public async Task<ActionResult<ApiResponce>> deleteFiles (Guid MaterialId)
+        //{
+        //     await materialServices.deleteFiles(MaterialId);
+        //    return Ok(new ApiResponce { Result="The File/s is deleted successfully"});
+        //}
 
 
 

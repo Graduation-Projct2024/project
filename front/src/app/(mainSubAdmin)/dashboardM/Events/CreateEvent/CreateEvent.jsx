@@ -39,9 +39,7 @@ const onSubmit = async (values) => {
     }
 
     const { data } = await axios.post('https://localhost:7116/api/EventContraller/CreateEvent', formData,{headers :{Authorization:`Bearer ${userToken}`}});
-    
-   if(data.isSuccess){
-    
+        
     console.log(data);
     console.log('tttt');
     formik.resetForm();
@@ -51,7 +49,6 @@ const onSubmit = async (values) => {
       text: "Wait for Admin accredit this Event",
       icon: "success"
     });
-}
 
     console.log('jhbgyvftrgybuhnjimkjhb');
   } catch (error) {

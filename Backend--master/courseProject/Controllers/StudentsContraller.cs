@@ -58,7 +58,7 @@ namespace courseProject.Controllers
         [Authorize(Policy = "Admin")]
         //not try
 
-        public async Task <ActionResult<ApiResponce>> GetAllStudentsAsync([FromQuery] PaginationRequest paginationRequest)
+        public async Task <IActionResult> GetAllStudentsAsync([FromQuery] PaginationRequest paginationRequest)
         {
             var Students = await studentServices.GetAllStudents();
             return Ok(new ApiResponce { Result= 
@@ -97,7 +97,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(400)]
         [Authorize(Policy = "EnrolledInCourse")]
         //not try
-        public async Task<ActionResult<ApiResponce>> GetCourseParticipants(Guid Courseid, [FromQuery] PaginationRequest paginationRequest)
+        public async Task<IActionResult> GetCourseParticipants(Guid Courseid, [FromQuery] PaginationRequest paginationRequest)
         {
 
             var StudentsParticipants = await studentServices.GetCourseParticipants(Courseid);

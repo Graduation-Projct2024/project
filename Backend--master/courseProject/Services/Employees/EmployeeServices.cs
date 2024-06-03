@@ -8,6 +8,7 @@ using courseProject.ServiceErrors;
 using courseProject.Services.Instructors;
 using courseProject.Services.SubAdmins;
 using ErrorOr;
+using System;
 using System.Net;
 
 namespace courseProject.Services.Employees
@@ -34,10 +35,24 @@ namespace courseProject.Services.Employees
             var instructors = await unitOfWork.instructorRepositpry.GetAllEmployeeAsync();
 
             var mapperSubAdmin = mapper.Map<IReadOnlyList<SubAdmin>, IReadOnlyList<EmployeeDto>>(SubAdmins);
-            CommonClass.EditImageInEmployeeDTO(mapperSubAdmin);
+            //foreach (var employee in mapperSubAdmin)
+            //{
+            //    if (employee.ImageUrl != null)
+            //    {
+            //        employee.ImageUrl = Url + employee.ImageUrl;
+            //    }
+            //}
+          //  CommonClass.EditImageInEmployeeDTO(mapperSubAdmin);
             var mapperInstructor = mapper.Map<IReadOnlyList<Instructor>, IReadOnlyList<EmployeeDto>>(instructors);
-            CommonClass.EditImageInEmployeeDTO(mapperInstructor);
+          //  CommonClass.EditImageInEmployeeDTO(mapperInstructor);
             var allEmployees = (mapperSubAdmin.Concat(mapperInstructor)).OrderBy(x => x.Id).ToList();
+            foreach (var employee in allEmployees)
+            {
+                if (employee.ImageUrl != null)
+                {
+                    employee.ImageUrl = await unitOfWork.FileRepository.GetFileUrl(employee.ImageUrl);
+                }
+            }
             return allEmployees;
         }
 

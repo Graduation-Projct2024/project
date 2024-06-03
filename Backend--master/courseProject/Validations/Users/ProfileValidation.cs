@@ -19,7 +19,7 @@ namespace courseProject.Validations.Users
         {
             if (image == null || image.Length == 0)
             {
-                return false;
+                return true;
             }
 
             var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };

@@ -18,7 +18,7 @@ namespace courseProject.Core.Models
 
         public string? description { get; set; }
         public string type { get; set; }
-      [NotMapped] public IFormFile? pdf {  get; set; }
+      [NotMapped] public List<IFormFile>? pdf {  get; set; }
        public string? pdfUrl { get; set; }
         public  DateTime dateOfAdded { get; set; }= DateTime.Now;
         public  DateTime? DeadLine { get; set; } 
@@ -38,6 +38,7 @@ namespace courseProject.Core.Models
         public Consultation consultation { get; set; }
         public Instructor Instructor { get; set; }
         public List<Student_Task_Submissions> Student_Task_Submissions { get; set; }
+        public List<MaterialFiles> MaterialFiles { get; set; }
 
     }
 }

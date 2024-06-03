@@ -17,7 +17,7 @@
                             <p style='font-size: 18px;'>Best regards,</p>
                             
                         </div>
-<div class=""footer"">
+<div class=""footer""style='text-align: center';>
             <p>&copy; 2024 Course Academy. All rights reserved.</p>
         </div>
                     </body>
@@ -177,8 +177,40 @@
             return body;
         }
 
+        public static string ForgetPassword(string UserName, string VerificationCode)
+        {
+            var body = $@"
+        <html>
+            <body style='font-family: Arial, sans-serif; line-height: 1.6;'>
+                <table width='100%' cellpadding='0' cellspacing='0' style='max-width: 600px; margin: 0 auto;'>
+                    <tr>
+                        <td style='background-color: #f5f5f5; padding: 20px; text-align: center;'>
+                            <h1 style='color: #333; font-size: 24px; margin: 0;'>Password Reset Code</h1>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style='background-color: #ffffff; padding: 20px;'>
+                            <p style='color: #333; font-size: 16px; margin: 0 0 20px;'>Dear {UserName},</p>
+                            <p style='color: #333; font-size: 16px; margin: 0 0 20px;'>We received a request to reset your password. Please use the following a code to reset your password:</p>
+                            <p style='text-align: center; font-size: 24px; font-weight: bold; margin: 20px 0;'>{VerificationCode}</p>
+                            <p style='color: #333; font-size: 16px; margin: 0 0 20px;'>If you did not request a password reset, please ignore this email or contact support if you have questions.</p>
+                            <p style='color: #333; font-size: 16px; margin: 0;'>Thank you,</p>
+                            <p style='color: #333; font-size: 16px; margin: 0;'>Course Academy Team</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style='background-color: #f5f5f5; padding: 20px; text-align: center; font-size: 12px; color: #666;'>
+                            <p style='margin: 0;'>© 2024 Course Academy. All rights reserved.</p>
+                        </td>
+                    </tr>
+                </table>
+            </body>
+        </html>";
 
 
+            return body;
+        }
 
-    }
+
+        }
 }

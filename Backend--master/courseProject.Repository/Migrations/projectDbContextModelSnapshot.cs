@@ -52,7 +52,7 @@ namespace courseProject.Repository.Migrations
                     b.HasData(
                         new
                         {
-                            AdminId = new Guid("c1f80478-28de-41c7-bce3-1c156b59f76d")
+                            AdminId = new Guid("266972e6-d478-4405-98fe-1734e464d248")
                         });
                 });
 
@@ -379,6 +379,19 @@ namespace courseProject.Repository.Migrations
                     b.ToTable("InstructorSkills");
                 });
 
+            modelBuilder.Entity("courseProject.Core.Models.MaterialFiles", b =>
+                {
+                    b.Property<Guid>("materialId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("pdfUrl")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("materialId", "pdfUrl");
+
+                    b.ToTable("MaterialFiles");
+                });
+
             modelBuilder.Entity("courseProject.Core.Models.Request", b =>
                 {
                     b.Property<Guid>("Id")
@@ -588,7 +601,7 @@ namespace courseProject.Repository.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("c1f80478-28de-41c7-bce3-1c156b59f76d"),
+                            UserId = new Guid("266972e6-d478-4405-98fe-1734e464d248"),
                             IsVerified = true,
                             email = "programming.academy24@gmail.com",
                             password = "$2a$11$cCCo7VY/4sxtIpeWDUFDROiDL/QPhi8AtawQhx4RGqKMAYgk8UIse",
@@ -754,6 +767,17 @@ namespace courseProject.Repository.Migrations
                     b.Navigation("Skills");
                 });
 
+            modelBuilder.Entity("courseProject.Core.Models.MaterialFiles", b =>
+                {
+                    b.HasOne("courseProject.Core.Models.CourseMaterial", "CourseMaterial")
+                        .WithMany("MaterialFiles")
+                        .HasForeignKey("materialId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CourseMaterial");
+                });
+
             modelBuilder.Entity("courseProject.Core.Models.Request", b =>
                 {
                     b.HasOne("courseProject.Core.Models.Student", "Student")
@@ -864,6 +888,8 @@ namespace courseProject.Repository.Migrations
 
             modelBuilder.Entity("courseProject.Core.Models.CourseMaterial", b =>
                 {
+                    b.Navigation("MaterialFiles");
+
                     b.Navigation("Student_Task_Submissions");
                 });
 

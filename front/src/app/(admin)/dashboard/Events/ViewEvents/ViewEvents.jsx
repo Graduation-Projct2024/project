@@ -135,7 +135,7 @@ const handleCloseUpdate = () => {
       <table className="table">
   <thead>
     <tr>
-      <th scope="col">ID</th>
+      <th scope="col">#</th>
       <th scope="col">Name</th>
       <th scope="col">Content</th>
       {/* <th scope="col">Category</th> */}
@@ -146,10 +146,10 @@ const handleCloseUpdate = () => {
   </thead>
   <tbody>
   {filteredEvents.length ? (
-    filteredEvents.map((event) =>(
+    filteredEvents.map((event,index) =>(
       <tr key={event.id}>
-        {console.log(event.id)}
-      <th scope="row">{event.id}</th>
+        {/* {console.log(++index)} */}
+      <th scope="row">{++index}</th>
       <td>{event.name}</td>
       <td>{event.content}</td>
       {/* <td>{event.category}</td> */}
