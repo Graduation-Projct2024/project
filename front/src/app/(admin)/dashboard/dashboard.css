@@ -80,6 +80,9 @@ color: #4C5372 !important;
     color: #4C5372;
     border: #4C5372 1px solid;
 }
+.primaryBg:hover .addIcon{
+    color: #4C5372;
+}
 .primaryColor{
     color:#4C5372 !important;
 }

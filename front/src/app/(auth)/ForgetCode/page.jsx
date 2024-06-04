@@ -2,7 +2,7 @@
 import Layout from '@/app/(pages)/Layout/Layout';
 import { useRouter } from 'next/navigation'
 import React, { useContext, useEffect, useState } from 'react'
-import './RegisterCode.css'
+import '../RegisterCode/RegisterCode.css'
 import Input from '@/component/input/Input';
 import axios from 'axios';
 import { useFormik } from 'formik';
@@ -56,13 +56,7 @@ const onSubmit = async (values) => {
             );
         console.log(data);
         formik.resetForm();
-        Swal.fire({
-          title: "You registered Successfully!",
-          text: "Go to login page and sign into your account",
-          icon: "success"
-        });
-        router.push('/login');
-    
+        router.push(`/ForgetPassword?email=${email}`)
       } catch (error) {
         console.error('Error submitting form:', error);
         console.log('Error response:', error.response);
@@ -133,10 +127,10 @@ const onSubmit = async (values) => {
                           </p>
                         ) : null}
                       </div>
-                      <div className="resendCode d-flex justify-content-center align-items-center gap-1">
-                          <p className='text-center pt-3'>Dont receive any code?</p>
-                          <button onClick={resendCode} className='border-0 bg-transparent text-primary text-decoration-underline'>re-send code</button>
-                      </div>
+                      {/* <div className="resendCode row justify-content-center">
+                          <p className='text-center'>Dont receive any code?</p>
+                          <button onClick={resendCode} className='border-0 bg-transparent'>re-send code</button>
+                      </div> */}
                       
                       <div className="text-center mt-3">
                         <Button

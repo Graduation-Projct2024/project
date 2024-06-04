@@ -1,3 +1,4 @@
+'use client'
 import Input from '@/component/input/Input';
 import TextArea from '@/component/input/TextArea';
 import { editEvent } from '@/component/validation/validation';
@@ -47,6 +48,7 @@ export default function EditEvent({id   , name   , category    ,dateOfEvent   , 
         console.error('Error updating Course:', error);
       }
     }
+
   };
 
   const formik = useFormik({

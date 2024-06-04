@@ -7,8 +7,10 @@ export const createEmployee = yup.object({
     phoneNumber:yup.string().required('Phone Number is required').min(6,'phone must have at least 6 characters').max(30,'Password must have at most 30 characters'),
     address:yup.string().required('Address is required').min(6,'address must have at least 6 characters').max(30,'Password must have at most 30 characters'),
  })
-
- 
+ export const resetPass = yup.object({
+   password:yup.string().required('Password is required').min(8,'Password must have at least 8 characters'),
+   confirmPassword:yup.string().required('confirmPassword is required').min(8,'Password must have at least 8 characters').oneOf([yup.ref('password'), null], 'Passwords must match'),
+})
 
  export const createCourse = yup.object({
     name:yup.string().required('Name is required').min(3,'Course Name must have at least 3 characters').max(30,'Course Name must have at most 30 characters'),
@@ -39,6 +41,10 @@ export const updateEmployee = yup.object({
    email:yup.string().required('Email is required'),
    address:yup.string().required('Address is required'),
    phoneNumber:yup.string().required('Phone number is required'),
+})
+
+export const AddEmailForgetPass = yup.object({
+   email:yup.string().required('Email is required'),
 })
 export const editProfile = yup.object({
    FName:yup.string().required('First Name is required'),

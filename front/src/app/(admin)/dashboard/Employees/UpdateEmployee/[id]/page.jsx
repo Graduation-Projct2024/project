@@ -1,3 +1,4 @@
+'use client'
 import Input from '@/component/input/Input';
 import { updateEmployee } from '@/component/validation/validation';
 import { UserContext } from '@/context/user/User';

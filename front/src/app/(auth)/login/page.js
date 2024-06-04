@@ -168,12 +168,13 @@ export default function page() {
       
         {renderInputs}
         {/* {console.log(errmsg)} */}
+        <button className='bg-transparent border-0 text-primary text-decoration-underline' onClick={()=> router.push('/AddEmailForgetPass')}>Forget Password?</button>
         
         <div className="text-center mt-3 loginActions">
               <button
                 className="m-2 btn "
                 type="submit"
-                disabled={!formik.isValid}
+                disabled={!formik.isValid ||formik.isSubmitting || Object.keys(formik.errors).length > 0 || Object.keys(formik.touched).length === 0}
               >
                 Login
               </button>

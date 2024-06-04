@@ -151,7 +151,7 @@ const sidebarItems = [
                 <ListItem key={name}>
                 <ListItemButton 
                   className={`sidebar__link ${router.pathname === href ? "sidebar__link--active" : ""}`}
-                  onClick={() => router.push(href)}
+                  onClick={() => router.push(href,undefined, { shallow: true })}
                 >
                   <ListItemIcon>
                     <Icon sx={{/*color: deepPurple[50]*/ }} />
