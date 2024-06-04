@@ -18,12 +18,13 @@ export default function EmployeeContacts() {
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
-
+  // const [loading,setLoading]= useState(false);
   
   let [contacts,setContact] = useState([]);
   const fetchContacts = async (pageNum = pageNumber, pageSizeNum = pageSize) => {
     if(userData){
     try{
+    // setLoading(true)
     const { data } = await axios.get(`https://localhost:7116/api/Employee/GetAllEmployee?pageNumber=${pageNum}&pageSize=${pageSize}`,
     {
         headers: {
@@ -33,12 +34,20 @@ export default function EmployeeContacts() {
     console.log(data);
     setContact(data.result.items);
     setTotalPages(data.result.totalPages);
+    
   }
     catch(error){
       console.log(error);
     }
+    // finally{
+    //   setLoading(false)
+    // }
+  
   }
   };
+  // if (loading) {
+  //   return <div>Loading...</div>;
+  // }
 
 
   useEffect(() => {

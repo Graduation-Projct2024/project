@@ -7,7 +7,7 @@ body{
     color: #fffdf6;
 }
 
-.addCodeWrapper {
+.addCodeWrapper{
     padding: 70px;
     padding-top: 20px;
     border: 1px solid #4C5372;
@@ -20,4 +20,9 @@ body{
 .resendCode button{
     color: #4C5372;
     width: fit-content;
+}
+.addEmailSection{
+    padding: 30px;
+    border: 1px solid #4C5372;
+    border-radius: 10px;
 }

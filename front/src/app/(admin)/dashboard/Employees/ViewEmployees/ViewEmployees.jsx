@@ -211,7 +211,7 @@ export default function ViewEmployees() {
           mr: 6,
         }}
       >
-<Button sx={{px:2,m:0.5}} variant="contained" className='primaryBg' startIcon={<AddCircleOutlineIcon />} onClick={handleClickOpen}>
+<Button sx={{px:2,m:0.5}} variant="contained" className='primaryBg' startIcon={<AddCircleOutlineIcon  className='addIcon'/>} onClick={handleClickOpen}>
   Add New
 </Button>
       </Box>

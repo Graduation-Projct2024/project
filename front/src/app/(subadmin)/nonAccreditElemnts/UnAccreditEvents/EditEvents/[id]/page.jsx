@@ -1,3 +1,4 @@
+'use client'
 import Input from '@/component/input/Input';
 import TextArea from '@/component/input/TextArea';
 import { editEvent } from '@/component/validation/validation';
