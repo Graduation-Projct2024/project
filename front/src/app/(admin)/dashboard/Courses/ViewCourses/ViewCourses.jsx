@@ -4,6 +4,7 @@ import React, { useContext, useEffect, useState } from "react";
 import {
   faArrowUpFromBracket,
   faEye,
+  faFileCsv,
   faFilter,
   faPen,
 } from "@fortawesome/free-solid-svg-icons";
@@ -35,6 +36,64 @@ const handleCloseUpdate = () => {
 };
 
   const [courses, setCourses] = useState([]);
+  const ExportAllDataToPdf =async()=>{
+    if(userData){
+      try{
+        const data = JSON.stringify(courses);
+        const response = await axios.get(
+          `https://localhost:7116/api/Reports/export-all-Data-To-PDF?data=course`,
+          {
+            headers: { Authorization: `Bearer ${userToken}`, 'Content-Type': 'application/json' },
+            responseType: 'blob'
+          }
+        );
+  
+        // Check the response in the console
+        console.log('Response Headers:', response.headers);
+        console.log('Response Data:', response.data);
+        const url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'Courses.pdf');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        console.log(response)
+      }catch(error){
+        console.log(error)
+      }
+    }
+  }
+
+  const ExportAllDataToCSV =async()=>{
+    if(userData){
+      try{
+        const data = JSON.stringify(courses);
+        const response = await axios.get(
+          `https://localhost:7116/api/Reports/export-all-data-to-excel?data=course`,
+          {
+            headers: { Authorization: `Bearer ${userToken}`, 'Content-Type': 'application/json' },
+            responseType: 'blob'
+          }
+        );
+  
+        // Check the response in the console
+        console.log('Response Headers:', response.headers);
+        console.log('Response Data:', response.data);
+        const url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'courses.xlsx');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        console.log(response)
+      }catch(error){
+        console.log(error)
+      }
+    }
+  }
+
 
   // const fetchCourses = async () => {
   //   if (userData) {
@@ -142,9 +201,19 @@ const handlePageChange = (event, value) => {
                   </button>
                   <ul className="dropdown-menu"></ul>
                 </div>
-                <FontAwesomeIcon icon={faArrowUpFromBracket} />
+                
               </div>
             </form>
+            <Tooltip title="Convert courses into pdf" placement="top">
+            <button className='border-0 bg-transparent edit-pen' onClick={ExportAllDataToPdf}>
+                <FontAwesomeIcon icon={faArrowUpFromBracket} className='pb-2'/>
+                </button>
+                </Tooltip>
+                <Tooltip title="Convert courses into Excel file" placement="top">
+        <button className='border-0 bg-transparent edit-pen' onClick={ExportAllDataToCSV}>
+              <FontAwesomeIcon icon={faFileCsv} className="pb-2"/>
+            </button>
+            </Tooltip>
           </div>
         </nav>
       </div>
