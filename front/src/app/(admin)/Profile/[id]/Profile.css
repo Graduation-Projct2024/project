@@ -93,3 +93,7 @@ body{
   font-weight: 800;
 }
 
+.custom-swal2-popupp {
+  z-index: 3000; /* or any value higher than your change password dialog */
+}
+

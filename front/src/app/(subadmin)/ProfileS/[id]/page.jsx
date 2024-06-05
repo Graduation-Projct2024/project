@@ -143,6 +143,7 @@ const handleCloseUpdate = () => {
                  <Dialog
                   fullScreen={fullScreen}
                   open={openChange}
+                  className='z-3'
                   onClose={handleCloseChange}
                   aria-labelledby="responsive-dialog-title"
                   sx={{

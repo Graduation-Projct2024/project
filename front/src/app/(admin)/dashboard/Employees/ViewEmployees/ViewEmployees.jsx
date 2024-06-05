@@ -70,6 +70,24 @@ export default function ViewEmployees() {
       }
       };
 
+      const ExportAllDataToPdf =async()=>{
+        if(userData){
+          try{
+            const response  = await axios.get(`https://localhost:7116/api/Reports/export-all-Data-To-PDF?data=employee`, { headers: { Authorization: `Bearer ${userToken}` } }, {responseType: 'blob'})
+            const url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'employees.pdf');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            console.log(response)
+          }catch(error){
+            console.log(error)
+          }
+        }
+      }
+
 
       // useEffect(() => {
       //   fetchEmployees();
@@ -196,9 +214,11 @@ export default function ViewEmployees() {
                   </ul>
                 </div>
                 
-                <FontAwesomeIcon icon={faArrowUpFromBracket} className='pb-1'/>
               </div>
             </form>
+            <button className='border-0 bg-transparent edit-pen' onClick={ExportAllDataToPdf}>
+                <FontAwesomeIcon icon={faArrowUpFromBracket} className=''/>
+                </button>
 
             {/* <button type="button" className="btn btn-primary ms-2 addEmp" data-bs-toggle="modal" data-bs-target="#staticBackdrop2">
               <span>+ Add new</span>

@@ -26,16 +26,16 @@ export default function page() {
 
 const onSubmit = async (values) => {
     try {
-    //   const formData = new FormData();
-    //   formData.append('password', users.password);
-    //   formData.append('confirmPassword', users.confirmPassword);
-      const { data } = await axios.patch(`https://localhost:7116/api/UserAuth/ForgetPassword?email=${email}&password=${values.password}&confirmPassword=${values.confirmPassword}`, {},{ headers: {
+      const formData = new FormData();
+      formData.append('password', values.password);
+      formData.append('confirmPassword', values.confirmPassword);
+      const { data } = await axios.patch(`https://localhost:7116/api/UserAuth/ForgetPassword?email=${email}`, formData,{ headers: {
         'Content-Type': 'application/json',
       }});
       console.log(data);
       formik.resetForm();
 
-    // router.push(`/login`,undefined, { shallow: true })
+    router.push(`/login`,undefined, { shallow: true })
 
     } catch (error) {
       console.error('Error submitting form:', error);

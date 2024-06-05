@@ -249,7 +249,7 @@ const [materialId, setMaterialId]=useState();
       gap={4}
       p={2}
       sx={{ border: '1px solid grey' ,borderRadius: 3, justifyContent: 'space-between' }}
-      className={index%2==0?"bg-purple1":'bg-purple2'}
+      className={index%2==0?"bg-purple1":'bg-purple2 mb-2'}
     >
      <Typography variant='h6'> {participant.userName}</Typography>
      <div className='m-2'>

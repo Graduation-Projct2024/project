@@ -168,7 +168,7 @@ export default function page() {
       
         {renderInputs}
         {/* {console.log(errmsg)} */}
-        <button className='bg-transparent border-0 text-primary text-decoration-underline' onClick={()=> router.push('/AddEmailForgetPass')}>Forget Password?</button>
+        <Link className='bg-transparent border-0 text-primary text-decoration-underline' href='/AddEmailForgetPass'>Forget Password?</Link>
         
         <div className="text-center mt-3 loginActions">
               <button

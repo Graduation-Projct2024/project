@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useFormik } from 'formik';
 import React, { useContext, useState } from 'react'
 import Swal from 'sweetalert2';
+import './ChangePassword.css'
 
 export default function ChangePassword({setOpenChange}) {
 
@@ -18,9 +19,63 @@ export default function ChangePassword({setOpenChange}) {
     newpassword: '',
   };
 
-  const onSubmit = async (values) => {
-      if(userData){
-            try {
+  // const onSubmit = async (values) => {
+  //     if(userData){
+  //           try {
+  //             const formData = new FormData();
+  //             formData.append(`userId`, userId)
+  //             formData.append('password', values.password);
+  //             formData.append('newpassword', values.newpassword);
+  //             const { data } = await axios.patch(`https://localhost:7116/api/UserAuth/changePassword?UserId=${userId}`,
+  //             formData,
+  //               {
+  //                 headers: {
+  //                   'Content-Type': 'application/json',
+  //                   'Authorization': `Bearer ${userToken}`
+  //                 }
+  //               });
+  //               if(data.errorMassages != null){
+  //                 setErrmsg(data.errorMassages)
+                  
+  //                 // console.log(data.errorMassages)
+  //               }
+  //               else{
+  //                  console.log(data);
+  //             formik.resetForm();
+  //             setOpenChange(false);
+              
+  //               Swal.fire({
+  //                 title: `Password Changed successfully`,
+  //                 text: "Request Accepted",
+  //                 icon: "success"
+  //               });
+  //               }
+             
+              
+    
+  //           } catch (error) {
+  //             console.log(error);
+  //           }
+  //         }
+        
+      
+  //     };
+      const onSubmit = async (values) => {
+        if(userData){
+          Swal.fire({
+            title: `Are you sure?`,
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes!",
+            customClass: {
+              popup: 'custom-swal2-popup' // apply the custom class here
+            }
+          }).then(async (result) => {
+            if (result.isConfirmed) {
+                        try {
               const formData = new FormData();
               formData.append(`userId`, userId)
               formData.append('password', values.password);
@@ -48,18 +103,17 @@ export default function ChangePassword({setOpenChange}) {
                   text: "Request Accepted",
                   icon: "success"
                 });
-                }
-             
-              
-    
-            } catch (error) {
-              console.log(error);
+                }}
+              catch (error) {
+                console.log(error);
+              }
             }
-          }
+          });
+            }
+          
         
-      
-      };
-
+        };
+  
       const formik = useFormik({
           initialValues : initialValues,
           onSubmit,
