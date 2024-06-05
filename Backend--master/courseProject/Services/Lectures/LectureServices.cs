@@ -31,7 +31,7 @@ namespace courseProject.Services.Lectures
             var instructorFound = await unitOfWork.instructorRepositpry.GetEmployeeById(instructorId);
             if (instructorFound == null) return ErrorInstructor.NotFound;
             
-            var GetLectures = await unitOfWork.instructorRepositpry.GetAllConsultationRequestByInstructorIdAsync(instructorId);
+            var GetLectures = await unitOfWork.RequestRepository.GetAllConsultationRequestByInstructorIdAsync(instructorId);
           
             var LecturesMapper = mapper.Map<IReadOnlyList<Consultation>, IReadOnlyList<LecturesForRetriveDTO>>(GetLectures);
             return LecturesMapper.ToErrorOr();
@@ -52,7 +52,7 @@ namespace courseProject.Services.Lectures
 
             if ((EndTime - StartTime) > TimeSpan.Parse("02:00") || (EndTime - StartTime) < TimeSpan.Parse("00:30"))
                 return ErrorLectures.limitationTime;
-            var CheckTime = await unitOfWork.instructorRepositpry.showifSelectedTimeIsAvilable(StartTime, EndTime, date);
+            var CheckTime = await unitOfWork.lecturesRepository.showifSelectedTimeIsAvilable(StartTime, EndTime, date);
             if (CheckTime.Count() == 0) return ErrorInstructor.NoInstructorAvailable;
 
 
@@ -63,7 +63,7 @@ namespace courseProject.Services.Lectures
             consultation.date = date;
             consultation.Duration = EndTime - StartTime;
 
-            await unitOfWork.StudentRepository.BookLectureAsync(consultation);
+            await unitOfWork.lecturesRepository.BookLectureAsync(consultation);
             await unitOfWork.StudentRepository.saveAsync();
             var studentConsulation = mapper.Map<Consultation, StudentConsultations>(consultation);
             await unitOfWork.StudentRepository.AddInStudentConsulationAsync(studentConsulation);
@@ -75,7 +75,7 @@ namespace courseProject.Services.Lectures
         {
             var student = await unitOfWork.StudentRepository.getStudentByIdAsync(StudentId);
             if (student == null) return ErrorStudent.NotFound;
-            var allConsultations = await unitOfWork.StudentRepository.GetAllPublicConsultationsAsync();
+            var allConsultations = await unitOfWork.lecturesRepository.GetAllPublicConsultationsAsync();
             if (!allConsultations.Any(x => x.Id == ConsultaionId)) return ErrorLectures.NotFound;
                  
             StudentConsultations studentConsultation = new StudentConsultations();
@@ -90,9 +90,9 @@ namespace courseProject.Services.Lectures
         {
             var getstudent = await unitOfWork.StudentRepository.getStudentByIdAsync(studentId);
             if (getstudent == null) return ErrorStudent.NotFound;
-            var allPublicConsultations = await unitOfWork.StudentRepository.GetAllConsultations();
+            var allPublicConsultations = await unitOfWork.lecturesRepository.GetAllPublicConsultations();
             var publicConsulations = allPublicConsultations.DistinctBy(x => x.consultationId).ToList();
-            var itsPrivateConsultations = await unitOfWork.StudentRepository.GetAllBookedPrivateConsultationsAsync(studentId);
+            var itsPrivateConsultations = await unitOfWork.lecturesRepository.GetAllBookedPrivateConsultationsAsync(studentId);
            
             IReadOnlyList<PublicLectureForRetriveDTO>? lectureForRetrive = new List<PublicLectureForRetriveDTO>();
             lectureForRetrive = mapper.Map<IReadOnlyList<StudentConsultations>, IReadOnlyList<PublicLectureForRetriveDTO>>(publicConsulations);
@@ -129,7 +129,7 @@ namespace courseProject.Services.Lectures
 
         public async Task<ErrorOr<LecturesForRetriveDTO>> GetConsultationById(Guid consultationId)
         {
-            var getConsultation = await unitOfWork.StudentRepository.GetConsultationById(consultationId);
+            var getConsultation = await unitOfWork.lecturesRepository.GetConsultationById(consultationId);
             if (getConsultation == null) return ErrorLectures.NotFound;
            
          

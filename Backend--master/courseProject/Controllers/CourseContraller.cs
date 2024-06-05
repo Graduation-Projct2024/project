@@ -128,16 +128,16 @@ namespace courseProject.Controllers
         [Authorize(Policy = "Admin")]
 
         // this to change the status of courses to reject or accredit
-        public async Task<IActionResult> EditCourseStatus(Guid courseId, string Status)
+        public async Task<IActionResult> EditCourseStatus(Guid courseId, CourseStatusDTO courseStatus)
         {
-            var updateStatus = await courseServices.accreditCourse(courseId, Status);
+            var updateStatus = await courseServices.accreditCourse(courseId, courseStatus.Status);
             if (updateStatus.IsError) return NotFound(new ApiResponce
             {
                 ErrorMassages = updateStatus.FirstError.Description
             }) ;
             return Ok(new ApiResponce
             {
-                Result = $"The Course is {Status}"
+                Result = $"The Course is {courseStatus.Status}"
             });
         }
 

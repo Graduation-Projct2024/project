@@ -20,7 +20,13 @@ namespace courseProject.Core.IGenericRepository
         public IMaterialRepository materialRepository { get; set; }
         public IEventRepository eventRepository {  get; set; }
         public IEmailService EmailService { get; set; }
-       
+        public IFeedbackRepository FeedbackRepository { get; set; }
+        public ILecturesRepository lecturesRepository { get; set; }
+        public IRequestRepository RequestRepository { get; set; }
+        public ISkillRepository skillRepository { get; set; }
+        public IStudentCourseRepository studentCourseRepository { get; set; }
+        public ISubmissionRepository submissionRepository { get; set; }
+
 
     }
 }

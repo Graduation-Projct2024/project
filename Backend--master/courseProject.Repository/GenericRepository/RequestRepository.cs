@@ -1,0 +1,56 @@
+﻿using courseProject.Core.IGenericRepository;
+using courseProject.Core.Models;
+using courseProject.Repository.Data;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace courseProject.Repository.GenericRepository
+{
+    public class RequestRepository : IRequestRepository
+    {
+        private readonly projectDbContext dbContext;
+
+        public RequestRepository(projectDbContext dbContext)
+        {
+            this.dbContext = dbContext;
+        }
+
+
+        public async Task<IReadOnlyList<Consultation>> GetAllConsultationRequestByInstructorIdAsync(Guid instructorId)
+        {
+            return await dbContext.consultations.Include(x => x.student.user).Include(x => x.instructor.user).Where(x => x.InstructorId == instructorId).ToListAsync();
+        }
+
+        public async Task CreateRequest(Request request)
+        {
+            await dbContext.Set<Request>().AddAsync(request);
+        }
+
+        public async Task<IReadOnlyList<Request>> GerAllCoursesRequestAsync()
+        {
+            return await dbContext.requests.Include(x => x.Student.user).Where(x => x.satus == "custom-course").ToListAsync();
+        }
+
+
+        public async Task<Request> GerCourseRequestByIdAsync(Guid id)
+        {
+            return await dbContext.requests.Include(x => x.Student.user).Where(x => x.satus == "custom-course").FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+
+        public async Task<IReadOnlyList<StudentCourse>> getAllRequestToJoindCourseAsync()
+        {
+            return await dbContext.studentCourses.Include(x => x.Student)
+                                                      .ThenInclude(x => x.user)
+                                                 .Include(x => x.Course)
+                                                 .Where(x => x.status.ToLower() == "waiting")
+                                                 .ToListAsync();
+        }
+
+
+    }
+}

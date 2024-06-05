@@ -22,25 +22,12 @@ namespace courseProject.Repository.GenericRepository
          
         }
 
-        public async Task CreateCourse(Course model)
-        {
-            await dbContext.Set<Course>().AddAsync(model);
-            
-        }
+      
 
-        public async Task CreateRequest(Request request)
-        {
-            await dbContext.Set<Request>().AddAsync(request);
-        }
+      
 
-        public async Task updateCourse(Course course)
-        {
-            dbContext.Entry(course).State = EntityState.Modified;
-        }
-        public async Task updateEvent(Event model)
-        {
-            dbContext.Update(model);
-        }
+        
+       
 
         public async Task<IDbContextTransaction> BeginTransactionAsync()
         {
@@ -86,10 +73,7 @@ namespace courseProject.Repository.GenericRepository
             }
         }
 
-        public async Task CreateEvent(Event model)
-        {
-            await dbContext.Set<Event>().AddAsync(model);
-        }
+      
 
         public async Task<SubAdmin> GetSubAdminByIdAsync(Guid id)
         {
@@ -97,28 +81,14 @@ namespace courseProject.Repository.GenericRepository
  
         }
 
-        public async Task<IReadOnlyList<Request>> GerAllCoursesRequestAsync()
-        {
-            return await dbContext.requests.Include(x => x.Student.user).Where(x => x.satus == "custom-course").ToListAsync(); 
-        }
-        public async Task<Request> GerCourseRequestByIdAsync(Guid id)
-        {
-             return await dbContext.requests.Include(x => x.Student.user).Where(x => x.satus == "custom-course").FirstOrDefaultAsync(x=>x.Id==id);
-        }
+       
 
         public async Task<SubAdmin> getSubAdminByIdAsync(Guid subAdminId)
         {
             return await dbContext.subadmins.FirstOrDefaultAsync(x => x.SubAdminId == subAdminId);
         }
 
-        public async Task<IReadOnlyList<StudentCourse>> getAllRequestToJoindCourseAsync()
-        {
-            return await dbContext.studentCourses.Include(x => x.Student)
-                                                      .ThenInclude(x => x.user)
-                                                 .Include(x => x.Course)
-                                                 .Where(x => x.status.ToLower() == "waiting")
-                                                 .ToListAsync();
-        }
+       
 
         public async Task RemoveSubAdmin(SubAdmin subAdmin)
         {

@@ -54,7 +54,7 @@ namespace courseProject.Services.StudentCourses
             patchDocument.Replace(path, status);
             getStudentCourse.status = status;
 
-            await unitOfWork.CourseRepository.UpdateStudentCourse(getStudentCourse);
+            await unitOfWork.studentCourseRepository.UpdateStudentCourse(getStudentCourse);
             var studentEmail = (await unitOfWork.UserRepository.getUserByIdAsync(studentId)).email;
             string studentName = (await unitOfWork.UserRepository.ViewProfileAsync(studentId, "student")).userName;
             var courseName = (await unitOfWork.CourseRepository.GetCourseByIdAsync(courseId)).name;

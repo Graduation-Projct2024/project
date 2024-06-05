@@ -1,7 +1,6 @@
 ﻿using courseProject.Core.IGenericRepository;
 using courseProject.Core.Models;
 using courseProject.Repository.Data;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,24 +9,24 @@ using System.Threading.Tasks;
 
 namespace courseProject.Repository.GenericRepository
 {
-    public class AdminRepository : GenericRepository1<Admin>, IAdminRepository
+    public class StudentCourseRepository : IStudentCourseRepository
     {
         private readonly projectDbContext dbContext;
 
-        public AdminRepository(projectDbContext dbContext) : base(dbContext)
+        public StudentCourseRepository(projectDbContext dbContext)
         {
             this.dbContext = dbContext;
         }
 
-       
 
-        
-
-        public async Task<Admin> GetAdminByIdAsync(Guid id)
+        public async Task UpdateStudentCourse(StudentCourse studentCourse)
         {
-            return await dbContext.admins.FirstOrDefaultAsync(x => x.AdminId == id);
+            dbContext.Set<StudentCourse>().Update(studentCourse);
         }
 
-        
+
+
+
+
     }
 }

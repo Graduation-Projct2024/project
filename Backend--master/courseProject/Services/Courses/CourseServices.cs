@@ -43,7 +43,7 @@ namespace courseProject.Services.Courses
             getCourse.dateOfAdded = dateAdded;
             
             if (getCourse.status.ToLower() != "accredit") return ErrorCourse.NoContent;          
-            await unitOfWork.SubAdminRepository.updateCourse(getCourse);
+            await unitOfWork.CourseRepository.updateCourse(getCourse);
             await unitOfWork.CourseRepository.saveAsync();
             return Result.Updated; 
 
@@ -81,7 +81,7 @@ namespace courseProject.Services.Courses
 
         public async Task<IReadOnlyList<Course>> GetAllCoursesToStudent(Guid studentId)
         {
-            var courses = await unitOfWork.StudentRepository.GetAllCoursesAsync(studentId);
+            var courses = await unitOfWork.CourseRepository.GetAllCoursesAsync(studentId);
             foreach (var course in courses)
             {
                 if (course.ImageUrl != null)
@@ -128,10 +128,10 @@ namespace courseProject.Services.Courses
             using (var transaction = await unitOfWork.SubAdminRepository.BeginTransactionAsync())
             {
                
-                    await unitOfWork.SubAdminRepository.CreateRequest(request);
+                    await unitOfWork.RequestRepository.CreateRequest(request);
                     var success1 = await unitOfWork.StudentRepository.saveAsync();                   
                     course.requestId = request.Id;
-                    await unitOfWork.SubAdminRepository.CreateCourse(course);
+                    await unitOfWork.CourseRepository.CreateCourse(course);
                     var success2 = await unitOfWork.StudentRepository.saveAsync();
 
                     if (success1 > 0 && success2 > 0)
@@ -157,7 +157,7 @@ namespace courseProject.Services.Courses
             patchDocument.Replace(path, Status);
             getCourse.status = Status;
             
-            await unitOfWork.SubAdminRepository.updateCourse(getCourse);
+            await unitOfWork.CourseRepository.updateCourse(getCourse);
             await unitOfWork.SubAdminRepository.saveAsync();
             return Result.Updated;
         }
@@ -174,7 +174,7 @@ namespace courseProject.Services.Courses
             }
             // Re-attach and update the course entity
           //  unitOfWork.CourseRepository.AttachEntity(getCourse);
-            await unitOfWork.SubAdminRepository.updateCourse(getCourse);
+            await unitOfWork.CourseRepository.updateCourse(getCourse);
             await unitOfWork.CourseRepository.saveAsync() ;
             return Result.Updated;
 
@@ -202,7 +202,7 @@ namespace courseProject.Services.Courses
         {
             var instructorFound = await unitOfWork.UserRepository.ViewProfileAsync(instructorId, "instructor");
             if (instructorFound == null) return ErrorInstructor.NotFound;
-            var courseFond = await unitOfWork.instructorRepositpry.GetAllCoursesGivenByInstructorIdAsync(instructorId);
+            var courseFond = await unitOfWork.CourseRepository.GetAllCoursesGivenByInstructorIdAsync(instructorId);
             foreach (var course in courseFond)
             {
                 if (course.ImageUrl != null)
@@ -217,7 +217,7 @@ namespace courseProject.Services.Courses
 
         public async Task<IReadOnlyList<CustomCourseForRetriveDTO>> GetAllCustomCourses()
         {
-            var GetCustomCourse = await unitOfWork.SubAdminRepository.GerAllCoursesRequestAsync();
+            var GetCustomCourse = await unitOfWork.RequestRepository.GerAllCoursesRequestAsync();
             
             var CustomCoursesMapper = mapper.Map<IReadOnlyList<Request>, IReadOnlyList<CustomCourseForRetriveDTO>>(GetCustomCourse);
             return CustomCoursesMapper;
@@ -225,7 +225,7 @@ namespace courseProject.Services.Courses
 
         public async Task<ErrorOr<CustomCourseForRetriveDTO>> GetCustomCoursesById(Guid courseId)
         {
-            var GetCustomCourse = await unitOfWork.SubAdminRepository.GerCourseRequestByIdAsync(courseId);
+            var GetCustomCourse = await unitOfWork.RequestRepository.GerCourseRequestByIdAsync(courseId);
             if (GetCustomCourse == null) return ErrorCourse.NotFound;
             
             var CustomCoursesMapper = mapper.Map<Request, CustomCourseForRetriveDTO>(GetCustomCourse);
@@ -236,7 +236,7 @@ namespace courseProject.Services.Courses
         {
             var student = await unitOfWork.StudentRepository.getStudentByIdAsync(studentId);
             if (student == null) return ErrorStudent.NotFound;
-            var enrolledCourses = await unitOfWork.StudentRepository.GetAllCoursesForStudentAsync(studentId);
+            var enrolledCourses = await unitOfWork.CourseRepository.GetAllCoursesForStudentAsync(studentId);
             
             var courseFound = enrolledCourses.Select(x => x.Course).ToList();
             foreach (var course in courseFound)

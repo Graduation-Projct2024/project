@@ -12,5 +12,6 @@ namespace courseProject.Core.Models.DTO.FeedbacksDTO
         public int? range { get; set; }
         public string name { get; set; }
         public string type { get; set; }
+        public string? imageUrl { get; set; }
     }
 }

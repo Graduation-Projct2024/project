@@ -63,5 +63,22 @@ namespace courseProject.Repository.GenericRepository
         }
 
 
+        public async Task AddMaterial(CourseMaterial courseMaterial)
+        {
+            await dbContext.Set<CourseMaterial>().AddAsync(courseMaterial);
+        }
+
+        public async Task DeleteMaterial(Guid id)
+        {
+            var materail = await dbContext.courseMaterials.FirstOrDefaultAsync(x => x.Id == id);
+            dbContext.courseMaterials.Remove(materail);
+        }
+
+        public async Task EditMaterial(CourseMaterial courseMaterial)
+        {
+            dbContext.Set<CourseMaterial>().Update(courseMaterial);
+        }
+
+
     }
 }

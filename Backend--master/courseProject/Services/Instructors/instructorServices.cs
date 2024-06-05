@@ -90,7 +90,7 @@ namespace courseProject.Services.Instructors
 
             if ((EndTime - StartTime) > TimeSpan.Parse("02:00") || (EndTime - StartTime) < TimeSpan.Parse("00:30"))
                 return ErrorLectures.limitationTime;
-            var getAllSkills = await unitOfWork.AdminRepository.GetAllSkillsAsync();
+            var getAllSkills = await unitOfWork.skillRepository.GetAllSkillsAsync();
             
             var getInstructors = await unitOfWork.instructorRepositpry.getAListOfInstructorDependOnSkillsAndOfficeTime(skillId, StartTime, EndTime, date);           
             var instructorMapper = mapper.Map<IReadOnlyList<Instructor_Working_Hours>, IReadOnlyList<EmployeeListDTO>>(getInstructors);            

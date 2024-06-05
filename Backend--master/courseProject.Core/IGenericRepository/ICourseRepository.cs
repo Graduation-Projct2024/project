@@ -12,8 +12,14 @@ namespace courseProject.Core.IGenericRepository
         public  Task<T> GetCourseByIdAsync(Guid? id);
         public Task<int> GetNumberOfStudentsInTHeCourseAsync(Guid courseId);
         public Task EditCourseAfterAccreditAsync(Guid courseId);
-        public Task UpdateStudentCourse(StudentCourse studentCourse);
+       
         public Task<IReadOnlyList<Course>> GetAllUndefinedCoursesBySubAdminIdAsync(Guid subAdminId);
         public Task<Course> getAccreditCourseByIdAcync(Guid courseId);
+        public Task<IReadOnlyList<Course>> GetAllCoursesGivenByInstructorIdAsync(Guid Instructorid);
+        public Task<IReadOnlyList<StudentCourse>> GetAllCoursesForStudentAsync(Guid Studentid);
+        public Task<IReadOnlyList<Course>> GetAllCoursesAsync(Guid studentId);
+        public Task CreateCourse(Course model);
+        public Task updateCourse(Course course);
+
     }
 }
