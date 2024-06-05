@@ -32,7 +32,6 @@ export default function GeneralFeedback() {
          
       const [feedbacks, setFeedbacks] = useState([]);
  const fetchFeedbacks = async ()  => {
-        if(userData){
         try{
         const { data } = await axios.get(`https://localhost:7116/api/Feedback/GetAllGeneralFeedback?pageNumber=1&pageSize=20`);
         
@@ -42,7 +41,6 @@ export default function GeneralFeedback() {
         catch(error){
          console.log(error);
         }
-      }
       };
 useEffect(() => {
   fetchFeedbacks();

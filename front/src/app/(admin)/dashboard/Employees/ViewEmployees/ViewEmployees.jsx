@@ -2,7 +2,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import CreateEmployee from '../CreateEmployee/CreateEmployee';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowUpFromBracket, faBook, faEye, faFilter, faPen, faPeopleArrows } from '@fortawesome/free-solid-svg-icons'
+import { faArrowUpFromBracket, faBook, faEye, faFileCsv, faFilter, faPen, faPeopleArrows } from '@fortawesome/free-solid-svg-icons'
 import Link from 'next/link';
 import axios from 'axios';
 import UpdateEmployee from '../UpdateEmployee/[id]/page';
@@ -73,7 +73,18 @@ export default function ViewEmployees() {
       const ExportAllDataToPdf =async()=>{
         if(userData){
           try{
-            const response  = await axios.get(`https://localhost:7116/api/Reports/export-all-Data-To-PDF?data=employee`, { headers: { Authorization: `Bearer ${userToken}` } }, {responseType: 'blob'})
+            const data = JSON.stringify(employees);
+            const response = await axios.get(
+              `https://localhost:7116/api/Reports/export-all-Data-To-PDF?data=employee`,
+              {
+                headers: { Authorization: `Bearer ${userToken}`, 'Content-Type': 'application/json' },
+                responseType: 'blob'
+              }
+            );
+      
+            // Check the response in the console
+            console.log('Response Headers:', response.headers);
+            console.log('Response Data:', response.data);
             const url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }));
             const link = document.createElement('a');
             link.href = url;
@@ -87,7 +98,35 @@ export default function ViewEmployees() {
           }
         }
       }
-
+      
+      const ExportAllDataToCSV =async()=>{
+        if(userData){
+          try{
+            const data = JSON.stringify(employees);
+            const response = await axios.get(
+              `https://localhost:7116/api/Reports/export-all-data-to-excel?data=employee`,
+              {
+                headers: { Authorization: `Bearer ${userToken}`, 'Content-Type': 'application/json' },
+                responseType: 'blob'
+              }
+            );
+      
+            // Check the response in the console
+            console.log('Response Headers:', response.headers);
+            console.log('Response Data:', response.data);
+            const url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'employees.xlsx');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            console.log(response)
+          }catch(error){
+            console.log(error)
+          }
+        }
+      }
 
       // useEffect(() => {
       //   fetchEmployees();
@@ -216,9 +255,17 @@ export default function ViewEmployees() {
                 
               </div>
             </form>
+            <Tooltip title="Convert Employees into pdf" placement="top">
             <button className='border-0 bg-transparent edit-pen' onClick={ExportAllDataToPdf}>
                 <FontAwesomeIcon icon={faArrowUpFromBracket} className=''/>
                 </button>
+                </Tooltip>
+                <Tooltip title="Convert Employees into Excel" placement="top">
+            <button className='border-0 bg-transparent edit-pen' onClick={ExportAllDataToCSV}>
+                  <FontAwesomeIcon icon={faFileCsv} />
+                </button>
+                </Tooltip>
+                
 
             {/* <button type="button" className="btn btn-primary ms-2 addEmp" data-bs-toggle="modal" data-bs-target="#staticBackdrop2">
               <span>+ Add new</span>

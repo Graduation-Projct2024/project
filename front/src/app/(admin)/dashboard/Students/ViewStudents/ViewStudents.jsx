@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowUpFromBracket, faEye, faFilter } from '@fortawesome/free-solid-svg-icons'
+import { faArrowUpFromBracket, faEye, faFileCsv, faFilter } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react'
 import Link from 'next/link';
@@ -13,6 +13,64 @@ export default function ViewStudents() {
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
+
+  const ExportAllDataToPdf =async()=>{
+    if(userData){
+      try{
+        const data = JSON.stringify(students);
+        const response = await axios.get(
+          `https://localhost:7116/api/Reports/export-all-Data-To-PDF?data=student`,
+          {
+            headers: { Authorization: `Bearer ${userToken}`, 'Content-Type': 'application/json' },
+            responseType: 'blob'
+          }
+        );
+  
+        // Check the response in the console
+        console.log('Response Headers:', response.headers);
+        console.log('Response Data:', response.data);
+        const url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'Students.pdf');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        console.log(response)
+      }catch(error){
+        console.log(error)
+      }
+    }
+  }
+
+  const ExportAllDataToCSV =async()=>{
+    if(userData){
+      try{
+        const data = JSON.stringify(students);
+        const response = await axios.get(
+          `https://localhost:7116/api/Reports/export-all-data-to-excel?data=student`,
+          {
+            headers: { Authorization: `Bearer ${userToken}`, 'Content-Type': 'application/json' },
+            responseType: 'blob'
+          }
+        );
+  
+        // Check the response in the console
+        console.log('Response Headers:', response.headers);
+        console.log('Response Data:', response.data);
+        const url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'students.xlsx');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        console.log(response)
+      }catch(error){
+        console.log(error)
+      }
+    }
+  }
 
 
   const fetchStudents =  async (pageNum = pageNumber, pageSizeNum = pageSize) => {
@@ -102,11 +160,21 @@ return matchesSearchTerm ;
  
   </ul>
 </div>
-<FontAwesomeIcon icon={faArrowUpFromBracket} />
+
                     
                 </div>
                 </form>
-               
+                <Tooltip title="Convert students into pdf" placement="top">
+                <button className='border-0 bg-transparent edit-pen' onClick={ExportAllDataToPdf}>
+                <FontAwesomeIcon icon={faArrowUpFromBracket} className=''/>
+                </button>
+               </Tooltip>
+
+               <Tooltip title="Convert Students into Excel file" placement="top">
+        <button className='border-0 bg-transparent edit-pen' onClick={ExportAllDataToCSV}>
+              <FontAwesomeIcon icon={faFileCsv} />
+            </button>
+            </Tooltip>
 
             </div>
         </nav>
