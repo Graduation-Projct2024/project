@@ -11,5 +11,7 @@ namespace courseProject.Core.IGenericRepository
     {
         public Task<Event> GetEventByIdAsync(Guid eventId);
         public Task<IReadOnlyList<Event>> GetAllUndefindEventBySubAdminIdAsync(Guid subAdminId);
+        public Task CreateEvent(Event model);
+        public Task updateEvent(Event model);
     }
 }

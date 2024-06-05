@@ -17,5 +17,9 @@ namespace courseProject.Core.IGenericRepository
         public Task<IReadOnlyList<MaterialFiles>> GetMaterialFilesByMaterialId(Guid materialId);      
 
         public  Task DeleteFilesById(MaterialFiles file);
+
+        public Task AddMaterial(CourseMaterial courseMaterial);
+        public Task DeleteMaterial(Guid id);
+        public Task EditMaterial(CourseMaterial courseMaterial);
     }
 }

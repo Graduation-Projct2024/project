@@ -18,14 +18,14 @@ namespace courseProject.Services.Skill
 
         public async Task<ErrorOr<string>> AddSkillByAdmin(string skillName)
         {
-            var getAllSkills = await unitOfWork.AdminRepository.GetAllSkillsAsync();
+            var getAllSkills = await unitOfWork.skillRepository.GetAllSkillsAsync();
           
 
             if (getAllSkills.Any(x => x.name == skillName)) return ErrorSkills.ChapterNameExists;
 
             Skills skills = new Skills();
             skills.name = skillName;
-            await unitOfWork.AdminRepository.addSkillOptionsAsync(skills);
+            await unitOfWork.skillRepository.addSkillOptionsAsync(skills);
             await unitOfWork.AdminRepository.saveAsync();
             return skillName;
 
@@ -43,9 +43,9 @@ namespace courseProject.Services.Skill
             {
                 return ErrorSkills.NoContent;
             }
-            await unitOfWork.instructorRepositpry.AddListOfSkillsAsync(instructorId, array.skills);
+            await unitOfWork.skillRepository.AddListOfSkillsAsync(instructorId, array.skills);
 
-             await unitOfWork.instructorRepositpry.GetAllSkillsNameToInstructorAsync(array.skills);
+             await unitOfWork.skillRepository.GetAllSkillsNameToInstructorAsync(array.skills);
             return  Result.Created;
         }
 
@@ -53,13 +53,13 @@ namespace courseProject.Services.Skill
 
         public async Task<IReadOnlyList< Skills>> getAllSkillesAddedByAdmin()
         {
-            var allSkills = await unitOfWork.AdminRepository.GetAllSkillsAsync();         
+            var allSkills = await unitOfWork.skillRepository.GetAllSkillsAsync();         
             return allSkills;
         }
 
         public async Task<IReadOnlyList<Skills>> getAllSkillOptionsToInstructor(Guid instructorId)
         {
-            var allSkills = await unitOfWork.instructorRepositpry.getAllUnregisteredSkillsOfTheInstructor(instructorId);
+            var allSkills = await unitOfWork.skillRepository.getAllUnregisteredSkillsOfTheInstructor(instructorId);
             return allSkills;
             
 
@@ -67,7 +67,7 @@ namespace courseProject.Services.Skill
 
         public async Task<ErrorOr<Deleted>> DeleteAnInstructorSkill(Guid InstructorId, Guid SkillId)
         {
-            var getAllSkills = await unitOfWork.AdminRepository.GetAllSkillsAsync();
+            var getAllSkills = await unitOfWork.skillRepository.GetAllSkillsAsync();
             if (!getAllSkills.Any(x => x.Id == SkillId))
             {
                 return ErrorSkills.NotFound;
@@ -84,7 +84,7 @@ namespace courseProject.Services.Skill
             InstructorSkills instructorSkills = new InstructorSkills();
             instructorSkills.InstructorId = InstructorId;
             instructorSkills.skillId = SkillId;
-            await unitOfWork.instructorRepositpry.RemoveASkill(instructorSkills);
+            await unitOfWork.skillRepository.RemoveASkill(instructorSkills);
             await unitOfWork.instructorRepositpry.saveAsync();
 
             return Result.Deleted;
@@ -97,7 +97,7 @@ namespace courseProject.Services.Skill
             var instructorFound = await unitOfWork.UserRepository.ViewProfileAsync(instructorId, "instructor");
             if (instructorFound == null) return ErrorInstructor.NotFound;
 
-            var getAllHisSkills = await unitOfWork.instructorRepositpry.getAllInstructorSkills(instructorId);
+            var getAllHisSkills = await unitOfWork.skillRepository.getAllInstructorSkills(instructorId);
             
             return getAllHisSkills.ToErrorOr();
         }

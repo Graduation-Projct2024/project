@@ -7,10 +7,12 @@ using System.Threading.Tasks;
 
 namespace courseProject.Core.IGenericRepository
 {
-    public interface IAdminRepository :IGenericRepository1<Admin>
+    public interface IStudentCourseRepository
     {
 
-        public Task<Admin> GetAdminByIdAsync(Guid id);
-        
+        public Task UpdateStudentCourse(StudentCourse studentCourse);
+
+
+
     }
 }

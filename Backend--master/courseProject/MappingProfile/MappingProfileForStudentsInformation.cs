@@ -55,10 +55,12 @@ namespace courseProject.MappingProfile
             CreateMap<BookALectureDTO, Consultation>();
             CreateMap<FeedbackDTO, Feedback>();
             CreateMap<Feedback, FeedbackForRetriveDTO>()
-                .ForMember(x => x.name, o => o.MapFrom(y => y.User.userName + " " + y.User.student.LName));
+                .ForMember(x => x.name, o => o.MapFrom(y => y.User.userName + " " + y.User.student.LName))
+                .ForMember(x => x.imageUrl, o => o.MapFrom(y => y.User.student.ImageUrl));
 
             CreateMap<Feedback, AllFeedbackForRetriveDTO>()
-                .ForMember(x => x.name, o => o.MapFrom(y => y.User.userName + " " + y.User.student.LName));
+                .ForMember(x => x.name, o => o.MapFrom(y => y.User.userName + " " + y.User.student.LName))
+                .ForMember(x => x.imageUrl, o => o.MapFrom(y => y.User.student.ImageUrl));
 
             CreateMap<Consultation, StudentConsultations>()
                 .ForMember(x=>x.consultationId , o=>o.MapFrom(y=>y.Id));

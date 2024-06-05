@@ -38,10 +38,7 @@ namespace courseProject.Repository.GenericRepository
             throw new NotImplementedException();
         }
 
-        public async Task UpdateStudentCourse(StudentCourse studentCourse)
-        {
-             dbContext.Set<StudentCourse>().Update(studentCourse);
-        }
+       
 
         public async Task<IReadOnlyList<Course>> GetAllUndefinedCoursesBySubAdminIdAsync(Guid subAdminId)
         {
@@ -54,5 +51,62 @@ namespace courseProject.Repository.GenericRepository
         {
             return await dbContext.courses.Where(x => x.status.ToLower() == "accredit").FirstOrDefaultAsync(x => x.Id == courseId);
         }
+
+        public async Task<IReadOnlyList<Course>> GetAllCoursesGivenByInstructorIdAsync(Guid Instructorid)
+        {
+            return await dbContext.courses.Where(x => x.InstructorId == Instructorid && (x.status.ToLower() == "accredit" || x.status.ToLower() == "start" || x.status.ToLower() == "finished")).ToListAsync();
+        }
+
+        public async Task<IReadOnlyList<StudentCourse>> GetAllCoursesForStudentAsync(Guid Studentid)
+        {
+            return await dbContext.studentCourses.Include(x => x.Course).Where(x => x.StudentId == Studentid && x.status.ToLower() == "joind").ToListAsync();
+        }
+
+
+
+        public async Task<IReadOnlyList<Course>> GetAllCoursesAsync(Guid studentId)
+        {
+            var allCourses = await dbContext.courses
+                .Where(x => x.status.ToLower() == "accredit")
+                .Include(x => x.studentCourses)
+                .Include(x => x.Instructor).ThenInclude(x => x.user)
+                .Include(x => x.SubAdmin).ThenInclude(x => x.user)
+                .ToListAsync();
+
+            if (allCourses.Count > 0)
+            {
+
+                StudentCourse studentCourse;
+                foreach (var course in allCourses)
+                {
+                    studentCourse = course.studentCourses.FirstOrDefault(x => x.StudentId == studentId && course.Id == x.courseId);
+
+                    if (studentCourse != null && course.studentCourses.Any(x => x.courseId == course.Id && x.StudentId == studentId && (x.Course.Deadline >= DateTime.Today.Date || x.Course.Deadline == null)))
+                    {
+
+                        studentCourse.isEnrolled = true;
+                    }
+                    //else
+                    //{
+                    //    studentCourse.isEnrolled = false;
+                    //}
+                }
+            }
+            return allCourses;
+        }
+
+
+        public async Task CreateCourse(Course model)
+        {
+            await dbContext.Set<Course>().AddAsync(model);
+
+        }
+        public async Task updateCourse(Course course)
+        {
+            dbContext.Entry(course).State = EntityState.Modified;
+        }
+
+
+
     }
 }

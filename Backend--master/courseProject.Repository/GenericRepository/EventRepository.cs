@@ -29,5 +29,20 @@ namespace courseProject.Repository.GenericRepository
             return await dbContext.events.Include(e => e.SubAdmin).ThenInclude(s => s.user)
                  .Where(e => e.SubAdminId == subAdminId && e.status.ToLower() == "undefined").ToListAsync();
         }
+
+        public async Task CreateEvent(Event model)
+        {
+            await dbContext.Set<Event>().AddAsync(model);
+        }
+
+
+        public async Task updateEvent(Event model)
+        {
+            dbContext.Update(model);
+        }
+
+
+
+
     }
 }

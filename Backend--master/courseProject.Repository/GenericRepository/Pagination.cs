@@ -25,27 +25,7 @@ namespace courseProject.Repository.GenericRepository
         public bool HasPreviousPage => PageNumber > 1;
         public bool HasNextPage => PageNumber * PageSize < TotalCount;
 
-        // public IReadOnlyList<T> Items { get; }
-
-        //public  Pagination(List<T> items, int pageNumber,int pafeSize, int totalCount)
-        //{
-        //    Items = items;
-        //     PageNumber = pageNumber;
-        //    TotalCount = totalCount;
-        //    PageSize = pafeSize;
-        //}
-        //public Pagination(List<T> items, int pageNumber, int pageSize, int totalCount)
-        //{
-        //    Items = items;
-        //    PageNumber = pageNumber;
-        //    PageSize = pageSize;
-        //    TotalCount = totalCount;
-        //}
-
-        //public IReadOnlyList<T> Items { get; }
-        //public  int PageNumber { get; }
-        //public  int PageSize { get; }
-        //public int TotalCount { get; }
+       
 
         public  Pagination(IReadOnlyList<T> items, int pageNumber, int pageSize, int totalCount , int totalPages)
         {

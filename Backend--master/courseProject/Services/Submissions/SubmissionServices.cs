@@ -30,7 +30,7 @@ namespace courseProject.Services.Submissions
             if (taskFound == null || taskFound.type.ToLower() != "task") return ErrorMaterial.NotFound;
             
             
-            var GetSubmissions = await unitOfWork.instructorRepositpry.GetAllSubmissionsByTaskIdAsync(taskId);
+            var GetSubmissions = await unitOfWork.submissionRepository.GetAllSubmissionsByTaskIdAsync(taskId);
            
             var submissionMapper = mapper.Map<IReadOnlyList<Student_Task_Submissions>, IReadOnlyList<StudentSubmissionDTO>>(GetSubmissions);
           
@@ -60,7 +60,7 @@ namespace courseProject.Services.Submissions
             {
                 student_Task.pdfUrl = "Files\\" + await unitOfWork.FileRepository.UploadFile1(student_Task.pdf);
             }
-            await unitOfWork.StudentRepository.SubmitTaskAsync(student_Task);
+            await unitOfWork.submissionRepository.SubmitTaskAsync(student_Task);
              await unitOfWork.StudentRepository.saveAsync();
             ////if (submissions.pdf != null)
             ////{

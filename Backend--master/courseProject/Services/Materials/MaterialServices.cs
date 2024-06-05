@@ -29,13 +29,13 @@ namespace courseProject.Services.Materials
            var uploadedFileNames=await unitOfWork.FileRepository.UploadFiles(taskDTO.pdf);
             var taskMapped = mapper.Map<TaskDTO, CourseMaterial>(taskDTO);
             taskMapped.type = "Task";            
-            var getcourses = await unitOfWork.instructorRepositpry.GetAllCoursesGivenByInstructorIdAsync(taskDTO.InstructorId);
-            var getConsultations = await unitOfWork.instructorRepositpry.GetAllConsultationRequestByInstructorIdAsync(taskDTO.InstructorId);
+            var getcourses = await unitOfWork.CourseRepository.GetAllCoursesGivenByInstructorIdAsync(taskDTO.InstructorId);
+            var getConsultations = await unitOfWork.RequestRepository.GetAllConsultationRequestByInstructorIdAsync(taskDTO.InstructorId);
             if (!getcourses.Any(x => x.Id == taskDTO.courseId) && !getConsultations.Any(x => x.Id == taskDTO.consultationId))
             {
                 return ErrorUser.Unauthorized;
             }
-            await unitOfWork.instructorRepositpry.AddMaterial(taskMapped);
+            await unitOfWork.materialRepository.AddMaterial(taskMapped);
             var success = await unitOfWork.instructorRepositpry.saveAsync();
             MaterialFiles materialFiles = new MaterialFiles();
             materialFiles.materialId = taskMapped.Id;
@@ -55,12 +55,12 @@ namespace courseProject.Services.Materials
             var uploadedFileNames = await unitOfWork.FileRepository.UploadFiles(fileDTO.pdf);
             var fileMapped = mapper.Map<FileDTO, CourseMaterial>(fileDTO);
             fileMapped.type = "File";
-            var getcourses = await unitOfWork.instructorRepositpry.GetAllCoursesGivenByInstructorIdAsync(fileDTO.InstructorId);
-            var getConsultations = await unitOfWork.instructorRepositpry.GetAllConsultationRequestByInstructorIdAsync(fileDTO.InstructorId);
+            var getcourses = await unitOfWork.CourseRepository.GetAllCoursesGivenByInstructorIdAsync(fileDTO.InstructorId);
+            var getConsultations = await unitOfWork.RequestRepository.GetAllConsultationRequestByInstructorIdAsync(fileDTO.InstructorId);
             if (!getcourses.Any(x => x.Id == fileDTO.courseId) && !getConsultations.Any(x => x.Id == fileDTO.consultationId))
                 return ErrorUser.Unauthorized;
    
-            await unitOfWork.instructorRepositpry.AddMaterial(fileMapped);
+            await unitOfWork.materialRepository.AddMaterial(fileMapped);
             var success = await unitOfWork.instructorRepositpry.saveAsync();
             MaterialFiles materialFiles = new MaterialFiles();
             materialFiles.materialId = fileMapped.Id;
@@ -77,11 +77,11 @@ namespace courseProject.Services.Materials
         {
             var AnnouncementMapped = mapper.Map<AnnouncementDTO, CourseMaterial>(AnnouncementDTO);
             AnnouncementMapped.type = "Announcement";
-            var getcourses = await unitOfWork.instructorRepositpry.GetAllCoursesGivenByInstructorIdAsync(AnnouncementDTO.InstructorId);
-            var getConsultations = await unitOfWork.instructorRepositpry.GetAllConsultationRequestByInstructorIdAsync(AnnouncementDTO.InstructorId);
+            var getcourses = await unitOfWork.CourseRepository.GetAllCoursesGivenByInstructorIdAsync(AnnouncementDTO.InstructorId);
+            var getConsultations = await unitOfWork.RequestRepository.GetAllConsultationRequestByInstructorIdAsync(AnnouncementDTO.InstructorId);
             if (!getcourses.Any(x => x.Id == AnnouncementDTO.courseId) && !getConsultations.Any(x => x.Id == AnnouncementDTO.consultationId))
                 return ErrorUser.Unauthorized;
-            await unitOfWork.instructorRepositpry.AddMaterial(AnnouncementMapped);
+            await unitOfWork.materialRepository.AddMaterial(AnnouncementMapped);
             var success = await unitOfWork.instructorRepositpry.saveAsync();
             return Result.Created;
         }
@@ -90,11 +90,11 @@ namespace courseProject.Services.Materials
         {
             var linkMapped = mapper.Map<LinkDTO, CourseMaterial>(linkDTO);
             linkMapped.type = "Link";
-            var getcourses = await unitOfWork.instructorRepositpry.GetAllCoursesGivenByInstructorIdAsync(linkDTO.InstructorId);
-            var getConsultations = await unitOfWork.instructorRepositpry.GetAllConsultationRequestByInstructorIdAsync(linkDTO.InstructorId);
+            var getcourses = await unitOfWork.CourseRepository.GetAllCoursesGivenByInstructorIdAsync(linkDTO.InstructorId);
+            var getConsultations = await unitOfWork.RequestRepository.GetAllConsultationRequestByInstructorIdAsync(linkDTO.InstructorId);
             if (!getcourses.Any(x => x.Id == linkDTO.courseId) && !getConsultations.Any(x => x.Id == linkDTO.consultationId))
                 return ErrorUser.Unauthorized;
-            await unitOfWork.instructorRepositpry.AddMaterial(linkMapped);
+            await unitOfWork.materialRepository.AddMaterial(linkMapped);
             var success = await unitOfWork.instructorRepositpry.saveAsync();
             return Result.Created;
         }
@@ -109,7 +109,7 @@ namespace courseProject.Services.Materials
             var Taskmapper = mapper.Map(taskDTO, TaskToUpdate);
             Taskmapper.Id = id;
             Taskmapper.type = "Task";       
-            await unitOfWork.instructorRepositpry.EditMaterial(Taskmapper);
+            await unitOfWork.materialRepository.EditMaterial(Taskmapper);
             var success1 = await unitOfWork.instructorRepositpry.saveAsync();
          
             if (taskDTO.pdf.Any())
@@ -156,7 +156,7 @@ namespace courseProject.Services.Materials
             var filemapper = mapper.Map(fileDTO, FileToUpdate);
             filemapper.Id = id;
             filemapper.type = "File";
-            await unitOfWork.instructorRepositpry.EditMaterial(filemapper);
+            await unitOfWork.materialRepository.EditMaterial(filemapper);
 
             var success1 = await unitOfWork.instructorRepositpry.saveAsync();
 
@@ -191,7 +191,7 @@ namespace courseProject.Services.Materials
             var Announcementmapper = mapper.Map(AnnouncementDTO, AnnouncementToUpdate);
             Announcementmapper.Id = id;
             Announcementmapper.type = "Announcement";
-            await unitOfWork.instructorRepositpry.EditMaterial(Announcementmapper);
+            await unitOfWork.materialRepository.EditMaterial(Announcementmapper);
 
             var success1 = await unitOfWork.instructorRepositpry.saveAsync();
             return Result.Updated;
@@ -207,7 +207,7 @@ namespace courseProject.Services.Materials
             var Linkmapper = mapper.Map(linkDTO, LinkToUpdate);
             Linkmapper.Id = id;
             Linkmapper.type = "Link";
-            await unitOfWork.instructorRepositpry.EditMaterial(Linkmapper);
+            await unitOfWork.materialRepository.EditMaterial(Linkmapper);
 
             var success1 = await unitOfWork.instructorRepositpry.saveAsync();
             return Result.Updated;
@@ -218,7 +218,7 @@ namespace courseProject.Services.Materials
             var materail = await unitOfWork.materialRepository.GetMaterialByIdAsync(id);
             if (materail == null) return ErrorMaterial.NotFound;
             
-            await unitOfWork.instructorRepositpry.DeleteMaterial(id);
+            await unitOfWork.materialRepository.DeleteMaterial(id);
             var success = await unitOfWork.instructorRepositpry.saveAsync();
             return Result.Deleted;
         }
@@ -245,7 +245,7 @@ namespace courseProject.Services.Materials
         {
             var getCourse = await unitOfWork.CourseRepository.GetCourseByIdAsync(courseId);
             if (getCourse == null && courseId!=null) return ErrorCourse.NotFound;
-            var getConsultation = await unitOfWork.StudentRepository.GetConsultationById(consultationId);
+            var getConsultation = await unitOfWork.lecturesRepository.GetConsultationById(consultationId);
             if (getConsultation == null && consultationId!=null) return ErrorLectures.NotFound;
             var AlMaterials = await unitOfWork.materialRepository.GetAllMaterial(courseId , consultationId);
 

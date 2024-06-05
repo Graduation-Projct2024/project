@@ -37,10 +37,10 @@ namespace courseProject.Services.Events
             using (var transaction = await unitOfWork.SubAdminRepository.BeginTransactionAsync())
             {
 
-                await unitOfWork.SubAdminRepository.CreateRequest(request);
+                await unitOfWork.RequestRepository.CreateRequest(request);
                 var success1 = await unitOfWork.StudentRepository.saveAsync();
                 _event.requestId = request.Id;
-                await unitOfWork.SubAdminRepository.CreateEvent(_event);
+                await unitOfWork.eventRepository.CreateEvent(_event);
                 var success2 = await unitOfWork.StudentRepository.saveAsync();
 
                 if (success1 > 0 && success2 > 0)
@@ -64,7 +64,7 @@ namespace courseProject.Services.Events
             patchDocument.Replace(path, Status);
             getEvent.status = Status;
 
-            await unitOfWork.SubAdminRepository.updateEvent(getEvent);
+            await unitOfWork.eventRepository.updateEvent(getEvent);
             await unitOfWork.SubAdminRepository.saveAsync();
             return Result.Updated;
         }
@@ -110,7 +110,7 @@ namespace courseProject.Services.Events
             {
                 getEvent.ImageUrl = "Files\\" + await unitOfWork.FileRepository.UploadFile1(eventForEditDTO.image);
             }
-            await unitOfWork.SubAdminRepository.updateEvent(getEvent);
+            await unitOfWork.eventRepository.updateEvent(getEvent);
             await unitOfWork.CourseRepository.saveAsync() ;
             return Result.Updated;
         

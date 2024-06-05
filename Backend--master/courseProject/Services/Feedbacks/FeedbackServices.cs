@@ -6,6 +6,7 @@ using courseProject.Repository.GenericRepository;
 using courseProject.ServiceErrors;
 using ErrorOr;
 using System.Net;
+using static Microsoft.IO.RecyclableMemoryStreamManager;
 
 namespace courseProject.Services.Feedbacks
 {
@@ -36,7 +37,7 @@ namespace courseProject.Services.Feedbacks
             feddbackMapper.type = "instructor-feedback";
             feddbackMapper.StudentId = studentId;
             feddbackMapper.InstructorId = InstructorId;
-            await unitOfWork.StudentRepository.addFeedbackAsync(feddbackMapper);
+            await unitOfWork.FeedbackRepository.addFeedbackAsync(feddbackMapper);
             var success = await unitOfWork.StudentRepository.saveAsync();
             return Result.Created;
         }
@@ -47,7 +48,7 @@ namespace courseProject.Services.Feedbacks
             var getStudent = await unitOfWork.StudentRepository.getStudentByIdAsync(studentId);
             if (getStudent == null) return ErrorStudent.NotFound;
 
-            var getCourse = await unitOfWork.StudentRepository.GetAllCoursesForStudentAsync(studentId);
+            var getCourse = await unitOfWork.CourseRepository.GetAllCoursesForStudentAsync(studentId);
             if (!getCourse.Any(x => x.courseId == courseId))
                 return ErrorCourse.UnavailableCourse;
 
@@ -55,7 +56,7 @@ namespace courseProject.Services.Feedbacks
             feddbackMapper.type = "course-feedback";
             feddbackMapper.StudentId = studentId;
             feddbackMapper.CourseId = courseId;
-            await unitOfWork.StudentRepository.addFeedbackAsync(feddbackMapper);
+            await unitOfWork.FeedbackRepository.addFeedbackAsync(feddbackMapper);
             var success = await unitOfWork.StudentRepository.saveAsync();
             return Result.Created;
         }
@@ -67,50 +68,82 @@ namespace courseProject.Services.Feedbacks
             var feddbackMapper = mapper.Map<FeedbackDTO, Feedback>(Feedback);
             feddbackMapper.type = "general-feedback";
             feddbackMapper.StudentId = studentId;
-            await unitOfWork.StudentRepository.addFeedbackAsync(feddbackMapper);
+            await unitOfWork.FeedbackRepository.addFeedbackAsync(feddbackMapper);
             await unitOfWork.StudentRepository.saveAsync();
             return Result.Created;
         }
 
         public async Task<IReadOnlyList<FeedbackForRetriveDTO>> GetAllGeneralFeedback()
         {
-            var getFeedback = await unitOfWork.StudentRepository.GetFeedbacksByTypeAsync("general-feedback" );
-          
+            var getFeedback = await unitOfWork.FeedbackRepository.GetFeedbacksByTypeAsync("general-feedback" );
+           
             var feedbackMapper = mapper.Map<IReadOnlyList<Feedback>, IReadOnlyList<FeedbackForRetriveDTO>>(getFeedback);
+            foreach (var feedback in feedbackMapper)
+            {
+                if (feedback.imageUrl != null)
+                {
+                    feedback.imageUrl = await unitOfWork.FileRepository.GetFileUrl(feedback.imageUrl);
+                }
+            }
             return feedbackMapper;
         }
 
         public async Task<IReadOnlyList<FeedbackForRetriveDTO>> GetAllInstructorFeedback(Guid? instructorId)
         {
-            var getFeedback = await unitOfWork.StudentRepository.GetFeedbacksByTypeAsync("instructor-feedback",instructorId);
+            var getFeedback = await unitOfWork.FeedbackRepository.GetFeedbacksByTypeAsync("instructor-feedback",instructorId);
            
             var feedbackMapper = mapper.Map<IReadOnlyList<Feedback>, IReadOnlyList<FeedbackForRetriveDTO>>(getFeedback);
+            foreach (var feedback in feedbackMapper)
+            {
+                if (feedback.imageUrl != null)
+                {
+                    feedback.imageUrl = await unitOfWork.FileRepository.GetFileUrl(feedback.imageUrl);
+                }
+            }
             return feedbackMapper;
         }
 
         public async Task<IReadOnlyList<FeedbackForRetriveDTO>> GetAllCourseFeedback(Guid? courseId)
         {
-            var getFeedback = await unitOfWork.StudentRepository.GetFeedbacksByTypeAsync("course-feedback" ,null, courseId);
+            var getFeedback = await unitOfWork.FeedbackRepository.GetFeedbacksByTypeAsync("course-feedback" ,null, courseId);
             
             var feedbackMapper = mapper.Map<IReadOnlyList<Feedback>, IReadOnlyList<FeedbackForRetriveDTO>>(getFeedback);
+            foreach (var feedback in feedbackMapper)
+            {
+                if (feedback.imageUrl != null)
+                {
+                    feedback.imageUrl = await unitOfWork.FileRepository.GetFileUrl(feedback.imageUrl);
+                }
+            }
             return feedbackMapper;
         }
 
         public async Task<IReadOnlyList<AllFeedbackForRetriveDTO>> GetAllFeedback()
         {
-            var getFeedback = await unitOfWork.StudentRepository.GetAllFeedbacksAsync();
+            var getFeedback = await unitOfWork.FeedbackRepository.GetAllFeedbacksAsync();
           
             var feedbackMapper = mapper.Map<IReadOnlyList<Feedback>, IReadOnlyList<AllFeedbackForRetriveDTO>>(getFeedback);
+            foreach (var feedback in feedbackMapper)
+            {
+                if (feedback.imageUrl != null)
+                {
+                    feedback.imageUrl = await unitOfWork.FileRepository.GetFileUrl(feedback.imageUrl);
+                }
+            }
             return feedbackMapper;
         }
 
         public async Task<ErrorOr<FeedbackForRetriveDTO>> GetFeedbackById(Guid id)
         {
-            var getFeedbacks = await unitOfWork.StudentRepository.GetAllFeedbacksAsync();
+            var getFeedbacks = await unitOfWork.FeedbackRepository.GetAllFeedbacksAsync();
             if (!getFeedbacks.Any(x => x.Id == id)) return ErrorFeedback.NotFound;
             
-            var getAFeedback = await unitOfWork.StudentRepository.GetFeedbackByIdAsync(id);
+            var getAFeedback = await unitOfWork.FeedbackRepository.GetFeedbackByIdAsync(id);
             var feedbackMapper = mapper.Map<Feedback, FeedbackForRetriveDTO>(getAFeedback);
+            if (feedbackMapper.imageUrl != null)
+            {
+                feedbackMapper.imageUrl = await unitOfWork.FileRepository.GetFileUrl(feedbackMapper.imageUrl);
+            }
             return feedbackMapper;        
     }
 

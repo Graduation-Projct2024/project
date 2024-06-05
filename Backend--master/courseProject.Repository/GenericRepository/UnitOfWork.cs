@@ -33,6 +33,12 @@ namespace courseProject.Repository.GenericRepository
             CourseRepository = new CourseRepository(dbContext);
             materialRepository = new MaterialRepository(dbContext);
             eventRepository = new EventRepository(dbContext);
+            FeedbackRepository = new FeedbackRepository(dbContext);
+            lecturesRepository = new LecturesRepository(dbContext);
+            RequestRepository = new RequestRepository(dbContext);
+            skillRepository= new SkillRepository(dbContext);
+            studentCourseRepository = new StudentCourseRepository(dbContext);
+            submissionRepository = new SubmissionRepository(dbContext);
      //       EmailService = new SmtpEmailService(configuration);
 
         }
@@ -47,6 +53,12 @@ namespace courseProject.Repository.GenericRepository
         public IMaterialRepository materialRepository { get; set ; }
         public IEventRepository eventRepository { get; set ; }
         public IEmailService EmailService { get; set; }
+        public IFeedbackRepository FeedbackRepository { get; set ; }
+        public ILecturesRepository lecturesRepository { get; set ; }
+        public IRequestRepository RequestRepository { get; set ; }
+        public ISkillRepository skillRepository { get; set ; }
+        public IStudentCourseRepository studentCourseRepository { get; set ; }
+        public ISubmissionRepository submissionRepository { get; set ; }
         //  Core.IGenericRepository.ICourseRepository<Course> IUnitOfWork.CourseRepository { get ; set; }
     }
 }

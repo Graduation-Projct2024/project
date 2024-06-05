@@ -23,7 +23,7 @@ namespace courseProject.Services.Requests
 
         public async Task<IReadOnlyList<ViewTheRequestOfJoindCourseDTO>> GetAllRequestToJoinCourses()
         {
-            var getRequests = await unitOfWork.SubAdminRepository.getAllRequestToJoindCourseAsync();
+            var getRequests = await unitOfWork.RequestRepository.getAllRequestToJoindCourseAsync();
            
             var requestMapper = mapper.Map<IReadOnlyList<StudentCourse>, IReadOnlyList<ViewTheRequestOfJoindCourseDTO>>(getRequests);
             return requestMapper;
@@ -38,7 +38,7 @@ namespace courseProject.Services.Requests
             customCourseMapper.satus = "custom-course";
             customCourseMapper.StudentId = studentid;
           
-            await unitOfWork.SubAdminRepository.CreateRequest(customCourseMapper);
+            await unitOfWork.RequestRepository.CreateRequest(customCourseMapper);
             await unitOfWork.CourseRepository.saveAsync();
             return Result.Created;
         }

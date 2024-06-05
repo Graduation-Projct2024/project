@@ -97,18 +97,6 @@ namespace courseProject.Repository.GenericRepository
         }
 
 
-        //public async Task<IReadOnlyList<T>> GetAllEmployeeForContactAsync()
-        //{
-        //    if (typeof(T) == typeof(Instructor))
-        //    {
-        //        return (IReadOnlyList<T>)await dbContext.instructors.Include(x => x.user).ToListAsync();
-        //    }
-        //    else if (typeof(T) == typeof(SubAdmin))
-        //    {
-        //        return (IReadOnlyList<T>) await dbContext.subadmins.Include(x=>x.user).ToListAsync();
-        //    }
-        //    return await dbContext.Set<T>().ToListAsync();
-        //}
 
 
         public async Task<IReadOnlyList<T>> GetAllCoursesForAccreditAsync()
