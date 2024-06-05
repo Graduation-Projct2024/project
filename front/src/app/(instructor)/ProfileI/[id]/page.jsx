@@ -160,6 +160,7 @@ const handleCloseUpdate = () => {
                   fullScreen={fullScreen}
                   open={openChange}
                   onClose={handleCloseChange}
+                  className='z-3'
                   aria-labelledby="responsive-dialog-title"
                   sx={{
                     "& .MuiDialog-container": {

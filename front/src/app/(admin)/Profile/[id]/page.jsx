@@ -173,6 +173,7 @@ setOpenChange(false);
                   open={openChange}
                   onClose={handleCloseChange}
                   aria-labelledby="responsive-dialog-title"
+                  className='z-3'
                   sx={{
                     "& .MuiDialog-container": {
                       "& .MuiPaper-root": {
@@ -204,7 +205,7 @@ setOpenChange(false);
                       Cancle
                     </Button>
                   </DialogActions>
-                </Dialog>
+                </Dialog >
 
                 
               </div>

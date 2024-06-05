@@ -192,10 +192,11 @@ export default function Navbar({role}) {
               <Button
                 key={page}
                 // onClick={handleCloseNavMenu}
-                onClick={() => router.push(`/${page}`)}
+                onClick={() => router.push(`/${page}`,undefined, { shallow: true })}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
-                 {/* <Link href={`/${page}`} color="inherit" underline='none' >{page}</Link> */}
+                 {/* <Link href=
+                 {`/${page}`} color="inherit" underline='none' >{page}</Link> */}
                 {page}
               </Button>
             ))}

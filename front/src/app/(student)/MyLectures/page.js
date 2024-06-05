@@ -51,7 +51,7 @@ export default function page() {
           `https://localhost:7116/api/Lectures/GetAllConsultations?studentId=${userId}&pageNumber=${pageNum}&pageSize=${pageSizeNum}`,
           { headers: { Authorization: `Bearer ${userToken}` } }
         );
-        console.log(response);
+        console.log(response.data);
         setLectures(response.data.result.items);
         setTotalPages(response.data.result.totalPages);
       } catch (error) {
@@ -104,8 +104,8 @@ export default function page() {
         </Select>
       </FormControl>
     </Stack>
-      <TableContainer component={Paper} sx={{ width: '90%', mt: 5 }}>
-        <Table sx={{ minWidth: 700 }} aria-label="customized table">
+      <TableContainer component={Paper} sx={{ width: '90%', mt: 5 }} className=''>
+        <Table sx={{ minWidth: 700 }} aria-label="customized table" className=''>
           <TableHead>
             <TableRow>
               <StyledTableCell>Lecture title</StyledTableCell>
@@ -132,7 +132,7 @@ export default function page() {
           </TableBody>
         </Table>
       </TableContainer>
-      <Stack spacing={2} sx={{ width: '100%', maxWidth: 500, margin: '0 auto' }}>
+      <Stack spacing={2} sx={{ width: '100%', maxWidth: 500, margin: '0 auto' }} className='pt-5'>
         <Pagination
           className="pb-3"
           count={totalPages}
