@@ -21,7 +21,9 @@ namespace courseProject.Repository.GenericRepository
 
         public async Task<Event> GetEventByIdAsync(Guid eventId)
         {
-            return await dbContext.events.FirstOrDefaultAsync(x => x.Id == eventId);
+            return await dbContext.events
+                .Include(x=>x.SubAdmin) .ThenInclude(x=>x.user)
+                .FirstOrDefaultAsync(x => x.Id == eventId);
         }
 
         public async Task<IReadOnlyList<Event>> GetAllUndefindEventBySubAdminIdAsync(Guid subAdminId)

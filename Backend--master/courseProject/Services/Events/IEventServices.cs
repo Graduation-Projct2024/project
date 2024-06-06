@@ -12,5 +12,6 @@ namespace courseProject.Services.Events
         public Task<IReadOnlyList<EventAccreditDto>> GetAllEventsToAccreditByAdmin();
         public Task<IReadOnlyList<EventAccreditDto>> GetAllUndefinedEvents(Guid subAdminId);
         public Task<ErrorOr<Updated>> EditEvent(Guid eventId , EventForEditDTO eventForEditDTO);
+        public Task<ErrorOr<EventDto>> GetEventById(Guid eventId);
     }
 }
