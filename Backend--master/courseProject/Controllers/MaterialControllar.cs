@@ -206,11 +206,11 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "InstructorwhoGiveTheMaterial")]
-        public async Task<IActionResult> HideOrShowMaterials(Guid materialId , bool isHidden)
+        public async Task<IActionResult> HideOrShowMaterials(Guid Id, bool isHidden)
         {
-            var statusMaterial = await materialServices.changeMaterialStatus(materialId , isHidden);
-            if (statusMaterial.IsError) return NotFound(new ApiResponce { ErrorMassages=statusMaterial.FirstError.Description});
-            return Ok(new ApiResponce { Result="The status of material is changed successfully"});
+            var statusMaterial = await materialServices.changeMaterialStatus(Id, isHidden);
+            if (statusMaterial.IsError) return NotFound(new ApiResponce { ErrorMassages = statusMaterial.FirstError.Description });
+            return Ok(new ApiResponce { Result = "The status of material is changed successfully" });
         }
 
 
