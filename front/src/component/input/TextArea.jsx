@@ -3,7 +3,7 @@ import TextField from '@mui/material/TextField';
 
 export default function TextArea({type='text',name,id,value,title,onChange,errors,onBlur,touched,fullWidth}) {
   return (
-        <div className="form-floating my-3">
+        <div className="form-floating my-3 w-100">
         <TextField
           id={id}
           label={title}

@@ -205,9 +205,9 @@ const renderInputs =  inputs.slice(0, -1).map((input,index)=>
     );
   return (
     <form onSubmit={formik.handleSubmit} encType="multipart/form-data" >
-      <div className="row justify-content-center">
+      <div className="row justify-content-center align-items-center">
           {renderInputs}
-          <div className="col-md-6">
+          <div className="col-md-10">
         <select
           className="form-select p-3 primaryColor"
           aria-label="Default select example"
@@ -227,6 +227,8 @@ const renderInputs =  inputs.slice(0, -1).map((input,index)=>
         </select>
       </div> 
         {textAraeInput}
+      
+        
         
       </div>
       

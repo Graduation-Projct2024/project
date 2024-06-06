@@ -23,7 +23,7 @@ export default function AccreditCourses() {
     if(userData){
     try{
     const { data } = await axios.get(`https://localhost:7116/api/CourseContraller/GetAllCoursesForAccredit?pageNumber=${pageNum}&pageSize=${pageSize}`);
-    console.log(data);
+    // console.log(data);
     setAccreditCourses(data.result.items);
     setTotalPages(data.result.totalPages);
   }
@@ -64,14 +64,14 @@ export default function AccreditCourses() {
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
-            const { data } = await axios.patch(`https://localhost:7116/api/CourseContraller/accreditCourse?courseId=${courseId}&Status=${Status}`, {},
+            const { data } = await axios.patch(`https://localhost:7116/api/CourseContraller/accreditCourse?courseId=${courseId}`, {Status},
               {
                 headers: {
                   Authorization: `Bearer ${userToken}`,
                 },
               });
   
-            // console.log(data, status);
+            console.log(data);
             if (Status == "accredit") {
               Swal.fire({
                 title: `Course Accredit Successully`,
@@ -189,6 +189,7 @@ const filteredAccreditCourses = Array.isArray(accreditCourses) ? accreditCourses
             <th scope="col">Instructor</th>
             <th scope="col">SubAdmin</th>
             <th scope="col">Hours</th>
+            <th scope='col'>Det.</th>
             <th scope="col">Action</th>
           </tr>
         </thead>
@@ -206,6 +207,16 @@ const filteredAccreditCourses = Array.isArray(accreditCourses) ? accreditCourses
                 <td>{course.instructorFName} {course.instructorLName}</td>
                 <td>{course.subAdminFName} {course.subAdminLName}</td>
                 <td>{course.totalHours}</td>
+                <td>
+                <Link href={`CourseDetails/${course.id}`}>
+                    <button
+                      type="button"
+                      className="edit-pen border-0 bg-white "
+                    >
+                      <FontAwesomeIcon icon={faEye} />
+                    </button>
+                  </Link>
+                </td>
                 <td className="d-flex gap-1">
                   {/* <Link href={"/Profile"}>
                     <button type="button" className="border-0 bg-white ">

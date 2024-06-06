@@ -169,7 +169,7 @@ export default function EditCourse({courseId , startDate , Deadline , Instructor
     <form onSubmit={formik.handleSubmit} encType="multipart/form-data" >
       
       <div className="row justify-content-center">
-        <div className="col-md-6 pb-4">
+        <div className="col-md-10 pb-4">
             <select
           className="form-select p-3"
           aria-label="Default select example"

@@ -1,21 +1,20 @@
-'use client'
-import axios from 'axios';
+import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
-import './AllCourses.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
-import Link from 'next/link';
 import { Button } from '@mui/material';
-import { useRouter } from 'next/navigation';
+import axios from 'axios';
+import Link from 'next/link';
 
-export default function AllCourses() {
+
+export default function CoursesSection() {
     const [courses, setCourses] = useState([]);
     const router = useRouter()
 
     const fetchCourses = async () => {
         try {
           const { data } = await axios.get(
-            `https://localhost:7116/api/CourseContraller/GetAllAccreditCourses?pageNumber=1&pageSize=100`
+            `https://localhost:7116/api/CourseContraller/GetAllAccreditCourses?pageNumber=1&pageSize=3`
           );
           console.log(data);
           setCourses(data.result.items);
@@ -30,6 +29,7 @@ export default function AllCourses() {
     }, []);
   return (
     <>
+    <div className="CourseSection py-3">
         <div className="container">
         <div className="pageTitle text-center py-5">
         <h2 className='coursesPageTitle'>Courses in academy</h2>
@@ -39,7 +39,7 @@ export default function AllCourses() {
             </p>
         </div>
       </div>
-          <div className="row justify-content-center align-items-center">
+          <div className="row">
           {courses.length ? (
             courses.map((course) => (
               <div className="col-lg-4 col-md-6 col-sm-12 pb-4" key={course.id}>
@@ -80,7 +80,14 @@ export default function AllCourses() {
           )}
             
           </div>
+          <div className='text-center mt-3 py-5'>
+
+          <Link href={'/AllCourses'} className='btn ViewAllCourses '>
+                View All courses
+          </Link>
+          </div>
            
+        </div>
         </div>
     </>
   )
