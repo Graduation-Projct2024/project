@@ -15,7 +15,7 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import Link from '@mui/material/Link';
 import { useRouter } from 'next/navigation'
-const pages = ['About','AllCourses', 'Contact', 'FAQ'];
+const pages = ['About', 'ContactUs', 'FAQ', 'AllCourses', 'AllEvents'];
 const settings = ['Login', 'Register'];
 import './navbar.css'
 import { UserContext } from '@/context/user/User';
