@@ -8,6 +8,7 @@ using ErrorOr;
 using Microsoft.AspNetCore.JsonPatch;
 using System.Linq.Expressions;
 using System.Net;
+using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 
 namespace courseProject.Services.Events
 {
@@ -26,54 +27,80 @@ namespace courseProject.Services.Events
 
         public async Task<ErrorOr<Created>> CreateEvent(Event _event, Request request)
         {
-            
+            // Check if the SubAdmin exists
             var SubAdminFound = await unitOfWork.UserRepository.ViewProfileAsync(_event.SubAdminId, "subadmin");
             if (SubAdminFound == null) return ErrorSubAdmin.NotFound;
-           
+
+            // Upload event image if provided
             if (_event.image != null)
             {
                 _event.ImageUrl = "Files\\" + await unitOfWork.FileRepository.UploadFile1(_event.image);
             }
+
+            // Begin a transaction
             using (var transaction = await unitOfWork.SubAdminRepository.BeginTransactionAsync())
             {
 
+                // Create the request
                 await unitOfWork.RequestRepository.CreateRequest(request);
+
+                // Save changes to the database
                 var success1 = await unitOfWork.StudentRepository.saveAsync();
+
+                // Set the request ID for the event
                 _event.requestId = request.Id;
+
+                // Create the event
                 await unitOfWork.eventRepository.CreateEvent(_event);
                 var success2 = await unitOfWork.StudentRepository.saveAsync();
 
+                // Commit the transaction if both operations are successful
                 if (success1 > 0 && success2 > 0)
                 {
                     await transaction.CommitAsync();
                     return Result.Created;
                 }
 
+                // Return an error if any operation fails
                 return ErrorEvent.hasError;
 
             }
         }
 
+
+        //change the status of event from undefined to accredit or reject
         public async Task<ErrorOr<Updated>> accreditEvent(Guid eventId, string Status)
         {
+            // Get the event by ID
             var getEvent = await unitOfWork.eventRepository.GetEventByIdAsync(eventId);
             if (getEvent == null) return ErrorEvent.NotFound;
 
+            // Define the property to update and create a JsonPatchDocument to replace the value
             Expression<Func<Course, string>> path = x => x.status;
             var patchDocument = new JsonPatchDocument<Course>();
             patchDocument.Replace(path, Status);
+
+            // Update the event status
             getEvent.status = Status;
 
+            // Update the event in the repository
             await unitOfWork.eventRepository.updateEvent(getEvent);
+            // Save changes to the database
             await unitOfWork.SubAdminRepository.saveAsync();
+            // Return a success message
             return Result.Updated;
         }
 
+
+        // Retrieves all accredited events based on the provided date status.
         public async Task<IReadOnlyList<EventDto>> GetAllAccreditEvents(string? dateStatus)
         {
             var events = await unitOfWork.eventRepository.GetAllEventsAsync(dateStatus);
-            
+
+            // Order events by date of addition
             events = events.OrderByDescending(x => x.dateOfAdded).ToList();
+
+            // Update image URLs if they exist
             foreach (var _event in events)
             {
                 if (_event.ImageUrl != null)
@@ -85,6 +112,8 @@ namespace courseProject.Services.Events
             return mapperEvent;
         }
 
+
+        // Retrieves all events for accreditation by an admin.
         public async Task<IReadOnlyList<EventAccreditDto>> GetAllEventsToAccreditByAdmin()
         {
             var events = await unitOfWork.eventRepository.GetAllEventsForAccreditAsync();
@@ -104,17 +133,31 @@ namespace courseProject.Services.Events
 
             var getEvent = await unitOfWork.eventRepository.GetEventByIdAsync(eventId);
             if (getEvent == null) return ErrorEvent.NotFound;
-            
+
             mapper.Map(eventForEditDTO, getEvent);
             if (eventForEditDTO.image != null)
             {
                 getEvent.ImageUrl = "Files\\" + await unitOfWork.FileRepository.UploadFile1(eventForEditDTO.image);
             }
             await unitOfWork.eventRepository.updateEvent(getEvent);
-            await unitOfWork.CourseRepository.saveAsync() ;
+            await unitOfWork.CourseRepository.saveAsync();
             return Result.Updated;
-        
 
+        }
+
+
+       // Retrieves an event by its ID .
+        public async Task<ErrorOr<EventDto>> GetEventById(Guid eventId)
+        {
+            var getEvent = await unitOfWork.eventRepository.GetEventByIdAsync(eventId);
+            if(getEvent==null) return ErrorEvent.NotFound;
+
+            var eventMapper = mapper.Map<Event , EventDto>(getEvent);
+            if (eventMapper.ImageUrl != null)
+            {
+                eventMapper.ImageUrl = await unitOfWork.FileRepository.GetFileUrl(eventMapper.ImageUrl);
+            }
+            return eventMapper;
+        }
     }
-}
 }

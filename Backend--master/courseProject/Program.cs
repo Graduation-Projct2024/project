@@ -62,7 +62,7 @@ namespace courseProject
                    .AddInfrastucture(builder.Configuration)
                    .AddAuthenticationAndAuthorization(builder.Configuration);
 
-
+            builder.Services.AddHostedService<DailyCheckBackgroundService>();
             //builder.Services.AddSingleton<IHostedService, CourseStatusUpdater>();
 
             //builder.Services.AddHostedService<CourseStatusUpdater>();
