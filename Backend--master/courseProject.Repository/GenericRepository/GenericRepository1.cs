@@ -54,14 +54,14 @@ namespace courseProject.Repository.GenericRepository
             return await dbContext.Set<T>().ToListAsync();
         }
 
-        //edit status from On to Accredit 
+        // Retrieve all courses with specific statuses : accredit , start or finish (A_S_F)
         public async Task<IReadOnlyList<T>> GetAllCoursesAsync()
         {
             if (typeof(T) == typeof(Course))
             {
                 
                 return (IReadOnlyList<T>) await dbContext.courses
-                    .Where(x=>x.status== "accredit")
+                    .Where(x=>x.status.ToLower()== "accredit" || x.status.ToLower()=="start" || x.status.ToLower()=="finish")
                     .Include(x=>x.Instructor.user).Include(x=>x.SubAdmin.user).ToListAsync();
             }
             return await dbContext.Set<T>().ToListAsync();

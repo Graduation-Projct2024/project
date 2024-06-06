@@ -34,8 +34,8 @@ namespace courseProject.Configuration
             //  services.AddScoped(typeof(ISubAdminRepository), typeof(SubAdminRepository));
             //  services.AddScoped(typeof(IUserRepository), typeof(UserRepository));
             //  services.AddScoped(typeof(IStudentRepository), typeof(StudentRepository));
-            services.AddAutoMapper(typeof(MappingProfileForStudentsInformation));
-            services.AddAutoMapper(typeof(MappingForCourseInformation));
+            services.AddAutoMapper(typeof(MappingForStudents));
+            services.AddAutoMapper(typeof(MappingForCourse));
             services.AddAutoMapper(typeof(MappingForEmployee));
             services.AddAutoMapper(typeof(MappingForEvents));
 

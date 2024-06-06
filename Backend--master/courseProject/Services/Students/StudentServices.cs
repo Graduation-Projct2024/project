@@ -39,17 +39,17 @@ namespace courseProject.Services.Students
             return mappedStudentDTO;
         }
 
-        public async Task<IReadOnlyList<ContactDto>> GetAllStudentsForContact()
-        {
-            var students = await unitOfWork.StudentRepository.GetAllStudentsForContactAsync();           
-            var mapperStudents = mapper.Map<IReadOnlyList<Student>, IReadOnlyList<ContactDto>>(students);
-            var updatedStudents = mapperStudents.Select(model =>
-            {
-                model.ImageUrl = $"http://localhost:5134/{model.ImageUrl}";
-                return model;
-            }).ToList();
-           return updatedStudents;
-        }
+        //public async Task<IReadOnlyList<ContactDto>> GetAllStudentsForContact()
+        //{
+        //    var students = await unitOfWork.StudentRepository.GetAllStudentsForContactAsync();           
+        //    var mapperStudents = mapper.Map<IReadOnlyList<Student>, IReadOnlyList<ContactDto>>(students);
+        //    var updatedStudents = mapperStudents.Select(model =>
+        //    {
+        //        model.ImageUrl = $"http://localhost:5134/{model.ImageUrl}";
+        //        return model;
+        //    }).ToList();
+        //   return updatedStudents;
+        //}
 
         public async Task<ErrorOr<IReadOnlyList<StudentsInformationDto>>> GetCourseParticipants(Guid courseId)
         {

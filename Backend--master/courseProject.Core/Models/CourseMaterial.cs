@@ -25,6 +25,7 @@ namespace courseProject.Core.Models
 
         //  public DateTime? date { get; set; } = DateOnly.MinValue;
         public string? linkUrl { get; set; }
+        public bool isHidden {  get; set; }
 
         [ForeignKey("Instructor")]
         public Guid InstructorId {  get; set; }

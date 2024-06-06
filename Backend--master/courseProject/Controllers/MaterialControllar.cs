@@ -194,14 +194,24 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "EnrolledInCourse")]
-        public async Task<IActionResult> GetAllMaterialInTheCourseAsync( Guid? CourseId  , Guid? ConsultationId)
+        public async Task<IActionResult> GetAllMaterialInTheCourseToStudentAsync( Guid? CourseId  , Guid? ConsultationId ,[FromQuery] UserTypeDTO userTypeDTO)
         {
-            var AllMaterials = await materialServices.GetAllMaterialInTheCourse(CourseId , ConsultationId);
+            var AllMaterials = await materialServices.GetAllMaterialInTheCourse(CourseId , ConsultationId , userTypeDTO.userType);
             if (AllMaterials.IsError) return NotFound(new ApiResponce { ErrorMassages=AllMaterials.FirstError.Description});
             return Ok(new ApiResponce { Result = AllMaterials.Value });
         }
 
-
+        [HttpPatch("HideOrShowMaterials")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        [Authorize(Policy = "InstructorwhoGiveTheMaterial")]
+        public async Task<IActionResult> HideOrShowMaterials(Guid materialId , bool isHidden)
+        {
+            var statusMaterial = await materialServices.changeMaterialStatus(materialId , isHidden);
+            if (statusMaterial.IsError) return NotFound(new ApiResponce { ErrorMassages=statusMaterial.FirstError.Description});
+            return Ok(new ApiResponce { Result="The status of material is changed successfully"});
+        }
 
 
         //[HttpDelete("DeleteMaterialFiles")]

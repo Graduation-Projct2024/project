@@ -27,9 +27,18 @@ namespace courseProject.Repository.GenericRepository
             
         }
 
-        public async Task<IReadOnlyList<CourseMaterial>> GetAllMaterial(Guid? Courseid, Guid? consultationId)
+        public async Task<IReadOnlyList<CourseMaterial>> GetAllMaterial(Guid? Courseid, Guid? consultationId ,string userType)
         {
-            return await dbContext.courseMaterials.Include(x=>x.MaterialFiles).Where(x => x.courseId == Courseid || x.consultationId == consultationId).ToListAsync();
+            IReadOnlyList<CourseMaterial>? materials = null;
+            if (userType.ToLower() == "student")
+            {
+                materials = await dbContext.courseMaterials.Include(x => x.MaterialFiles).Where(x => (x.courseId == Courseid || x.consultationId == consultationId) && x.isHidden == false).ToListAsync();
+            }
+            else if (userType.ToLower() == "instructor")
+            {
+                materials = await dbContext.courseMaterials.Include(x => x.MaterialFiles).Where(x => (x.courseId == Courseid || x.consultationId == consultationId) ).ToListAsync();
+            }
+            return materials;
         }
 
         public async Task<IEnumerable<CourseMaterial>> GetAllMaterialInSameCourse(Guid courseId)

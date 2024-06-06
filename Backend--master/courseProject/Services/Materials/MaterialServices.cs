@@ -241,13 +241,13 @@ namespace courseProject.Services.Materials
             return material;           
         }
 
-        public async Task<ErrorOr<ArrayList>> GetAllMaterialInTheCourse(Guid? courseId , Guid? consultationId)
+        public async Task<ErrorOr<ArrayList>> GetAllMaterialInTheCourse(Guid? courseId , Guid? consultationId , string userType)
         {
             var getCourse = await unitOfWork.CourseRepository.GetCourseByIdAsync(courseId);
             if (getCourse == null && courseId!=null) return ErrorCourse.NotFound;
             var getConsultation = await unitOfWork.lecturesRepository.GetConsultationById(consultationId);
             if (getConsultation == null && consultationId!=null) return ErrorLectures.NotFound;
-            var AlMaterials = await unitOfWork.materialRepository.GetAllMaterial(courseId , consultationId);
+            var AlMaterials = await unitOfWork.materialRepository.GetAllMaterial(courseId , consultationId , userType);
 
             ArrayList arrayList = new ArrayList();
 
@@ -279,6 +279,17 @@ namespace courseProject.Services.Materials
 
             }
             return Result.Deleted;
+        }
+
+        public async Task<ErrorOr<Updated>> changeMaterialStatus(Guid materialId, bool isHidden)
+        {
+            var getmaterial = await unitOfWork.materialRepository.GetMaterialByIdAsync(materialId);
+            if (getmaterial == null) return ErrorMaterial.NotFound;
+
+            getmaterial.isHidden = isHidden;
+            await unitOfWork.materialRepository.EditMaterial(getmaterial);
+            await unitOfWork.materialRepository.saveAsync();
+            return Result.Updated;
         }
     }
 }
