@@ -39,6 +39,7 @@ namespace courseProject.Repository.GenericRepository
             skillRepository= new SkillRepository(dbContext);
             studentCourseRepository = new StudentCourseRepository(dbContext);
             submissionRepository = new SubmissionRepository(dbContext);
+            contactRepository = new ContactRepository(dbContext);
      //       EmailService = new SmtpEmailService(configuration);
 
         }
@@ -59,6 +60,7 @@ namespace courseProject.Repository.GenericRepository
         public ISkillRepository skillRepository { get; set ; }
         public IStudentCourseRepository studentCourseRepository { get; set ; }
         public ISubmissionRepository submissionRepository { get; set ; }
+        public IContactRepository contactRepository { get; set ; }
         //  Core.IGenericRepository.ICourseRepository<Course> IUnitOfWork.CourseRepository { get ; set; }
     }
 }

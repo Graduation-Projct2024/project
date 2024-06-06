@@ -12,7 +12,7 @@ namespace courseProject.Core.IGenericRepository
     public interface IGenericRepository1<T> where T : class
     {
 
-        public  void DetachEntity(T entity);
+      
         Task<IReadOnlyList<T>> GetAllStudentsAsync();
         Task<IReadOnlyList<T>> GetAllEmployeeAsync();
         Task<IReadOnlyList<T>> GetAllCoursesAsync();

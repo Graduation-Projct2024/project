@@ -26,6 +26,7 @@ namespace courseProject.Core.IGenericRepository
         public ISkillRepository skillRepository { get; set; }
         public IStudentCourseRepository studentCourseRepository { get; set; }
         public ISubmissionRepository submissionRepository { get; set; }
+        public IContactRepository contactRepository { get; set; }
 
 
     }
