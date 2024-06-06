@@ -16,6 +16,7 @@ export default function UserContextProvider({children}){
     const getUserID= async() =>{
         if(userToken){
             const {data} = await axios.get(`https://localhost:7116/api/UserAuth/GetUserIdFromToken`,
+         
             {headers :{Authorization:`Bearer ${userToken}`}})
             if(data!=null){
             setUserId(data);
