@@ -53,7 +53,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         
-        //get all accredits courses
+        //get all accredits courses , whit status = accredit , start or finish
         public async Task<IActionResult> GetAllCoursesAsync([FromQuery] PaginationRequest paginationRequest)
         {
             var getCourses = await courseServices.GetAllCourses();
@@ -62,13 +62,26 @@ namespace courseProject.Controllers
             return Ok(responce);
         }
 
+
+
+        /// <summary>
+        /// Retrieves all courses available for a student to enroll in, including courses the student is already enrolled in.
+        /// </summary>
+        /// <param name="studentId">The ID of the student.</param>
+        /// <param name="paginationRequest">Pagination parameters for the course list.</param>
+        /// <returns>
+        /// An IActionResult containing a paginated list of courses available for the student.
+        /// </returns>
+        /// <response code="200">Returns the paginated list of courses.</response>
+        /// <response code="404">If the requested resource is not found.</response>
+        /// <response code="400">If the request is invalid.</response>
         [HttpGet("GetAllCoursesToStudent")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "Student")]
 
-        //this is to retrive all courses to students to enroll in
+        //this is to retrive all courses to students to enroll in, and another course that he is already enroll in it 
         public async Task<IActionResult> GetAllCoursesToStudent(Guid studentId, [FromQuery] PaginationRequest paginationRequest)
         {
 
@@ -83,7 +96,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
 
-        //get all courses
+        //get all courses , with all status 
         public async Task<IActionResult> GetAllCoursesForAccreditAsync([FromQuery] PaginationRequest paginationRequest)
         {
             var courses = await courseServices.GetAllCoursesForAccreditAsync();
@@ -127,7 +140,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(400)]
         [Authorize(Policy = "Admin")]
 
-        // this to change the status of courses to reject or accredit
+        // this to change the status of courses to reject , accredit , finish , start
         public async Task<IActionResult> EditCourseStatus(Guid courseId, CourseStatusDTO courseStatus)
         {
             var updateStatus = await courseServices.accreditCourse(courseId, courseStatus.Status);
@@ -142,11 +155,13 @@ namespace courseProject.Controllers
         }
 
 
+        // after accredit the course , the admin only can edit in the course
         [HttpPut("EditOnCourseAfterAccredit")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "Admin")]
+        
         public async Task<IActionResult> EditOnCourseAfterAccreditByAdmin(Guid courseId, [FromForm] EditCourseAfterAccreditDTO editedCourse)
         {
 
@@ -212,6 +227,8 @@ namespace courseProject.Controllers
                 return Ok(new ApiResponce { Result = (Pagination<CourseInformationDto>.CreateAsync(mapperCourse, paginationRequest.pageNumber, paginationRequest.pageSize)).Result });                          
         }
 
+
+        
         [HttpGet("GetAllCoursesGivenByInstructor")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]

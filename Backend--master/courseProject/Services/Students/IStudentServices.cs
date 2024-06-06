@@ -9,7 +9,7 @@ namespace courseProject.Services.Students
     {
 
         public Task<IReadOnlyList<StudentsInformationDto>> GetAllStudents();
-        public Task<IReadOnlyList<ContactDto>> GetAllStudentsForContact();
+      //  public Task<IReadOnlyList<ContactDto>> GetAllStudentsForContact();
         public Task<ErrorOr<IReadOnlyList<StudentsInformationDto>>> GetCourseParticipants(Guid courseId);
 
     }

@@ -11,11 +11,11 @@ using courseProject.Core.Models.DTO.UsersDTO;
 
 namespace courseProject.MappingProfile
 {
-    public class MappingProfileForStudentsInformation: Profile
+    public class MappingForStudents: Profile
     {
       
 
-        public  MappingProfileForStudentsInformation ()
+        public  MappingForStudents ()
         {
                 CreateMap<Student, StudentsInformationDto>()
                     .ForMember(x => x.userName, o => o.MapFrom(y => y.user.userName))
@@ -27,8 +27,7 @@ namespace courseProject.MappingProfile
                     .ForMember(x => x.ImageUrl, o => o.MapFrom(y => $"https://localhost:7116/{y.ImageUrl}"));
 
 
-            CreateMap<RegistrationRequestDTO, Student>();
-               // .ForMember(x=>x.Id , o=>o.MapFrom(y=>y.UserId));
+            CreateMap<RegistrationRequestDTO, Student>();          
             CreateMap<Student, RegistrationRequestDTO>();
 
             CreateMap<RegistrationRequestDTO, Admin>();
@@ -45,30 +44,17 @@ namespace courseProject.MappingProfile
                 .ForMember(x => x.userName, o => o.MapFrom(y => y.Student.user.userName))
                 .ForMember(x => x.LName, o => o.MapFrom(y => y.Student.LName))
                 .ForMember(x => x.email, o => o.MapFrom(y => y.Student.user.email));
-                //.ForMember(x => x.pdfUrl, o =>
-                // {
-                //     o.PreCondition(src => src.pdfUrl != null);
-                //     o.MapFrom(y => unitOfWork.FileRepository.GetFileUrl( y.pdfUrl));
-                // });
+               
 
 
             CreateMap<BookALectureDTO, Consultation>();
-            CreateMap<FeedbackDTO, Feedback>();
-            CreateMap<Feedback, FeedbackForRetriveDTO>()
-                .ForMember(x => x.name, o => o.MapFrom(y => y.User.userName + " " + y.User.student.LName))
-                .ForMember(x => x.imageUrl, o => o.MapFrom(y => y.User.student.ImageUrl));
-
-            CreateMap<Feedback, AllFeedbackForRetriveDTO>()
-                .ForMember(x => x.name, o => o.MapFrom(y => y.User.userName + " " + y.User.student.LName))
-                .ForMember(x => x.imageUrl, o => o.MapFrom(y => y.User.student.ImageUrl));
+           
 
             CreateMap<Consultation, StudentConsultations>()
                 .ForMember(x=>x.consultationId , o=>o.MapFrom(y=>y.Id));
 
             CreateMap<StudentConsultations, PublicLectureForRetriveDTO>()
                 .ForMember(x => x.name, o => o.MapFrom(y => y.consultation.name))
-                //.ForMember(dest => dest.StudentLName, opt => opt.MapFrom(src => new List<string> { src.Student.LName }))
-               // .ForMember(dest => dest.StudentuserName, opt => opt.MapFrom(src => new List<string> { src.Student.user.userName }))
                 .ForMember(x => x.InstructoruserName, o => o.MapFrom(y => y.consultation.instructor.user.userName))
                 .ForMember(x => x.InstructorLName, o => o.MapFrom(y => y.consultation.instructor.LName))
                 .ForMember(x=>x.endTime , o=>o.MapFrom(y=>y.consultation.endTime))

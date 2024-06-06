@@ -28,10 +28,10 @@
             while (!stoppingToken.IsCancellationRequested)
             {
                 // Calculate the delay until the next occurrence of 12:00 AM
-                var now = DateTime.UtcNow;
-                var nextMidnight = now.Date.AddDays(1); // Next day at 00:00
+                var now = DateTime.Now;
+                var nextMidnight = DateTime.Today.AddDays(1); // Next day at 00:00
                 var delay = nextMidnight - now;
-
+                
                 // Delay until the next 12:00 AM
                 await Task.Delay(delay, stoppingToken);
 

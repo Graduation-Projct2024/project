@@ -34,19 +34,19 @@ namespace courseProject.MappingProfile
                 .ForMember(x => x.email, o => o.MapFrom(y => y.user.email))
                 .ForMember(x => x.type, o => o.MapFrom(y => y.user.role));
 
-            CreateMap<SubAdmin, ContactDto>()
-                .ForMember(x => x.userName, o => o.MapFrom(y => y.user.userName))
-                .ForMember(x => x.email, o => o.MapFrom(y => y.user.email))
-                .ForMember(x => x.role, o => o.MapFrom(y => y.user.role))
-                .ForMember(x => x.ImageUrl, o => o.MapFrom(y => $"http://localhost:7116/{y.ImageUrl}"));
+            //CreateMap<SubAdmin, ContactDto>()
+            //    .ForMember(x => x.userName, o => o.MapFrom(y => y.user.userName))
+            //    .ForMember(x => x.email, o => o.MapFrom(y => y.user.email))
+            //    .ForMember(x => x.role, o => o.MapFrom(y => y.user.role))
+            //    .ForMember(x => x.ImageUrl, o => o.MapFrom(y => $"http://localhost:7116/{y.ImageUrl}"));
 
-            CreateMap<Instructor, ContactDto>()
-                .ForMember(x => x.userName, o => o.MapFrom(y => y.user.userName))
-                .ForMember(x => x.email, o => o.MapFrom(y => y.user.email))
-                .ForMember(x => x.role, o => o.MapFrom(y => y.user.role))
-                .ForMember(x => x.ImageUrl, o => o.MapFrom(y => $"http://localhost:7116/{y.ImageUrl}"));
+            //CreateMap<Instructor, ContactDto>()
+            //    .ForMember(x => x.userName, o => o.MapFrom(y => y.user.userName))
+            //    .ForMember(x => x.email, o => o.MapFrom(y => y.user.email))
+            //    .ForMember(x => x.role, o => o.MapFrom(y => y.user.role))
+            //    .ForMember(x => x.ImageUrl, o => o.MapFrom(y => $"http://localhost:7116/{y.ImageUrl}"));
 
-           // CreateMap<RegistrationRequestDTO, SubAdmin>();
+           
             CreateMap<EmployeeForCreate, User>()
                 .ForMember(x => x.userName, o => o.MapFrom(y => y.FName));
             CreateMap<EmployeeDto, Instructor>();
@@ -109,7 +109,7 @@ namespace courseProject.MappingProfile
             CreateMap<Student, ProfileDTO>();
             CreateMap<User, ProfileDTO>()
                 .ForMember(x => x.FName, o => o.MapFrom(y => y.userName));
-            //  .ForMember(x => x.LName, o => o.MapFrom(y => y.instructor.LName ));
+           
 
             CreateMap<Instructor, UserInfoDTO>()
                 .ForMember(x => x.userName, o => o.MapFrom(y => y.user.userName))

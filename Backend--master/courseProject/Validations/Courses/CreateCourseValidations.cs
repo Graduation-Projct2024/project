@@ -22,19 +22,28 @@ namespace courseProject.Validations.Courses
             RuleFor(x => x.category)
                 .NotEmpty().WithMessage("Course category is required.");
             RuleFor(x => x.image)
+                
                 .Must(HaveValidImageExtension)
             .WithMessage("Image must have a .jpg , .png or .jpeg extension.");
+
+            RuleFor(x => x.startDate)
+                .GreaterThanOrEqualTo(DateTime.Now.Date).WithMessage("The start date must grater then the date now or equal to it");
+
+
+
+
+
         }
 
 
 
         private bool HaveValidImageExtension(IFormFile image)
         {
-            if (image == null || image.Length == 0)
+            if (image == null)
             {
-                return false;
+                return true;
             }
-
+            if (image.Length == 0) return false;
             var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
             var extension = Path.GetExtension(image.FileName).ToLower();
 
