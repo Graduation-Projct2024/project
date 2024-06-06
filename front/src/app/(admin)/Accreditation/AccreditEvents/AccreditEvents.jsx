@@ -25,7 +25,7 @@ export default function AccreditEvents() {
           Authorization: `Bearer ${userToken}`,
       },
   });
-    console.log(data);
+    // console.log(data);
     // setAccreditEvents(data);
     setTotalPages(data.result.totalPages);
     setAccreditEvents(data.result.items);
@@ -81,14 +81,14 @@ export default function AccreditEvents() {
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
-            const { data } = await axios.patch(`https://localhost:7116/api/EventContraller/accreditEvent?eventId=${eventId}&Status=${Status}`, {},
+            const { data } = await axios.patch(`https://localhost:7116/api/EventContraller/accreditEvent?eventId=${eventId}`, {Status},
               {
                 headers: {
                   Authorization: `Bearer ${userToken}`,
                 },
               });
   
-            // console.log(data, status);
+            console.log(data);
             if (Status == "accredit") {
               Swal.fire({
                 title: `Event Accredit Successully`,
@@ -129,7 +129,7 @@ export default function AccreditEvents() {
 if(loader){
   return <p>Loading ...</p>
 }
-console.log(accreditEvents);
+// console.log(accreditEvents);
 
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -224,7 +224,7 @@ const  filteredAccreditEvents= Array.isArray(accreditEvents) ? accreditEvents.fi
                 <td>{event.eventCategory}</td>
                 <td>{event.dateOfEvent}</td>
                 <td>{event.subAdminFName} {event.subAdminLName}</td>
-                {console.log (event.status)}
+                {/* {console.log (event.status)} */}
                 <td className="d-flex gap-1">
                   {/* <Link href={"/Profile"}>
                     <button type="button" className="border-0 bg-white ">

@@ -26,12 +26,12 @@ export default function SingleCustomCourse({id}) {
     <>
     <div className="customCourseContent">
         <ul>
-            <li className=' fs-5 '>Custom course name: <span>{course.name}</span></li>
-            <li className=' fs-5 '>student name: <span>{course.studentFName} {course.studentLName}</span></li>
-            <li className=' fs-5 '>student id: <span className='fs-6'>{course.studentId}</span></li>
-            <li className=' fs-5 '>custom course start date:<span>{course.startDate}</span></li>
-            <li className=' fs-5 '>custom course end date:<span> {course.endDate}</span></li>
-            <li className=' fs-5 '>custom course description: <span>{course.description}</span></li>
+            <li className=' fs-5 content list-unstyled p-2'>Custom course name: <span>{course.name}</span></li>
+            <li className=' fs-5 content list-unstyled p-2'>student name: <span>{course.studentFName} {course.studentLName}</span></li>
+            <li className=' fs-5 content list-unstyled p-2'>student id: <span className='fs-6'>{course.studentId}</span></li>
+            <li className=' fs-5 content list-unstyled p-2'>custom course start date:<span>{course.startDate}</span></li>
+            <li className=' fs-5 content list-unstyled p-2'>custom course end date:<span> {course.endDate}</span></li>
+            <li className=' fs-5 content list-unstyled p-2'>custom course description: <span>{course.description}</span></li>
         </ul>
     </div>
     </>

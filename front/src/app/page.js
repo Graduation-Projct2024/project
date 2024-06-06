@@ -10,6 +10,7 @@ import Layout from "./(pages)/Layout/Layout";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "@/context/user/User";
 import GeneralFeedback from "./(pages)/GeneralFeedback/GeneralFeedback";
+import CoursesSection from "./(pages)/AllCourses/CoursesSection/CoursesSection";
 
 export default function Home() {
   const {userToken, setUserToken,userData, setUserData}=useContext(UserContext);
@@ -30,6 +31,7 @@ export default function Home() {
       <Layout>
       <Header role={role} />
       <Testimonials/>
+      <CoursesSection/>
       <GeneralFeedback/>
       </Layout>   
   );

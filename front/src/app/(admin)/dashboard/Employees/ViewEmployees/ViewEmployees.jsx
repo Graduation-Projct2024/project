@@ -261,7 +261,7 @@ export default function ViewEmployees() {
                 </button>
                 </Tooltip>
                 <Tooltip title="Convert Employees into Excel" placement="top">
-            <button className='border-0 bg-transparent edit-pen' onClick={ExportAllDataToCSV}>
+            <button className='border-0 bg-transparent edit-pen ps-2' onClick={ExportAllDataToCSV}>
                   <FontAwesomeIcon icon={faFileCsv} />
                 </button>
                 </Tooltip>

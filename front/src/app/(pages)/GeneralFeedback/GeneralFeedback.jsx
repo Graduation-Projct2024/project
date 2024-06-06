@@ -194,8 +194,15 @@ useEffect(() => {
                       </p>
                     </div>
                     <div className="userInfo d-flex align-items-center">
-                      <img src="/user.jpg" alt="writer photo" />
-                      <p className="pt-3 writerName">{feedback.name}</p>
+                    <img src={feedback.imageUrl ? feedback.imageUrl : "./user1.png"} 
+           className=" img-fluid" 
+           alt="Profile" 
+           onError={(e) => { 
+             console.error("Error loading image:", feedback.imageUrl); 
+             e.target.onerror = null; // prevents looping
+             e.target.src = "./user1.png"; // default image if error
+           }} />      
+                      <p className="pt-3 ps-2 writerName">{feedback.name}</p>
                       <ul className="d-flex gap-1 align-items-center pt-3">
                         <li className="list-unstyled">
                           <FontAwesomeIcon

@@ -196,7 +196,7 @@ const handleCloseUpdate = () => {
          </Button>
        </DialogActions>
         </Dialog>
-                  <Link href={"/Profile"}>
+                  <Link href={`CourseDetails/${course.id}`}>
                     <button
                       type="button"
                       className="edit-pen border-0 bg-white "

@@ -64,7 +64,7 @@ function Layout(props) {
     icon: AccountCircleIcon,
   },
   {
-    name: "Non accredit elemnts",
+    name: "Non Accredit ",
     href: `/UnAccreditElemnts`,
     icon: ReportOutlinedIcon,
   },
