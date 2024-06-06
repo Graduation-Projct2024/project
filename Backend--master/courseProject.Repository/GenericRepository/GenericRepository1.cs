@@ -67,14 +67,31 @@ namespace courseProject.Repository.GenericRepository
             return await dbContext.Set<T>().ToListAsync();
         }
 
-        public async Task<IReadOnlyList<T>> GetAllEventsAsync()
+        public async Task<IReadOnlyList<T>> GetAllEventsAsync(string? dateStatus)
         {
+            // Check if the generic type T is Event
             if (typeof(T) == typeof(Event))
             {
-                return (IReadOnlyList<T>)await dbContext.events
-                    .Where(x=>x.status== "accredit")
-                    .Include(x => x.SubAdmin.user).ToListAsync();
+                // Query to get events with status "accredit" and include related SubAdmin and User entities
+                var events = dbContext.events
+                    .Include(x => x.SubAdmin.user)
+                    .Where(x => x.status == "accredit");
+
+                // Filter events based on the dateStatus parameter
+                if (dateStatus == "upcoming")
+                {
+                    // Get events with dates in the future or today
+                    events = events.Where(x => x.dateOfEvent.Value.Date >= DateTime.UtcNow.Date);
+                }
+                else if (dateStatus == "expired")
+                {
+                    // Get events with dates in the past
+                    events = events.Where(x => x.dateOfEvent.Value.Date < DateTime.UtcNow.Date);
+                }
+                // Return the list of events as IReadOnlyList<T>
+                return (IReadOnlyList<T>)await events.ToListAsync();
             }
+            // If T is not Event, return all entities of type T
             return await dbContext.Set<T>().ToListAsync();
         }
 

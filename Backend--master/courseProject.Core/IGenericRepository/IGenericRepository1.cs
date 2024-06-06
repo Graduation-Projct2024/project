@@ -16,7 +16,7 @@ namespace courseProject.Core.IGenericRepository
         Task<IReadOnlyList<T>> GetAllStudentsAsync();
         Task<IReadOnlyList<T>> GetAllEmployeeAsync();
         Task<IReadOnlyList<T>> GetAllCoursesAsync();
-        Task<IReadOnlyList<T>> GetAllEventsAsync();
+        Task<IReadOnlyList<T>> GetAllEventsAsync(string? dateStatus);
 
         Task<IReadOnlyList<T>> GetAllStudentsForContactAsync();
        // Task<IReadOnlyList<T>> GetAllEmployeeForContactAsync();

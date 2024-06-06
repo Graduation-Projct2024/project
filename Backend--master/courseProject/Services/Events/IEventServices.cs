@@ -8,7 +8,7 @@ namespace courseProject.Services.Events
     {
         public Task<ErrorOr<Created>> CreateEvent(Event _event, Request request);
         public Task<ErrorOr<Updated>> accreditEvent(Guid eventId , string Status);
-        public Task<IReadOnlyList<EventDto>> GetAllAccreditEvents();
+        public Task<IReadOnlyList<EventDto>> GetAllAccreditEvents(string? dateStatus);
         public Task<IReadOnlyList<EventAccreditDto>> GetAllEventsToAccreditByAdmin();
         public Task<IReadOnlyList<EventAccreditDto>> GetAllUndefinedEvents(Guid subAdminId);
         public Task<ErrorOr<Updated>> EditEvent(Guid eventId , EventForEditDTO eventForEditDTO);
