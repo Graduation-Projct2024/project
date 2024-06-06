@@ -23,6 +23,8 @@ using courseProject.Common;
 using courseProject.Core.Models;
 using Microsoft.AspNetCore.Identity;
 using courseProject.Emails;
+using courseProject.Services.Courses;
+using courseProject.Services.CourseStatus;
 
 namespace courseProject
 {
@@ -48,7 +50,9 @@ namespace courseProject
                 });
             });
 
-    
+
+
+         
 
 
             builder.Services
@@ -58,8 +62,17 @@ namespace courseProject
                    .AddInfrastucture(builder.Configuration)
                    .AddAuthenticationAndAuthorization(builder.Configuration);
 
+
+            //builder.Services.AddSingleton<IHostedService, CourseStatusUpdater>();
+
+            //builder.Services.AddHostedService<CourseStatusUpdater>();
+
+
             builder. Services.AddEmailInfrastucture (builder. Configuration);
             builder.Services.AddHttpClient();
+
+
+          
 
             //validations 
             //builder.Services.AddFluentValidation(

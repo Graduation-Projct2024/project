@@ -8,9 +8,11 @@ using courseProject.MappingProfile;
 using courseProject.Repository.Data;
 using courseProject.Repository.GenericRepository;
 using courseProject.Services.Courses;
+using courseProject.Services.CourseStatus;
 using courseProject.Services.Skill;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -55,8 +57,13 @@ namespace courseProject.Configuration
                     .AddNewtonsoftJson(options =>
                          options.SerializerSettings.ReferenceLoopHandling =
                                  Newtonsoft.Json.ReferenceLoopHandling.Ignore);
-
             services.AddMemoryCache();
+
+
+
+            //update status to start
+          
+            
             return services;
         }
 

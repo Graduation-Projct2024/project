@@ -27,15 +27,7 @@ namespace courseProject.Repository.GenericRepository
         }
 
 
-        public async void DetachEntity(T entity)
-        {
-            dbContext.Entry(entity).State = EntityState.Detached;
-        }
-
-        public async void AttachEntity(Course entity)
-        {
-            dbContext.Entry(entity).State = EntityState.Modified;
-        }
+      
 
         public async Task<IReadOnlyList<T>> GetAllStudentsAsync()
         {

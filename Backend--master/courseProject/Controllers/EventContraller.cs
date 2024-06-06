@@ -109,16 +109,16 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "Admin")]
-        public async Task<ActionResult<ApiResponce>> EditEventStatus(Guid eventId, string Status)
+        public async Task<ActionResult<ApiResponce>> EditEventStatus(Guid eventId, EventStatusDTO eventStatus)
         {
-            var updateStatus = await eventServices.accreditEvent(eventId, Status);
+            var updateStatus = await eventServices.accreditEvent(eventId ,eventStatus.Status);
             if (updateStatus.IsError) return NotFound(new ApiResponce
             {
                 ErrorMassages =  updateStatus.FirstError.Description 
             });
             return Ok(new ApiResponce
             {
-                Result = $"The Event is {Status}"
+                Result = $"The Event is {eventStatus.Status}"
             });
         }
 

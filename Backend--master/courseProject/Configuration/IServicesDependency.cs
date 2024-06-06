@@ -1,4 +1,5 @@
-﻿using courseProject.Services.Courses;
+﻿using courseProject.Services.ContactUs;
+using courseProject.Services.Courses;
 using courseProject.Services.Employees;
 using courseProject.Services.Events;
 using courseProject.Services.Feedbacks;
@@ -24,7 +25,7 @@ namespace courseProject.Configuration
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
             services.AddScoped(typeof(ISkillsServices), typeof(SkillsServices));
-            services.AddScoped(typeof(ICourseServices), typeof(CourseServices));
+            services.AddScoped<ICourseServices ,CourseServices>();
             services.AddScoped<IEventServices, EventServices>();
             services.AddScoped<ISubAdminServices, SubAdminServices>();
             services.AddScoped<IinstructorServices, instructorServices>();
@@ -39,6 +40,7 @@ namespace courseProject.Configuration
             services.AddScoped<IFeedbackServices, FeedbackServices>();
             services.AddScoped<IPdfServices, PdfServices>();
             services.AddScoped<IExcelServices, ExcelServices>();
+            services.AddScoped<IContactServices, ContactServices>();
 
 
             return services;

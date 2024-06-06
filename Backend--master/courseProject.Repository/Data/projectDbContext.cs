@@ -202,5 +202,6 @@ namespace courseProject.Repository.Data
         public DbSet<Skills> Skills { get; set; }
         public DbSet<InstructorSkills> InstructorSkills { get; set;}
         public DbSet<MaterialFiles> MaterialFiles { get; set; }
+        public DbSet<Contact> contacts { get; set; }
     }
 }

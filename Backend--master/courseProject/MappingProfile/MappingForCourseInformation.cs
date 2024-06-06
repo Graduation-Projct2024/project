@@ -4,6 +4,7 @@ using courseProject.Controllers;
 using courseProject.core.Models;
 using courseProject.Core.IGenericRepository;
 using courseProject.Core.Models;
+using courseProject.Core.Models.DTO.ContactUsDTO;
 using courseProject.Core.Models.DTO.CoursesDTO;
 using courseProject.Core.Models.DTO.LecturesDTO;
 using courseProject.Core.Models.DTO.MaterialsDTO;
@@ -101,6 +102,9 @@ namespace courseProject.MappingProfile
             CreateMap<EditCourseAfterAccreditDTO, Course>()
            .ForAllMembers(opts => opts.Condition((src, dest, srcMember, destMember) =>
             IsNotDefaultClassForMapping.IsNotDefault(srcMember)));
+
+
+            CreateMap<CreateMessageContactDTO, Contact>();
           
         }
     }
