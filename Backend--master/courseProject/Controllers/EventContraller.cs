@@ -38,9 +38,9 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         //not try
-        public async Task<ActionResult< ApiResponce>> GetAllAccreditEventsAsync([FromQuery] PaginationRequest paginationRequest)
+        public async Task<ActionResult< ApiResponce>> GetAllAccreditEventsAsync(string? dateStatus ,[FromQuery] PaginationRequest paginationRequest)
         {
-            var events = await eventServices.GetAllAccreditEvents();
+            var events = await eventServices.GetAllAccreditEvents(dateStatus);
             return Ok(new ApiResponce { Result = (Pagination<EventDto>.CreateAsync(events, paginationRequest.pageNumber, paginationRequest.pageSize)).Result });
         }
 

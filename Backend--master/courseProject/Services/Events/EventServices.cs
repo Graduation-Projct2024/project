@@ -69,9 +69,9 @@ namespace courseProject.Services.Events
             return Result.Updated;
         }
 
-        public async Task<IReadOnlyList<EventDto>> GetAllAccreditEvents()
+        public async Task<IReadOnlyList<EventDto>> GetAllAccreditEvents(string? dateStatus)
         {
-            var events = await unitOfWork.eventRepository.GetAllEventsAsync();
+            var events = await unitOfWork.eventRepository.GetAllEventsAsync(dateStatus);
             
             events = events.OrderByDescending(x => x.dateOfAdded).ToList();
             foreach (var _event in events)
