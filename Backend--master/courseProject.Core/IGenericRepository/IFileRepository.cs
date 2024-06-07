@@ -9,6 +9,8 @@ namespace courseProject.Core.IGenericRepository
 {
     public interface IFileRepository
     {
+
+        
         public  Task<string> UploadFile1(IFormFile file);
        
         public Task<string> GetFileUrl(string fileName);

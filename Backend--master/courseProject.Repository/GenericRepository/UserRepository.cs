@@ -25,11 +25,13 @@ namespace courseProject.Repository.GenericRepository
  
         
         private readonly projectDbContext dbContext;
+        private readonly IHttpContextAccessor httpContextAccessor;
         private string secretKey;
         private string token1 = "";
-        public UserRepository( projectDbContext dbContext ,IConfiguration configuration):base(dbContext)
+        public UserRepository( projectDbContext dbContext ,IConfiguration configuration , IHttpContextAccessor httpContextAccessor) :base(dbContext)
         {
             this.dbContext = dbContext;
+            this.httpContextAccessor = httpContextAccessor;
             secretKey = configuration.GetSection("Authentication")["SecretKey"]; 
         }
 
@@ -155,6 +157,15 @@ namespace courseProject.Repository.GenericRepository
         public async Task UpdateUser(User user)
         {
             dbContext.Entry(user).State = EntityState.Modified;
+        }
+
+
+        public async Task<string> getRoleFromToken()
+        {
+            var userIdAsString = (httpContextAccessor.HttpContext.User.FindFirst("UserId")).Value;
+            Guid.TryParse(userIdAsString, out var userId);
+            var role =(await dbContext.users.FirstAsync(x => x.UserId == userId)).role;
+            return role;
         }
     }
 }

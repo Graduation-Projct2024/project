@@ -21,6 +21,9 @@ namespace courseProject.Repository.GenericRepository
         {
             this.httpContextAccessor = httpContextAccessor;
         }
+        
+
+        
 
         public async Task<string> UploadFile1(IFormFile file)
         {

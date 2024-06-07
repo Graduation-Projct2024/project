@@ -24,8 +24,8 @@ namespace courseProject.Core.IGenericRepository
         public Task<string> GenerateSecureVerificationCode(int length);
         public Task<User> GetUserByEmail(string email);
         public Task UpdateUser(User user);
-        
 
+        public Task<string> getRoleFromToken();
         // void LogOut();
     }
 }
