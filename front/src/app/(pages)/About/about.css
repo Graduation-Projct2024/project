@@ -150,6 +150,8 @@ background-color:#f4eaf1;
    background-size: cover;
    width: 300px;
    height: 100%;
+   min-height:250px;
+ 
  }
  
  .swiper-slide img {

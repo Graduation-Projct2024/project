@@ -5,7 +5,7 @@ import Layout from '../Layout/Layout'
 import { faCode} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import './Events.css'
-import Box from '@mui/material/Box';
+import { Box, FormControl, InputLabel, MenuItem, Pagination, Select, Stack } from '@mui/material';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
@@ -13,25 +13,40 @@ import TabPanel from '@mui/lab/TabPanel';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import Link from '@mui/material/Link';
+import Expired from './Expired.jsx';
+import Upcoming from './Upcoming.jsx';
 
 export default function page() {
   const [events, setEvents] = useState([]);
-  const getEvents = async () => {
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalPages, setTotalPages] = useState(0);
+  const getEvents = async (pageNum = pageNumber, pageSizeNum = pageSize) => {
       try {
         const { data } = await axios.get(
-          `https://localhost:7116/api/EventContraller/GetAllAccreditEvents`
+          `https://localhost:7116/api/EventContraller/GetAllAccreditEvents?pageNumber=${pageNum}&pageSize=${pageSizeNum}`
         );
         console.log(data);
         setEvents(data.result.items);
+        setTotalPages(data.result.totalPages);
+
       } catch (error) {
         console.log(error);
       }
     
   };
 
+  const handlePageSizeChange = (event) => {
+    setPageSize(event.target.value);
+    setPageNumber(1); // Reset to the first page when page size changes
+  };
+
+  const handlePageChange = (event, value) => {
+    setPageNumber(value);
+  };
   useEffect(() => {
     getEvents();
-  }, []);
+  }, [pageNumber, pageSize]);
   const [value, setValue] = React.useState('1');
 
   const handleChange = (event, newValue) => {
@@ -39,6 +54,7 @@ export default function page() {
   };
   return (
     <Layout>
+     
        <div className='container'>
       <div className="pageTitle text-center py-5">
         <h2 className='eventstitle'>All Events</h2>
@@ -61,14 +77,37 @@ export default function page() {
           </TabList>
         </Box>
         <TabPanel value="1">
-          <div className='events'>
+        <Stack
+      direction="row"
+      justifyContent="flex-end"
+      alignItems="center"
+      spacing={2}
+    >
+      <FormControl fullWidth className="page-Size me-5">
+        <InputLabel id="page-size-select-label">Page Size</InputLabel>
+        <Select
+          className="justify-content-center"
+          labelId="page-size-select-label"
+          id="page-size-select"
+          value={pageSize}
+          label="Page Size"
+          onChange={handlePageSizeChange}
+        >
+          <MenuItem value={5}>5</MenuItem>
+          <MenuItem value={10}>10</MenuItem>
+          <MenuItem value={20}>20</MenuItem>
+          <MenuItem value={50}>50</MenuItem>
+        </Select>
+      </FormControl>
+    </Stack>
+          <div className='events mt-5'>
             <div className='row'>
               {events?.length?(
                 events.map(event=>(
                   <div className='col-lg-4 col-sm-6 col-md-6 '>
                     <div className='event-details'>
                       <div className='event-image'>
-                      <img src={`https://localhost:7116/${event.imageUrl.split('https://localhost:7116/')[2]}`}/>
+                      <img src={`${event.imageUrl}`}/>
                       <span className='date'><CalendarMonthIcon sx={{m:1}}/>{event.dateOfEvent}</span>
                       </div>
                     
@@ -88,8 +127,8 @@ export default function page() {
           </div>
 
         </TabPanel>
-        <TabPanel value="2">Item Two</TabPanel>
-        <TabPanel value="3">Item Three</TabPanel>
+        <TabPanel value="2"><Upcoming/></TabPanel>
+        <TabPanel value="3"><Expired/></TabPanel>
       </TabContext>
     </Box>
       </div>
