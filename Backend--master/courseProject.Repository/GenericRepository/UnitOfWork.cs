@@ -25,7 +25,7 @@ namespace courseProject.Repository.GenericRepository
             this.dbContext = dbContext;
             this.httpContextAccessor = httpContextAccessor;
             SubAdminRepository = new SubAdminRepository(dbContext);
-            UserRepository = new UserRepository(dbContext, configuration);
+            UserRepository = new UserRepository(dbContext, configuration, httpContextAccessor);
             instructorRepositpry = new instructorRepositpry(dbContext);
             StudentRepository=new StudentRepository(dbContext);
             AdminRepository = new AdminRepository(dbContext);
