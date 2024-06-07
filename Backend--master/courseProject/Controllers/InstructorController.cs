@@ -84,7 +84,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-     //   [Authorize(Policy ="Student")]
+        [Authorize(Policy ="Student")]
         public async Task<IActionResult> GetAListOfInstrcutorsForBookALectures(LectureFormDTO lectureForm)
         {
             var getInstructors = await instructorServices.GetListOfInstructorForLectures(lectureForm);
