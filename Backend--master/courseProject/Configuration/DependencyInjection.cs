@@ -8,7 +8,7 @@ using courseProject.MappingProfile;
 using courseProject.Repository.Data;
 using courseProject.Repository.GenericRepository;
 using courseProject.Services.Courses;
-using courseProject.Services.CourseStatus;
+
 using courseProject.Services.Skill;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

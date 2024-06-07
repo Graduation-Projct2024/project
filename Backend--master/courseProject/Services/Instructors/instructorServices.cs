@@ -4,6 +4,7 @@ using courseProject.Core.IGenericRepository;
 using courseProject.Core.Models;
 using courseProject.Core.Models.DTO.EmployeesDTO;
 using courseProject.Core.Models.DTO.InstructorsDTO;
+using courseProject.Core.Models.DTO.LecturesDTO;
 using courseProject.ServiceErrors;
 using ErrorOr;
 using System.Net;
@@ -80,19 +81,18 @@ namespace courseProject.Services.Instructors
             return InstrctorOfficeHoursMapper;
         }
 
-        public async Task<ErrorOr< IReadOnlyList<EmployeeListDTO>>> GetListOfInstructorForLectures(Guid skillId, string startTime, string endTime, DateTime date)
+        public async Task<ErrorOr< IReadOnlyList<EmployeeListDTO>>> GetListOfInstructorForLectures(LectureFormDTO lectureForm)
         {
-            if (!CommonClass.IsValidTimeFormat(startTime) || !CommonClass.IsValidTimeFormat(endTime))
-                return ErrorLectures.InvalidTime;
-            TimeSpan StartTime = CommonClass.ConvertToTimeSpan(startTime);
-            TimeSpan EndTime = CommonClass.ConvertToTimeSpan(endTime);
+           
+            TimeSpan StartTime = CommonClass.ConvertToTimeSpan(lectureForm.startTime);
+            TimeSpan EndTime = CommonClass.ConvertToTimeSpan(lectureForm.endTime);
             if (StartTime >= EndTime) return ErrorLectures.GraterTime;
 
             if ((EndTime - StartTime) > TimeSpan.Parse("02:00") || (EndTime - StartTime) < TimeSpan.Parse("00:30"))
                 return ErrorLectures.limitationTime;
             var getAllSkills = await unitOfWork.skillRepository.GetAllSkillsAsync();
             
-            var getInstructors = await unitOfWork.instructorRepositpry.getAListOfInstructorDependOnSkillsAndOfficeTime(skillId, StartTime, EndTime, date);           
+            var getInstructors = await unitOfWork.instructorRepositpry.getAListOfInstructorDependOnSkillsAndOfficeTime(lectureForm.skillId, StartTime, EndTime, lectureForm.date);           
             var instructorMapper = mapper.Map<IReadOnlyList<Instructor_Working_Hours>, IReadOnlyList<EmployeeListDTO>>(getInstructors);            
             return instructorMapper.ToErrorOr();
             

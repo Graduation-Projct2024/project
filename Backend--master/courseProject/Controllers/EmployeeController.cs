@@ -61,26 +61,6 @@ namespace courseProject.Controllers
         }
 
 
-        //[HttpGet("GetAllEmployeeForContact")]
-        //[ProducesResponseType(200)]
-        //[ProducesResponseType(404)]
-        //[ProducesResponseType(400)]
-        
-        //public async Task<ActionResult<ApiResponce>> GetAllEmployeeForContactAsync([FromQuery] PaginationRequest paginationRequest)
-        //{
-        //    var subAdmins = await subAdminServices.GetAllSubAdmins();
-        //    var instructors = await instructorServices.GetAllInstructors();
-
-           
-        //    var mapperSubAdmin = mapper.Map<IReadOnlyList<SubAdmin>, IReadOnlyList<ContactDto>>(subAdmins);
-        //    var mapperInstructor = mapper.Map<IReadOnlyList<Instructor>, IReadOnlyList<ContactDto>>(instructors);
-        //    var allEmployees = (mapperSubAdmin.Concat(mapperInstructor)).ToList();
-         
-        //    return Ok(new ApiResponce { Result = (Pagination<ContactDto>.CreateAsync(allEmployees, paginationRequest.pageNumber, paginationRequest.pageSize)).Result });
-
-        //}
-
-
 
         [HttpPost("CreateEmployee")]
         [ProducesResponseType(200)]

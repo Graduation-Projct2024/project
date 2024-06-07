@@ -24,7 +24,7 @@ using courseProject.Core.Models;
 using Microsoft.AspNetCore.Identity;
 using courseProject.Emails;
 using courseProject.Services.Courses;
-using courseProject.Services.CourseStatus;
+using courseProject.Services.BackgroundServices;
 
 namespace courseProject
 {

@@ -1,6 +1,7 @@
 ﻿using courseProject.Core.Models;
 using courseProject.Core.Models.DTO.EmployeesDTO;
 using courseProject.Core.Models.DTO.InstructorsDTO;
+using courseProject.Core.Models.DTO.LecturesDTO;
 using ErrorOr;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,7 +15,7 @@ namespace courseProject.Services.Instructors
         public Task<ErrorOr<IReadOnlyList<GetWorkingHourDTO>>> GetInstructorOfficeHours(Guid InstructorId);
         public Task<IReadOnlyList<EmployeeListDTO>> GetAllInstructorsList();
         public Task<IReadOnlyList<Instructor_OfficeHoursDTO>> GetAllInstructorsOfficeHours();
-        public Task<ErrorOr<IReadOnlyList<EmployeeListDTO>>> GetListOfInstructorForLectures(Guid skillId, string startTime, string endTime, DateTime date);
+        public Task<ErrorOr<IReadOnlyList<EmployeeListDTO>>> GetListOfInstructorForLectures(LectureFormDTO lectureForm);
         public Task<ErrorOr<Updated>> AddSkillDescription(Guid instructorId , SkillDescriptionDTO skillDescription);
     }
 }

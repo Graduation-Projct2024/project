@@ -245,34 +245,6 @@ namespace courseProject.Services.Materials
             return material;           
         }
 
-        //public async Task<ErrorOr<ArrayList>> GetAllMaterialInTheCourse(Guid? courseId , Guid? consultationId , string userType)
-        //{
-        //    var getCourse = await unitOfWork.CourseRepository.GetCourseByIdAsync(courseId);
-        //    if (getCourse == null && courseId!=null) return ErrorCourse.NotFound;
-        //    var getConsultation = await unitOfWork.lecturesRepository.GetConsultationById(consultationId);
-        //    if (getConsultation == null && consultationId!=null) return ErrorLectures.NotFound;
-        //    var AlMaterials = await unitOfWork.materialRepository.GetAllMaterial(courseId , consultationId , userType);
-
-        //    ArrayList arrayList = new ArrayList();
-
-
-        //    foreach (var material in AlMaterials)
-        //    {
-             
-        //            foreach (var file in material.MaterialFiles)
-        //            {
-        //                if (!string.IsNullOrEmpty(file.pdfUrl))
-        //                {
-        //                    file.pdfUrl = await unitOfWork.FileRepository.GetFileUrl(file.pdfUrl);
-        //                }
-        //            }
-                               
-        //        arrayList.Add(material);
-                
-        //    }
-        //    return arrayList;
-        //}
-
         public async Task<ErrorOr<Deleted>> deleteFiles(Guid materialId)
         {
             var getFiles = await unitOfWork.materialRepository.GetMaterialFilesByMaterialId(materialId);
@@ -298,23 +270,21 @@ namespace courseProject.Services.Materials
 
 
 
-        //test
-        public async Task<ErrorOr<ArrayList>> GetAllMaterialInTheCourse(Guid? courseId, Guid? consultationId)
+        
+        public async Task<ErrorOr<IReadOnlyList<CourseMaterial>>> GetAllMaterialInTheCourse(Guid? courseId, Guid? consultationId)
         {
             var getCourse = await unitOfWork.CourseRepository.GetCourseByIdAsync(courseId);
             if (getCourse == null && courseId != null) return ErrorCourse.NotFound;
             var getConsultation = await unitOfWork.lecturesRepository.GetConsultationById(consultationId);
             if (getConsultation == null && consultationId != null) return ErrorLectures.NotFound;
             string userType = await unitOfWork.UserRepository.getRoleFromToken();
-            //userType= Convert.ToString( httpContextAccessor.HttpContext.User.FindFirst("role").Value);
-            var AlMaterials = await unitOfWork.materialRepository.GetAllMaterial(courseId, consultationId, userType);
+            
+            var AllMaterials = await unitOfWork.materialRepository.GetAllMaterial(courseId, consultationId, userType);
+            
+            
 
-            ArrayList arrayList = new ArrayList();
-
-
-            foreach (var material in AlMaterials)
+            foreach (var material in AllMaterials)
             {
-
                 foreach (var file in material.MaterialFiles)
                 {
                     if (!string.IsNullOrEmpty(file.pdfUrl))
@@ -322,11 +292,9 @@ namespace courseProject.Services.Materials
                         file.pdfUrl = await unitOfWork.FileRepository.GetFileUrl(file.pdfUrl);
                     }
                 }
-
-                arrayList.Add(material);
-
+               
             }
-            return arrayList;
+            return AllMaterials.ToErrorOr();
         }
 
     }
