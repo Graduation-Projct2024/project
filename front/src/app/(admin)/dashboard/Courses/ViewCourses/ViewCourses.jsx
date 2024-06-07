@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useContext, useEffect, useState } from "react";
 import {
   faArrowUpFromBracket,
+  faEllipsisVertical,
   faEye,
   faFileCsv,
   faFilter,
@@ -13,6 +14,7 @@ import axios from "axios";
 import { UserContext } from "@/context/user/User";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Pagination, Stack, useMediaQuery, useTheme, MenuItem, FormControl, Select, InputLabel, Tooltip } from "@mui/material";
 import EditCourse from "../EditCourse/[courseId]/page";
+import Swal from "sweetalert2";
 
 export default function ViewCourses() {
   const { userToken, setUserToken, userData } = useContext(UserContext);
@@ -122,6 +124,43 @@ const handleCloseUpdate = () => {
       } catch (error) {
         console.error('Failed to fetch courses:', error);
       }
+    }
+  };
+
+  const accreditCourse = async (courseId , Status) => {
+    if (userData) {
+      Swal.fire({
+        title: `Are you sure?`,
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes!"
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            const { data } = await axios.patch(`https://localhost:7116/api/CourseContraller/accreditCourse?courseId=${courseId}`, {Status},
+              {
+                headers: {
+                  Authorization: `Bearer ${userToken}`,
+                },
+              });
+  
+            console.log(data);
+            if (Status == "finish") {
+              Swal.fire({
+                title: `Course Finished Successully`,
+                text: "The status of course set to finish",
+                icon: "success"
+              });
+            } 
+  
+          } catch (error) {
+            console.log(error);
+          }
+        }
+      });
     }
   };
 
@@ -296,6 +335,32 @@ const handlePageChange = (event, value) => {
                     </button>
                   </Link>
                   </Tooltip>
+
+                  <div className="dropdown">
+                   <Tooltip title="Finish this Course?" placement="top">
+                  <button
+                    className="dropdown-toggle border-0 bg-white edit-pen"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                   <FontAwesomeIcon icon={faEllipsisVertical} />
+                  </button>
+                  </Tooltip>
+                  <ul className="dropdown-menu">
+                  <li>
+                      <a
+                        className="dropdown-item"
+                        href="#"
+                        onClick={()=>accreditCourse(course.id,"finish")}
+                        disabled = {course.status == 'finish' }
+                      >
+                        Finish
+                      </a>
+                    </li>
+                   
+                  </ul>
+                </div>
                 </td>
               </tr>
             ))

@@ -189,6 +189,7 @@ const filteredAccreditCourses = Array.isArray(accreditCourses) ? accreditCourses
             <th scope="col">Instructor</th>
             <th scope="col">SubAdmin</th>
             <th scope="col">Hours</th>
+            <th scope="col">Status</th>
             <th scope='col'>Det.</th>
             <th scope="col">Action</th>
           </tr>
@@ -207,6 +208,7 @@ const filteredAccreditCourses = Array.isArray(accreditCourses) ? accreditCourses
                 <td>{course.instructorFName} {course.instructorLName}</td>
                 <td>{course.subAdminFName} {course.subAdminLName}</td>
                 <td>{course.totalHours}</td>
+                <td>{course.status}</td>
                 <td>
                 <Link href={`CourseDetails/${course.id}`}>
                     <button
@@ -223,12 +225,12 @@ const filteredAccreditCourses = Array.isArray(accreditCourses) ? accreditCourses
                       <FontAwesomeIcon icon={faEye} className="edit-pen" />
                     </button>
                   </Link> */}
-                  <button type="button" className="btn accredit" onClick={()=>accreditCourse(course.id,'accredit')} disabled = {course.status == 'accredit' || course.status == 'reject'} >
+                  <button type="button" className="btn accredit" onClick={()=>accreditCourse(course.id,'accredit')} disabled = {course.status == 'accredit' || course.status == 'reject' || course.status == 'finish'||course.status == 'start'} >
                   {/* <FontAwesomeIcon icon={faSquareCheck} className='fs-2'/> */}
                   Accredit
                   </button>  
                 {/* <Link href='/dashboard' className='text-decoration-none acc'>Accredit </Link> */}
-                <button type="button" className="btn accredit" onClick={()=>accreditCourse(course.id,"reject")} disabled = {course.status == 'accredit' || course.status == 'reject'} >
+                <button type="button" className="btn accredit" onClick={()=>accreditCourse(course.id,"reject")} disabled = {course.status == 'accredit' || course.status == 'reject' || course.status == 'finish'||course.status == 'start'} >
                 {/* <FontAwesomeIcon icon={faSquareXmark} className='fs-2'/> */}
                 Reject
                 </button>
