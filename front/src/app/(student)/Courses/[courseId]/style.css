@@ -37,3 +37,32 @@
 .css-10hburv-MuiTypography-root,.css-i4bv87-MuiSvgIcon-root{
     color: #fffdf6;
   }
+
+  .css-1aquho2-MuiTabs-indicator {
+    background-color:#4c5372 !important;
+  }
+  .css-aym9vq-MuiButtonBase-root-MuiTab-root.Mui-selected {
+    color:#4c5372 !important;
+  }
+  .css-heg063-MuiTabs-flexContainer{
+    justify-content:center;
+  }
+  .Reviews .css-10hburv-MuiTypography-root{
+color:#4c5372 !important ;
+  }
+  .css-1uvicyx-MuiTypography-root-MuiDialogTitle-root {
+    color:#4c5372 !important ;
+
+  }
+  .post-review .css-1fqo4oq-MuiButtonBase-root-MuiButton-root{
+    background-color:#4c5372 !important ;
+    color: white !important;
+  }
+  .css-1onm1wo-MuiDialogContent-root {
+width:100%;
+  }
+
+  .css-15befwp-MuiRating-root {
+font-size:1rem !important;
+
+} 

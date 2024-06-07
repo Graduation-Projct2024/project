@@ -19,7 +19,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import { EffectCoverflow, Pagination, Autoplay } from 'swiper/modules';
 import axios from 'axios';
-
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 export default function page() {
   const [instructors, setInstructors] = useState([]);
   const getInstructors = async () => {
@@ -198,7 +198,7 @@ export default function page() {
              {instructors?(
           instructors?.map((instructor) => (
             <SwiperSlide className='d-flex justify-content-center'>
-           {instructor.imageUrl=='http://localhost:5134/'?(<img src="./user1.png" />):(<img src={instructor.imageUrl}/>)}
+           {!instructor.imageUrl?(<AccountCircleIcon  sx={{fontSize:150, color:"#4c5372" , mt:5}}/>):(<img src={instructor.imageUrl}/>)}
            <div className='ps-5 pt-5'>
             <h4 className='pt-3'>{instructor.userName} {instructor.lName}</h4>
             <h5 className='pt-3'>Email : {instructor.email}</h5>

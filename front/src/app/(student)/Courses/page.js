@@ -19,7 +19,9 @@ import { UserContext } from '@/context/user/User';
 import { useRouter } from 'next/navigation'
 
 export default function page() {
-  const [page, setPage] = useState(1);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalPages, setTotalPages] = useState(0);
   const {userToken, setUserToken, userData,userId}=useContext(UserContext);
   const router = useRouter();
 const [role, setRole]=useState('student');
@@ -28,7 +30,7 @@ const [role, setRole]=useState('student');
       if(userId&&userToken){
         try{
       const data = await axios.get(
-        `https://localhost:7116/api/CourseContraller/GetAllCoursesToStudent?studentId=${userId}`,
+        `https://localhost:7116/api/CourseContraller/GetAllCoursesToStudent?studentId=${userId}&pageNumber=${pageNumber}&pageSize=6`,
         {headers :{Authorization:`Bearer ${userToken}`}}
 
       );
@@ -39,7 +41,9 @@ const [role, setRole]=useState('student');
       console.log(error);
     }}
     };
-
+    const handlePageChange = (event, value) => {
+      setPageNumber(value);
+    };
     const handleClick = (course) => {
       router.push(`/Courses/${course.id}?isEnrolled=${course.isEnrolled}`);
     };
@@ -126,15 +130,18 @@ if (role=='student'){
         </Box>
         </Box>
       </Grid>
-      <div className="pagenation">
-        <Stack spacing={2}>
-          <Pagination
-            count={5}
-            defaultPage={page}
-            onChange={(event, value) => setPage(value)}
-          />
-        </Stack>
-      </div>
+      <Stack spacing={2} sx={{ width: '100%', maxWidth: 500, margin: '0 auto' }} className='pt-5'>
+        <Pagination
+          className="pb-3"
+          count={totalPages}
+          page={pageNumber}
+          onChange={handlePageChange}
+          variant="outlined"
+          color="secondary"
+          showFirstButton
+          showLastButton
+        />
+      </Stack>
       
     </Grid>
     </Layout>
