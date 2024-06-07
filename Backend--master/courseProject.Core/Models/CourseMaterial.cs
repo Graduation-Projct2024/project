@@ -19,7 +19,7 @@ namespace courseProject.Core.Models
         public string? description { get; set; }
         public string type { get; set; }
       [NotMapped] public List<IFormFile>? pdf {  get; set; }
-       public string? pdfUrl { get; set; }
+       //public string? pdfUrl { get; set; }
         public  DateTime dateOfAdded { get; set; }= DateTime.Now;
         public  DateTime? DeadLine { get; set; } 
 

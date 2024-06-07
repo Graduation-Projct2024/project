@@ -22,7 +22,7 @@ namespace courseProject.Services.Materials
         public Task<ErrorOr<Updated>> changeMaterialStatus(Guid materialId ,bool isHidden);
 
 
-        public Task<ErrorOr<ArrayList>> GetAllMaterialInTheCourse(Guid? courseId, Guid? consultationId);
+        public Task<ErrorOr<IReadOnlyList<CourseMaterial>>> GetAllMaterialInTheCourse(Guid? courseId, Guid? consultationId);
 
     }
 }

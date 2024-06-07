@@ -70,10 +70,10 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         
-        public async Task<IActionResult> GetAllContact(int? pageNumber , int? pageSize)
+        public async Task<IActionResult> GetAllContact([FromQuery] PaginationRequest paginationRequest)
         {
             var allContact = await contactServices.GetAllMessages();
-            return Ok(Pagination<Contact>.CreateAsync(allContact ,pageNumber , pageSize ).Result);
+            return Ok(Pagination<Contact>.CreateAsync(allContact , paginationRequest.pageNumber, paginationRequest.pageSize).Result);
         }
 
 

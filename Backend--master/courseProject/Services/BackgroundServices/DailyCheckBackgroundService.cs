@@ -1,4 +1,4 @@
-﻿namespace courseProject.Services.CourseStatus
+﻿namespace courseProject.Services.BackgroundServices
 {
     using courseProject.Core.Models;
     using Microsoft.EntityFrameworkCore;

@@ -10,6 +10,7 @@ using courseProject.Services.Instructors;
 using courseProject.Core.IGenericRepository;
 using Microsoft.AspNetCore.Authorization;
 using courseProject.Core.Models.DTO.EmployeesDTO;
+using courseProject.Core.Models.DTO.LecturesDTO;
 
 namespace courseProject.Controllers
 {
@@ -83,10 +84,10 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        [Authorize(Policy ="Student")]
-        public async Task<IActionResult> GetAListOfInstrcutorsForBookALectures(Guid skillId, string startTime, string endTime, DateTime date)
+     //   [Authorize(Policy ="Student")]
+        public async Task<IActionResult> GetAListOfInstrcutorsForBookALectures(LectureFormDTO lectureForm)
         {
-            var getInstructors = await instructorServices.GetListOfInstructorForLectures(skillId, startTime, endTime, date);
+            var getInstructors = await instructorServices.GetListOfInstructorForLectures(lectureForm);
             if (getInstructors.IsError) return Ok(new ApiResponce { ErrorMassages = getInstructors.FirstError.Description });
             return Ok(new ApiResponce { Result = getInstructors });
         }
@@ -104,17 +105,7 @@ namespace courseProject.Controllers
             return Ok(new ApiResponce { Result = "The description is added successfully" });
         }
 
-        //[HttpPut("EditASkillDescription")]
-        //[ProducesResponseType(200)]
-        //[ProducesResponseType(404)]
-        //[ProducesResponseType(400)]
-        //[Authorize(Policy = "Instructor")]
-        //public async Task<IActionResult> EditASkillDescriptionForInstructor(Guid instructorId, SkillDescriptionDTO skillDescriptionDTO)
-        //{
-        //    var addedSkill = await instructorServices.AddSkillDescription(instructorId, skillDescriptionDTO);
-        //    if (addedSkill.IsError) return NotFound(new ApiResponce { ErrorMassages = addedSkill.FirstError.Description });
-        //    return Ok(new ApiResponce { Result = "The description is added successfully" });
-        //}
+        
 
     }
 }
