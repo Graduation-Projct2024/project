@@ -6,21 +6,25 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUpFromBracket, faEye, faFilter, faSquareCheck, faSquareXmark } from '@fortawesome/free-solid-svg-icons'
 import Link from 'next/link';
 import { UserContext } from '@/context/user/User';
-import { FormControl, InputLabel, MenuItem, Pagination, Select, Stack } from '@mui/material';
+import { Box, FormControl, InputLabel, MenuItem, Pagination, Select, Stack } from '@mui/material';
 import Swal from 'sweetalert2';
+import '../../dashboard/loading.css'
 
 
 export default function AccreditCourses() {
   const {userToken, setUserToken, userData}=useContext(UserContext);
 
   const [accreditCourses, setAccreditCourses] = useState([]);
-  let[loader,setLoader] = useState(false);
+  // let[loader,setLoader] = useState(false);
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
+  const [loading, setLoading] = useState(true);
+
 
   const fetchCoursesForAccredit = async (pageNum = pageNumber, pageSizeNum = pageSize)=> {
     if(userData){
+      setLoading(true)
     try{
     const { data } = await axios.get(`https://localhost:7116/api/CourseContraller/GetAllCoursesForAccredit?pageNumber=${pageNum}&pageSize=${pageSize}`);
     // console.log(data);
@@ -29,6 +33,9 @@ export default function AccreditCourses() {
   }
     catch(error){
       console.log(error);
+    }
+    finally{
+      setLoading(false)
     }
   }
   };
@@ -96,7 +103,7 @@ export default function AccreditCourses() {
 
   useEffect(() => {
     fetchCoursesForAccredit();
-  }, [accreditCourse,userData, pageNumber, pageSize]);
+  }, [userData, pageNumber, pageSize]);
 
   const handlePageSizeChange = (event) => {
     setPageSize(event.target.value);
@@ -107,9 +114,7 @@ export default function AccreditCourses() {
     setPageNumber(value);
   };
 
-if(loader){
-  return <p>Loading ...</p>
-}
+
   const [searchTerm, setSearchTerm] = useState('');
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
@@ -127,6 +132,17 @@ const filteredAccreditCourses = Array.isArray(accreditCourses) ? accreditCourses
 
   return (
     <>
+    {loading ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
+          {/* <CircularProgress /> */}
+          {/* <div className='loading bg-white position-fixed vh-100 w-100 d-flex justify-content-center align-items-center z-3'> */}
+      <span class="loader"></span>
+    {/* </div> */}
+        </Box>
+        
+      ) : (
+
+        <>
       <div className="filter py-2 text-end">
         <nav className="navbar">
           <div className="container justify-content-end">
@@ -258,6 +274,7 @@ const filteredAccreditCourses = Array.isArray(accreditCourses) ? accreditCourses
         showLastButton
       />
     </Stack>
+    </>)}
     </>
   );
 }

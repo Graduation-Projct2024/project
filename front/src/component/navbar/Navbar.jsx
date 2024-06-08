@@ -139,51 +139,53 @@ export default function Navbar({role}) {
               <Button
               key='1'
               // onClick={handleCloseNavMenu}
-              onClick={() => router.push('/dashboard')}
+              // onClick={() => router.push('/dashboard')}
               sx={{ my: 2, color: 'white', display: 'block' }}
             >
-               {/* <Link href="/dashboard" color="inherit" underline='none' >Dashboard</Link> */}
-               Dashboard
-            </Button>) || (role == "main-subadmin" &&
+               <Link href="/dashboard" color="inherit" underline='none' >Dashboard</Link>
+               {/* { Dashboard} */}
+            </Button>
+          )
+             || (role == "main-subadmin" &&
               <Button
               key='1'
               // onClick={handleCloseNavMenu}
-              onClick={() => router.push('/dashboardM')}
+              // onClick={() => router.push('/dashboardM')}
               sx={{ my: 2, color: 'white', display: 'block' }}
             >
-               {/* <Link href="/dashboardM" color="inherit" underline='none' >Dashboard</Link> */}
-               Dashboard
+               <Link href="/dashboardM" color="inherit" underline='none' >Dashboard</Link>
+               {/* Dashboard */}
             </Button>)||
             (role == "subadmin" &&
             <Button
             key='1'
             // onClick={handleCloseNavMenu}
-            onClick={() => router.push('/dashboardS')}
+            // onClick={() => router.push('/dashboardS')}
             sx={{ my: 2, color: 'white', display: 'block' }}
           >
-             {/* <Link href="/dashboardS" color="inherit" underline='none' >Dashboard</Link> */}
-             Dashboard
+             <Link href="/dashboardS" color="inherit" underline='none' >Dashboard</Link>
+             {/* Dashboard */}
           </Button>)||
           (role == "instructor" &&
           <Button
           key='1'
           // onClick={handleCloseNavMenu}
-          onClick={() => router.push('/myDashboard')}
+          // onClick={() => router.push('/myDashboard')}
           sx={{ my: 2, color: 'white', display: 'block' }}
         >
-           {/* <Link href="/myDashboard" color="inherit" underline='none' >Dashboard</Link> */}
-           Dashboard
+           <Link href="/myDashboard" color="inherit" underline='none' >Dashboard</Link>
+           {/* Dashboard */}
           
         </Button>)||
         (role == "student" &&
         <Button
         key='1'
         // onClick={handleCloseNavMenu}
-        onClick={() => router.push('/MyDashboard')}
+        // onClick={() => router.push('/MyDashboard')}
         sx={{ my: 2, color: 'white', display: 'block' }}
       >
-         {/* <Link href="/MyDashboard" color="inherit" underline='none' >Dashboard</Link> */}
-         Dashboard
+         <Link href="/MyDashboard" color="inherit" underline='none' >Dashboard</Link>
+         {/* Dashboard */}
       </Button>)
                     
           )
@@ -192,12 +194,11 @@ export default function Navbar({role}) {
               <Button
                 key={page}
                 // onClick={handleCloseNavMenu}
-                onClick={() => router.push(`/${page}`,undefined, { shallow: true })}
+                // onClick={() => router.push(`/${page}`,undefined, { shallow: true })}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
-                 {/* <Link href=
-                 {`/${page}`} color="inherit" underline='none' >{page}</Link> */}
-                {page}
+                  <Link href={`/${page}`} color="inherit" underline='none' >{page}</Link> 
+                {/* {page} */}
               </Button>
             ))}
           </Box>
