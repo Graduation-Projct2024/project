@@ -70,9 +70,15 @@ function getCurrentDateFormatted(date) {
 // console.log(`skill ${skill} , start: ${start}, end: ${end}, currntDate ${currntDate}`)
     try {
 
+      const formData = new FormData();
+formData.append("skillId", skill);
+formData.append("startTime", start);
+formData.append("endTime", end);
+formData.append("date", currntDate);
+
       const response = await axios.post(
-        `https://localhost:7116/api/Instructor/GetListOfInstructorForLectures?skillId=${skill}&startTime=${start}&endTime=${end}&date=${currntDate}`,
-        {},
+        `https://localhost:7116/api/Instructor/GetListOfInstructorForLectures`,
+        formData,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -169,6 +175,7 @@ formData.append("name", skillName);
 formData.append("description", lectures.description);
 formData.append("type", status);
 formData.append("InstructorId", selectedInstructor);
+
 
 
 const { data } = await axios.post(

@@ -26,45 +26,45 @@ export default function page() {
   };
   const initialValues = {
     name: "",
-    description: "",
-    startDate: "",
-    endDate: "",
+    email: "",
+    subject: "",
+    message: "",
   };
-  const onSubmit = async (courses) => {
-const formData = new FormData();
-formData.append("name", courses.name);
-formData.append("description", courses.description);
-formData.append("startDate", courses.startDate);
-formData.append("endDate", courses.endDate);
-console.log( courses.name)
-console.log(  courses.description)
-console.log( courses.startDate)
-console.log( courses.endDate)
-
-const { data } = await axios.post(
-  `https://localhost:7116/api/Request/RequestToCreateCustomCourse`,
- formData,
- 
-);
-setOpen(true);
-
   
+  const onSubmit = async (contact, { resetForm }) => {
+    try {
+      const formData = new FormData();
+      formData.append("name", contact.name);
+      formData.append("email", contact.email);
+      formData.append("subject", contact.subject);
+      formData.append("message", contact.message);
+
+      const { data } = await axios.post(
+        `https://localhost:7116/api/Contact/MessageToContactUs`,
+        formData,
+      );
+      setOpen(true);
+      resetForm(); // Reset the form after successful submission
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
   };
+  
   const validationSchema = yup.object({
     name: yup
       .string()
-      .required("course name is required"),
+      .required("name is required"),
       
-      description: yup
-      .string()
-      .required("description is required"),
+      email: yup.string().required("email is required").email(),
+
     
-      startDate: yup
+      subject: yup
       .string()
-      .required("Start Date is required"),
-      endDate: yup
+      .required("subject is required"),
+      message: yup
       .string()
-      .required("End Date is required")
+      .required("message is required")
 
   });
 
@@ -94,45 +94,46 @@ setOpen(true);
       name: "subject",
       title: "Subject",
       value: formik.values.subject,
-        },
-        {
-          id: "massage",
-          type: "text",
-          name: "massage",
-          title: "Massage",
-          value: formik.values.massage,
-        }
+    },
+    {
+      id: "message",
+      type: "text",
+      name: "message",
+      title: "Message",
+      value: formik.values.message,
+    }
   ];
   const renderInputs = inputs.slice(0, -1).map((input, index) => (
     <Input
+      key={index}
       type={input.type}
       id={input.id}
       name={input.name}
-      value={input.value}
+      value={formik.values[input.name]} // Use formik.values directly
       title={input.title}
-      onChange={input.onChange || formik.handleChange}
+      onChange={formik.handleChange}
       onBlur={formik.handleBlur}
       touched={formik.touched}
       errors={formik.errors}
-      key={index}
     />
   ));
+
   const lastInput = inputs[inputs.length - 1];
 
-const textAraeInput = (
-  <TextArea
-    type={lastInput.type}
-    id={lastInput.id}
-    name={lastInput.name}
-    value={lastInput.value}
-    title={lastInput.title}
-    onChange={lastInput.onChange || formik.handleChange}
-    onBlur={formik.handleBlur}
-    touched={formik.touched}
-    errors={formik.errors}
-    key={inputs.length - 1}
-  />
-);
+  const textAreaInput = (
+    <TextArea
+      type={lastInput.type}
+      id={lastInput.id}
+      name={lastInput.name}
+      value={formik.values[lastInput.name]} // Use formik.values directly
+      title={lastInput.title}
+      onChange={formik.handleChange}
+      onBlur={formik.handleBlur}
+      touched={formik.touched}
+      errors={formik.errors}
+    />
+  );
+
   return (
     <Layout>
        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
@@ -170,7 +171,7 @@ const textAraeInput = (
                 <div className="form-container">
       <form onSubmit={formik.handleSubmit} encType="multipart/form-data">        
         {renderInputs}
-        {textAraeInput}
+        {textAreaInput}
         <div className="text-center mt-3 w-75">
         <Button sx={{px:2}} variant="contained"
               className="m-2  "
