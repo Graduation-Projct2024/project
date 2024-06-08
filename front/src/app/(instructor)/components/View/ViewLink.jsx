@@ -28,7 +28,11 @@ import Alert from '@mui/material/Alert';
 import EditLink from '../Edit/EditLink.jsx';
 import { useRouter } from 'next/navigation'
 import { UserContext } from '../../../../context/user/User.jsx';
-
+import Switch from '@mui/material/Switch';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
 export default function ViewLink({ materialID , type, Id}) {
  const [material, setMaterial]=useState(null);
  const [loading ,setLoading]=useState(true);
@@ -63,6 +67,8 @@ const handleClose = () => {
 )
 
   setMaterial(data.result);
+  setIsChecked(data.result.isHidden);
+
   setLoading(false);
   console.log(data)
 
@@ -70,6 +76,21 @@ const handleClose = () => {
     console.log(error);
   }
  }}
+ const [isChecked, setIsChecked] = useState();
+
+ const hideMaterial= async(event)=>{
+  try{
+    setIsChecked(event.target.checked);
+    const {data}= await axios.patch(`https://localhost:7116/api/MaterialControllar/HideOrShowMaterials?Id=${materialID}&isHidden=${event.target.checked}`,
+      {},
+      {headers :{Authorization:`Bearer ${userToken}`}}
+    
+      )
+    console.log(data);
+  }catch(error){
+    console.log(error);
+  }
+ }
  const deleteMaterial=async()=>{
   try{
   const {data}= await axios.delete(`https://localhost:7116/api/MaterialControllar/DeleteMaterial?id=${materialID}`,
@@ -89,7 +110,7 @@ const handleClose = () => {
  useEffect(() => {
     getMaterial();
   
-}, [materialID, userToken]);
+}, [materialID, userToken, isChecked]);
 
 
   const style = {
@@ -115,6 +136,12 @@ if (loading) {
     <>
     <Stack direction="row" alignItems="center"  justifyContent= 'end' width='89%' mt='2px'>
     <div >
+    <FormControlLabel
+          value="top"
+          control={<Switch color="success" onChange={hideMaterial} checked={isChecked} />}
+          label="Hide"
+          labelPlacement="top"
+        />
     <IconButton aria-label="delete" onClick={handleClickOpen} >
       <DeleteIcon  color="error"/>
     </IconButton>
