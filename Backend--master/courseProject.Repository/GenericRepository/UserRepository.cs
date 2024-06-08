@@ -162,10 +162,19 @@ namespace courseProject.Repository.GenericRepository
 
         public async Task<string> getRoleFromToken()
         {
-            var userIdAsString = (httpContextAccessor.HttpContext.User.FindFirst("UserId")).Value;
-            Guid.TryParse(userIdAsString, out var userId);
-            var role =(await dbContext.users.FirstAsync(x => x.UserId == userId)).role;
-            return role;
+            try
+            {
+
+
+                var userIdAsString = (httpContextAccessor.HttpContext.User.FindFirst("UserId")).Value;
+                Guid.TryParse(userIdAsString, out var userId);
+                var role = (await dbContext.users.FirstAsync(x => x.UserId == userId)).role;
+                return role;
+            }
+            catch(Exception ex)
+            {
+                return null;
+            }
         }
     }
 }

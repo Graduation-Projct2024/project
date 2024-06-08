@@ -31,13 +31,14 @@ namespace courseProject.Configuration
           //  services.AddTransient<IEmailService, EmailService>();
             services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
            
-            //  services.AddScoped(typeof(ISubAdminRepository), typeof(SubAdminRepository));
-            //  services.AddScoped(typeof(IUserRepository), typeof(UserRepository));
-            //  services.AddScoped(typeof(IStudentRepository), typeof(StudentRepository));
             services.AddAutoMapper(typeof(MappingForStudents));
             services.AddAutoMapper(typeof(MappingForCourse));
             services.AddAutoMapper(typeof(MappingForEmployee));
             services.AddAutoMapper(typeof(MappingForEvents));
+            services.AddAutoMapper(typeof(MappingForContact));
+            services.AddAutoMapper(typeof(MappingForFeedback));
+            services.AddAutoMapper(typeof(MappingForMaterial));
+            services.AddAutoMapper(typeof(MappingForStudentCourses));
 
 
             return services;
