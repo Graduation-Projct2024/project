@@ -10,6 +10,7 @@ import { faArrowUpFromBracket, faFilter } from '@fortawesome/free-solid-svg-icon
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, useMediaQuery, useTheme } from '@mui/material';
 import '../../../../node_modules/bootstrap/dist/js/bootstrap.bundle'
 import AddSkill from './AddSkill/AddSkill';
+import '../dashboard/loading.css'
 
 export default function page() {
 
@@ -17,6 +18,7 @@ export default function page() {
     const {userToken, setUserToken, userData}=useContext(UserContext);
     const [skills, setSkills] = useState([]);
     const [open, setOpen] = React.useState(false);
+    const [loading, setLoading] = useState(true);
 
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
@@ -29,6 +31,7 @@ export default function page() {
 
     const fetchSkills = async () => {
       if(userData){
+        setLoading(true);
       try{
       const { data } = await axios.get(`https://localhost:7116/api/Skill/GetAllSkillOptions`,{ headers: { Authorization: `Bearer ${userToken}` } });
       // setLoading(false)
@@ -38,12 +41,15 @@ export default function page() {
       catch(error){
         console.log(error);
       }
+      finally{
+        setLoading(false)
+      }
     }
     };
 
     useEffect(() => {
         fetchSkills();
-    }, [skills,userData]);
+    }, [,userData]);
 
     const [searchTerm, setSearchTerm] = useState('');
   
@@ -64,6 +70,17 @@ const filteredSkills = Array.isArray(skills) ? skills.filter((skill) => {
 
   return (
     <Layout title="Skills in academy">
+      {loading ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
+          {/* <CircularProgress /> */}
+          {/* <div className='loading bg-white position-fixed vh-100 w-100 d-flex justify-content-center align-items-center z-3'> */}
+      <span class="loader"></span>
+    {/* </div> */}
+        </Box>
+        
+      ) : (
+
+        <>
     <div className="filter py-2 text-end">
         <nav className="navbar">
           <div className="container justify-content-end">
@@ -185,6 +202,7 @@ const filteredSkills = Array.isArray(skills) ? skills.filter((skill) => {
           )}
         </tbody>
       </table>
+      </>)}
     </Layout>
   )
 }

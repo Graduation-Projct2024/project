@@ -11,17 +11,20 @@ import { faEnvelope } from '@fortawesome/free-regular-svg-icons'
 import '../Profile/[id]/Profile.css'
 import { faArrowUpFromBracket, faEye, faFilter } from '@fortawesome/free-solid-svg-icons'
 import { UserContext } from '@/context/user/User'
-import { FormControl, InputLabel, MenuItem, Pagination, Select, Stack, Tooltip } from '@mui/material'
+import { Box, FormControl, InputLabel, MenuItem, Pagination, Select, Stack, Tooltip } from '@mui/material'
+import '../dashboard/loading.css'
 
 export default function EmployeeContacts() {
   const {userToken, setUserToken, userData}=useContext(UserContext);
   const [pageNumber, setPageNumber] = useState(1);
+  const [loading,setLoading] = useState(true);
   const [pageSize, setPageSize] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
   // const [loading,setLoading]= useState(false);
   
   let [contacts,setContact] = useState([]);
   const fetchContacts = async (pageNum = pageNumber, pageSizeNum = pageSize) => {
+    setLoading(true);
     if(userData){
     try{
     // setLoading(true)
@@ -39,9 +42,9 @@ export default function EmployeeContacts() {
     catch(error){
       console.log(error);
     }
-    // finally{
-    //   setLoading(false)
-    // }
+    finally{
+      setLoading(false)
+    }
   
   }
   };
@@ -81,7 +84,19 @@ return matchesSearchTerm ;
 
 
   return (
+
     <>
+    {loading ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
+          {/* <CircularProgress /> */}
+          {/* <div className='loading bg-white position-fixed vh-100 w-100 d-flex justify-content-center align-items-center z-3'> */}
+      <span class="loader"></span>
+    {/* </div> */}
+        </Box>
+        
+      ) : (
+
+        <>
                <div className="filter py-2 text-end ">
                      <nav className="navbar">
           <div className="container justify-content-end">
@@ -172,6 +187,7 @@ return matchesSearchTerm ;
         showLastButton
       />
     </Stack>
+    </>)}
     </>
   )
 }

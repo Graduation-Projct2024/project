@@ -12,17 +12,18 @@ import '../../dashboard/dashboard.css'
 import { UserContext } from '@/context/user/User';
 import EditProfile from './EditProfile';
 import '../../../../../node_modules/bootstrap/dist/js/bootstrap.bundle'
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Tooltip, useMediaQuery, useTheme } from '@mui/material';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Tooltip, useMediaQuery, useTheme } from '@mui/material';
 import { Stack } from '@mui/system';
 import SyncLockIcon from '@mui/icons-material/SyncLock';
 import ChangePassword from '@/app/(auth)/ChangePassword/ChangePassword';
+import '../../dashboard/loading.css'
 
 
 export default function page({params}) {
   const {userToken, setUserToken, userData,userId}=useContext(UserContext);
 
   let [user,setUser] = useState({})
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [openUpdate, setOpenUpdate] = React.useState(false);
   const [openChange, setOpenChange] = React.useState(false);
   const theme = useTheme();
@@ -52,6 +53,7 @@ setOpenChange(false);
 // console.log(params)
   const getUser =async ()=>{
     if(userData){
+      setLoading(true);
     try {
       //setLoading(false)
       const {data} = await axios.get(`https://localhost:7116/api/UserAuth/GetProfileInfo?id=${params.id}`,
@@ -63,16 +65,30 @@ setOpenChange(false);
       }
       catch (error) {
       console.log(error)
-      }}
+      }finally{
+        setLoading(false);
+      }
+    }
       
   }
   console.log(user)
   useEffect(()=>{
       getUser();
-  },[user,userData])
+  },[userData])
   
   return (
     <Layout>
+      {loading ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
+          {/* <CircularProgress /> */}
+          {/* <div className='loading bg-white position-fixed vh-100 w-100 d-flex justify-content-center align-items-center z-3'> */}
+      <span class="loader"></span>
+    {/* </div> */}
+        </Box>
+        
+      ) : (
+
+        <>
       <div className="container">
         <div className="row">
           <div className="col-xl-4 text-center">
@@ -284,6 +300,7 @@ setOpenChange(false);
           </div>
         </div>
       </div>
+      </>)}
     </Layout>
   );
 }
