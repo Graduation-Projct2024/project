@@ -75,7 +75,7 @@
 }
 
 .card:hover h4{
-  color: #FFFDF6;
+  color: #FFFDF6 !important;
 }
 .card:hover .social{
   background-color: #FFFDF6;
