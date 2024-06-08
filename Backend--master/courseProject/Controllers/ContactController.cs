@@ -65,7 +65,7 @@ namespace courseProject.Controllers
         /// <response code="200">Returns the paginated list of contact messages.</response>
         /// <response code="404">If the requested resource is not found.</response>
         /// <response code="400">If the request is invalid.</response>
-        [HttpPost("GetAllContact")]
+        [HttpGet("GetAllContact")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
@@ -88,7 +88,7 @@ namespace courseProject.Controllers
         /// <response code="200">Returns the contact message with the specified ID.</response>
         /// <response code="404">If the requested contact message is not found.</response>
         /// <response code="400">If the request is invalid.</response>
-        [HttpPost("GetContactById")]
+        [HttpGet("GetContactById")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
