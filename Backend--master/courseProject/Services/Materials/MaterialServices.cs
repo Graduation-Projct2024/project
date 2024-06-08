@@ -278,7 +278,7 @@ namespace courseProject.Services.Materials
             var getConsultation = await unitOfWork.lecturesRepository.GetConsultationById(consultationId);
             if (getConsultation == null && consultationId != null) return ErrorLectures.NotFound;
             string userType = await unitOfWork.UserRepository.getRoleFromToken();
-            
+            if(userType==null) return ErrorUser.NotFound;
             var AllMaterials = await unitOfWork.materialRepository.GetAllMaterial(courseId, consultationId, userType);
             
             
