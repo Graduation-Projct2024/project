@@ -107,7 +107,7 @@ export default function page() {
                   <div className='col-lg-4 col-sm-6 col-md-6 '>
                     <div className='event-details'>
                       <div className='event-image'>
-                      <img src={`${event.imageUrl}`}/>
+                      <img src={`${event.imageUrl}`} alt='event image'/>
                       <span className='date'><CalendarMonthIcon sx={{m:1}}/>{event.dateOfEvent}</span>
                       </div>
                     
