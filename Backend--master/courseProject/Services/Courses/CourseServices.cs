@@ -42,7 +42,7 @@ namespace courseProject.Services.Courses
             getCourse.dateOfUpdated = DateTime.Now;
             getCourse.dateOfAdded = dateAdded;
             
-            if (getCourse.status.ToLower() == "accredit") return ErrorCourse.NoContent;          
+            if (getCourse.status.ToLower() != "accredit") return ErrorCourse.NoContent;          
             await unitOfWork.CourseRepository.updateCourse(getCourse);
             await unitOfWork.CourseRepository.saveAsync();
             return Result.Updated; 
