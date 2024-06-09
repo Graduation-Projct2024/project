@@ -30,6 +30,7 @@ import { useRouter } from 'next/navigation'
 import LogoutIcon from '@mui/icons-material/Logout';
 import { Avatar, Stack } from '@mui/material';
 import AdbIcon from '@mui/icons-material/Adb';
+import ContactMailIcon from '@mui/icons-material/ContactMail';
 import './Layout.css'
 import HomeIcon from '@mui/icons-material/Home';
 import { UserContext } from '@/context/user/User';
@@ -72,6 +73,11 @@ function Layout(props) {
       name: "Requests",
       href: "/Requests",
       icon: FeedOutlinedIcon,
+    },
+    {
+      name: "Contacts",
+      href: "/Contacts",
+      icon: ContactMailIcon,
     },
     // {
     //   name: "My Lectures",

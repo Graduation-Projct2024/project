@@ -90,3 +90,7 @@ color: #4C5372 !important;
 .w-25{
     width: 25% !important;
 }
+.message{
+    border: 1px solid #4C5372;
+    padding: 20px;
+}
