@@ -68,13 +68,14 @@
 .card:hover{
   background-color: #4C5372;
 }
-.card h4{
+.card h4 a{
   color: #4C5372;
   font-family: 'Nunito', 'sans-serif';
+  text-decoration:none;
 
 }
 
-.card:hover h4{
+.card:hover h4 a{
   color: #FFFDF6 !important;
 }
 .card:hover .social{
