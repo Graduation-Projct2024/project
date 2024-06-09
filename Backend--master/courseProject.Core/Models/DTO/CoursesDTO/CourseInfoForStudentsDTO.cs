@@ -22,6 +22,7 @@ namespace courseProject.Core.Models.DTO.CoursesDTO
         public double price { get; set; }
         public string startDate { get; set; }
         public string endDate { get; set; }
+        public string? Deadline { get; set; }
         public int? totalHours { get; set; }
         public Guid InstructorId { get; set; }
         public string InstructorName { get; set; }

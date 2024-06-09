@@ -37,7 +37,7 @@ namespace courseProject.Repository.GenericRepository
         }
         public static async Task<Pagination<T>> CreateAsync(IReadOnlyList<T> data, int? pageNumber=null , int? pageSize=null , int defaultPageNumber = 1, int defaultPageSize = 10 )
         {
-            var totalCount = data.Count;
+            var totalCount = data.Count();
             var page = pageNumber ?? defaultPageNumber;
             var size = pageSize ?? defaultPageSize;
             size = size> maxPageSize ? maxPageSize : size;
