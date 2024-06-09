@@ -19,7 +19,7 @@ using courseProject.Core.Models.DTO.EventsDTO;
 using courseProject.Core.Models.DTO.CoursesDTO;
 using courseProject.Services.Courses;
 using courseProject.Validations;
-using Sieve.Models;
+
 
 namespace courseProject.Controllers
 {

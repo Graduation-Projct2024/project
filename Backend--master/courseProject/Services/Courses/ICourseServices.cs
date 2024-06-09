@@ -4,7 +4,7 @@ using courseProject.Core.Models.DTO.CoursesDTO;
 using courseProject.Core.Models.DTO.StudentsDTO;
 using ErrorOr;
 using Microsoft.AspNetCore.Mvc;
-using Sieve.Models;
+
 
 namespace courseProject.Services.Courses
 {
