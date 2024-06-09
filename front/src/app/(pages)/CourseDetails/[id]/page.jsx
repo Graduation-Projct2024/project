@@ -10,6 +10,7 @@ import axios from 'axios';
 import { faCss3, faFacebookF, faGithub, faLinkedinIn } from '@fortawesome/free-brands-svg-icons'
 import { useSearchParams } from 'next/navigation'
 import Swal from 'sweetalert2'
+import Review from './Review.jsx'
 export default function CourseDetails({params}) {
   const {userToken, setUserToken, userData,userId}=useContext(UserContext);
 
@@ -154,7 +155,7 @@ export default function CourseDetails({params}) {
                       
                     </div>
                     <div className="tab-pane fade" id="nav-reviwe" role="tabpanel" aria-labelledby="nav-reviwe-tab" tabIndex={2}>
-                      sssss
+                      <Review courseId={params.id}/>
                     </div>
                     {/* <div className="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab" tabIndex={0}>
                       ,,,,,

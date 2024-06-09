@@ -110,7 +110,6 @@ export default function Review({courseId}) {
         const data = await axios.get(
           `https://localhost:7116/api/Feedback/GetAllCourseFeedback?courseId=${courseId}`
         );
-      console.log(data);
         setReviews(data.data.result.items);
       }catch(error){
         console.log(error);

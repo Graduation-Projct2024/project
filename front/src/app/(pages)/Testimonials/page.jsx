@@ -133,7 +133,7 @@ export default function Testimonials() {
              e.target.onerror = null; // prevents looping
              e.target.src = "./user1.png"; // default image if error
            }} />                          
-                      <h4 className="card-title contactName">{contact.fName} {contact.lName}</h4>
+                      <h4 className="card-title contactName"><Link href={`/Testimonials/${contact.id}`}>{contact.fName} {contact.lName}</Link></h4>
                         
                         <div className="d-flex justify-content-center gap-3 pt-3 border-top">
                           <Link className='social' href="#"><FontAwesomeIcon icon={faLinkedinIn} /></Link>

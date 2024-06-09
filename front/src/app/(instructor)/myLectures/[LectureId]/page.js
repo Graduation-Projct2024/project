@@ -32,6 +32,7 @@ import AddAnnouncement from '../../components/Add/AddAnnouncement.jsx';
 import ViewTask from '../../components/View/ViewTask.jsx';
 import { FormControl, InputLabel, MenuItem, Pagination, Select } from '@mui/material';
 import { UserContext } from '../../../../context/user/User.jsx';
+import Chip from '@mui/material/Chip';
 
 export default function page() {
   const {userToken, setUserToken, userData}=useContext(UserContext);
@@ -299,26 +300,29 @@ if(userToken&&LectureId){
       </Dialog>
    {materials&& materials?.map((material)=>( 
 
-   <Box
-      height={70}
-      width={1000}
-      display="flex"
-      alignItems="center"
-      gap={4}
-      p={2}
-      sx={{ border: '1px solid grey' ,borderRadius: 3, mt:2}}
-      className={material.type}
-    >
-      {material.type=='Task'&&<AssignmentIcon sx={{fontSize:50, }}/>}
-      {material.type=='File'&&<InsertDriveFileIcon sx={{fontSize:50, }}/>}
-      {material.type=='Link'&&<LinkIcon  sx={{fontSize:50, }}/>}
-      {material.type=='Announcement'&&<MessageIcon sx={{fontSize:50, }}/>}
-      <Link href={`${LectureId}/${material.id}`} underline="none">
-     <Typography variant='h6'> {material.name}</Typography>
-     </Link>
+<Box
+height={70}
+width={1000}
+gap={4}
+p={2}
+sx={{ border: '1px solid grey' ,borderRadius: 3, mt:2, display: 'flex',
+  justifyContent: 'space-between',}}
+className={material.type}
+>
+<div className='d-flex align-items-center '>
+{material.type=='Task'&&<AssignmentIcon sx={{fontSize:50, }}/>}
+{material.type=='File'&&<InsertDriveFileIcon sx={{fontSize:50, }}/>}
+{material.type=='Link'&&<LinkIcon  sx={{fontSize:50, }}/>}
+{material.type=='Announcement'&&<MessageIcon sx={{fontSize:50, }}/>}
+<Link href={`${LectureId}/${material.id}`} underline="none">
+<Typography variant='h6'> {material.name}</Typography>
+</Link>
+</div>
+{material.isHidden?(<Chip label="Hidden" color="error" />):(<Chip label="Active" color="success" />)}
 
-    </Box>
 
+
+</Box>
 
         ))}
 
