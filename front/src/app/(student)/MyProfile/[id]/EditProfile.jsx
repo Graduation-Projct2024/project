@@ -142,7 +142,7 @@ export default function EditProfile({ id, FName, LName, gender, phoneNumber, Dat
   ));
 
   return (
-    <form onSubmit={formik.handleSubmit} className="row justify-content-center">
+    <form onSubmit={formik.handleSubmit} encType="multipart/form-data" className="row justify-content-center">
       {renderInputs}
       <div className="col-md-6">
         <select

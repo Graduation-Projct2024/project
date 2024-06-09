@@ -260,7 +260,7 @@ const handlePageChange = (event, value) => {
 
 
 
-      <table className="table ">
+      <table className="table">
         <thead>
           <tr>
             <th scope="col">ID</th>
@@ -270,7 +270,7 @@ const handlePageChange = (event, value) => {
             <th scope="col">Status</th>
             <th scope="col">Start Date</th>
             <th scope="col">Instructor</th>
-            <th scope="col">Option</th>
+            <th scope="col ">Option</th>
           </tr>
         </thead>
         <tbody>
@@ -284,12 +284,8 @@ const handlePageChange = (event, value) => {
                 <td>{course.status}</td>
                 <td>{course.startDate}</td>
                 <td>{course.instructorName}</td>
-                <td className="d-flex gap-1">
-                <Tooltip title="Edit course" placement="top">
-                <button className="border-0 bg-white" type="button" onClick={() => handleClickOpenUpdate(course.id)}>
-                <FontAwesomeIcon icon={faPen} className="edit-pen" />
-            </button>
-            </Tooltip>
+                <td className="d-flex gap-1 ">
+                  
 
             <Dialog
         fullScreen={fullScreen}
@@ -361,18 +357,27 @@ const handlePageChange = (event, value) => {
                   </Tooltip>
                   <ul className="dropdown-menu">
                   <li>
-                      <a
+                      <button
                         className="dropdown-item"
                         href="#"
                         onClick={()=>accreditCourse(course.id,"finish")}
-                        disabled = {course.status == 'finish' }
+                        disabled = {course.status === 'finish' }
                       >
                         Finish
-                      </a>
+                      </button>
                     </li>
                    
                   </ul>
                 </div>
+{userData && course.status == "accredit" &&
+                 
+                <Tooltip title="Edit course" placement="top">
+                <button className="border-0 bg-white" type="button" onClick={() => handleClickOpenUpdate(course.id)}>
+                <FontAwesomeIcon icon={faPen} className="edit-pen" />
+            </button>
+            </Tooltip>
+             }
+
                 </td>
               </tr>
             ))
