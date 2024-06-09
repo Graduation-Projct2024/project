@@ -14,7 +14,7 @@ export default function GeneralFeedback() {
     const [role,setRole] = useState();
     useEffect(() => {
         if (userData){
-          setRole(userData.role)
+          setRole(userData.role);
         }
       }, [userData]);
 
