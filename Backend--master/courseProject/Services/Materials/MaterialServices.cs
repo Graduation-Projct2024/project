@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System.Collections;
 using System.Net;
+using courseProject.core.Models;
 
 namespace courseProject.Services.Materials
 {
@@ -231,6 +232,14 @@ namespace courseProject.Services.Materials
         {
             var material = await unitOfWork.materialRepository.GetMaterialByIdAsync(id);
             if (material == null) return ErrorMaterial.NotFound;
+            var user = await unitOfWork.UserRepository.getRoleFromToken();
+            if(user == null) return ErrorUser.NotFound;
+            if(user.role.ToLower()=="student")
+            {
+                var submission = material.Student_Task_Submissions.FirstOrDefault(x => x.StudentId==user.UserId && x.TaskId==id);
+                if (submission == null) material.Student_Task_Submissions = null;
+                else material.Student_Task_Submissions = new List<Student_Task_Submissions> { submission};
+            }
             if (material.MaterialFiles != null && material.MaterialFiles.Any())
             {
                 foreach (var file in material.MaterialFiles)
@@ -277,9 +286,9 @@ namespace courseProject.Services.Materials
             if (getCourse == null && courseId != null) return ErrorCourse.NotFound;
             var getConsultation = await unitOfWork.lecturesRepository.GetConsultationById(consultationId);
             if (getConsultation == null && consultationId != null) return ErrorLectures.NotFound;
-            string userType = await unitOfWork.UserRepository.getRoleFromToken();
-            if(userType==null) return ErrorUser.NotFound;
-            var AllMaterials = await unitOfWork.materialRepository.GetAllMaterial(courseId, consultationId, userType);
+            var user = await unitOfWork.UserRepository.getRoleFromToken();
+            if(user==null) return ErrorUser.NotFound;
+            var AllMaterials = await unitOfWork.materialRepository.GetAllMaterial(courseId, consultationId, user.role);
             
             
 

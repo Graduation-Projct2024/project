@@ -145,7 +145,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-      //  [Authorize]
+        [Authorize]
         public async Task<IActionResult> changePassword (Guid UserId ,ChengePasswordDTO chengePasswordDTO)
         {
             var changedPass = await userServices.changePassword( UserId, chengePasswordDTO);
