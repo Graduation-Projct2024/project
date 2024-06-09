@@ -147,7 +147,7 @@ const renderInputs = inputs.slice(0, -1).map((input,index)=>
       />
     );
   return (
-    <form onSubmit={formik.handleSubmit} className="row justify-content-center">
+    <form onSubmit={formik.handleSubmit} encType="multipart/form-data" className="row justify-content-center">
       {renderInputs}
       {textAraeInput}
       {/* <button
