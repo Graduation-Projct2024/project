@@ -19,12 +19,12 @@ export default function AccreditCourses() {
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
 
 
   const fetchCoursesForAccredit = async (pageNum = pageNumber, pageSizeNum = pageSize)=> {
     if(userData){
-      setLoading(true)
+      // setLoading(true)
     try{
     const { data } = await axios.get(`https://localhost:7116/api/CourseContraller/GetAllCoursesForAccredit?pageNumber=${pageNum}&pageSize=${pageSize}`);
     // console.log(data);
@@ -34,9 +34,9 @@ export default function AccreditCourses() {
     catch(error){
       console.log(error);
     }
-    finally{
-      setLoading(false)
-    }
+    // finally{
+    //   setLoading(false)
+    // }
   }
   };
 
@@ -103,7 +103,7 @@ export default function AccreditCourses() {
 
   useEffect(() => {
     fetchCoursesForAccredit();
-  }, [userData, pageNumber, pageSize]);
+  }, [accreditCourses,userData, pageNumber, pageSize]);
 
   const handlePageSizeChange = (event) => {
     setPageSize(event.target.value);
@@ -132,15 +132,15 @@ const filteredAccreditCourses = Array.isArray(accreditCourses) ? accreditCourses
 
   return (
     <>
-    {loading ? (
+    {/* {loading ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
-          {/* <CircularProgress /> */}
-          {/* <div className='loading bg-white position-fixed vh-100 w-100 d-flex justify-content-center align-items-center z-3'> */}
+          <CircularProgress />
+          <div className='loading bg-white position-fixed vh-100 w-100 d-flex justify-content-center align-items-center z-3'>
       <span class="loader"></span>
-    {/* </div> */}
+    </div>
         </Box>
         
-      ) : (
+      ) : ( */}
 
         <>
       <div className="filter py-2 text-end">
@@ -274,7 +274,8 @@ const filteredAccreditCourses = Array.isArray(accreditCourses) ? accreditCourses
         showLastButton
       />
     </Stack>
-    </>)}
+    </>
+    {/* )} */}
     </>
   );
 }

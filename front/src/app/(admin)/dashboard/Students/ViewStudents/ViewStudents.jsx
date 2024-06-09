@@ -166,7 +166,7 @@ return matchesSearchTerm ;
                 </form>
                 <Tooltip title="Convert students into pdf" placement="top">
                 <button className='border-0 bg-transparent edit-pen' onClick={ExportAllDataToPdf}>
-                <FontAwesomeIcon icon={faArrowUpFromBracket} className=''/>
+                <FontAwesomeIcon icon={faArrowUpFromBracket} className='px-2'/>
                 </button>
                </Tooltip>
 

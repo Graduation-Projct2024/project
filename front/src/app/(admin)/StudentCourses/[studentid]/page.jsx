@@ -7,7 +7,7 @@ import Link from 'next/link'
 import React, { useContext, useEffect, useState } from 'react'
 import '../../dashboard/dashboard.css'
 import { UserContext } from '@/context/user/User'
-import { FormControl, InputLabel, MenuItem, Pagination, Select, Stack } from '@mui/material'
+import { FormControl, InputLabel, MenuItem, Pagination, Select, Stack, Tooltip } from '@mui/material'
 import { useRouter } from 'next/router'
 
 export default function page({params}) {
@@ -24,7 +24,7 @@ export default function page({params}) {
     try {
       //setLoading(false)
       const {data} = await axios.get(`https://localhost:7116/api/CourseContraller/GetAllEnrolledCoursesForAStudent?studentid=${params.studentid}&pageNumber=${pageNum}&pageSize=${pageSize}`,{ headers: { Authorization: `Bearer ${userToken}` } });
-        // console.log(data.result);
+        console.log(data.result);
       setStudentCourses(data.result.items);
       setTotalPages(data.result.totalPages);
       //setLoading(false)
@@ -42,7 +42,7 @@ export default function page({params}) {
         if(userData){
         try{
         const { data } = await axios.get(`https://localhost:7116/api/StudentsContraller/GetAllStudents?pageNumber=1&pageSize=100000`,{ headers: { Authorization: `Bearer ${userToken}` } });
-        console.log(data);
+        // console.log(data);
         setStudents(data.result.items);
       }
         catch(error){
@@ -66,7 +66,7 @@ export default function page({params}) {
   };
 
  useEffect(() => {
-    const student = students.find(student => student.id == params.studentid);
+    const student = students.find(student => student.studentId == params.studentid);
     if(student) {
         setStudentName(`${student.userName}`);
     }
@@ -144,18 +144,18 @@ return matchesSearchTerm ;
   <tbody>
   {filteredSCourses.length ? (
     filteredSCourses.map((course,index) =>(
-      <tr key={course.id}>
+      <tr key={course.course.id}>
         {/* {console.log(course.id)} */}
       <th scope="row">{++index}</th>
-      <td>{course.name}</td>
-      <td>{course.price}</td>
-      <td>{course.category}</td>
-      <td>{course.status}</td>
-      <td>{course.startDate}</td>
+      <td>{course.course.name}</td>
+      <td>{course.course.price}</td>
+      <td>{course.course.category}</td>
+      <td>{course.course.status}</td>
+      <td>{course.course.startDate}</td>
       <td className='d-flex gap-1'>
 
       <Tooltip title="View Course details" placement="top">
-                  <Link href={`CourseDetails/${course.id}`}>
+                  <Link href={`CourseDetails/${course.course.id}`}>
                     <button
                       type="button"
                       className="edit-pen border-0 bg-white "
