@@ -8,6 +8,7 @@ import {
   faFileCsv,
   faFilter,
   faPen,
+  faPeopleGroup,
 } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import axios from "axios";
@@ -325,6 +326,17 @@ const handlePageChange = (event, value) => {
          </Button>
        </DialogActions>
         </Dialog>
+        <Tooltip title="View Course Students" placement="top">
+                  <Link href={`CourseStudents/${course.id}`}>
+                    <button
+                      type="button"
+                      className="edit-pen border-0 bg-white "
+                    >
+                      <FontAwesomeIcon icon={faPeopleGroup} />
+                    </button>
+                  </Link>
+                  </Tooltip>
+
         <Tooltip title="View Course details" placement="top">
                   <Link href={`CourseDetails/${course.id}`}>
                     <button

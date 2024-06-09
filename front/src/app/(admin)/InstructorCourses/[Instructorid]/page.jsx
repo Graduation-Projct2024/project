@@ -12,8 +12,6 @@ import { FormControl, InputLabel, MenuItem, Pagination, Select, Stack } from '@m
 export default function InstructorCourses({params}) {
     // console.log(params.Instructorid)
     const {userToken, setUserToken, userData}=useContext(UserContext);
-    
-
     const [instructorCourse,setInstructorCourse] = useState([])
     const [employeeName, setEmployeeName] = useState('');
     const [loading, setLoading] = useState(false);
@@ -28,12 +26,11 @@ export default function InstructorCourses({params}) {
     try {
       //setLoading(false)
       const {data} = await axios.get(`https://localhost:7116/api/CourseContraller/GetAllCoursesGivenByInstructor?Instructorid=${params.Instructorid}&pageNumber=${pageNum}&pageSize=${pageSize}`,{ headers: { Authorization: `Bearer ${userToken}` } });
-      if(data.isSuccess){
         // console.log(data.result);
       setInstructorCourse(data.result.items);
       setTotalPages(data.result.totalPages);
       //setLoading(false)
-      }}
+      }
       catch (error) {
       console.log(error)
       }
@@ -155,7 +152,7 @@ return matchesSearchTerm ;
       <table className="table">
   <thead>
     <tr>
-      <th scope="col">ID</th>
+      <th scope="col">#</th>
       <th scope="col">Name</th>
       <th scope="col">Price</th>
       <th scope="col">Category</th>
@@ -166,10 +163,10 @@ return matchesSearchTerm ;
   </thead>
   <tbody>
   {filteredICourses.length ? (
-    filteredICourses.map((course) =>(
+    filteredICourses.map((course,index) =>(
       <tr key={course.id}>
-        {console.log(course.id)}
-      <th scope="row">{course.id}</th>
+        {/* {console.log(course.id)} */}
+      <th scope="row">{++index}</th>
       <td>{course.name}</td>
       <td>{course.price}</td>
       <td>{course.category}</td>
@@ -177,11 +174,16 @@ return matchesSearchTerm ;
       <td>{course.startDate}</td>
       <td className='d-flex gap-1'>
 
-      <Link href={'/Profile'}>
-        <button  type="button"className='edit-pen border-0 bg-white '>
-        <FontAwesomeIcon icon={faEye}  />
-        </button>
-        </Link>
+      <Tooltip title="View Course details" placement="top">
+                  <Link href={`CourseDetails/${course.id}`}>
+                    <button
+                      type="button"
+                      className="edit-pen border-0 bg-white "
+                    >
+                      <FontAwesomeIcon icon={faEye} />
+                    </button>
+                  </Link>
+                  </Tooltip>
         </td>
 
     </tr>

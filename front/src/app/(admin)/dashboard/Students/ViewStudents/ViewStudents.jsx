@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowUpFromBracket, faEye, faFileCsv, faFilter } from '@fortawesome/free-solid-svg-icons'
+import { faArrowUpFromBracket, faBook, faEye, faFileCsv, faFilter } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react'
 import Link from 'next/link';
@@ -214,6 +214,21 @@ return matchesSearchTerm ;
         </button>
       </Tooltip>
         </Link>
+        {userData &&  (
+                    <Link 
+                    href={{
+                      pathname: `/StudentCourses/${student.studentId}`,
+                      query: { fName: student.userName }
+                    }}>
+
+                      <Tooltip title="View Student Courses" placement="top">
+                    <button type="button" className="border-0 bg-white ">
+                      <FontAwesomeIcon icon={faBook} className="edit-pen" />
+                    </button>
+                    </Tooltip>
+                  </Link>
+                  
+                  )}
         </td>
 
     </tr>
