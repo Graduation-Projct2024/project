@@ -23,7 +23,7 @@ export default function page({params}) {
   const {userToken, setUserToken, userData,userId}=useContext(UserContext);
 
   let [user,setUser] = useState({})
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
   const [openUpdate, setOpenUpdate] = React.useState(false);
   const [openChange, setOpenChange] = React.useState(false);
   const theme = useTheme();
@@ -53,7 +53,7 @@ setOpenChange(false);
 // console.log(params)
   const getUser =async ()=>{
     if(userData){
-      setLoading(true);
+      // setLoading(true);
     try {
       //setLoading(false)
       const {data} = await axios.get(`https://localhost:7116/api/UserAuth/GetProfileInfo?id=${params.id}`,
@@ -65,28 +65,33 @@ setOpenChange(false);
       }
       catch (error) {
       console.log(error)
-      }finally{
-        setLoading(false);
       }
+      // finally{
+      //   setLoading(false);
+      // }
     }
       
   }
   console.log(user)
   useEffect(()=>{
       getUser();
-  },[userData])
+  },[user,userData])
   
   return (
     <Layout>
-      {loading ? (
+      {/* {loading ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
+          <CircularProgress />
+          <div className='loading bg-white position-fixed vh-100 w-100 d-flex justify-content-center align-items-center z-3'>
+      <span class="loader"></span>
+    </div>
           {/* <CircularProgress /> */}
           {/* <div className='loading bg-white position-fixed vh-100 w-100 d-flex justify-content-center align-items-center z-3'> */}
       <span className="loader"></span>
     {/* </div> */}
         </Box>
         
-      ) : (
+      ) : ( */}
 
         <>
       <div className="container">
@@ -300,7 +305,8 @@ setOpenChange(false);
           </div>
         </div>
       </div>
-      </>)}
+      </>
+      {/* )} */}
     </Layout>
   );
 }

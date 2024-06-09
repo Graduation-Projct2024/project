@@ -245,7 +245,7 @@ const handlePageChange = (event, value) => {
               </div>
             </form>
             <Tooltip title="Convert courses into pdf" placement="top">
-            <button className='border-0 bg-transparent edit-pen' onClick={ExportAllDataToPdf}>
+            <button className='border-0 bg-transparent edit-pen px-2' onClick={ExportAllDataToPdf}>
                 <FontAwesomeIcon icon={faArrowUpFromBracket} className='pb-2'/>
                 </button>
                 </Tooltip>
