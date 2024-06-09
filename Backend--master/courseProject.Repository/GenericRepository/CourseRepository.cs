@@ -2,21 +2,26 @@
 using courseProject.Core.Models;
 using courseProject.Repository.Data;
 using Microsoft.EntityFrameworkCore;
+using Sieve.Models;
+using Sieve.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Sieve.Extensions.MethodInfoExtended;
 
 namespace courseProject.Repository.GenericRepository
 {
     public class CourseRepository : GenericRepository1<Course>, ICourseRepository<Course>
     {
         private readonly projectDbContext dbContext;
+    
 
-        public CourseRepository(projectDbContext dbContext) : base(dbContext)
+        public CourseRepository(projectDbContext dbContext ) : base(dbContext)
         {
             this.dbContext = dbContext;
+        
         }
 
         
@@ -54,7 +59,7 @@ namespace courseProject.Repository.GenericRepository
 
         public async Task<IReadOnlyList<Course>> GetAllCoursesGivenByInstructorIdAsync(Guid Instructorid)
         {
-            return await dbContext.courses.Where(x => x.InstructorId == Instructorid && (x.status.ToLower() == "accredit" || x.status.ToLower() == "start" || x.status.ToLower() == "finished")).ToListAsync();
+            return await dbContext.courses.Where(x => x.InstructorId == Instructorid && (x.status.ToLower() == "accredit" || x.status.ToLower() == "start" || x.status.ToLower() == "finish")).ToListAsync();
         }
 
         public async Task<IReadOnlyList<StudentCourse>> GetAllCoursesForStudentAsync(Guid Studentid)
@@ -107,6 +112,31 @@ namespace courseProject.Repository.GenericRepository
         }
 
 
+
+        // Retrieve all courses with specific statuses : accredit , start or finish (A_S_F)
+        public async Task<IReadOnlyList<Course>> GetAllCoursesAsync()
+        {
+           
+
+                return await dbContext.courses
+                    .Where(x => x.status.ToLower() == "accredit" || x.status.ToLower() == "start" || x.status.ToLower() == "finish")
+                    .Include(x => x.Instructor.user).Include(x => x.SubAdmin.user).ToListAsync();
+           
+            //// Apply filtering and sorting using Sieve without pagination
+            //var filteredAndSortedCourses = sieveProcessor.Apply(sieveModel, courses, applyPagination: false);
+
+            //// Get the total count after filtering and sorting but before pagination
+            //var totalCount = await filteredAndSortedCourses.CountAsync();
+
+            //// Apply pagination
+            //var pagedCourses = await sieveProcessor.Apply(sieveModel, filteredAndSortedCourses).ToListAsync();
+
+
+            // Create and return the PagedResponse
+       //    return PaginationClass<Course>.CreateAsync(pagedCourses,totalCount, sieveModel.Page , sieveModel.PageSize ).Result;
+          //  return await sieveProcessor.Apply(sieveModel, courses).ToListAsync();
+           
+        }
 
     }
 }

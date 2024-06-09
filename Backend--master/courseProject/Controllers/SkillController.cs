@@ -108,7 +108,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        [Authorize]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAllInstructorSkills(Guid instructorId)
         {
 

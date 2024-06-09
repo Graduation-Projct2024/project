@@ -1,8 +1,10 @@
 ﻿using courseProject.Authentication;
 using courseProject.Authentication.EnrolledInCourse;
 using courseProject.Authentication.MaterialInEnrolledCourse;
+
 using courseProject.Core.IGenericRepository;
 using courseProject.Core.Models;
+
 using courseProject.Emails;
 using courseProject.MappingProfile;
 using courseProject.Repository.Data;
@@ -16,6 +18,8 @@ using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Sieve.Models;
+using Sieve.Services;
 using System.Runtime.CompilerServices;
 using System.Text;
 
@@ -27,8 +31,8 @@ namespace courseProject.Configuration
     {
         public static IServiceCollection AddApplication (this IServiceCollection services)
         {
+           
             services.AddScoped(typeof(IGenericRepository1<>), typeof(GenericRepository1<>));
-          //  services.AddTransient<IEmailService, EmailService>();
             services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
            
             services.AddAutoMapper(typeof(MappingForStudents));
@@ -41,8 +45,13 @@ namespace courseProject.Configuration
             services.AddAutoMapper(typeof(MappingForStudentCourses));
 
 
+            
+
             return services;
         }
+
+      
+
 
         public static IServiceCollection AddInfrastucture (this IServiceCollection services , IConfiguration configuration)
         {
@@ -62,18 +71,21 @@ namespace courseProject.Configuration
 
 
 
-            //update status to start
-          
+            
             
             return services;
         }
 
         public static IServiceCollection AddAuthenticationAndAuthorization(this IServiceCollection services , IConfiguration configuration)
        {
+            // Retrieve the secret key used for JWT authentication from the configuration
             var Key = configuration.GetValue<string>("Authentication:SecretKey");
+
+
 
             services.AddAuthentication(x =>
             {
+                // Set the default authentication scheme to JWT Bearer
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(a =>
@@ -165,6 +177,13 @@ namespace courseProject.Configuration
                );
 
 
+                options.AddPolicy("Admin , EnrolledInCourse" , policy =>
+                {
+                    policy.Requirements.Add(new EnrolledInCourseRequirement());
+                    policy.RequireRole("admin");
+                }
+                    );
+
 
                 options.AddPolicy("EnrolledInCourse", policy =>
                 policy.Requirements.Add(new EnrolledInCourseRequirement()));
@@ -212,34 +231,6 @@ namespace courseProject.Configuration
 
 
 
-       // public static IServiceCollection AddIdentities(this IServiceCollection services)
-       // {
-
-       //     services.AddIdentity<User, IdentityRole>()
-       //.AddEntityFrameworkStores<projectDbContext>()
-       //.AddDefaultTokenProviders();
-
-
-
-       //     services.AddIdentityCore<User>()
-       //          .AddRoles<IdentityRole>()
-       //       // .addIdentity<User , IdentityRole>
-       //       //   .AddEntityFrameworkStores<projectDbContext>()
-       //          .AddDefaultTokenProviders()
-       //          .AddSignInManager<SignInManager<User>>();
-
-       //     services.Configure<IdentityOptions>(options =>
-       //     {
-       //         options.Password.RequireDigit = false;
-       //         options.Password.RequireLowercase = false;
-       //         options.Password.RequireNonAlphanumeric = false;
-       //         options.Password.RequireUppercase = false;
-       //         options.Password.RequiredLength = 8;
-       //         options.Password.RequiredUniqueChars = 1;
-       //     }
-       //     );
-
-       //     return services;
-       // }
+      
     }
 }

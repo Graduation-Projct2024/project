@@ -35,7 +35,7 @@ namespace courseProject.Repository.GenericRepository
             TotalCount = totalCount;
             TotalPages = totalPages;
         }
-        public static async Task<Pagination<T>> CreateAsync(IReadOnlyList<T> data, int? pageNumber=null , int? pageSize=null , int defaultPageNumber = 1, int defaultPageSize = 10)
+        public static async Task<Pagination<T>> CreateAsync(IReadOnlyList<T> data, int? pageNumber=null , int? pageSize=null , int defaultPageNumber = 1, int defaultPageSize = 10 )
         {
             var totalCount = data.Count;
             var page = pageNumber ?? defaultPageNumber;
@@ -47,26 +47,10 @@ namespace courseProject.Repository.GenericRepository
             return new Pagination<T>(items, page, size, totalCount , totalPages);
         }
 
-        //public static async Task<Pagination<T>> CreateAsync1(IReadOnlyList<T> data, int? pageNumber, int? pageSize)
-        //{
-        //    var totalCount = data.Count;
-        //    var page = pageNumber ?? PageNumber;
-        //    var size = pageSize ?? PageSize;
 
-        //    var items = data.Skip((page - 1) * size).Take(size).ToList();
+        
 
-        //    return new Pagination<T>(items, page, size, totalCount);
-        //}
-        //public async Task<IReadOnlyList<T>> ApplayPagination(IQueryable<T>? data, int? pageNumber, int? pageSize, int count)
-        //{
-        //    PageNumber = pageNumber ?? PageNumber;
-        //    TotalPages = (int)Math.Ceiling(count / (double)pageSize);
-        //    var size= pageSize ?? DefaultPageSize;
-        //    var PageSize = size > maxPageSize ? maxPageSize : size;
-
-        //    return await data.Skip((PageNumber - 1) * PageSize).Take(PageSize).ToListAsync();
-        //}
-
+       
 
     }
 }

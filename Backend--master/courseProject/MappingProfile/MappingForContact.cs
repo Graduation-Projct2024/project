@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using courseProject.Core.Models.DTO.ContactUsDTO;
 using courseProject.Core.Models;
+using Sieve.Models;
 
 namespace courseProject.MappingProfile
 {
@@ -10,6 +11,8 @@ namespace courseProject.MappingProfile
         {
 
             CreateMap<CreateMessageContactDTO, Contact>();
+
+            CreateMap<CustomSieveModel, SieveModel>();
         }
     }
 }

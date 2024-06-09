@@ -25,6 +25,7 @@ using Microsoft.AspNetCore.Identity;
 using courseProject.Emails;
 using courseProject.Services.Courses;
 using courseProject.Services.BackgroundServices;
+using Sieve.Services;
 
 namespace courseProject
 {
@@ -52,13 +53,14 @@ namespace courseProject
 
 
 
-         
 
+       //sieve     builder.Services.AddScoped<SieveProcessor>();
 
             builder.Services
                    .AddApplication()
                    .AddServices()
-                  // .AddIdentities()
+             //sieve      .AddSieve(builder.Configuration)
+                   // .AddIdentities()
                    .AddInfrastucture(builder.Configuration)
                    .AddAuthenticationAndAuthorization(builder.Configuration);
 
