@@ -126,7 +126,7 @@ const sidebarItems = [
           </Link>
             </Stack>
       <Divider />
-      <List sx={{ my:7, pt:5 }} >
+      <List sx={{ my:4, pt:5 }} >
               {sidebarItems.map(({ name, href, icon: Icon }) =>{
                 return(
                 // <ListItem key={name} 

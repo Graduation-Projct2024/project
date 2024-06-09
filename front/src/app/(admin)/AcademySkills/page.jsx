@@ -74,7 +74,7 @@ const filteredSkills = Array.isArray(skills) ? skills.filter((skill) => {
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
           {/* <CircularProgress /> */}
           {/* <div className='loading bg-white position-fixed vh-100 w-100 d-flex justify-content-center align-items-center z-3'> */}
-      <span class="loader"></span>
+      <span className="loader"></span>
     {/* </div> */}
         </Box>
         
