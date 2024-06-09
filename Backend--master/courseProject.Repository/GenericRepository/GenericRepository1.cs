@@ -12,8 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using courseProject.Core.Models.DTO;
-using Sieve.Models;
-using Sieve.Services;
+
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace courseProject.Repository.GenericRepository
@@ -21,13 +20,13 @@ namespace courseProject.Repository.GenericRepository
     public class GenericRepository1<T> : IGenericRepository1<T> where T : class
     {
         private readonly projectDbContext dbContext;
-        private readonly ISieveProcessor sieveProcessor;
+
 
         public GenericRepository1(projectDbContext dbContext )
         {
            
             this.dbContext = dbContext;
-            this.sieveProcessor = sieveProcessor;
+         
         }
 
 

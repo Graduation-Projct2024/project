@@ -2,14 +2,13 @@
 using courseProject.Core.Models;
 using courseProject.Repository.Data;
 using Microsoft.EntityFrameworkCore;
-using Sieve.Models;
-using Sieve.Services;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Sieve.Extensions.MethodInfoExtended;
+
 
 namespace courseProject.Repository.GenericRepository
 {
