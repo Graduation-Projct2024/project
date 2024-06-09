@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using courseProject.Core.Models;
 using Microsoft.AspNetCore.Http;
+using Sieve.Services;
 
 namespace courseProject.Repository.GenericRepository
 {
@@ -18,12 +19,14 @@ namespace courseProject.Repository.GenericRepository
     
         private readonly projectDbContext dbContext;
         private readonly IHttpContextAccessor httpContextAccessor;
+      
         private IConfiguration configuration;
 
-        public UnitOfWork(projectDbContext dbContext , IConfiguration configuration , IHttpContextAccessor httpContextAccessor)
+        public UnitOfWork(projectDbContext dbContext , IConfiguration configuration , IHttpContextAccessor httpContextAccessor )
         {
             this.dbContext = dbContext;
             this.httpContextAccessor = httpContextAccessor;
+           
             SubAdminRepository = new SubAdminRepository(dbContext);
             UserRepository = new UserRepository(dbContext, configuration, httpContextAccessor);
             instructorRepositpry = new instructorRepositpry(dbContext);

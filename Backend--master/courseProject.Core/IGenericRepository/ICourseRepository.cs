@@ -1,4 +1,5 @@
 ﻿using courseProject.Core.Models;
+using Sieve.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,6 @@ namespace courseProject.Core.IGenericRepository
         public Task<IReadOnlyList<Course>> GetAllCoursesAsync(Guid studentId);
         public Task CreateCourse(Course model);
         public Task updateCourse(Course course);
-
+       public Task<IReadOnlyList<Course>> GetAllCoursesAsync();
     }
 }

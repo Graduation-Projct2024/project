@@ -1,5 +1,6 @@
 ﻿using courseProject.Core.Models;
 using courseProject.Core.Models.DTO;
+using Sieve.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace courseProject.Core.IGenericRepository
       
         Task<IReadOnlyList<T>> GetAllStudentsAsync();
         Task<IReadOnlyList<T>> GetAllEmployeeAsync();
-        Task<IReadOnlyList<T>> GetAllCoursesAsync();
+     
         Task<IReadOnlyList<T>> GetAllEventsAsync(string? dateStatus);
 
         Task<IReadOnlyList<T>> GetAllStudentsForContactAsync();
@@ -36,6 +37,8 @@ namespace courseProject.Core.IGenericRepository
        // public Task<T> GetMaterialByIdAsync(int id);
         public Task<T> ViewProfileAsync(Guid id, string role);
         public Task<User> GetAdminId();
-      
+
+
+      //  public Task<T> search(string query);
     }
 }

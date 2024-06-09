@@ -12,18 +12,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using courseProject.Core.Models.DTO;
+using Sieve.Models;
+using Sieve.Services;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace courseProject.Repository.GenericRepository
 {
     public class GenericRepository1<T> : IGenericRepository1<T> where T : class
     {
         private readonly projectDbContext dbContext;
-       
+        private readonly ISieveProcessor sieveProcessor;
 
-        public GenericRepository1(projectDbContext dbContext)
+        public GenericRepository1(projectDbContext dbContext )
         {
            
             this.dbContext = dbContext;
+            this.sieveProcessor = sieveProcessor;
         }
 
 
@@ -54,18 +58,6 @@ namespace courseProject.Repository.GenericRepository
             return await dbContext.Set<T>().ToListAsync();
         }
 
-        // Retrieve all courses with specific statuses : accredit , start or finish (A_S_F)
-        public async Task<IReadOnlyList<T>> GetAllCoursesAsync()
-        {
-            if (typeof(T) == typeof(Course))
-            {
-                
-                return (IReadOnlyList<T>) await dbContext.courses
-                    .Where(x=>x.status.ToLower()== "accredit" || x.status.ToLower()=="start" || x.status.ToLower()=="finish")
-                    .Include(x=>x.Instructor.user).Include(x=>x.SubAdmin.user).ToListAsync();
-            }
-            return await dbContext.Set<T>().ToListAsync();
-        }
 
         public async Task<IReadOnlyList<T>> GetAllEventsAsync(string? dateStatus)
         {
@@ -196,6 +188,25 @@ namespace courseProject.Repository.GenericRepository
         {
             return await dbContext.users.FirstOrDefaultAsync(x=>x.role.ToLower()=="admin");
         }
+
+//        public async Task<T> search(string query)
+//        {
+
+//            query = "%" + query.ToLower() + "%";
+
+//            var sql = @"
+//            SELECT * FROM Courses 
+//            WHERE LOWER(Title) LIKE {0} 
+//            OR LOWER(Description) LIKE {0} 
+//            OR LOWER(Instructor) LIKE {0} 
+//            OR LOWER(Status) LIKE {0}";
+
+//            var results = await dbContext.courses.FromSqlRaw(sql, query).ToListAsync();
+//            object value = await dbContext.Database.SqlQuery<TranactionDTO>(
+//                $"Select id FROM " 
+//                ).toList();
+//;
+//        }
 
 
 

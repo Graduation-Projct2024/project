@@ -10,6 +10,7 @@ using courseProject.ServiceErrors;
 using ErrorOr;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Sieve.Models;
 using System.Linq.Expressions;
 using System.Net;
 
@@ -59,6 +60,7 @@ namespace courseProject.Services.Courses
                     course.ImageUrl=await unitOfWork.FileRepository.GetFileUrl(course.ImageUrl);
                 }
             }
+
           ///  CommonClass.EditImageInFor(courses, null);
             return courses;
             

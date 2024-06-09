@@ -19,6 +19,7 @@ using courseProject.Core.Models.DTO.EventsDTO;
 using courseProject.Core.Models.DTO.CoursesDTO;
 using courseProject.Services.Courses;
 using courseProject.Validations;
+using Sieve.Models;
 
 namespace courseProject.Controllers
 {
@@ -56,7 +57,9 @@ namespace courseProject.Controllers
         //get all accredits courses , whit status = accredit , start or finish
         public async Task<IActionResult> GetAllCoursesAsync([FromQuery] PaginationRequest paginationRequest)
         {
+           
             var getCourses = await courseServices.GetAllCourses();
+          
             var mapperCourse = mapper.Map<IReadOnlyList<Course>, IReadOnlyList<CourseInformationDto>>(getCourses);          
             responce.Result = (Pagination<CourseInformationDto>.CreateAsync(mapperCourse, paginationRequest.pageNumber, paginationRequest.pageSize)).Result;
             return Ok(responce);
@@ -266,7 +269,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "Main-SubAdmin , Student")]
-        //not try
+        
         public async Task<IActionResult> GetCustomCourseById(Guid id)
         {
 
@@ -281,7 +284,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        [Authorize(Policy = "Student")]
+        [Authorize(Policy = "Admin , Student")]
         public async Task<IActionResult> GetEnrolledCourses(Guid studentid, [FromQuery] PaginationRequest paginationRequest)
         {
 
