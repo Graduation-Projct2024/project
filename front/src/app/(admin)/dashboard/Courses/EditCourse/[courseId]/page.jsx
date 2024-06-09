@@ -50,7 +50,8 @@ export default function EditCourse({courseId , startDate , Deadline , Instructor
         }
 
         const { data } = await axios.put(`https://localhost:7116/api/CourseContraller/EditOnCourseAfterAccredit?courseId=${courseId}`, formData, { headers: { Authorization: `Bearer ${userToken}` } });
-          formik.resetForm();
+          console.log(data);
+        formik.resetForm();
           setOpenUpdate(false);
           Swal.fire({
             title: "Course updated successfully",

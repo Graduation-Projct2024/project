@@ -37,7 +37,7 @@ export default function page() {
   }, [userData]);
 
   return (
-    <Layout>
+    <Layout title='My Dashboard'>
       <div>
         <>
         <div className='d-flex justify-content-center'>
