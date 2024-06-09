@@ -25,6 +25,7 @@ using Microsoft.AspNetCore.Identity;
 using courseProject.Emails;
 using courseProject.Services.Courses;
 using courseProject.Services.BackgroundServices;
+using courseProject.Authentication.CourseParticipantsAuthorize;
 
 
 namespace courseProject
@@ -94,6 +95,7 @@ namespace courseProject
 
             builder.Services.AddScoped<IAuthorizationHandler, GetMaterialForEnrolledCourseHandler>();
             builder.Services.AddScoped<IAuthorizationHandler, EnrolledInCourseHandler >();
+            builder.Services.AddScoped<IAuthorizationHandler,CourseParticipantsAuthorizeHandler>();
 
            
           

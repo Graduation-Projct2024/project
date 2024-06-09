@@ -176,12 +176,8 @@ namespace courseProject.Configuration
                );
 
 
-                options.AddPolicy("Admin , EnrolledInCourse" , policy =>
-                {
-                    policy.Requirements.Add(new EnrolledInCourseRequirement());
-                    policy.RequireRole("admin");
-                }
-                    );
+                options.AddPolicy("Admin , EnrolledInCourse", policy =>
+                 policy.Requirements.Add(new CourseParticipantsAuthorizeRequirement()));
 
 
                 options.AddPolicy("EnrolledInCourse", policy =>

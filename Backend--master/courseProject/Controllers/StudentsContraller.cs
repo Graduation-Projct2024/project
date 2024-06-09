@@ -80,6 +80,7 @@ namespace courseProject.Controllers
         {
 
             var StudentsParticipants = await studentServices.GetCourseParticipants(Courseid);
+            if (StudentsParticipants.IsError) return NotFound(new ApiResponce { ErrorMassages= StudentsParticipants .FirstError.Description});
             return Ok(new ApiResponce { Result = 
                 (Pagination<StudentsInformationDto>.CreateAsync(StudentsParticipants.Value, paginationRequest.pageNumber, paginationRequest.pageSize)).Result});             
         }

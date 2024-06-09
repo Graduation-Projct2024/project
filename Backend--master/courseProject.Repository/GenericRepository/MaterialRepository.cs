@@ -22,9 +22,8 @@ namespace courseProject.Repository.GenericRepository
         public async Task<CourseMaterial> GetMaterialByIdAsync(Guid id)
         {
            
-                return await dbContext.courseMaterials.Include(x=>x.MaterialFiles).FirstOrDefaultAsync(x => x.Id == id);
-            
-            
+           return await dbContext.courseMaterials.Include(x=>x.Student_Task_Submissions).Include(x=>x.MaterialFiles).FirstOrDefaultAsync(x => x.Id == id);
+                        
         }
 
         public async Task<IReadOnlyList<CourseMaterial>> GetAllMaterial(Guid? Courseid, Guid? consultationId ,string userType)

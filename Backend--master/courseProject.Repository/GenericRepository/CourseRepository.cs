@@ -53,7 +53,7 @@ namespace courseProject.Repository.GenericRepository
 
         public async Task<Course> getAccreditCourseByIdAcync(Guid courseId)
         {
-            return await dbContext.courses.Where(x => x.status.ToLower() == "accredit").FirstOrDefaultAsync(x => x.Id == courseId);
+            return await dbContext.courses.Where(x => x.status.ToLower() != "undefined" || x.status.ToLower() != "reject").FirstOrDefaultAsync(x => x.Id == courseId);
         }
 
         public async Task<IReadOnlyList<Course>> GetAllCoursesGivenByInstructorIdAsync(Guid Instructorid)
@@ -71,7 +71,8 @@ namespace courseProject.Repository.GenericRepository
         public async Task<IReadOnlyList<Course>> GetAllCoursesAsync(Guid studentId)
         {
             var allCourses = await dbContext.courses
-                .Where(x => x.status.ToLower() == "accredit")
+                .Where(x => x.status.ToLower() != "undefined" || x.status.ToLower()!="reject")
+                
                 .Include(x => x.studentCourses)
                 .Include(x => x.Instructor).ThenInclude(x => x.user)
                 .Include(x => x.SubAdmin).ThenInclude(x => x.user)
@@ -85,15 +86,35 @@ namespace courseProject.Repository.GenericRepository
                 {
                     studentCourse = course.studentCourses.FirstOrDefault(x => x.StudentId == studentId && course.Id == x.courseId);
 
-                    if (studentCourse != null && course.studentCourses.Any(x => x.courseId == course.Id && x.StudentId == studentId && (x.Course.Deadline >= DateTime.Today.Date || x.Course.Deadline == null)))
+                    if (studentCourse != null &&( course.studentCourses.Any(x => x.courseId == course.Id && x.StudentId == studentId) ))/*&& (x.Course.Deadline >= DateTime.Today.Date || x.Course.Deadline == null)))*/
                     {
 
                         studentCourse.isEnrolled = true;
                     }
-                    //else
-                    //{
-                    //    studentCourse.isEnrolled = false;
-                    //}
+
+                    else
+                    {
+                        // Check if the course's deadline is less than today's date
+                        if ((course.Deadline.Value < DateTime.Now.Date) && course.status.ToLower()!="finish")
+                        {
+                            // If there is no studentCourse entry for this student and course, create one
+                            if (studentCourse == null)
+                            {
+
+                                studentCourse = new StudentCourse
+                                {
+                                    StudentId = studentId,
+                                    courseId = course.Id,
+                                    isEnrolled = true
+                                };
+                            }
+                            else
+                            {
+                                studentCourse.isEnrolled = true;
+                            }
+                            course.studentCourses.Add(studentCourse);
+                        }
+                    }
                 }
             }
             return allCourses;

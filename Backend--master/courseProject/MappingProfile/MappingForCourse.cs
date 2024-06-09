@@ -34,7 +34,8 @@ namespace courseProject.MappingProfile
                 .ForMember(x => x.InstructorName, o => o.MapFrom(y => y.Instructor.user.userName + " " + y.Instructor.LName))
                 .ForMember(x => x.SubAdminName, o => o.MapFrom(y => y.SubAdmin.user.userName + " " + y.Instructor.LName))
                 .ForMember(x => x.startDate, o => o.MapFrom(y => y.startDate.HasValue ? y.startDate.Value.ToString("dd/MM/yyyy") : null))
-                .ForMember(x => x.endDate, o => o.MapFrom(y => y.endDate.HasValue ? y.endDate.Value.ToString("dd/MM/yyyy") : null))         
+                .ForMember(x => x.endDate, o => o.MapFrom(y => y.endDate.HasValue ? y.endDate.Value.ToString("dd/MM/yyyy") : null))
+                .ForMember(x => x.Deadline, o => o.MapFrom(y => y.Deadline.HasValue ? y.Deadline.Value.ToString("dd/MM/yyyy") : null))
                 .ForMember(x => x.isEnrolled, o => o.MapFrom(y => y.studentCourses.Any(x => x.isEnrolled)));
 
             CreateMap<Course, CourseAccreditDTO>()

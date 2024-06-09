@@ -160,16 +160,15 @@ namespace courseProject.Repository.GenericRepository
         }
 
 
-        public async Task<string> getRoleFromToken()
+        public async Task<User> getRoleFromToken()
         {
             try
             {
 
-
                 var userIdAsString = (httpContextAccessor.HttpContext.User.FindFirst("UserId")).Value;
                 Guid.TryParse(userIdAsString, out var userId);
-                var role = (await dbContext.users.FirstAsync(x => x.UserId == userId)).role;
-                return role;
+                var user = (await dbContext.users.FirstAsync(x => x.UserId == userId));
+                return user;
             }
             catch(Exception ex)
             {
