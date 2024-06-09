@@ -276,3 +276,11 @@ body{
 .css-sghohy-MuiButtonBase-root-MuiButton-root, .css-sghohy-MuiButtonBase-root-MuiButton-root:hover{
 background-color:#4C5372 !important;
 }
+.css-1xylxj1-MuiTypography-root-MuiLink-root{
+  background-color:#4C5372 !important;
+  padding:5px;
+  text-decoration:none !important;
+  margin:2px;
+  color:#fff6fd !important; 
+  border-radius:5px;
+}

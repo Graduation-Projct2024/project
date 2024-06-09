@@ -14,7 +14,7 @@ import ViewWeeklyHours from './ViewWeeklyHours';
 import Education from './Education.jsx';
 import Feedback from './Feedback.jsx';
 import About from './About.jsx';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, Tooltip, useMediaQuery, useTheme } from '@mui/material';
+import { Button, useMediaQuery, useTheme } from '@mui/material';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import SchoolIcon from '@mui/icons-material/School';
@@ -25,8 +25,7 @@ import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import Box from '@mui/material/Box';
-import SyncLockIcon from '@mui/icons-material/SyncLock';
-import ChangePassword from '@/app/(auth)/ChangePassword/ChangePassword';
+import Link from '@mui/material/Link';
 
 export default function page({params}) {
   const {userToken, setUserToken, userData,userId}=useContext(UserContext);
@@ -116,7 +115,7 @@ const handleCloseUpdate = () => {
                     <p className=' info ps-4'>{user.gender}</p>
                   </div>
                   <div className="d-flex justify-content-xl-start justify-content-lg-center justify-content-md-center justify-content-sm-center justify-content-center"><p className='fw-bold labels'>Phone:</p><p className=' info ps-4'>{user.phoneNumber}</p></div>
-                  <div className="d-flex justify-content-xl-start justify-content-lg-center justify-content-md-center justify-content-sm-center justify-content-center"><p className='fw-bold labels'>Date of birth:</p><p className=' info ps-4'>{user.dateOfBirth}</p></div>
+                  <div className="d-flex justify-content-xl-start justify-content-lg-center justify-content-md-center justify-content-sm-center justify-content-center">{userToken?(<Link href='/calender'>Book Now</Link>):(<Link href='/login'>Book Now</Link>)}</div>
                  
                 </div>
                 
@@ -136,7 +135,7 @@ const handleCloseUpdate = () => {
                   </div>
               </div>
                 
-                <ul className='d-flex gap-4 justify-content-center'>
+                <ul className='d-flex gap-4 '>
                   <li className=' social'><FontAwesomeIcon icon={faLinkedinIn} /></li>
                   <li className=' social'><FontAwesomeIcon icon={faGithub} /></li>
                   <li className=' social'><FontAwesomeIcon icon={faFacebookF} /></li>
