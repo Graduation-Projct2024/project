@@ -8,9 +8,13 @@
             {
                 return intValue != default;
             }
-            if (srcMember is double doubleValue)
+            else if (srcMember is double doubleValue)
             {
                 return doubleValue != default;
+            }
+            else if (srcMember is Guid GuidValue)
+            {
+                return GuidValue != default;
             }
             return srcMember != null;
         }

@@ -238,7 +238,12 @@ namespace courseProject.Services.Materials
             {
                 var submission = material.Student_Task_Submissions.FirstOrDefault(x => x.StudentId==user.UserId && x.TaskId==id);
                 if (submission == null) material.Student_Task_Submissions = null;
-                else material.Student_Task_Submissions = new List<Student_Task_Submissions> { submission};
+                else
+                {
+                    submission.pdfUrl = await unitOfWork.FileRepository.GetFileUrl(submission.pdfUrl);
+                    material.Student_Task_Submissions = new List<Student_Task_Submissions> { submission };
+
+                }
             }
             if (material.MaterialFiles != null && material.MaterialFiles.Any())
             {

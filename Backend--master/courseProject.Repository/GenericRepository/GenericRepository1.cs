@@ -188,24 +188,26 @@ namespace courseProject.Repository.GenericRepository
             return await dbContext.users.FirstOrDefaultAsync(x=>x.role.ToLower()=="admin");
         }
 
-//        public async Task<T> search(string query)
-//        {
+        public async Task<IReadOnlyList<Course>> search(string query)
+        {
 
-//            query = "%" + query.ToLower() + "%";
+            query = "%" + query.ToLower() + "%";
 
-//            var sql = @"
-//            SELECT * FROM Courses 
-//            WHERE LOWER(Title) LIKE {0} 
-//            OR LOWER(Description) LIKE {0} 
-//            OR LOWER(Instructor) LIKE {0} 
-//            OR LOWER(Status) LIKE {0}";
+            var sql = @"
+            SELECT * FROM courses 
+            WHERE LOWER(name) LIKE {0} 
+            OR LOWER(description) LIKE {0} 
+            OR LOWER(price) LIKE {0} 
+            OR LOWER(category) LIKE {0} 
+            OR LOWER(status) LIKE {0}";
 
-//            var results = await dbContext.courses.FromSqlRaw(sql, query).ToListAsync();
-//            object value = await dbContext.Database.SqlQuery<TranactionDTO>(
-//                $"Select id FROM " 
-//                ).toList();
-//;
-//        }
+            var results = await dbContext.courses.FromSqlRaw(sql, query).ToListAsync();
+            return results;
+            //object value = await dbContext.Database.SqlQuery<TranactionDTO>(
+            //    $"Select id FROM "
+            //    ).toList();
+            //;
+        }
 
 
 

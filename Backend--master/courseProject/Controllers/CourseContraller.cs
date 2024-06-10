@@ -163,15 +163,15 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        [Authorize(Policy = "Admin")]
+       // [Authorize(Policy = "Admin")]
         
         public async Task<IActionResult> EditOnCourseAfterAccreditByAdmin(Guid courseId, [FromForm] EditCourseAfterAccreditDTO editedCourse)
         {
 
             var courseService = await courseServices.EditOnCourseAfterAccredit(courseId, editedCourse);
-            responce.Result = courseService;
+           
             if (courseService.IsError == true) responce.ErrorMassages = courseService.FirstError.Description;
-            return Ok(responce);
+            return Ok(new ApiResponce { Result="course updated successfully"});
 
         }
 
@@ -295,6 +295,17 @@ namespace courseProject.Controllers
         }
 
 
+
+
+
+        //[HttpGet("searchinCourse")]
+        //[ProducesResponseType(200)]
+        //[ProducesResponseType(404)]
+        //[ProducesResponseType(400)]
+        //public async Task<IActionResult> searchCourse (string query)
+        //{
+        //    return Ok(await unitOfWork.contactRepository.search(query));
+        //}
     }
     }
 
