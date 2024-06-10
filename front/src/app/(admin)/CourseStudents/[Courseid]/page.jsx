@@ -24,7 +24,7 @@ export default function page({params}) {
           if(userData){
           try{
           const { data } = await axios.get(`https://localhost:7116/api/CourseContraller/GetAllAccreditCourses?pageNumber=1&pageSize=10000`,);
-          console.log(data);
+          // console.log(data);
           setCourses(data.result.items);
         }
           catch(error){
@@ -43,8 +43,9 @@ export default function page({params}) {
   const fetchStudents =  async (pageNum = pageNumber, pageSizeNum = pageSize) => {
       if(userData){
       try{
-      const { data } = await axios.get(`https://localhost:7116/api/StudentsContraller/GetCourseParticipants?Courseid=${params.Courseid}?pageNumber=${pageNum}&pageSize=${pageSize}`,{ headers: { Authorization: `Bearer ${userToken}` } });
-      //console.log(data);
+      const { data } = await axios.get(`https://localhost:7116/api/StudentsContraller/GetCourseParticipants?Courseid=${params.Courseid}?pageNumber=${pageNum}&pageSize=${pageSize}`,
+        { headers: { Authorization: `Bearer ${userToken}` } });
+      console.log(data);
       setStudents(data.result.items);
       setTotalPages(data.result.totalPages);
     }
@@ -53,6 +54,7 @@ export default function page({params}) {
       }
     }
     };
+    console.log(students)
   useEffect(() => {
       fetchStudents();
       fetchCourses();

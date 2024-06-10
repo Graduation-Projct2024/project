@@ -185,8 +185,8 @@ useEffect(() => {
                 loop={true}
                 className="row justify-content-center align-items-center"
               >
-                {feedbacks.length?feedbacks.map((feedback)=>
-<SwiperSlide className="py-3">
+                {feedbacks.length?feedbacks.map((feedback,index)=>
+<SwiperSlide key={++index} className="py-3">
                   <div className="singleFeedbackContent">
                     <div className="feedbackPara">
                       <p className="contentfeed">

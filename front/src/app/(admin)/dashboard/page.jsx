@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+// import React, { useEffect, useState } from 'react'
 import './dashboard.css'
 import '../../../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js'
 
@@ -10,19 +10,19 @@ import ViewCourses from './Courses/ViewCourses/ViewCourses'
 import ViewEvents from './Events/ViewEvents/ViewEvents'
 
 export default function dashboard() {
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    // Simulate data fetching
-    const fetchData = async () => {
-      // You can replace this with actual data fetching logic
-      setTimeout(() => {
-        setLoading(false);
-      }, 5000); // Simulating a 2-second data fetching process
-    };
+  // useEffect(() => {
+  //   // Simulate data fetching
+  //   const fetchData = async () => {
+  //     // You can replace this with actual data fetching logic
+  //     setTimeout(() => {
+  //       setLoading(false);
+  //     }, 5000); // Simulating a 2-second data fetching process
+  //   };
 
-    fetchData();
-  }, []);
+  //   fetchData();
+  // }, []);
  
   return (
     <Layout title = "Dashboard">
