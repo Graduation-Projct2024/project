@@ -20,7 +20,8 @@ export default function Footer() {
             <div className="footer-logo">
             <AdbIcon className='academyIcon'/>
             </div>
-            <p>Sorem ipsum dolor sit amet conse ctetur adipiscing elit, sed do eiusmod incididunt ut labore et dolore magna aliqua. Utenim ad minim veniam, quis nostrud exercition ullamco laboris nisi </p>
+            <p>
+            Unlock your tech potential with personalized courses and one-on-one sessions at our academy. Whether you're just starting or an expert, our passionate instructors tailor learning to your needs. Join our community of lifelong learners and elevate your tech journey!</p>
             <div className="footer-social">
               <span>Follow Us</span>
               <div className="footer-social-icon">
