@@ -12,7 +12,7 @@ import '../../../../node_modules/bootstrap/dist/js/bootstrap.bundle'
 import AddSkill from './AddSkill/AddSkill';
 import '../dashboard/loading.css'
 
-export default function page() {
+export default function AcademySkills() {
 
     
     const {userToken, setUserToken, userData}=useContext(UserContext);
@@ -33,7 +33,7 @@ export default function page() {
       if(userData){
         // setLoading(true);
       try{
-      const { data } = await axios.get(`https://localhost:7116/api/Skill/GetAllSkillOptions`,{ headers: { Authorization: `Bearer ${userToken}` } });
+      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}Skill/GetAllSkillOptions`,{ headers: { Authorization: `Bearer ${userToken}` } });
       // setLoading(false)
       console.log(data);
       setSkills(data.result);

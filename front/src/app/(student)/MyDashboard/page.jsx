@@ -19,7 +19,7 @@ export default function page() {
     if(userData){
       try{
         const {data} = await axios.get(
-          `https://localhost:7116/api/CourseContraller/GetAllEnrolledCoursesForAStudent?studentid=${userData.userId}&pageNumber=1&pageSize=10`,
+          `${process.env.NEXT_PUBLIC_EDUCODING_API}CourseContraller/GetAllEnrolledCoursesForAStudent?studentid=${userData.userId}&pageNumber=1&pageSize=10`,
           {headers :{Authorization:`Bearer ${userToken}`}}
         );
         console.log(data.result);

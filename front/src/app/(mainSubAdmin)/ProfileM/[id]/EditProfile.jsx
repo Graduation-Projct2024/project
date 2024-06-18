@@ -213,7 +213,7 @@ const formatDate = (dateString) => {
 
 export default function EditProfile({ id, FName, LName, gender, phoneNumber, DateOfBirth, address, image ,openUpdate,setOpenUpdate}) {
   const { userData,userToken } = useContext(UserContext);
-
+  let [errmsg,setErrmsg] = useState()
   const [selectedGender, setSelectedGender] = useState(gender);
 
   const handleFieldChange = (event) => {
@@ -233,7 +233,13 @@ export default function EditProfile({ id, FName, LName, gender, phoneNumber, Dat
         formData.append('image', updatedData.image);
       }
 
-      const { data } = await axios.put(`https://localhost:7116/api/UserAuth/EditProfile?id=${id}`, formData,{headers :{Authorization:`Bearer ${userToken}`}},);
+      const { data } = await axios.put(`${process.env.NEXT_PUBLIC_EDUCODING_API}UserAuth/EditProfile?id=${id}`, formData,{headers :{Authorization:`Bearer ${userToken}`}},);
+      if(data.errorMassages != null){
+        setErrmsg(data.errorMassages)
+        
+        // console.log(data.errorMassages)
+      }
+      else{
         console.log('Profile Updated');
         formik.resetForm();
         setOpenUpdate(false);
@@ -243,7 +249,7 @@ export default function EditProfile({ id, FName, LName, gender, phoneNumber, Dat
           icon: "success"
         });
       
-    } catch (error) {
+    }} catch (error) {
       console.error('Error updating employee:', error);
     }
   };
@@ -366,6 +372,7 @@ export default function EditProfile({ id, FName, LName, gender, phoneNumber, Dat
         >
           Update
         </Button>
+        <p className='text-danger'>{errmsg}</p>
       </div>
     </form>
   );

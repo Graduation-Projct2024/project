@@ -29,7 +29,7 @@ export default function ViewTask({ materialID }) {
  const getMaterial=async()=>{
   if(userToken){
     try{
-  const {data}= await axios.get(`https://localhost:7116/api/MaterialControllar/GetMaterialById?id=${materialID}`,
+  const {data}= await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}MaterialControllar/GetMaterialById?id=${materialID}`,
   {headers :{Authorization:`Bearer ${userToken}`}}
 
   )
@@ -56,7 +56,7 @@ const DownloadMaterial = async (url) => {
   console.log(fileName);
 
   const { data } = await axios.get(
-    `https://localhost:7116/api/Files/DownloadFile?filename=${cleanUrl}`,
+    `${process.env.NEXT_PUBLIC_EDUCODING_API}Files/DownloadFile?filename=${cleanUrl}`,
     {
       responseType: 'blob',
       headers: {

@@ -23,7 +23,7 @@ export default function page({params}) {
         const fetchCourses = async () => {
           if(userData){
           try{
-          const { data } = await axios.get(`https://localhost:7116/api/CourseContraller/GetAllAccreditCourses?pageNumber=1&pageSize=10000`,);
+          const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}CourseContraller/GetAllAccreditCourses?pageNumber=1&pageSize=10000`,);
           // console.log(data);
           setCourses(data.result.items);
         }
@@ -43,7 +43,7 @@ export default function page({params}) {
   const fetchStudents =  async (pageNum = pageNumber, pageSizeNum = pageSize) => {
       if(userData){
       try{
-      const { data } = await axios.get(`https://localhost:7116/api/StudentsContraller/GetCourseParticipants?Courseid=${params.Courseid}?pageNumber=${pageNum}&pageSize=${pageSize}`,
+      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}StudentsContraller/GetCourseParticipants?Courseid=${params.Courseid}&pageNumber=${pageNum}&pageSize=${pageSize}`,
         { headers: { Authorization: `Bearer ${userToken}` } });
       console.log(data);
       setStudents(data.result.items);
@@ -112,8 +112,7 @@ export default function page({params}) {
         >
           <MenuItem value={5}>5</MenuItem>
           <MenuItem value={10}>10</MenuItem>
-          <MenuItem value={20}>20</MenuItem>
-          <MenuItem value={50}>50</MenuItem>
+          <MenuItem value={15}>15</MenuItem>
         </Select>
       </FormControl>
                 <div className="icons d-flex gap-2 pt-3">

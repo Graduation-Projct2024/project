@@ -43,7 +43,7 @@ formData.append("confirmPassword", users.confirmPassword);
 formData.append("role", 'student');
 
 const { data } = await axios.post(
-  "https://localhost:7116/api/UserAuth/Register",
+  `${process.env.NEXT_PUBLIC_EDUCODING_API}UserAuth/Register`,
  formData,
  {headers: {
   'Content-Type': 'multipart/form-data','Content-Type': 'application/json',}}

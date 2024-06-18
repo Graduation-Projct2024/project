@@ -80,7 +80,7 @@ export default function ChangePassword({setOpenChange}) {
               formData.append(`userId`, userId)
               formData.append('password', values.password);
               formData.append('newpassword', values.newpassword);
-              const { data } = await axios.patch(`https://localhost:7116/api/UserAuth/changePassword?UserId=${userId}`,
+              const { data } = await axios.patch(`${process.env.NEXT_PUBLIC_EDUCODING_API}UserAuth/changePassword?UserId=${userId}`,
               formData,
                 {
                   headers: {

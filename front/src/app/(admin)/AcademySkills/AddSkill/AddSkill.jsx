@@ -8,6 +8,7 @@ import React, { useContext } from 'react'
 import Swal from 'sweetalert2';
 
 export default function AddSkill({setOpen}) {
+  let [errmsg,setErrmsg] = useState();
     const { userData,userToken } = useContext(UserContext);
     console.log(userToken)
     const initialValues={
@@ -18,13 +19,19 @@ export default function AddSkill({setOpen}) {
         if(userData){
           try {
             const { data } = await axios.post(
-                `https://localhost:7116/api/Skill/AddSkillOptionsByAdmin?skillName=${values.skillName}`,
+                `${process.env.NEXT_PUBLIC_EDUCODING_API}Skill/AddSkillOptionsByAdmin?skillName=${values.skillName}`,
                 {},
                 {
                     headers: {
                         Authorization: `Bearer ${userToken}`,
                     },
                 });
+                if(data.errorMassages != null){
+                  setErrmsg(data.errorMassages)
+                  
+                  // console.log(data.errorMassages)
+                }
+                else{
             //console.log(data);
             formik.resetForm();
             setOpen(false);      
@@ -34,7 +41,7 @@ export default function AddSkill({setOpen}) {
               icon: "success"
             });
         
-          } catch (error) {
+          }} catch (error) {
             console.error('Error submitting form:', error);
             console.log('Error response:', error.response);
           }}
@@ -70,6 +77,7 @@ export default function AddSkill({setOpen}) {
             >
               Add
             </Button>
+            <p className='text-danger'>{errmsg}</p>
       </div>
     </form>
     </>

@@ -29,7 +29,7 @@ export default function EmployeeContacts() {
     if(userData){
     try{
     // setLoading(true)
-    const { data } = await axios.get(`https://localhost:7116/api/Employee/GetAllEmployee?pageNumber=${pageNum}&pageSize=${pageSize}`,
+    const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}Employee/GetAllEmployee?pageNumber=${pageNum}&pageSize=${pageSize}`,
     {
         headers: {
             Authorization: `Bearer ${userToken}`,
@@ -126,8 +126,7 @@ return matchesSearchTerm ;
         >
           <MenuItem value={5}>5</MenuItem>
           <MenuItem value={10}>10</MenuItem>
-          <MenuItem value={20}>20</MenuItem>
-          <MenuItem value={50}>50</MenuItem>
+          <MenuItem value={15}>15</MenuItem>
         </Select>
       </FormControl>
                 <div className="icons d-flex gap-2 pt-3">

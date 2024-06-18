@@ -14,7 +14,7 @@ export default function CoursesSection() {
     const fetchCourses = async () => {
         try {
           const { data } = await axios.get(
-            `https://localhost:7116/api/CourseContraller/GetAllAccreditCourses?pageNumber=1&pageSize=3`
+            `${process.env.NEXT_PUBLIC_EDUCODING_API}CourseContraller/GetAllAccreditCourses?pageNumber=1&pageSize=3`
           );
           console.log(data);
           setCourses(data.result.items);
@@ -56,18 +56,18 @@ export default function CoursesSection() {
                         <li><img src="./user1.png" alt="instructor-img"/></li>
                         <li><p className='instructorName'>{course.instructorName}</p></li>
                       </ul>
-                      <ul>
+                      {/* <ul>
                         <li><FontAwesomeIcon icon={faStar} style={{color: "#FFD43B",}} /></li>
                         <li>(4.9)</li>
-                      </ul>
+                      </ul> */}
                     </div>
                     <h4 className="title">{course.name}</h4>
-                    <p>{course.description}</p>
+                    {/* <p>{course.description}</p> */}
                     <div className="category row align-items-center">
                       <p className='col-6 pt-4 pe-5'>{course.category}</p>
                       <div className="courses-button col-6 justify-content-end pt-2 ps-4">
-                                {/* <Link href={`CourseDetails/${course.id}`} className = "text-decoration-none btn btn-dark p-3">View Details</Link> */}
-                                <Button className='viewDetailsButton p-2'  onClick={() => router.push(`CourseDetails/${course.id}?isEnrolled=${course.isEnrolled}`)}>View Details</Button>
+                                <Link href={`CourseDetails/${course.id}`} className = "text-decoration-none viewDetailsButton p-3 ">View Details</Link>
+                                {/* <Button className='viewDetailsButton p-2'  onClick={() => router.push(`CourseDetails/${course.id}?isEnrolled=${course.isEnrolled}`)}>View Details</Button> */}
                       </div>
                     </div>
                 </div>
@@ -82,7 +82,7 @@ export default function CoursesSection() {
           </div>
           <div className='text-center mt-3 py-5'>
 
-          <Link href={'/AllCourses'} className='btn ViewAllCourses '>
+          <Link href={'/AllCourses'} className='text-decoration-none viewDetailsButton p-3'>
                 View All courses
           </Link>
           </div>

@@ -19,7 +19,7 @@ const{materialId, LectureId}=useParams();
     const getMaterial=async()=>{
       if(userToken){
         try{
-        const {data}= await axios.get(`https://localhost:7116/api/MaterialControllar/GetMaterialById?id=${materialId}`,
+        const {data}= await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}MaterialControllar/GetMaterialById?id=${materialId}`,
         {headers :{Authorization:`Bearer ${userToken}`}}
 
         )

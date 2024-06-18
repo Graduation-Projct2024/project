@@ -67,7 +67,7 @@ export default function Review({courseId}) {
   
     try {
       const { data } = await axios.post(
-        `https://localhost:7116/api/Feedback/AddCourseFeedback?studentId=${userId}&courseId=${courseId}`,
+        `${process.env.NEXT_PUBLIC_EDUCODING_API}Feedback/AddCourseFeedback?studentId=${userId}&courseId=${courseId}`,
         payload,
         {
           headers: {
@@ -108,7 +108,7 @@ export default function Review({courseId}) {
   const getReviews = async () => {
     try{
         const data = await axios.get(
-          `https://localhost:7116/api/Feedback/GetAllCourseFeedback?courseId=${courseId}`
+          `${process.env.NEXT_PUBLIC_EDUCODING_API}Feedback/GetAllCourseFeedback?courseId=${courseId}`
         );
         setReviews(data.data.result.items);
       }catch(error){

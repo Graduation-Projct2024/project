@@ -42,7 +42,7 @@ export default function Education({id}) {
   const getInstructorSkills = async () => {
     if (id) {
       try {
-        const { data } = await axios.get(`https://localhost:7116/api/Skill/GetAllInstructorSkills?instructorId=${id}`, {
+        const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}Skill/GetAllInstructorSkills?instructorId=${id}`, {
           headers: { Authorization: `Bearer ${userToken}`}
         });
         if (data) {

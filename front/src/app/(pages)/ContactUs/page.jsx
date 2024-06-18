@@ -40,7 +40,7 @@ export default function page() {
       formData.append("message", contact.message);
 
       const { data } = await axios.post(
-        `https://localhost:7116/api/Contact/MessageToContactUs`,
+        `${process.env.NEXT_PUBLIC_EDUCODING_API}Contact/MessageToContactUs`,
         formData,
       );
       setOpen(true);

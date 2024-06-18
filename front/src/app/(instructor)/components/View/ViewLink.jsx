@@ -62,7 +62,7 @@ const handleClose = () => {
  const getMaterial=async()=>{
   if(userToken){
     try{
-  const {data}= await axios.get(`https://localhost:7116/api/MaterialControllar/GetMaterialById?id=${materialID}`,
+  const {data}= await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}MaterialControllar/GetMaterialById?id=${materialID}`,
   {headers :{Authorization:`Bearer ${userToken}`}}
 )
 
@@ -81,7 +81,7 @@ const handleClose = () => {
  const hideMaterial= async(event)=>{
   try{
     setIsChecked(event.target.checked);
-    const {data}= await axios.patch(`https://localhost:7116/api/MaterialControllar/HideOrShowMaterials?Id=${materialID}&isHidden=${event.target.checked}`,
+    const {data}= await axios.patch(`${process.env.NEXT_PUBLIC_EDUCODING_API}MaterialControllar/HideOrShowMaterials?Id=${materialID}&isHidden=${event.target.checked}`,
       {},
       {headers :{Authorization:`Bearer ${userToken}`}}
     
@@ -93,7 +93,7 @@ const handleClose = () => {
  }
  const deleteMaterial=async()=>{
   try{
-  const {data}= await axios.delete(`https://localhost:7116/api/MaterialControllar/DeleteMaterial?id=${materialID}`,
+  const {data}= await axios.delete(`${process.env.NEXT_PUBLIC_EDUCODING_API}MaterialControllar/DeleteMaterial?id=${materialID}`,
   {headers :{Authorization:`Bearer ${userToken}`}}
 
   )

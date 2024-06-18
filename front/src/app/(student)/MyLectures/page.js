@@ -48,7 +48,7 @@ export default function page() {
     if (userId) {
       try {
         const response = await axios.get(
-          `https://localhost:7116/api/Lectures/GetAllConsultations?studentId=${userId}&pageNumber=${pageNum}&pageSize=${pageSizeNum}`,
+          `${process.env.NEXT_PUBLIC_EDUCODING_API}Lectures/GetAllConsultations?studentId=${userId}&pageNumber=${pageNum}&pageSize=${pageSizeNum}`,
           { headers: { Authorization: `Bearer ${userToken}` } }
         );
         console.log(response.data);

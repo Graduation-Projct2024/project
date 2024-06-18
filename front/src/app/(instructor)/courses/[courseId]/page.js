@@ -162,7 +162,7 @@ const handleCloseViewTaskDialog = () => {
     const getCourses = async () => {
 if(userToken){
       const data = await axios.get(
-        `https://localhost:7116/api/CourseContraller/GetCourseById?id=${courseId}`,
+        `${process.env.NEXT_PUBLIC_EDUCODING_API}CourseContraller/GetCourseById?id=${courseId}`,
         {},
         {headers :{Authorization:`Bearer ${userToken}`}}
 
@@ -173,7 +173,7 @@ if(userToken){
     const getCourseMaterial = async () => {
       if(userToken){
         const { data } = await axios.get(
-          `https://localhost:7116/api/MaterialControllar/GetAllMaterial?CourseId=${courseId}`,
+          `${process.env.NEXT_PUBLIC_EDUCODING_API}MaterialControllar/GetAllMaterial?CourseId=${courseId}`,
           {headers :{Authorization:`Bearer ${userToken}`}}
 
           
@@ -191,7 +191,7 @@ if(userToken){
         if(userToken){
 
         const data = await axios.get(
-          `https://localhost:7116/api/StudentsContraller/GetCourseParticipants?Courseid=${courseId}&pageNumber=${pageNum}&pageSize=${pageSize}`,
+          `${process.env.NEXT_PUBLIC_EDUCODING_API}StudentsContraller/GetCourseParticipants?Courseid=${courseId}&pageNumber=${pageNum}&pageSize=${pageSize}`,
           {headers :{Authorization:`Bearer ${userToken}`}}
 
         );
@@ -343,8 +343,7 @@ if(userToken){
                 >
                   <MenuItem value={5}>5</MenuItem>
                   <MenuItem value={10}>10</MenuItem>
-                  <MenuItem value={20}>20</MenuItem>
-                  <MenuItem value={50}>50</MenuItem>
+                  <MenuItem value={15}>15</MenuItem>
                 </Select>
               </FormControl></div>
     {participants?.map((participant, index)=>( 

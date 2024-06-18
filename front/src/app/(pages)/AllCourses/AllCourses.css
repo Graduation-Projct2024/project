@@ -38,7 +38,7 @@ border-color: #4C5372;
 .course-image img{
     border-radius: 20px;
     width: 100%;
-    max-height: 150px;
+    max-height: 220px;
     -webkit-border-radius: 20px;
     -moz-border-radius: 20px;
     -ms-border-radius: 20px;
@@ -133,7 +133,7 @@ border-top: 1px solid #D9D9D9;
     padding-left: 10px;
 }
 
-.courses-button .viewDetailsButton {
+.viewDetailsButton {
     font-size: 15px;
     background-color: #4C5372;
     color: #fffdf6;
@@ -142,15 +142,20 @@ border-top: 1px solid #D9D9D9;
     line-height: 1;
     transition: .3s;
     padding-left: 10px;
-    }
-    .courses-button .viewDetailsButton:hover {
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+}
+    .viewDetailsButton:hover {
         background-color: #fffdf6 !important;
         color: #4C5372 !important;
         border: #4C5372 1px solid !important;
     }
 
 
-.courses-button .viewDetailsButton:hover{
+.viewDetailsButton:hover{
     color: #7C7E9D;
 }
 .ViewAllCourses{

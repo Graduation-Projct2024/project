@@ -77,7 +77,7 @@ formData.append("endTime", end);
 formData.append("date", currntDate);
 
       const response = await axios.post(
-        `https://localhost:7116/api/Instructor/GetListOfInstructorForLectures`,
+        `${process.env.NEXT_PUBLIC_EDUCODING_API}Instructor/GetListOfInstructorForLectures`,
         formData,
         {
           headers: {
@@ -100,7 +100,7 @@ formData.append("date", currntDate);
     try{
       const data = await axios.get(
       
-      `https://localhost:7116/api/Skill/GetAllSkillOptions`,
+      `${process.env.NEXT_PUBLIC_EDUCODING_API}Skill/GetAllSkillOptions`,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -130,7 +130,7 @@ formData.append("date", currntDate);
     try {
       if (userId) {
         const response = await axios.get(
-          `https://localhost:7116/api/Lectures/GetAllConsultations?studentId=${userId}`,
+          `${process.env.NEXT_PUBLIC_EDUCODING_API}Lectures/GetAllConsultations?studentId=${userId}`,
 
           {headers :{Authorization:`Bearer ${userToken}`}}
 
@@ -179,7 +179,7 @@ formData.append("InstructorId", selectedInstructor);
 
 
 const { data } = await axios.post(
-  `https://localhost:7116/api/Lectures/BookALecture?studentId=${userId}&date=${date}&startTime=${lectures.startTime}&endTime=${lectures.endTime}`,
+  `${process.env.NEXT_PUBLIC_EDUCODING_API}Lectures/BookALecture?studentId=${userId}&date=${date}&startTime=${lectures.startTime}&endTime=${lectures.endTime}`,
   formData,
   {headers: {
     'Content-Type': 'application/problem+json; charset=utf-8',

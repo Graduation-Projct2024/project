@@ -21,7 +21,7 @@ export default function EditProfile({ id, FName, LName, gender, phoneNumber, Dat
   const { userData,userToken } = useContext(UserContext);
 
   const [selectedGender, setSelectedGender] = useState(gender);
-
+  let [errmsg,setErrmsg] = useState()
   const handleFieldChange = (event) => {
     formik.setFieldValue('image', event.target.files[0]); // Set the file directly to image
   };
@@ -39,7 +39,13 @@ export default function EditProfile({ id, FName, LName, gender, phoneNumber, Dat
         formData.append('image', updatedData.image);
       }
 
-      const { data } = await axios.put(`https://localhost:7116/api/UserAuth/EditProfile?id=${id}`, formData,{headers :{Authorization:`Bearer ${userToken}`}},);
+      const { data } = await axios.put(`${process.env.NEXT_PUBLIC_EDUCODING_API}UserAuth/EditProfile?id=${id}`, formData,{headers :{Authorization:`Bearer ${userToken}`}},);
+      if(data.errorMassages != null){
+        setErrmsg(data.errorMassages)
+        
+        // console.log(data.errorMassages)
+      }
+      else{
         console.log('Profile Updated');
         formik.resetForm();
         setOpenUpdate(false)
@@ -49,7 +55,7 @@ export default function EditProfile({ id, FName, LName, gender, phoneNumber, Dat
           icon: "success"
         });
       
-    } catch (error) {
+    } }catch (error) {
       console.error('Error updating employee:', error);
     }
   };
@@ -172,6 +178,7 @@ export default function EditProfile({ id, FName, LName, gender, phoneNumber, Dat
         >
           Update
         </Button>
+        <p className='text-danger'>{errmsg}</p>
       </div>
     </form>
   );

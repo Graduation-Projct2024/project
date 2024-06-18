@@ -35,7 +35,7 @@ const handleClickOpen = () => {
   const fetchCourses = async (pageNum = pageNumber, pageSizeNum = pageSize)=> {
     if(userData){
     try{
-    const { data } = await axios.get(`https://localhost:7116/api/CourseContraller/GetAllAccreditCourses?pageNumber=${pageNum}&pageSize=${pageSize}`);
+    const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}CourseContraller/GetAllAccreditCourses?pageNumber=${pageNum}&pageSize=${pageSize}`);
     console.log(data.result);
     setCourses(data.result.items);
     setTotalPages(data.result.totalPages);
@@ -98,8 +98,7 @@ const handleClickOpen = () => {
         >
           <MenuItem value={5}>5</MenuItem>
           <MenuItem value={10}>10</MenuItem>
-          <MenuItem value={20}>20</MenuItem>
-          <MenuItem value={50}>50</MenuItem>
+          <MenuItem value={15}>15</MenuItem>
         </Select>
       </FormControl>
                 <div className="icons d-flex gap-2 pt-3">

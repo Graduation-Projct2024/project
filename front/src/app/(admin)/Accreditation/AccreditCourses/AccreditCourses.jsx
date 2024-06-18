@@ -26,7 +26,7 @@ export default function AccreditCourses() {
     if(userData){
       // setLoading(true)
     try{
-    const { data } = await axios.get(`https://localhost:7116/api/CourseContraller/GetAllCoursesForAccredit?pageNumber=${pageNum}&pageSize=${pageSize}`);
+    const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}CourseContraller/GetAllCoursesForAccredit?pageNumber=${pageNum}&pageSize=${pageSize}`);
     // console.log(data);
     setAccreditCourses(data.result.items);
     setTotalPages(data.result.totalPages);
@@ -71,7 +71,7 @@ export default function AccreditCourses() {
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
-            const { data } = await axios.patch(`https://localhost:7116/api/CourseContraller/accreditCourse?courseId=${courseId}`, {Status},
+            const { data } = await axios.patch(`${process.env.NEXT_PUBLIC_EDUCODING_API}CourseContraller/accreditCourse?courseId=${courseId}`, {Status},
               {
                 headers: {
                   Authorization: `Bearer ${userToken}`,
@@ -167,8 +167,7 @@ const filteredAccreditCourses = Array.isArray(accreditCourses) ? accreditCourses
         >
           <MenuItem value={5}>5</MenuItem>
           <MenuItem value={10}>10</MenuItem>
-          <MenuItem value={20}>20</MenuItem>
-          <MenuItem value={50}>50</MenuItem>
+          <MenuItem value={15}>15</MenuItem>
         </Select>
       </FormControl>
               <div className="icons d-flex gap-2 pt-3">

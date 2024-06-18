@@ -23,7 +23,7 @@ export default function InstructorSkills({params}) {
       if(userData){
     try {
       //setLoading(false)
-      const {data} = await axios.get(`https://localhost:7116/api/Skill/GetAllInstructorSkills?instructorId=${params.instructorId}`,
+      const {data} = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}Skill/GetAllInstructorSkills?instructorId=${params.instructorId}`,
       { headers: { Authorization: `Bearer ${userToken}` }});
       if (data) {
         setInstructorSkills(data.result || []);
@@ -40,7 +40,7 @@ export default function InstructorSkills({params}) {
       const fetchEmployees = async () => {
         if(userData){
         try{
-        const { data } = await axios.get(`https://localhost:7116/api/Employee/GetAllEmployee`);
+        const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}Employee/GetAllEmployee`);
         console.log(data);
         setEmployees(data.result.items);
       }
