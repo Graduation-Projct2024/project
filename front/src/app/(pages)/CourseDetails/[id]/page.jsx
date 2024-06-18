@@ -27,7 +27,7 @@ export default function CourseDetails({params}) {
   let[instructor,setInstructor] = useState({});
   let[role,setRole] = useState();
  const fetchIns = async ()=>{
-    const {data} = await axios.get('https://localhost:7116/api/Employee/GetAllEmployee?pageNumber=1&pageSize=1000');
+    const {data} = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}Employee/GetAllEmployee?pageNumber=1&pageSize=1000`);
     // console.log(data)
      setInstructors(data.result.items);
   }
@@ -35,7 +35,7 @@ export default function CourseDetails({params}) {
   const getCourse =async ()=>{
     try {
       //setLoading(false)
-      const {data} = await axios.get(`https://localhost:7116/api/CourseContraller/GetCourseById?id=${params.id}`,);
+      const {data} = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}CourseContraller/GetCourseById?id=${params.id}`,);
         // console.log(data);
         setCourse(data.result);
     }

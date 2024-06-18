@@ -17,7 +17,7 @@ const formatDate = (dateString) => {
   };
 export default function EditEvent({id   , name   , category    ,dateOfEvent   , content   , image,   setOpenUpdate}) {
 
-    
+  let [errmsg,setErrmsg] = useState()
   const { userData, userToken } = useContext(UserContext);
 
   const handleFieldChange = (event) => {
@@ -36,7 +36,13 @@ export default function EditEvent({id   , name   , category    ,dateOfEvent   , 
           formData.append('image', updatedData.image);
         }
 
-        const { data } = await axios.put(`https://localhost:7116/api/EventContraller/EditEvent?id=${id}`, formData, { headers: { Authorization: `Bearer ${userToken}` } });
+        const { data } = await axios.put(`${process.env.NEXT_PUBLIC_EDUCODING_API}EventContraller/EditEvent?id=${id}`, formData, { headers: { Authorization: `Bearer ${userToken}` } });
+        if(data.errorMassages != null){
+          setErrmsg(data.errorMassages)
+          
+          // console.log(data.errorMassages)
+        }
+        else{
           formik.resetForm();
           setOpenUpdate(false);
           Swal.fire({
@@ -44,7 +50,7 @@ export default function EditEvent({id   , name   , category    ,dateOfEvent   , 
             text: "You can see the data updated in Events page",
             icon: "success"
           });
-      } catch (error) {
+      } }catch (error) {
         console.error('Error updating Course:', error);
       }
     }
@@ -160,6 +166,7 @@ export default function EditEvent({id   , name   , category    ,dateOfEvent   , 
             >
               Update
             </Button>
+            <p className='text-danger'>{errmsg}</p>
       </div>
       
     </form>  )

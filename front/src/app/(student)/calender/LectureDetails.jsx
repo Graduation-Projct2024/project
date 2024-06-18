@@ -38,7 +38,7 @@ export default function LectureDetails({ open, onClose, lectureID}) {
     try {
       if (lectureID) {
         const response = await axios.get(
-          `https://localhost:7116/api/Lectures/GetConsultationById?consultationId=${lectureID}`,
+          `${process.env.NEXT_PUBLIC_EDUCODING_API}Lectures/GetConsultationById?consultationId=${lectureID}`,
           
 
           {headers :{Authorization:`Bearer ${userToken}`}}
@@ -57,7 +57,7 @@ setLecture(response.data.result);
     try {
       if (lectureID&&userId) {
         const response = await axios.post(
-          `http://localhost:5134/api/StudentsContraller/JoinToPublicLecture?StudentId=${userId}&ConsultaionId=${lectureID}          `,
+          `${process.env.NEXT_PUBLIC_EDUCODING_API}StudentsContraller/JoinToPublicLecture?StudentId=${userId}&ConsultaionId=${lectureID}          `,
           {},
 
           {headers :{Authorization:`Bearer ${userToken}`}}

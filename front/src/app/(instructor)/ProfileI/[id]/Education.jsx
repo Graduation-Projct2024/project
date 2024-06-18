@@ -47,7 +47,7 @@ export default function Education() {
   };
   const handleDelete = async () => {
     try {
-      const { data } = await axios.delete(`https://localhost:7116/api/Skill/DeleteAnInstructorSkill?InstructorId=${userId}&SkillId=${skillId}`, {
+      const { data } = await axios.delete(`${process.env.NEXT_PUBLIC_EDUCODING_API}Skill/DeleteAnInstructorSkill?InstructorId=${userId}&SkillId=${skillId}`, {
         headers: { Authorization: `Bearer ${userToken}` }
       });
         setOpen(false);
@@ -64,7 +64,7 @@ export default function Education() {
   const getAllSkills = async () => {
     if (userId) {
       try {
-        const { data } = await axios.get(`https://localhost:7116/api/Skill/GetAllSkillOptionsToInstructor?instructorId=${userId}`,{ headers: { Authorization: `Bearer ${userToken}` } });
+        const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}Skill/GetAllSkillOptionsToInstructor?instructorId=${userId}`,{ headers: { Authorization: `Bearer ${userToken}` } });
           setAllSkills(data.result || []);
       } catch (error) {
         console.log(error);
@@ -75,7 +75,7 @@ export default function Education() {
   const getInstructorSkills = async () => {
     if (userId) {
       try {
-        const { data } = await axios.get(`https://localhost:7116/api/Skill/GetAllInstructorSkills?instructorId=${userId}`, {
+        const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}Skill/GetAllInstructorSkills?instructorId=${userId}`, {
           headers: { Authorization: `Bearer ${userToken}`}
         });
         if (data) {
@@ -94,7 +94,7 @@ export default function Education() {
     if (userId) {
       try {
         const { data } = await axios.post(
-          `https://localhost:7116/api/Skill/selectAnInstructorSkills?instructorId=${userId}`,
+          `${process.env.NEXT_PUBLIC_EDUCODING_API}Skill/selectAnInstructorSkills?instructorId=${userId}`,
           formData,
           { headers: { Authorization: `Bearer ${userToken}` },'Content-Type':'application/problem+json','Content-Type':'charset=utf-8' } // Authorization token as the third element
         );

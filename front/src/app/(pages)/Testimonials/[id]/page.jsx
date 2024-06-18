@@ -66,7 +66,7 @@ const handleCloseUpdate = () => {
   const getUser =async ()=>{
     try {
       //setLoading(false)
-      const { data } = await axios.get(`https://localhost:7116/api/Employee/GetEmployeeById?id=${params.id}`);
+      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}Employee/GetEmployeeById?id=${params.id}`);
       console.log(data);
         setUser(data.result);
       //setLoading(false)

@@ -50,7 +50,7 @@ formData.append("InstructorId",userData.userId);
 console.log(tasks.pdf)
 
 const { data } = await axios.post(
-  "https://localhost:7116/api/MaterialControllar/AddFile",
+    `${process.env.NEXT_PUBLIC_EDUCODING_API}MaterialControllar/AddFile`,
  
   formData,
   {headers :{Authorization:`Bearer ${userToken}`}}

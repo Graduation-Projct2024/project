@@ -10,6 +10,8 @@ import EmployeeContacts from './EmployeeContacts'
 import StudentContacts from './StudentContacts'
 
 export default function page() {
+  const isClient = typeof window !== 'undefined'
+
   return (
     <Layout title = "Contscts">
        <div>
@@ -24,10 +26,10 @@ export default function page() {
 
   <div className="tab-content" id="nav-tabContent">
     <div className="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabIndex={0}>
-      <EmployeeContacts/>
+    {isClient && <EmployeeContacts />}
     </div>
     <div className="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabIndex={0}>
-      <StudentContacts/>
+    {isClient && <StudentContacts />}
     </div>
   </div>
 </div>

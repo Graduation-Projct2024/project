@@ -23,7 +23,7 @@ export default function EditCourse({courseId , startDate , Deadline , Instructor
 
   const [selectedIns, setSelectedIns] = useState(InstructorId || '');
   const fetchIns = async ()=>{
-    const {data} = await axios.get('https://localhost:7116/api/Instructor/GetAllInstructorsList',{headers :{Authorization:`Bearer ${userToken}`}});
+    const {data} = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}Instructor/GetAllInstructorsList`,{headers :{Authorization:`Bearer ${userToken}`}});
     // console.log(data)
      setInstructors(data.result);
   }
@@ -51,7 +51,7 @@ export default function EditCourse({courseId , startDate , Deadline , Instructor
           formData.append('image', updatedData.image);
         }
 
-        const { data } = await axios.put(`https://localhost:7116/api/CourseContraller/EditOnCourseAfterAccredit?courseId=${courseId}`, formData, { headers: { Authorization: `Bearer ${userToken}` } });
+        const { data } = await axios.put(`${process.env.NEXT_PUBLIC_EDUCODING_API}CourseContraller/EditOnCourseAfterAccredit?courseId=${courseId}`, formData, { headers: { Authorization: `Bearer ${userToken}` } });
         if(data.errorMassages != null){
           setErrmsg(data.errorMassages)
           

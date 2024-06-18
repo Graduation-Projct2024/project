@@ -20,6 +20,7 @@ export default function CreateEvent({setOpen}) {
     dateOfEvent:'',
     image:'',
 };
+let [errmsg,setErrmsg] = useState()
 
 const handleFieldChange = (event) => {
   formik.setFieldValue('image', event.target.files[0]); // Set the file directly to image
@@ -38,8 +39,13 @@ const onSubmit = async (values) => {
       formData.append('image', values.image);
     }
 
-    const { data } = await axios.post('https://localhost:7116/api/EventContraller/CreateEvent', formData,{headers :{Authorization:`Bearer ${userToken}`}});
-        
+    const { data } = await axios.post(`${process.env.NEXT_PUBLIC_EDUCODING_API}EventContraller/CreateEvent`, formData,{headers :{Authorization:`Bearer ${userToken}`}});
+    if(data.errorMassages != null){
+      setErrmsg(data.errorMassages)
+      
+      // console.log(data.errorMassages)
+    }
+    else{
     console.log(data);
     console.log('tttt');
     formik.resetForm();
@@ -51,7 +57,7 @@ const onSubmit = async (values) => {
     });
 
     console.log('jhbgyvftrgybuhnjimkjhb');
-  } catch (error) {
+  } }catch (error) {
     // Handle the error here
     console.error('Error submitting form:', error);
     console.log('Error response:', error.response);
@@ -165,6 +171,7 @@ const renderInputs = inputs.slice(0, -1).map((input,index)=>
             >
               Add
             </Button>
+            <p className='text-danger'>{errmsg}</p>
       </div>
     </form>
   )

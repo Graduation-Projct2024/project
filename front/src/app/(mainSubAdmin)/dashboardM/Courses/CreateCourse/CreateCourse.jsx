@@ -13,8 +13,9 @@ export default function CreateCourse({setOpen}) {
   const {userToken, setUserToken, userData,userId}=useContext(UserContext);
   let [instructors,setInstructors] = useState([]);
   const [selectedIns, setSelectedIns] = useState('');
+  let [errmsg,setErrmsg] = useState()
   const fetchIns = async ()=>{
-    const {data} = await axios.get('https://localhost:7116/api/Instructor/GetAllInstructorsList',{headers :{Authorization:`Bearer ${userToken}`}});
+    const {data} = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}Instructor/GetAllInstructorsList`,{headers :{Authorization:`Bearer ${userToken}`}});
     // console.log(data)
      setInstructors(data.result);
   }
@@ -63,7 +64,13 @@ const onSubmit = async (values) => {
       formData.append('image', values.image);
     }
    
-    const { data } = await axios.post('https://localhost:7116/api/CourseContraller/CreateCourse',formData,{headers :{Authorization:`Bearer ${userToken}`}});
+    const { data } = await axios.post(`${process.env.NEXT_PUBLIC_EDUCODING_API}CourseContraller/CreateCourse`,formData,{headers :{Authorization:`Bearer ${userToken}`}});
+    if(data.errorMassages != null){
+      setErrmsg(data.errorMassages)
+      
+      // console.log(data.errorMassages)
+    }
+    else{
     
     console.log(data);
     console.log('course created');
@@ -77,7 +84,7 @@ const onSubmit = async (values) => {
 
     
 
-  } catch (error) {
+  } }catch (error) {
     if (error.isAxiosError) {
       const requestConfig = error.config;
       console.log("Request Configuration:", requestConfig);
@@ -249,6 +256,7 @@ const renderInputs =  inputs.slice(0, -1).map((input,index)=>
             >
               Add
             </Button>
+            <p className='text-danger'>{errmsg}</p>
       </div>
       
     </form>

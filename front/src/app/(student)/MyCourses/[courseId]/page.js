@@ -92,7 +92,7 @@ const [materialId, setMaterialId]=useState();
       if(userToken){
         try{
         const { data } = await axios.get(
-          `https://localhost:7116/api/MaterialControllar/GetAllMaterial?CourseId=${courseId}`,
+          `${process.env.NEXT_PUBLIC_EDUCODING_API}MaterialControllar/GetAllMaterial?CourseId=${courseId}`,
           {headers :{Authorization:`Bearer ${userToken}`}}
 
           
@@ -109,7 +109,7 @@ const [materialId, setMaterialId]=useState();
       const getCourses = async () => {
         if(userToken){
           const data = await axios.get(
-            `https://localhost:7116/api/CourseContraller/GetCourseById?id=${courseId}`,
+            `${process.env.NEXT_PUBLIC_EDUCODING_API}CourseContraller/GetCourseById?id=${courseId}`,
             {},
             {headers :{Authorization:`Bearer ${userToken}`}}
     
@@ -124,7 +124,7 @@ const [materialId, setMaterialId]=useState();
         if(userToken){
 
           const data = await axios.get(
-            `https://localhost:7116/api/StudentsContraller/GetCourseParticipants?Courseid=${courseId}`,
+            `${process.env.NEXT_PUBLIC_EDUCODING_API}StudentsContraller/GetCourseParticipants?Courseid=${courseId}`,
             {headers :{Authorization:`Bearer ${userToken}`}}
   
           );

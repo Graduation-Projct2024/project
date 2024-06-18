@@ -21,7 +21,7 @@ export default function Testimonials() {
   let [contacts,setContacts] = useState([]);
   const fetchContacts = async () => {
     try{
-    const { data } = await axios.get(`https://localhost:7116/api/Employee/GetAllEmployee?pageNumber=1&pageSize=1000`);
+    const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}Employee/GetAllEmployee?pageNumber=1&pageSize=1000`);
 
     console.log(data);
     setContacts(data.result.items);

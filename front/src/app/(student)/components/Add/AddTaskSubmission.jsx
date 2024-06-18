@@ -46,7 +46,7 @@ formData.append("description", tasks.description);
 formData.append("pdf", tasks.pdf);
 
 const { data } = await axios.post(
-  `https://localhost:7116/api/Submissions/AddTaskSubmission?Studentid=${userData.userId}&Id=${materialID}`,
+  `${process.env.NEXT_PUBLIC_EDUCODING_API}Submissions/AddTaskSubmission?Studentid=${userData.userId}&Id=${materialID}`,
   formData,
   {headers :{Authorization:`Bearer ${userToken}`}}
 

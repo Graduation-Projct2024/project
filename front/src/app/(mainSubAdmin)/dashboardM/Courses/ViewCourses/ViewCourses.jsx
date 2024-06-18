@@ -7,7 +7,7 @@ import axios from 'axios';
 import CreateCourse from '../CreateCourse/CreateCourse';
 import { UserContext } from '@/context/user/User';
 import EditCourse from '../EditCourse/[id]/page';
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Pagination, Select, Stack, useMediaQuery, useTheme } from '@mui/material';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Pagination, Select, Stack, Tooltip, useMediaQuery, useTheme } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 
@@ -36,7 +36,7 @@ const handleClickOpen = () => {
   const fetchCourses = async (pageNum = pageNumber, pageSizeNum = pageSize) => {
     if(userData){
     try{
-    const { data } = await axios.get(`https://localhost:7116/api/CourseContraller/GetAllAccreditCourses?pageNumber=${pageNum}&pageSize=${pageSize}`);
+    const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}CourseContraller/GetAllAccreditCourses?pageNumber=${pageNum}&pageSize=${pageSize}`);
     // console.log(data.result);
     setCourses(data.result.items);
     setTotalPages(data.result.totalPages);
@@ -60,9 +60,13 @@ const handleClickOpen = () => {
     setPageNumber(value);
   };
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedStatus, setSelectedStatus] = useState(null);
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
+  };
+  const handleStatusFilter = (type) => {
+    setSelectedStatus(type);
   };
 
   const filteredCourses = Array.isArray(courses) ? courses.filter((course) => {
@@ -71,7 +75,8 @@ const handleClickOpen = () => {
         typeof value === "string" &&
         value.toLowerCase().includes(searchTerm.toLowerCase())
     );
-    return matchesSearchTerm;
+    const matchesStatus = selectedStatus ? course.status.toLowerCase() === selectedStatus.toLowerCase() : true;
+    return matchesSearchTerm && matchesStatus;
   }) : [];
   return (
     <>
@@ -99,20 +104,62 @@ const handleClickOpen = () => {
         >
           <MenuItem value={5}>5</MenuItem>
           <MenuItem value={10}>10</MenuItem>
-          <MenuItem value={20}>20</MenuItem>
-          <MenuItem value={50}>50</MenuItem>
+          <MenuItem value={15}>15</MenuItem>
         </Select>
       </FormControl>
                 <div className="icons d-flex gap-2 pt-3">
                     
-                    <div className="dropdown">
-  <button className="dropdown-toggle border-0 bg-white edit-pen" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-    <FontAwesomeIcon icon={faFilter} />
-  </button>
-  <ul className="dropdown-menu">
- 
-  </ul>
-</div>
+                <div className="dropdown ">
+                   <Tooltip title="Filter by Status" placement="top">
+                  <button
+                    className="dropdown-toggle border-0 bg-white edit-pen"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    <FontAwesomeIcon icon={faFilter} className="pt-1"/>
+                  </button>
+                  </Tooltip>
+                  <ul className="dropdown-menu">
+                    <li>
+                      <a
+                        className="dropdown-item"
+                        href="#"
+                        onClick={() => handleStatusFilter("")}
+                        
+                      >
+                        All
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        className="dropdown-item"
+                        href="#"
+                        onClick={() => handleStatusFilter("start")}
+                      >
+                        Start
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        className="dropdown-item"
+                        href="#"
+                        onClick={() => handleStatusFilter("finish")}
+                      >
+                        Finish
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        className="dropdown-item"
+                        href="#"
+                        onClick={() => handleStatusFilter("accredit")}
+                      >
+                        Accredit
+                      </a>
+                    </li>
+                  </ul>
+                </div>
 <FontAwesomeIcon icon={faArrowUpFromBracket} />
                     
                 </div>

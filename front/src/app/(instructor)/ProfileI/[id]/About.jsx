@@ -22,7 +22,7 @@ export default function About() {
     const getBio = async () => {
         if (userId) {
           try {
-            const { data } = await axios.get(`https://localhost:7116/api/Employee/GetEmployeeById?id=${userId}`);
+            const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}Employee/GetEmployeeById?id=${userId}`);
             setBio(data.result.skillDescription);
         } catch (error) {
          console.log(error);
@@ -49,7 +49,7 @@ export default function About() {
 
   
   const { data } = await axios.patch(
-    `https://localhost:7116/api/Instructor/AddASkillDescription?instructorId=${userId}`,
+    `${process.env.NEXT_PUBLIC_EDUCODING_API}Instructor/AddASkillDescription?instructorId=${userId}`,
     formData,
     {headers: {
     'Authorization':`Bearer ${userToken}`,

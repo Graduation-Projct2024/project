@@ -20,7 +20,7 @@ console.log(userToken);
     try{
     if(userData){
       const data = await axios.get(
-        `https://localhost:7116/api/CourseContraller/GetAllCoursesGivenByInstructor?Instructorid=${userData.userId}&pageNumber=${pageNum}&pageSize=${pageSize}`,{headers :{Authorization:`Bearer ${userToken}`}}
+        `${process.env.NEXT_PUBLIC_EDUCODING_API}CourseContraller/GetAllCoursesGivenByInstructor?Instructorid=${userData.userId}&pageNumber=${pageNum}&pageSize=${pageSize}`,{headers :{Authorization:`Bearer ${userToken}`}}
       );
     setCourses(data.data.result.items);
     setTotalPages(data.data.result.totalPages);
@@ -57,8 +57,7 @@ console.log(userToken);
                 >
                   <MenuItem value={5}>5</MenuItem>
                   <MenuItem value={10}>10</MenuItem>
-                  <MenuItem value={20}>20</MenuItem>
-                  <MenuItem value={50}>50</MenuItem>
+                  <MenuItem value={15}>15</MenuItem>
                 </Select>
               </FormControl>
               </Stack>

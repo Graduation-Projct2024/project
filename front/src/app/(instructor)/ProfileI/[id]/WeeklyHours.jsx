@@ -368,7 +368,7 @@ const onSubmit = async (hours) => {
       formData.append('startTime', hours.startTime);
       formData.append('endTime', hours.endTime);
       formData.append('day', selectedDay); // Use selectedGender from state
-      const { data } = await axios.post(`https://localhost:7116/api/Instructor/AddInstructorOfficeHours?InstructorId=${id}`, formData,
+      const { data } = await axios.post(`${process.env.NEXT_PUBLIC_EDUCODING_API}Instructor/AddInstructorOfficeHours?InstructorId=${id}`, formData,
       {headers :{Authorization:`Bearer ${userToken}`}}
 
       );

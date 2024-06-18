@@ -18,7 +18,7 @@ export default function page() {
     const getEvent = async () => {
         try {
           const { data } = await axios.get(
-            `https://localhost:7116/api/EventContraller/GetEventById?eventId=${id}`
+            `${process.env.NEXT_PUBLIC_EDUCODING_API}EventContraller/GetEventById?eventId=${id}`
           );
           console.log(data);
           setEvent(data.result);

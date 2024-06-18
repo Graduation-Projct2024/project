@@ -101,5 +101,8 @@ body{
 .rating > input:checked ~ label > svg {
     fill: #ffa723; /* Set color for selected stars */
 }
-
+.animation{
+    width: 500px;
+    height: 500px;
+}
   

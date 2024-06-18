@@ -47,7 +47,7 @@ export default function page() {
   const getCourses = async () => {
 try{
     const data = await axios.get(
-      `https://localhost:7116/api/CourseContraller/GetCourseById?id=${courseId}`
+      `${process.env.NEXT_PUBLIC_EDUCODING_API}CourseContraller/GetCourseById?id=${courseId}`
     );
   
     setCourse(data.data.result);
@@ -63,7 +63,7 @@ try{
     formData.append("courseId", courseId);
     formData.append("studentId", userData.userId);
     const data = await axios.post(
-      `https://localhost:7116/api/StudentCourse/EnrollInCourse`,formData,
+      `${process.env.NEXT_PUBLIC_EDUCODING_API}StudentCourse/EnrollInCourse`,formData,
      { headers: {
         'Content-Type': 'multipart/form-data','Content-Type': 'application/json',Authorization: `Bearer ${userToken}`
       }

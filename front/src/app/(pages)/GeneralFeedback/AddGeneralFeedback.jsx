@@ -131,7 +131,7 @@ export default function AddGeneralFeedback({setOpen}) {
             formData.append('content', values.content);
             formData.append('range', selectedRange);
 
-            const { data } = await axios.post(`https://localhost:7116/api/Feedback/AddGeneralFeedback?studentId=${userId}`, formData, {  
+            const { data } = await axios.post(`${process.env.NEXT_PUBLIC_EDUCODING_API}Feedback/AddGeneralFeedback?studentId=${userId}`, formData, {  
                 headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${userToken}`

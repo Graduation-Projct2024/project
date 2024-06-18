@@ -47,7 +47,7 @@ export default function Navbar({role}) {
     setUserData(null);
     setUserId(null);
     router.push("/login");
-  };
+    };
 
 
   return (
