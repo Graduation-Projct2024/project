@@ -35,17 +35,10 @@ namespace courseProject.Services.Employees
             var instructors = await unitOfWork.instructorRepositpry.GetAllEmployeeAsync();
 
             var mapperSubAdmin = mapper.Map<IReadOnlyList<SubAdmin>, IReadOnlyList<EmployeeDto>>(SubAdmins);
-            //foreach (var employee in mapperSubAdmin)
-            //{
-            //    if (employee.ImageUrl != null)
-            //    {
-            //        employee.ImageUrl = Url + employee.ImageUrl;
-            //    }
-            //}
-          //  CommonClass.EditImageInEmployeeDTO(mapperSubAdmin);
+          
             var mapperInstructor = mapper.Map<IReadOnlyList<Instructor>, IReadOnlyList<EmployeeDto>>(instructors);
-          //  CommonClass.EditImageInEmployeeDTO(mapperInstructor);
-            var allEmployees = (mapperSubAdmin.Concat(mapperInstructor)).OrderBy(x => x.Id).ToList();
+           
+            var allEmployees = (mapperSubAdmin.Concat(mapperInstructor)).OrderByDescending(x => x.dateOfAdded).ToList();
             foreach (var employee in allEmployees)
             {
                 if (employee.ImageUrl != null)
@@ -66,29 +59,30 @@ namespace courseProject.Services.Employees
 
             using (var transaction = await unitOfWork.SubAdminRepository.BeginTransactionAsync())
             {
-                var userMapped = mapper.Map<RegistrationRequestDTO>(employee);
-                var Usermapp = await unitOfWork.UserRepository.RegisterAsync(userMapped);
-                Usermapp.IsVerified = true;
-                var success1 = await unitOfWork.SubAdminRepository.saveAsync();
+           
+                var userupdated = mapper.Map<User>(employee);
+             
+                await unitOfWork.UserRepository.createEmployeeAccount(userupdated);
+                await unitOfWork.UserRepository.saveAsync();
                 if (employee.role.ToLower() == "subadmin" || employee.role.ToLower() == "main-subadmin")
                 {
                     var modelMapped = mapper.Map<SubAdmin>(employee);
-                    var userMap = mapper.Map<User, SubAdmin>(Usermapp);
-                    modelMapped.SubAdminId = userMap.SubAdminId;
+                
+                    modelMapped.SubAdminId = userupdated.UserId;
                     await unitOfWork.SubAdminRepository.createSubAdminAccountAsync(modelMapped);
                 }
                 else if (employee.role.ToLower() == "instructor")
                 {
                     var modelMapped = mapper.Map<Instructor>(employee);
-                    var userMap = mapper.Map<User, Instructor>(Usermapp);
-                    modelMapped.InstructorId = userMap.InstructorId;
+               
+                    modelMapped.InstructorId = userupdated.UserId;
                     await unitOfWork.instructorRepositpry.createInstructorAccountAsync(modelMapped);
                 }
                 var success2 = await unitOfWork.SubAdminRepository.saveAsync();
 
 
 
-                if (success1 > 0 && success2 > 0)
+                if ( success2 > 0)
                 {
                     await transaction.CommitAsync();
                     return Result.Created;
@@ -135,59 +129,59 @@ namespace courseProject.Services.Employees
 
         public async Task<ErrorOr<Updated>> UpdateEmployeeFromAdmin(Guid employeeId, EmployeeForUpdateDTO employee)
         {
-            var subAdminToUpdate = await unitOfWork.SubAdminRepository.getSubAdminByIdAsync(employeeId);
-            var instructorToUpdate = await unitOfWork.instructorRepositpry.getInstructorByIdAsync(employeeId);
+            //var subAdminToUpdate = await unitOfWork.SubAdminRepository.getSubAdminByIdAsync(employeeId);
+            //var instructorToUpdate = await unitOfWork.instructorRepositpry.getInstructorByIdAsync(employeeId);
             var UserToUpdate = await unitOfWork.UserRepository.getUserByIdAsync(employeeId);
 
-            if (subAdminToUpdate == null && (UserToUpdate.role.ToLower() == "subadmin" || UserToUpdate.role.ToLower() == "main-subadmin"))
+            if (UserToUpdate == null && (UserToUpdate.role.ToLower() == "subadmin" || UserToUpdate.role.ToLower() == "main-subadmin"))
                 return ErrorSubAdmin.NotFound;
-            if (instructorToUpdate == null && UserToUpdate.role.ToLower() == "instructor")
+            if (UserToUpdate == null && UserToUpdate.role.ToLower() == "instructor")
                 return ErrorInstructor.NotFound;
-            using (var transaction = await unitOfWork.SubAdminRepository.BeginTransactionAsync())
-            {
+            //using (var transaction = await unitOfWork.SubAdminRepository.BeginTransactionAsync())
+            //{
                // unitOfWork.UserRepository.DetachEntity(UserToUpdate);
                 var userMapper = mapper.Map(employee, UserToUpdate);
-                userMapper.UserId = employeeId;
-                userMapper.role = UserToUpdate.role;
-                userMapper.password = UserToUpdate.password;
+              //  userMapper.UserId = employeeId;
+               // userMapper.role = UserToUpdate.role;
+            //    userMapper.password = UserToUpdate.password;
 
 
                 await unitOfWork.UserRepository.UpdateUser(userMapper);
                     var success1 = await unitOfWork.UserRepository.saveAsync();
-                    var success2 = 0;
-                    SubAdmin? Subadminmapper = null;
-                    Instructor? Instructormapper = null;
-                    if (UserToUpdate.role.ToLower() == "subadmin" || UserToUpdate.role.ToLower() == "main-subadmin")
-                    {
-                    // Detach existing SubAdmin entity
-                  //  unitOfWork.SubAdminRepository.DetachEntity(subAdminToUpdate);
+                //    var success2 = 0;
+                //    SubAdmin? Subadminmapper = null;
+                //    Instructor? Instructormapper = null;
+                //    if (UserToUpdate.role.ToLower() == "subadmin" || UserToUpdate.role.ToLower() == "main-subadmin")
+                //    {
+                //    // Detach existing SubAdmin entity
+                //  //  unitOfWork.SubAdminRepository.DetachEntity(subAdminToUpdate);
 
-                    Subadminmapper = mapper.Map<EmployeeForUpdateDTO, SubAdmin>(employee);
-                        Subadminmapper.SubAdminId = subAdminToUpdate.SubAdminId;
-                        await unitOfWork.SubAdminRepository.updateSubAdminAsync(Subadminmapper);
-
-                   
-                    }
-
-                    if (UserToUpdate.role.ToLower() == "instructor")
-                    {
-                    // Detach existing Instructor entity
-                 //   unitOfWork.instructorRepositpry.DetachEntity(instructorToUpdate);
-                    Instructormapper = mapper.Map(employee, instructorToUpdate);
-                        Instructormapper.InstructorId = instructorToUpdate.InstructorId;
-                        await unitOfWork.instructorRepositpry.updateSubAdminAsync(Instructormapper);
+                //    Subadminmapper = mapper.Map<EmployeeForUpdateDTO, SubAdmin>(employee);
+                //        Subadminmapper.SubAdminId = subAdminToUpdate.SubAdminId;
+                //        await unitOfWork.SubAdminRepository.updateSubAdminAsync(Subadminmapper);
 
                    
-                }
-                    success2 = await unitOfWork.SubAdminRepository.saveAsync();
-                    if (success1 > 0 && success2 > 0)
-                    {
-                        await transaction.CommitAsync();
+                //    }
+
+                //    if (UserToUpdate.role.ToLower() == "instructor")
+                //    {
+                //    // Detach existing Instructor entity
+                // //   unitOfWork.instructorRepositpry.DetachEntity(instructorToUpdate);
+                //    Instructormapper = mapper.Map(employee, instructorToUpdate);
+                //        Instructormapper.InstructorId = instructorToUpdate.InstructorId;
+                //        await unitOfWork.instructorRepositpry.updateSubAdminAsync(Instructormapper);
+
+                   
+                //}
+                //    success2 = await unitOfWork.SubAdminRepository.saveAsync();
+                    //if (success1 > 0 )
+                    //{
+                    //    await transaction.CommitAsync();
                         
                          return Result.Updated;
-                }
-                return ErrorEmployee.hasError;
-                }
+                //}
+                //return ErrorEmployee.hasError;
+              //  }
         }
 
 

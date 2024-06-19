@@ -39,6 +39,6 @@ namespace courseProject.Core.IGenericRepository
         public Task<User> GetAdminId();
 
 
-        public Task<IReadOnlyList<Course>> search(string query);
+        public Task<IReadOnlyList<T>> Search(object searchObject, string searchQuery);
     }
 }

@@ -141,7 +141,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        [Authorize(Policy = "Admin")]
+        [Authorize(Policy = "Admin , Instructor")]
 
         // this to change the status of courses to reject , accredit , finish , start
         public async Task<IActionResult> EditCourseStatus(Guid courseId, CourseStatusDTO courseStatus)
@@ -231,7 +231,15 @@ namespace courseProject.Controllers
         }
 
 
-        
+
+
+
+        /// <summary>
+        /// Retrieves all courses given by a specific instructor, paginated.
+        /// </summary>
+        /// <param name="Instructorid">The ID of the instructor whose courses are to be retrieved.</param>
+        /// <param name="paginationRequest">Pagination parameters (pageNumber, pageSize).</param>
+        /// <returns>An IActionResult containing the paginated list of courses or appropriate error responses.</returns>
         [HttpGet("GetAllCoursesGivenByInstructor")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -248,22 +256,35 @@ namespace courseProject.Controllers
         }
 
 
+
+
+        /// <summary>
+        /// Retrieves all custom courses for Main-SubAdmins and Students, paginated.
+        /// </summary>
+        /// <param name="paginationRequest">Pagination parameters (pageNumber, pageSize).</param>
+        /// <returns>An IActionResult containing the paginated list of custom courses or appropriate error responses.</returns>
         [HttpGet("GetAllCustomCourses")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "Main-SubAdmin , Student")]
-        // not try
+       
         public async Task<IActionResult> GetAllCustomCoursesToMainSubAdmin([FromQuery] PaginationRequest paginationRequest)
         {
 
             var GetCustomCourses = await courseServices.GetAllCustomCourses();
 
             return Ok(new ApiResponce { Result= (Pagination<CustomCourseForRetriveDTO>.CreateAsync(GetCustomCourses, paginationRequest.pageNumber, paginationRequest.pageSize)).Result });
-            }
+        }
 
 
 
+
+        /// <summary>
+        /// Retrieves a custom course by its ID for Main-SubAdmins and Students.
+        /// </summary>
+        /// <param name="id">The ID of the custom course to retrieve.</param>
+        /// <returns>An IActionResult containing the custom course or appropriate error responses.</returns>
         [HttpGet("GetCustomCoursesById")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -280,6 +301,8 @@ namespace courseProject.Controllers
         }
 
 
+
+       
         [HttpGet("GetAllEnrolledCoursesForAStudent")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -298,14 +321,7 @@ namespace courseProject.Controllers
 
 
 
-        //[HttpGet("searchinCourse")]
-        //[ProducesResponseType(200)]
-        //[ProducesResponseType(404)]
-        //[ProducesResponseType(400)]
-        //public async Task<IActionResult> searchCourse (string query)
-        //{
-        //    return Ok(await unitOfWork.contactRepository.search(query));
-        //}
+       
     }
     }
 

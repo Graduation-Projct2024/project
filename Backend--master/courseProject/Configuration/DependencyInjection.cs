@@ -150,6 +150,14 @@ namespace courseProject.Configuration
                     a.User.IsInRole("instructor"));
                 });
 
+                options.AddPolicy("Admin , Main_Sub-Admin", policy =>
+                {
+                    policy.RequireAssertion(a =>
+
+                    a.User.IsInRole("admin") ||
+                    a.User.IsInRole("main-subadmin"));
+                });
+
                 options.AddPolicy("Admin , Student", policy =>
                 {
                     policy.RequireAssertion(a =>

@@ -31,11 +31,11 @@ namespace courseProject.Repository.GenericRepository
             IReadOnlyList<CourseMaterial>? materials = null;
             if (userType.ToLower() == "student")
             {
-                materials = await dbContext.courseMaterials.Include(x => x.MaterialFiles).Where(x => (x.courseId == Courseid || x.consultationId == consultationId) && x.isHidden == false).ToListAsync();
+                materials = await dbContext.courseMaterials.Include(x => x.MaterialFiles).Where(x => (x.courseId == Courseid && x.consultationId == consultationId) && x.isHidden == false).ToListAsync();
             }
             else if (userType.ToLower() == "instructor")
             {
-                materials = await dbContext.courseMaterials.Include(x => x.MaterialFiles).Where(x => (x.courseId == Courseid || x.consultationId == consultationId) ).ToListAsync();
+                materials = await dbContext.courseMaterials.Include(x => x.MaterialFiles).Where(x => (x.courseId == Courseid && x.consultationId == consultationId) ).ToListAsync();
             }
             return materials;
         }

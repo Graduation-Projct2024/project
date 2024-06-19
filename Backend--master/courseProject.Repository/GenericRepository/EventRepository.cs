@@ -29,7 +29,9 @@ namespace courseProject.Repository.GenericRepository
         public async Task<IReadOnlyList<Event>> GetAllUndefindEventBySubAdminIdAsync(Guid subAdminId)
         {
             return await dbContext.events.Include(e => e.SubAdmin).ThenInclude(s => s.user)
-                 .Where(e => e.SubAdminId == subAdminId && e.status.ToLower() == "undefined").ToListAsync();
+                 .Where(e => e.SubAdminId == subAdminId && e.status.ToLower() == "undefined")
+                 .OrderByDescending(x=>x.dateOfAdded)
+                 .ToListAsync();
         }
 
         public async Task CreateEvent(Event model)

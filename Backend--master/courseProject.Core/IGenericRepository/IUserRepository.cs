@@ -26,6 +26,7 @@ namespace courseProject.Core.IGenericRepository
         public Task UpdateUser(User user);
 
         public Task<User> getRoleFromToken();
+        public  Task<User> createEmployeeAccount(User user);
         // void LogOut();
     }
 }

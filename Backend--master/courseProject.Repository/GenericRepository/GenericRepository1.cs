@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using courseProject.Core.Models.DTO;
 
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using MailKit.Search;
 
 namespace courseProject.Repository.GenericRepository
 {
@@ -36,7 +37,9 @@ namespace courseProject.Repository.GenericRepository
         {
             if (typeof(T) == typeof(Student))
             {
-                return (IReadOnlyList<T>)await dbContext.students.Include(x => x.user).Where(x => x.user.IsVerified == true).ToListAsync();
+                return (IReadOnlyList<T>)await dbContext.students.Include(x => x.user).Where(x => x.user.IsVerified == true)
+                    .OrderByDescending(x=>x.user.dateOfAdded)
+                    .ToListAsync();
 
             }
             return await dbContext.Set<T>().ToListAsync();
@@ -48,11 +51,11 @@ namespace courseProject.Repository.GenericRepository
         {
             if (typeof(T) == typeof(SubAdmin))
             {
-                return (IReadOnlyList<T>)await dbContext.subadmins.Include(x => x.user).Where(x => x.user.IsVerified == true).ToListAsync();
+                return (IReadOnlyList<T>)await dbContext.subadmins.Include(x => x.user).Where(x=>x.SubAdminId==x.user.UserId).Where(x => x.user.IsVerified == true).ToListAsync();
             }
             else if (typeof(T) == typeof(Instructor))
             {
-                return (IReadOnlyList<T>)await dbContext.instructors.Include(x => x.user).Where(x => x.user.IsVerified == true).ToListAsync();
+                return (IReadOnlyList<T>)await dbContext.instructors.Include(x => x.user).Where(x => x.InstructorId == x.user.UserId).Where(x => x.user.IsVerified == true).ToListAsync();
             }
             return await dbContext.Set<T>().ToListAsync();
         }
@@ -105,7 +108,7 @@ namespace courseProject.Repository.GenericRepository
             {
                 return (IReadOnlyList<T>) await dbContext.courses
                    
-                    .Include(x => x.SubAdmin.user).Include(x => x.Instructor.user).ToListAsync();
+                    .Include(x => x.SubAdmin.user).Include(x => x.Instructor.user).OrderByDescending(x=>x.dateOfAdded).ToListAsync();
             }
             return await dbContext.Set<T>().ToListAsync();
         }
@@ -116,7 +119,7 @@ namespace courseProject.Repository.GenericRepository
             {
                 return (IReadOnlyList<T>)await dbContext.events
                     
-                    .Include(x => x.SubAdmin.user).ToListAsync();
+                    .Include(x => x.SubAdmin.user).OrderByDescending(x=>x.dateOfAdded).ToListAsync();
             }
             return await dbContext.Set<T>().ToListAsync();
         }
@@ -188,25 +191,40 @@ namespace courseProject.Repository.GenericRepository
             return await dbContext.users.FirstOrDefaultAsync(x=>x.role.ToLower()=="admin");
         }
 
-        public async Task<IReadOnlyList<Course>> search(string query)
+        public async Task<IReadOnlyList<T>> Search(object searchObject, string searchQuery)
         {
 
-            query = "%" + query.ToLower() + "%";
+            //searchQuery = "%" + searchQuery.ToLower() + "%";
 
-            var sql = @"
-            SELECT * FROM courses 
-            WHERE LOWER(name) LIKE {0} 
-            OR LOWER(description) LIKE {0} 
-            OR LOWER(price) LIKE {0} 
-            OR LOWER(category) LIKE {0} 
-            OR LOWER(status) LIKE {0}";
+            //var Coursesql = @"
+            //SELECT * FROM courses 
+            //WHERE LOWER(name) LIKE {0} 
+            //OR LOWER(description) LIKE {0} 
+            //OR LOWER(price) LIKE {0} 
+            //OR LOWER(category) LIKE {0} 
+            //OR LOWER(status) LIKE {0}";
 
-            var results = await dbContext.courses.FromSqlRaw(sql, query).ToListAsync();
-            return results;
-            //object value = await dbContext.Database.SqlQuery<TranactionDTO>(
-            //    $"Select id FROM "
-            //    ).toList();
-            //;
+            var query = dbContext.Set<T>().AsQueryable();
+
+            // Get all properties of the searchObject
+            var properties = searchObject.GetType().GetProperties();
+
+            foreach (var propertyInfo in properties)
+            {
+                var propertyValue = propertyInfo.GetValue(searchObject);
+
+                if (propertyValue != null)
+                {
+                    // Check if the property type is string, int, or DateTime
+
+                    query = query.Where(p => EF.Functions.Like(propertyInfo.GetValue(p).ToString().ToLower(), $"%{searchQuery.ToLower()}%"));
+
+                }
+
+            
+        }
+            return await query.ToListAsync();
+
         }
 
 

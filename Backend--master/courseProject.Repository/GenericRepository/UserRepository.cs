@@ -108,20 +108,30 @@ namespace courseProject.Repository.GenericRepository
             {
                 return null;
             }
-            var passHash = BC.HashPassword(registerRequestDTO.password);           
+            var passHash = BC.HashPassword(registerRequestDTO.password);
             User user = new User()
             {
-               
+
                 userName = registerRequestDTO.userName,
-                email= registerRequestDTO.email,
-                password= passHash,
-                role= registerRequestDTO.role.ToLower(),
-                IsVerified = false
+                email = registerRequestDTO.email,
+                password = passHash,
+                role = registerRequestDTO.role.ToLower(),
+                IsVerified = false,
+                dateOfAdded = DateTime.Now
             };
            await dbContext.users.AddAsync(user);
-          // await dbContext.SaveChangesAsync();
-          //  user.password = "";
             return  user;
+        }
+
+        public async Task<User> createEmployeeAccount(User user)
+        {
+            var passHash = BC.HashPassword(user.password);
+            user.IsVerified= true;
+            user.password = passHash;
+            user.role= user.role.ToLower();
+            user.dateOfAdded = DateTime.Now;
+            dbContext.Set<User>().AddAsync(user);
+            return user;
         }
 
         public async Task<string> GenerateSecureVerificationCode(int length)

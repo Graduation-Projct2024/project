@@ -56,7 +56,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "Admin")]
-        //not try
+        
 
         public async Task <IActionResult> GetAllStudentsAsync([FromQuery] PaginationRequest paginationRequest)
         {
@@ -75,7 +75,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "Admin , EnrolledInCourse")]
-        //not try
+        
         public async Task<IActionResult> GetCourseParticipants(Guid Courseid, [FromQuery] PaginationRequest paginationRequest)
         {
 

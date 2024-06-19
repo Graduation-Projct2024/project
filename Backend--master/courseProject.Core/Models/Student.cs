@@ -20,16 +20,7 @@ namespace courseProject.Core.Models
         [ForeignKey("User")]
         public Guid StudentId { get; set; }
 
-        public string? LName { get; set; }       
-        public DateTime? DateOfBirth { get; set; }
-
-        [DataType(DataType.PhoneNumber)]
-        public string? phoneNumber {  get; set; }
-
-        public string? gender {  get; set; }
-
-        public string? address { get; set; }
-        public string? ImageUrl { get; set; }
+       
 
         public User user { get; set; }
 

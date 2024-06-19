@@ -106,7 +106,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy ="InstructorwhoGiveTheMaterial")]
-        //not try
+        
         public async Task<IActionResult> EditTask(Guid id, [FromForm] TaskForEditDTO taskDTO)
         {
             await materialServices.deleteFiles(id);
@@ -214,18 +214,7 @@ namespace courseProject.Controllers
         }
 
 
-        //[HttpDelete("DeleteMaterialFiles")]
-        //[ProducesResponseType(200)]
-        //[ProducesResponseType(404)]
-        //[ProducesResponseType(400)]
-        //public async Task<ActionResult<ApiResponce>> deleteFiles (Guid MaterialId)
-        //{
-        //     await materialServices.deleteFiles(MaterialId);
-        //    return Ok(new ApiResponce { Result="The File/s is deleted successfully"});
-        //}
-
-        //test
-       
+        
 
     }
 }

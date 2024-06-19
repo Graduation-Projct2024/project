@@ -28,7 +28,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "MainSubAdmin")]
-        //not try
+        
         public async Task<IActionResult> GetAllRequestFromStudentsToJoinCourses([FromQuery] PaginationRequest paginationRequest)
         {
             
@@ -43,7 +43,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "Student")]
-        //not try
+        
         public async Task<IActionResult> RequestToCreateACustomCourse(Guid studentid, [FromForm] StudentCustomCourseDTO studentCustomCourse)
         {
             var customCourse = await requestServices.RequestToCreateCustomCourse(studentid, studentCustomCourse);
