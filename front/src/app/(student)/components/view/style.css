@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Acme&family=Bebas+Neue&display=swap');
+
 .css-1xylxj1-MuiTypography-root-MuiLink-root {
     color: black !important;
 }
@@ -42,4 +44,11 @@ width:70% !important;} */
 .studentTask .css-whk7y5-MuiList-root{
 left:55px;
 width:85%;
+}
+.taskSubmision h4, .submit-area h4{
+    font-family: "Acme", sans-serif;
+    font-weight: 400 !important;
+    font-style: normal !important;
+    font-size:30px;
+    color:#4c5372 !important ;
 }

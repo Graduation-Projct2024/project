@@ -18,6 +18,7 @@ import axios from 'axios';
 import Button from '@mui/material/Button';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import Box from '@mui/material/Box';
+import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
@@ -42,6 +43,10 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import fileDownload from 'js-file-download'
+import { KeyboardArrowUp as KeyboardArrowUpIcon, KeyboardArrowDown as KeyboardArrowDownIcon } from '@mui/icons-material';
+
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: '#4c5372', // Change the background color here
@@ -64,11 +69,19 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 
 export default function ViewTask({ materialID , type, Id}) {
-
+    const [openRows, setOpenRows] = useState([]);
+  
+    const handleToggleRow = (index) => {
+      const newOpenRows = [...openRows];
+      newOpenRows[index] = !newOpenRows[index];
+      setOpenRows(newOpenRows);
+    };
+  
   const router = useRouter();
  const [material, setMaterial]=useState(null);
  const [submission, setSubmission]=useState(null);
  const {userToken, setUserToken, userData}=useContext(UserContext);
+ const [taskOpen, setTaskOpen] = React.useState(false);
 
  const [loading ,setLoading]=useState(true);
  const [isEditing, setIsEditing] = useState(false);
@@ -90,7 +103,24 @@ export default function ViewTask({ materialID , type, Id}) {
  const handleClose = () => {
    setOpen(false);
  };
+ const DownloadMaterial = async (url) => {
+  let cleanUrl = url.replace("https://localhost:7116/", "");
+  let fileName = url.replace("https://localhost:7116/Files\\", "");
 
+  console.log(fileName);
+
+  const { data } = await axios.get(
+    `https://localhost:7116/api/Files/DownloadFile?filename=${cleanUrl}`,
+    {
+      responseType: 'blob',
+      headers: {
+        'Authorization': `Bearer ${userToken}`
+      }
+    }
+  );
+
+  fileDownload(data, fileName);
+};
  const getMaterial=async()=>{
   if(userToken){
     try{
@@ -245,65 +275,114 @@ if (loading) {
 ):(
 <div className='mt-5 pt-5 ms-5 task'>
 
-<List sx={{ ...style, width: '80%', maxWidth: 'none', mt: 7, mb: 5 }} aria-label="mailbox folders">
-      <ListItem sx={{ p: 3 }}>
-        <Typography sx={{ mr: 3, fontWeight: 'bold' }}>Task title :</Typography>
-        <Typography>{material.name}</Typography>
-      </ListItem>
-      <Divider component="li" />
-      <ListItem sx={{ p: 3 }}>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <Typography sx={{ mr: 3, fontWeight: 'bold' }}>Task Description:</Typography>
-          <Typography>{material.description}</Typography>
-        </div>
-      </ListItem>
-      <Divider component="li" />
-      <ListItem sx={{ p: 3 }}>
-        <Typography sx={{ mr: 3, fontWeight: 'bold' }}>DeadLine :</Typography>
-        <Typography>{material.deadLine}</Typography>
-      </ListItem>
-      <Divider component="li" />
-      <ListItem sx={{ p: 3 }}>
-        <Typography sx={{ mr: 3, fontWeight: 'bold' }}>File :</Typography>
-        {material.materialFiles?.length ? (
+<TableContainer component={Paper} sx={{ width: '84%', mt: 7 , align:'center', ml:7, }}>
+      <Table sx={{ minWidth: 700 }} aria-label="customized table">
+        <TableBody>
+         
+            <StyledTableRow >
+            <StyledTableCell component="th" scope="row">
+            Task title
+              </StyledTableCell>
+              <StyledTableCell align="left">{material.name}</StyledTableCell>
+            </StyledTableRow>
+            <StyledTableRow >
+            <StyledTableCell component="th" scope="row">
+            Description
+              </StyledTableCell>
+              <StyledTableCell align="left">{material.description}</StyledTableCell>
+            </StyledTableRow>
+            <StyledTableRow >
+            <StyledTableCell component="th" scope="row">
+            DeadLine
+              </StyledTableCell>
+              <StyledTableCell align="left">{material.deadLine}</StyledTableCell>
+            </StyledTableRow>
+            <StyledTableRow >
+            <StyledTableCell component="th" scope="row">
+            Files 
+              </StyledTableCell>
+              <StyledTableCell align="left">
+              {material.materialFiles?.length ? (
              material.materialFiles.map((file, index) => (
-              <Box key={index} sx={{ display: 'flex', alignItems: 'center', border: '1px solid', p: 1, mb: 1 }}>
+              <Box key={index} sx={{ display: 'flex', alignItems: 'center', border: '1px solid #adb5bd', p: 1, mb: 1 }}>
                 <PictureAsPdfIcon sx={{ mr: 1, color:'#4c5372' }} />
                 <Link target='_blank' href={`${file.pdfUrl}`}>
                   File {index + 1}
                 </Link>
+                <IconButton aria-label="download" onClick={()=>DownloadMaterial(file.pdfUrl)}>
+        <FileDownloadIcon sx={{color:'#4c5372' }} />
+      </IconButton>
               </Box>
          ))
         ) : (
-          <Link target='_blank' href={`https://localhost:7116/${material.pdfUrl}`}>
-          {material.name}
-        </Link>
+          <>
+           <Link download target='_blank'  href={`${material.pdfUrl}`}>{material.name}</Link>
+           <IconButton aria-label="download" onClick={()=>DownloadMaterial(material.pdfUrl)} >
+        <FileDownloadIcon sx={{color:'#4c5372' }} />
+      </IconButton>
+        
+          
+          </>
+         
           )
         }
-      </ListItem>
-    </List>
-<TableContainer component={Paper} sx={{width:'80%'}}>
-      <Table sx={{ minWidth:700 }} aria-label="customized table">
+              </StyledTableCell>
+            </StyledTableRow>
+       
+        </TableBody>
+      </Table>
+    </TableContainer>
+    <Typography variant="h6" gutterBottom component="div" className='mt-5 ms-5 ps-1'>
+      Submissions
+    </Typography>
+    <TableContainer component={Paper} sx={{ width: '84%', ml: 7, mt: 4 }}>
+      <Table sx={{ minWidth: 700 }} aria-label="customized table">
         <TableHead>
           <TableRow>
+          <StyledTableCell />
             <StyledTableCell>Student Name</StyledTableCell>
             <StyledTableCell align="center">Submissions</StyledTableCell>
-        
           </TableRow>
         </TableHead>
         <TableBody>
-
-          {submission?.length ?(
-          submission.map((subm) => (
-            <StyledTableRow key={subm.taskId}>
-              <StyledTableCell component="th" scope="row">
-                {subm.userName}
-              </StyledTableCell>
-              <StyledTableCell align="center"><Link target='_blank' href={subm.pdfUrl}>File</Link></StyledTableCell>
-            
-            </StyledTableRow>
-          ))):(
-            <p className='ps-3 pt-3'>No Submissions Yet.</p>
+          {submission?.length ? (
+            submission.map((sub, index) => (
+              <React.Fragment key={sub.studentId}>
+                <TableRow>
+                  <StyledTableCell>
+                    <IconButton
+                      aria-label="expand row"
+                      size="small"
+                      onClick={() => handleToggleRow(index)}
+                    >
+                      {openRows[index] ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                    </IconButton>
+                  </StyledTableCell>
+                  <StyledTableCell>{sub.userName}</StyledTableCell>
+                  <StyledTableCell align="center">
+                    <Link target='_blank' href={sub.pdfUrl}>File</Link>
+                  </StyledTableCell>
+                </TableRow>
+                <TableRow>
+                  <StyledTableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+                    <Collapse in={openRows[index]} timeout="auto" unmountOnExit>
+                      <Box sx={{ margin: 1 }}>
+                        <Typography variant="h5" gutterBottom component="div">
+                          Description
+                        </Typography>
+                        <Typography variant="body1" gutterBottom component="div">
+                          {sub.description}
+                        </Typography>
+                      </Box>
+                    </Collapse>
+                  </StyledTableCell>
+                </TableRow>
+              </React.Fragment>
+            ))
+          ) : (
+            <TableRow>
+              <StyledTableCell colSpan={3} align="center">No data</StyledTableCell>
+            </TableRow>
           )}
         </TableBody>
       </Table>
@@ -315,3 +394,4 @@ if (loading) {
   </>
   )
 }
+

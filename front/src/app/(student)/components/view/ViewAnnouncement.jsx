@@ -16,7 +16,33 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import CircularProgress from "@mui/material/CircularProgress";
 import { UserContext } from '../../../../context/user/User.jsx';
+import { styled } from '@mui/material/styles';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: ' #4c5372',
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
 
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  '&:nth-of-type(odd)': {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  '&:last-child td, &:last-child th': {
+    border: 0,
+  },
+}));
 export default function ViewAnnouncement({ materialID }) {
  const [material, setMaterial]=useState(null);
  const {userToken, setUserToken, userData}=useContext(UserContext);
@@ -64,20 +90,29 @@ if (loading) {
   );
 }
   return (
-    <div className='studentMaterial'>
-    <List sx={{ ...style,  maxWidth: 'none' }} aria-label="mailbox folders">
-    <ListItem sx={{p:6}} >
-    <Typography bold sx={{mr:3}}>Announcement title :</Typography>
-    <Typography>{material.name}</Typography>
-  </ListItem>
-  <Divider component="li" />
-  <ListItem sx={{p:6}} >
-    <Typography bold sx={{mr:3}}>Announcement Description :</Typography>
-    <Typography>{material.description}</Typography>
-  </ListItem>
- 
-</List>
-   
+    <div className='announcement mt-5 pt-5'>
+      <TableContainer component={Paper} sx={{ width: '84%', mt: 7 , align:'center', ml:7, }}>
+      <Table sx={{ minWidth: 700 }} aria-label="customized table">
+        <TableBody>
+         
+            <StyledTableRow >
+            <StyledTableCell component="th" scope="row">
+            Announcement title
+              </StyledTableCell>
+              <StyledTableCell align="left">{material.name}</StyledTableCell>
+            </StyledTableRow>
+            <StyledTableRow >
+            <StyledTableCell component="th" scope="row">
+            Announcement Description
+              </StyledTableCell>
+              <StyledTableCell align="left">{material.description}</StyledTableCell>
+            </StyledTableRow>
+            
+           
+       
+        </TableBody>
+      </Table>
+    </TableContainer>
   </div>
   )
 }
