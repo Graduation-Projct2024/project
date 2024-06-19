@@ -21,7 +21,33 @@ import './style.css'
 import AddTaskSubmission from '../Add/AddTaskSubmission.jsx';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import { styled } from '@mui/material/styles';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: ' #4c5372',
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
 
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  '&:nth-of-type(odd)': {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  '&:last-child td, &:last-child th': {
+    border: 0,
+  },
+}));
 export default function ViewTask({ materialID }) {
  const [material, setMaterial]=useState(null);
  const {userToken, setUserToken, userData}=useContext(UserContext);
@@ -90,30 +116,37 @@ if (loading) {
 }
   return (
     <>
-        <div className='studentTask'>
-        <List sx={{ ...style, width: '80%', maxWidth: 'none', mt: 7, mb: 5 }} aria-label="mailbox folders">
-      <ListItem sx={{ p: 3 }}>
-        <Typography sx={{ mr: 3, fontWeight: 'bold' }}>Task title :</Typography>
-        <Typography>{material.name}</Typography>
-      </ListItem>
-      <Divider component="li" />
-      <ListItem sx={{ p: 3 }}>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <Typography sx={{ mr: 3, fontWeight: 'bold' }}>Task Description:</Typography>
-          <Typography>{material.description}</Typography>
-        </div>
-      </ListItem>
-      <Divider component="li" />
-      <ListItem sx={{ p: 3 }}>
-        <Typography sx={{ mr: 3, fontWeight: 'bold' }}>DeadLine :</Typography>
-        <Typography>{material.deadLine}</Typography>
-      </ListItem>
-      <Divider component="li" />
-      <ListItem sx={{ p: 3 }}>
-        <Typography sx={{ mr: 3, fontWeight: 'bold' }}>File :</Typography>
-        {material.materialFiles?.length ? (
+        <div className='studentTask mt-5'>
+        <TableContainer component={Paper} sx={{ width: '84%', mt: 7 , align:'center', ml:7, }}>
+      <Table sx={{ minWidth: 700 }} aria-label="customized table">
+        <TableBody>
+         
+            <StyledTableRow >
+            <StyledTableCell component="th" scope="row">
+            Task title
+              </StyledTableCell>
+              <StyledTableCell align="left">{material.name}</StyledTableCell>
+            </StyledTableRow>
+            <StyledTableRow >
+            <StyledTableCell component="th" scope="row">
+            Description
+              </StyledTableCell>
+              <StyledTableCell align="left">{material.description}</StyledTableCell>
+            </StyledTableRow>
+            <StyledTableRow >
+            <StyledTableCell component="th" scope="row">
+            DeadLine
+              </StyledTableCell>
+              <StyledTableCell align="left">{material.deadLine}</StyledTableCell>
+            </StyledTableRow>
+            <StyledTableRow >
+            <StyledTableCell component="th" scope="row">
+            Files 
+              </StyledTableCell>
+              <StyledTableCell align="left">
+              {material.materialFiles?.length ? (
              material.materialFiles.map((file, index) => (
-              <Box key={index} sx={{ display: 'flex', alignItems: 'center', border: '1px solid', p: 1, mb: 1 }}>
+              <Box key={index} sx={{ display: 'flex', alignItems: 'center', border: '1px solid #adb5bd', p: 1, mb: 1 }}>
                 <PictureAsPdfIcon sx={{ mr: 1, color:'#4c5372' }} />
                 <Link target='_blank' href={`${file.pdfUrl}`}>
                   File {index + 1}
@@ -135,10 +168,13 @@ if (loading) {
          
           )
         }
-      </ListItem>
-    </List>
-    
-
+              </StyledTableCell>
+            </StyledTableRow>
+       
+        </TableBody>
+      </Table>
+    </TableContainer>
+       
 </div>
 <Box
       width='85%'
@@ -151,14 +187,50 @@ if (loading) {
       
       sx={{ border: '2px solid grey', borderRadius: 3 }}
     >
+    {!material.student_Task_Submissions?(
       <Stack  direction="column"
   justifyContent="center"
   alignItems="center"
   spacing={2}
-  mt='5px'>
+  mt='5px'
+  className='submit-area'>
+    <h4>Submit your task</h4>
           <AddTaskSubmission materialID={materialID}/>
+          <p className='text-center'>Note: once you submit your task, you will not be able to edit it or add additional submissions. Make sure to review your work carefully before submitting.</p> 
 
-  </Stack>
+  </Stack>):(<Stack  direction="column"
+  justifyContent="center"
+  alignItems="center"
+  spacing={2}
+  mt='5px'
+  className='taskSubmision'>
+          <h4>The task handded in</h4>
+          
+ <TableContainer component={Paper}>
+      <Table sx={{ minWidth: 700 }} aria-label="customized table">
+        <TableHead>
+          <TableRow>
+            <StyledTableCell>File submission</StyledTableCell>
+            <StyledTableCell align="left">Description</StyledTableCell>
+            
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {material.student_Task_Submissions.map((submision, index) => (
+            <StyledTableRow key={submision.name}>
+              <StyledTableCell component="th" scope="row">
+              <Link href={`https://localhost:7116/${submision.pdfUrl}`} target='_blank'>File {++index}</Link>
+              
+              </StyledTableCell>
+              <StyledTableCell align="left" ><p>{submision.description}</p></StyledTableCell>
+             
+            </StyledTableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  </Stack>)    }
+      
     </Box>   
    
   </>

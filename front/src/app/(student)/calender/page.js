@@ -44,9 +44,11 @@ export default function CalendarPage() {
   const [end, setEnd] = useState('01:00');
   const [status, setStatus] = useState('private');
   const [selectedInstructor, setSelectedInstructor] = useState();
+
+  const [selectedSkillId, setSelectedSkillId] = useState();
   const [open, setOpen] = useState(false);
   const [openDetails, setOpenDetails] = useState(false);
-
+  
   const [alertOpen, setAlertOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
 function getCurrentDateFormatted(date) {
@@ -493,18 +495,19 @@ const textAraeInput = (
   className="form-select p-3"
   aria-label="Default select example"
   name="selectedSkill" // Ensure the name attribute matches the form field in Formik
-  value={selectedInstructor}
+  value={selectedSkillId}
   onChange={(e) => {
     formik.handleChange(e); // Formik's handleChange to update the form state
-    const selectedSkillId = e.target.value;
+    setSelectedSkillId(e.target.value);
     setSkill(selectedSkillId);
-    
+    console.log(skill);
     // Find the selected skill object from the skills array
-    const selectedSkill = skills.find(skill => skill.id == selectedSkillId);
+    const selectedSkillName = skills.find(skill => skill.id == selectedSkillId);
     // console.log(selectedSkill);
 
-  
-      setSkillName(selectedSkill.name);
+    console.log(selectedSkillName?.name);
+
+      setSkillName(selectedSkillName?.name);
     
     // console.log(skillName);
   }}

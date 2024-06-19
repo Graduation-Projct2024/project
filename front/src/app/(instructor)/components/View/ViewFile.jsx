@@ -35,6 +35,36 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
+import { styled } from '@mui/material/styles';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import fileDownload from 'js-file-download'
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: ' #4c5372',
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  '&:nth-of-type(odd)': {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  '&:last-child td, &:last-child th': {
+    border: 0,
+  },
+}));
 export default function ViewFile({ materialID ,type, Id }) {
  const [material, setMaterial]=useState(null);
  const [loading ,setLoading]=useState(true);
@@ -49,7 +79,24 @@ export default function ViewFile({ materialID ,type, Id }) {
  const handleClickOpen = () => {
   setOpen(true);
 };
+const DownloadMaterial = async (url) => {
+  let cleanUrl = url.replace("https://localhost:7116/", "");
+  let fileName = url.replace("https://localhost:7116/Files\\", "");
 
+  console.log(fileName);
+
+  const { data } = await axios.get(
+    `https://localhost:7116/api/Files/DownloadFile?filename=${cleanUrl}`,
+    {
+      responseType: 'blob',
+      headers: {
+        'Authorization': `Bearer ${userToken}`
+      }
+    }
+  );
+
+  fileDownload(data, fileName);
+};
 const handleClose = () => {
   setOpen(false);
 };
@@ -201,41 +248,59 @@ if (loading) {
     <EditFile materialID={materialID} name={material.name} description={material.description} type={type} Id={Id}/>
 
 ):(
-  <div className ='material'>
-
-<List sx={{ ...style, width: '80%', maxWidth: 'none', mt: 7, mb: 5 }} aria-label="mailbox folders">
-      <ListItem sx={{ p: 3 }}>
-        <Typography sx={{ mr: 3, fontWeight: 'bold' }}>File title :</Typography>
-        <Typography>{material.name}</Typography>
-      </ListItem>
-      <Divider component="li" />
-      <ListItem sx={{ p: 3 }}>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <Typography sx={{ mr: 3, fontWeight: 'bold' }}>File Description:</Typography>
-          <Typography>{material.description}</Typography>
-        </div>
-      </ListItem>
-      <Divider component="li" />
-    
-      <ListItem sx={{ p: 3 }}>
-        <Typography sx={{ mr: 3, fontWeight: 'bold' }}>File :</Typography>
-        {material.materialFiles?.length ? (
+  <div className ='pt-5 mt-5'>
+<TableContainer component={Paper} sx={{ width: '84%', mt: 7 , align:'center', ml:7, }}>
+      <Table sx={{ minWidth: 700 }} aria-label="customized table">
+        <TableBody>
+         
+            <StyledTableRow >
+            <StyledTableCell component="th" scope="row">
+             title
+              </StyledTableCell>
+              <StyledTableCell align="left">{material.name}</StyledTableCell>
+            </StyledTableRow>
+            <StyledTableRow >
+            <StyledTableCell component="th" scope="row">
+            Description
+              </StyledTableCell>
+              <StyledTableCell align="left">{material.description}</StyledTableCell>
+            </StyledTableRow>
+        
+            <StyledTableRow >
+            <StyledTableCell component="th" scope="row">
+            Files 
+              </StyledTableCell>
+              <StyledTableCell align="left">
+              {material.materialFiles?.length ? (
              material.materialFiles.map((file, index) => (
-              <Box key={index} sx={{ display: 'flex', alignItems: 'center', border: '1px solid', p: 1, mb: 1 }}>
+              <Box key={index} sx={{ display: 'flex', alignItems: 'center', border: '1px solid #adb5bd', p: 1, mb: 1 }}>
                 <PictureAsPdfIcon sx={{ mr: 1, color:'#4c5372' }} />
                 <Link target='_blank' href={`${file.pdfUrl}`}>
                   File {index + 1}
                 </Link>
+                <IconButton aria-label="download" onClick={()=>DownloadMaterial(file.pdfUrl)}>
+        <FileDownloadIcon sx={{color:'#4c5372' }} />
+      </IconButton>
               </Box>
          ))
         ) : (
-          <Link target='_blank' href={`https://localhost:7116/${material.pdfUrl}`}>
-          {material.name}
-        </Link>
+          <>
+           <Link download target='_blank'  href={`${material.pdfUrl}`}>{material.name}</Link>
+           <IconButton aria-label="download" onClick={()=>DownloadMaterial(material.pdfUrl)} >
+        <FileDownloadIcon sx={{color:'#4c5372' }} />
+      </IconButton>
+        
+          
+          </>
+         
           )
         }
-      </ListItem>
-    </List>
+              </StyledTableCell>
+            </StyledTableRow>
+       
+        </TableBody>
+      </Table>
+    </TableContainer>
 </div>
 )}
   </>

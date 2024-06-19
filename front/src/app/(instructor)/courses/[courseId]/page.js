@@ -330,6 +330,7 @@ if(userToken){
     <div className="tab-pane fade" id="Participants-tab-pane" role="tabpanel" aria-labelledby="Participants-tab" tabIndex={0}>
 
               <div className='mt-5 ms-5'>
+
                 <div className='row justify-content-end'>
         <FormControl fullWidth className="w-25 pb-3 pe-4">
                 <InputLabel id="page-size-select-label">Page Size</InputLabel>
@@ -354,7 +355,7 @@ if(userToken){
       alignItems="center"
       gap={4}
       p={2}
-      sx={{ border: '1px solid grey' ,borderRadius: 3, justifyContent: 'space-between' }}
+      sx={{ border: '1px solid grey' ,borderRadius: 3, justifyContent: 'space-between', mt:1 }}
       className={index%2==0?"bg-purple1":'bg-purple2 '}
     >
      <Typography variant='h6'> {participant.userName}</Typography>
@@ -370,19 +371,7 @@ if(userToken){
    
     
     </div>
-     <Stack className='pt-5' spacing={2} sx={{ width: '100%', maxWidth: 500, margin: '0 auto' }}>
-     
-     <Pagination
-     className="pb-3"
-       count={totalPages}
-       page={pageNumber}
-       onChange={handlePageChange}
-       variant="outlined"
-       color="secondary"
-       showFirstButton
-       showLastButton
-     />
-   </Stack>
+  
    
    
   </div>
