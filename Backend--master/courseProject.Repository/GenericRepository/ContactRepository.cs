@@ -26,7 +26,8 @@ namespace courseProject.Repository.GenericRepository
 
         public async Task<IReadOnlyList<Contact>> GetAllContactsAsync()
         {
-           return await dbContext.contacts.ToListAsync();
+           
+           return await dbContext.contacts.OrderByDescending(x=>x.dateOfAdded).ToListAsync();
         }
 
         public async Task<Contact> getContactByIdAsync(Guid id)

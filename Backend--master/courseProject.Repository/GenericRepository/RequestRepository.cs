@@ -32,7 +32,9 @@ namespace courseProject.Repository.GenericRepository
 
         public async Task<IReadOnlyList<Request>> GerAllCoursesRequestAsync()
         {
-            return await dbContext.requests.Include(x => x.Student.user).Where(x => x.satus == "custom-course").ToListAsync();
+            return await dbContext.requests.Include(x => x.Student.user).Where(x => x.satus == "custom-course")
+                .OrderByDescending(x => x.date)
+                .ToListAsync();
         }
 
 
@@ -48,6 +50,7 @@ namespace courseProject.Repository.GenericRepository
                                                       .ThenInclude(x => x.user)
                                                  .Include(x => x.Course)
                                                  .Where(x => x.status.ToLower() == "waiting")
+                                                 .OrderByDescending(x=>x.EnrollDate)
                                                  .ToListAsync();
         }
 

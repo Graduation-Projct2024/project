@@ -20,12 +20,13 @@ namespace courseProject.Controllers
     {
 
         private readonly IContactServices contactServices;
-      
+        
+
         public ContactController(  IContactServices contactServices )
         {
             
             this.contactServices = contactServices;
-
+          
         }
 
 
@@ -69,8 +70,9 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [Authorize(Policy = "Admin , Main_Sub-Admin")]
         
-        public async Task<IActionResult> GetAllContact([FromQuery] PaginationRequest paginationRequest)
+        public async Task<IActionResult> GetAllContact([FromQuery] PaginationRequest paginationRequest )
         {
             var allContact = await contactServices.GetAllMessages();
             return Ok(Pagination<Contact>.CreateAsync(allContact , paginationRequest.pageNumber, paginationRequest.pageSize).Result);
@@ -92,13 +94,16 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        
+        [Authorize(Policy = "Admin , Main_Sub-Admin")]
+
         public async Task<IActionResult> GetContactById(Guid Contactid)
         {
             return Ok(await contactServices.getContactById(Contactid));
         }
 
 
+
+      
 
     }
 }

@@ -31,7 +31,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
         [Authorize(Policy = "Main-SubAdmin ,Instructor , Student")]
-        //not try
+        
         public async Task<IActionResult> GetAllLecturesByInstructorId(Guid instructorId, [FromQuery] PaginationRequest paginationRequest)
         {
 
@@ -49,7 +49,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "Student")]
-        //not try
+        
         public async Task<IActionResult> BooKLectureByStudent(Guid studentId, DateTime date, string startTime, string endTime, [FromForm] BookALectureDTO bookALecture)
         {
             var lecture = await lectureServices.BookALecture(studentId , date, startTime, endTime, bookALecture);
@@ -65,7 +65,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "Student")]
-        //not try
+        
         public async Task<IActionResult> JoinToAPublicLecture(Guid StudentId, Guid ConsultaionId)
         {
             var JoinedLecture = await lectureServices.JoinToPublicLecture(StudentId, ConsultaionId);

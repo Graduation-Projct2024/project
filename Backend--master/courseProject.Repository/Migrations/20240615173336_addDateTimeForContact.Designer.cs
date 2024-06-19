@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using courseProject.Repository.Data;
 
@@ -11,9 +12,10 @@ using courseProject.Repository.Data;
 namespace courseProject.Repository.Migrations
 {
     [DbContext(typeof(projectDbContext))]
-    partial class projectDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240615173336_addDateTimeForContact")]
+    partial class addDateTimeForContact
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,7 +36,7 @@ namespace courseProject.Repository.Migrations
                     b.HasData(
                         new
                         {
-                            AdminId = new Guid("6b8929ec-a3be-4431-abca-a7603b0a09b7")
+                            AdminId = new Guid("27112ae2-c1e6-436c-bbb0-338d7345a9d0")
                         });
                 });
 
@@ -461,9 +463,6 @@ namespace courseProject.Repository.Migrations
                     b.Property<Guid>("TaskId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("dateOfAdded")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("description")
                         .HasColumnType("nvarchar(max)");
 
@@ -548,9 +547,6 @@ namespace courseProject.Repository.Migrations
                     b.Property<string>("address")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("dateOfAdded")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -580,9 +576,8 @@ namespace courseProject.Repository.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("6b8929ec-a3be-4431-abca-a7603b0a09b7"),
+                            UserId = new Guid("27112ae2-c1e6-436c-bbb0-338d7345a9d0"),
                             IsVerified = true,
-                            dateOfAdded = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             email = "programming.academy24@gmail.com",
                             password = "$2a$11$cCCo7VY/4sxtIpeWDUFDROiDL/QPhi8AtawQhx4RGqKMAYgk8UIse",
                             role = "admin",

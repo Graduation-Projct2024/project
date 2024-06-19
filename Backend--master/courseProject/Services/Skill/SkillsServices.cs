@@ -53,7 +53,8 @@ namespace courseProject.Services.Skill
 
         public async Task<IReadOnlyList< Skills>> getAllSkillesAddedByAdmin()
         {
-            var allSkills = await unitOfWork.skillRepository.GetAllSkillsAsync();         
+            var allSkills = await unitOfWork.skillRepository.GetAllSkillsAsync();
+            allSkills = allSkills.OrderByDescending(x => x.TimeOfAdded).ToList();
             return allSkills;
         }
 

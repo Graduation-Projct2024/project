@@ -18,7 +18,7 @@
                             
                         </div>
 <div class=""footer""style='text-align: center';>
-            <p>&copy; 2024 Course Academy. All rights reserved.</p>
+            <p>&copy; {DateTime.Now.Year} EduCoding Academy. All rights reserved.</p>
         </div>
                     </body>
                     </html>";
@@ -93,7 +93,7 @@
            
         </div>
         <div class=""footer"">
-            <p>&copy; 2024 {companyName}. All rights reserved.</p>
+            <p>&copy; {DateTime.Now.Year} EduCoding Academy. All rights reserved.</p>
         </div>
     </div>
 </body>
@@ -168,7 +168,7 @@
             <p>Best regards,</p>
         </div>
         <div class=""footer"">
-            <p>&copy; 2024 {companyName}. All rights reserved.</p>
+            <p>&copy; {DateTime.Now.Year} EduCoding. All rights reserved.</p>
         </div>
     </div>
 </body>
@@ -195,12 +195,12 @@
                             <p style='text-align: center; font-size: 24px; font-weight: bold; margin: 20px 0;'>{VerificationCode}</p>
                             <p style='color: #333; font-size: 16px; margin: 0 0 20px;'>If you did not request a password reset, please ignore this email or contact support if you have questions.</p>
                             <p style='color: #333; font-size: 16px; margin: 0;'>Thank you,</p>
-                            <p style='color: #333; font-size: 16px; margin: 0;'>Course Academy Team</p>
+                            <p style='color: #333; font-size: 16px; margin: 0;'>EduCoding Academy Team</p>
                         </td>
                     </tr>
                     <tr>
                         <td style='background-color: #f5f5f5; padding: 20px; text-align: center; font-size: 12px; color: #666;'>
-                            <p style='margin: 0;'>© 2024 Course Academy. All rights reserved.</p>
+                            <p style='margin: 0;'>© {DateTime.Now.Year} EduCoding Academy. All rights reserved.</p>
                         </td>
                     </tr>
                 </table>

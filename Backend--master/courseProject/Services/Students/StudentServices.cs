@@ -29,9 +29,9 @@ namespace courseProject.Services.Students
             var Students = await unitOfWork.StudentRepository.GetAllStudentsAsync();
             foreach(var student in Students)
             {
-                if (student.ImageUrl != null)
+                if (student.user.ImageUrl != null)
                 {
-                    student.ImageUrl = await unitOfWork.FileRepository.GetFileUrl(student.ImageUrl);
+                    student.user.ImageUrl = await unitOfWork.FileRepository.GetFileUrl(student.user.ImageUrl);
                 }
             }
           //  CommonClass.EditImageInStudents(Students);

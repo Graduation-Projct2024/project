@@ -17,6 +17,7 @@ namespace courseProject.Core.Models
         public string email { get; set; }
         public string? subject { get; set; }
         public string message {  get; set; }
+        public DateTime dateOfAdded { get; set; }=DateTime.Now;
 
 
     }

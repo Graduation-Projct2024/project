@@ -62,9 +62,9 @@ namespace courseProject.Services.StudentCourses
             {
                 await unitOfWork.StudentRepository.RemoveTheRejectedRequestToJoinCourse(getStudentCourse);
                 
-                await emailService.SendVerificationEmail (studentEmail , "Course Application Status", EmailTexts.RejectInCourse(studentName , courseName , "Course Academy"));
+                await emailService.SendEmail (studentEmail , "Course Application Status", EmailTexts.RejectInCourse(studentName , courseName , "Course Academy"));
             }
-            await emailService.SendVerificationEmail(studentEmail, "Course Application Status", EmailTexts.GetAcceptanceEmailHtml(studentName, courseName, "Course Academy"));
+            await emailService.SendEmail(studentEmail, "Course Application Status", EmailTexts.GetAcceptanceEmailHtml(studentName, courseName, "Course Academy"));
 
             await unitOfWork.CourseRepository.saveAsync();
 

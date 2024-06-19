@@ -29,7 +29,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "Instructor")]
-        // not try
+        
         public async Task<IActionResult> GetAllSubmissionUsingTaskId(Guid taskId, [FromQuery] PaginationRequest paginationRequest)
         {
             var getSubmissions = await submissionServices.GetAllSubmissionForTask(taskId);

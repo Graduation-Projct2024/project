@@ -85,7 +85,7 @@ namespace courseProject.Services.Users
                 memoryCache.Set(cacheKey, verificationCode, TimeSpan.FromHours(2));
               //  await unitOfWork.EmailService.SendEmailAsync(model.email, "Your Verification Code", $" Hi {model.userName} , Your code is: {verificationCode}");
 
-                 await emailService.SendVerificationEmail(model.email, "Your Verification Code" ,EmailTexts.VerificationCode( model.userName,verificationCode));
+                 await emailService.SendEmail(model.email, "Your Verification Code" ,EmailTexts.VerificationCode( model.userName,verificationCode));
                 if (success1 > 0 && success2 > 0)
                 {
                     await transaction.CommitAsync();
@@ -129,7 +129,7 @@ namespace courseProject.Services.Users
             memoryCache.Set(cacheKey, verificationCode, TimeSpan.FromHours(2));
             //  await unitOfWork.EmailService.SendEmailAsync(email, "Your Verification Code", $" Hi {getUser.userName} , Your code is: {verificationCode}");
 
-            await emailService.SendVerificationEmail(email, "Your Verification Code", EmailTexts.VerificationCode(getUser.userName, verificationCode));
+            await emailService.SendEmail(email, "Your Verification Code", EmailTexts.VerificationCode(getUser.userName, verificationCode));
 
             return Result.Success;
         }
@@ -140,67 +140,20 @@ namespace courseProject.Services.Users
             var profileToUpdate = await unitOfWork.UserRepository.getUserByIdAsync(id);
             if (profileToUpdate == null) return ErrorUser.NotFound;
 
-            using (var transaction = await unitOfWork.SubAdminRepository.BeginTransactionAsync())
-            {
 
                 mapper.Map(profile, profileToUpdate);
-                await unitOfWork.UserRepository.updateSubAdminAsync(profileToUpdate);
-                var success1 = await unitOfWork.UserRepository.saveAsync();
-                var success2 = 0;
-                string imageUrl = "";
-                ProfileDTO profileResult = null;
+            
+              
                 if (profile.image != null)
 
                 {
-                   
-                    imageUrl = "Files\\" + await unitOfWork.FileRepository.UploadFile1(profile.image);
+                    profileToUpdate.ImageUrl = "Files\\" + await unitOfWork.FileRepository.UploadFile1(profile.image);
                 }
-                if (profileToUpdate.role.ToLower() == "admin")
-                {
-                    Admin adminToUpdate = await unitOfWork.AdminRepository.GetAdminByIdAsync(id);
-                    adminToUpdate.ImageUrl = imageUrl;
-                    var adminMapper = mapper.Map(profile, adminToUpdate);
-                    await unitOfWork.AdminRepository.updateSubAdminAsync(adminMapper);
-                    success2 = await unitOfWork.AdminRepository.saveAsync();
-                    profileResult = mapper.Map<Admin, ProfileDTO>(adminToUpdate);
-                }
-                else if (profileToUpdate.role.ToLower() == "subadmin" || profileToUpdate.role.ToLower() == "main-subadmin")
-                {
-                    SubAdmin subAdminToUpdate = await unitOfWork.SubAdminRepository.GetSubAdminByIdAsync(id);
-                    subAdminToUpdate.ImageUrl = imageUrl;
-                    var subAdminMapper = mapper.Map(profile, subAdminToUpdate);
-                    await unitOfWork.SubAdminRepository.updateSubAdminAsync(subAdminMapper);
+                await unitOfWork.UserRepository.UpdateUser(profileToUpdate);
+                await unitOfWork.UserRepository.saveAsync();
 
-                    success2 = await unitOfWork.SubAdminRepository.saveAsync();
-                    profileResult = mapper.Map<SubAdmin, ProfileDTO>(subAdminToUpdate);
-                }
-                else if (profileToUpdate.role.ToLower() == "instructor")
-                {
-                    Instructor instructorToUpdate = await unitOfWork.instructorRepositpry.getInstructorByIdAsync(id);
-                    instructorToUpdate.ImageUrl = imageUrl;
-                    var instructorMapper = mapper.Map(profile, instructorToUpdate);
-                    await unitOfWork.instructorRepositpry.updateSubAdminAsync(instructorMapper);
-                    success2 = await unitOfWork.instructorRepositpry.saveAsync();
-                    profileResult = mapper.Map<Instructor, ProfileDTO>(instructorToUpdate);
-                }
-                else if (profileToUpdate.role.ToLower() == "student")
-                {
-                    Student StudentToUpdate = await unitOfWork.StudentRepository.getStudentByIdAsync(id);
-                    StudentToUpdate.ImageUrl = imageUrl;
-                    var studentMapper = mapper.Map(profile, StudentToUpdate);
-                    await unitOfWork.StudentRepository.updateSubAdminAsync(studentMapper);
-                    success2 = await unitOfWork.StudentRepository.saveAsync();
-                    profileResult = mapper.Map<Student, ProfileDTO>(StudentToUpdate);
-                }
-
-                profileResult.FName = profileToUpdate.userName;
-                if (success1 > 0 && success2 > 0)
-                {
-                    await transaction.CommitAsync();
                     return Result.Updated;
-                }
-                return ErrorUser.hasError;
-            }
+                
 
         }
 
@@ -209,31 +162,12 @@ namespace courseProject.Services.Users
             var UserFound = await unitOfWork.UserRepository.getUserByIdAsync(id);
             if (UserFound == null) return ErrorUser.NotFound;
          
-            var GetUser = await unitOfWork.UserRepository.ViewProfileAsync(id, UserFound.role);
-            UserInfoDTO usermapper = null;
-            if (UserFound.role.ToLower() == "instructor")
+            if (UserFound.ImageUrl != null)
             {
-                usermapper = mapper.Map<Instructor, UserInfoDTO>(GetUser.instructor);
+                UserFound.ImageUrl= await unitOfWork.FileRepository.GetFileUrl(UserFound.ImageUrl);
             }
-            else if (UserFound.role.ToLower() == "admin")
-            {
-                usermapper = mapper.Map<Admin, UserInfoDTO>(GetUser.admin);
-            }
-            else if (UserFound.role.ToLower() == "subadmin" || UserFound.role.ToLower() == "main-subadmin")
-            {
-                usermapper = mapper.Map<SubAdmin, UserInfoDTO>(GetUser.subadmin);
-            }
-            else if (UserFound.role.ToLower() == "student")
-            {
-                usermapper = mapper.Map<Student, UserInfoDTO>(GetUser.student);
-            }
-            usermapper.UserId = id;
-          
-            if (usermapper.ImageUrl != null)
-            {
-                usermapper.ImageUrl= await unitOfWork.FileRepository.GetFileUrl(usermapper.ImageUrl);
-            }
-            return usermapper;
+            
+            return mapper.Map<UserInfoDTO>(UserFound); 
         }
 
         public async Task<ErrorOr<Updated>> changePassword(Guid UserId, ChengePasswordDTO chengePasswordDTO)
@@ -257,7 +191,7 @@ namespace courseProject.Services.Users
             memoryCache.Set(cacheKey, verificationCode, TimeSpan.FromHours(2));
             //  await unitOfWork.EmailService.SendEmailAsync(email, "Your Verification Code", $" Hi {getUser.userName} , Your code is: {verificationCode}");
 
-            await emailService.SendVerificationEmail(email, "Reset Password", EmailTexts.ForgetPassword(getUser.userName, verificationCode));
+            await emailService.SendEmail(email, "Reset Password", EmailTexts.ForgetPassword(getUser.userName, verificationCode));
 
             return Result.Success;
         }
