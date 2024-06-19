@@ -15,6 +15,7 @@ export default function page() {
   const router = useRouter();
   const [email, setEmail] = useState(null);
   const {userToken, setUserToken,userData, setUserData}=useContext(UserContext);
+  let [errmsg,setErrmsg] = useState()
 
 
   
@@ -44,7 +45,7 @@ export default function page() {
 };
 
 const resendCode = async()=>{
-  const {data} = await axios.get(`https://localhost:7116/api/UserAuth/reSendCode?email=${email}`);
+  const {data} = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}/UserAuth/reSendCode?email=${email}`);
   console.log(data);
   
 }
@@ -52,12 +53,16 @@ const resendCode = async()=>{
 const onSubmit = async (values) => {
       try {
         const { data } = await axios.post(
-            `https://localhost:7116/api/UserAuth/addCode?email=${email}&code=${values.code}`,
+            `${process.env.NEXT_PUBLIC_EDUCODING_API}UserAuth/addCode?email=${email}&code=${values.code}`,
             );
+            if(data.errorMassages != null){
+              setErrmsg(data.errorMassages)
+            }
+            else{
         console.log(data);
         formik.resetForm();
         router.push(`/ForgetPassword?email=${email}`)
-      } catch (error) {
+      }} catch (error) {
         console.error('Error submitting form:', error);
         console.log('Error response:', error.response);
       }
@@ -90,17 +95,19 @@ const onSubmit = async (values) => {
           <div className="addCodeWrapper">
             <div className="row align-items-center">
               <div className="col-lg-6">
-                <div className="addCodeImage">
+                {/* <div className="addCodeImage">
                   <img
                     src="/layer.png"
                     alt="courseAcademy"
                     className="img-fluid"
                   />
-                </div>
+                </div> */}
+                <iframe className='animationForget' src="https://lottie.host/embed/629592a9-1330-4a01-930a-c026358c5ec7/ZsOD8XZiio.json" />
+
               </div>
               <div className="col-lg-6">
                 <div className="addCodeForm">
-                  <div className="title text-center pb-4">
+                  <div className="title text-center">
                     <h2 className="titleColor">Insert code from your Email</h2>
                   </div>
                   <div className="formRegCode">
@@ -108,7 +115,7 @@ const onSubmit = async (values) => {
                       onSubmit={formik.handleSubmit}
                       className="row justify-content-center align-items-center flex-column"
                     >
-                      <div className="form-floating mb-3 col-lg-6">
+                      <div className="form-floating  col-lg-6">
                         <input
                           type="text"
                           className="form-control"
@@ -146,6 +153,7 @@ const onSubmit = async (values) => {
                         >
                           click!
                         </Button>
+                        <p className='text-danger'>{errmsg}</p>
                       </div>
                     </form>
                   </div>

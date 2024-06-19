@@ -25,7 +25,7 @@ export default function InstructorCourses({params}) {
       if(userData){
     try {
       //setLoading(false)
-      const {data} = await axios.get(`https://localhost:7116/api/CourseContraller/GetAllCoursesGivenByInstructor?Instructorid=${params.Instructorid}&pageNumber=${pageNum}&pageSize=${pageSize}`,{ headers: { Authorization: `Bearer ${userToken}` } });
+      const {data} = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}CourseContraller/GetAllCoursesGivenByInstructor?Instructorid=${params.Instructorid}&pageNumber=${pageNum}&pageSize=${pageSize}`,{ headers: { Authorization: `Bearer ${userToken}` } });
         // console.log(data.result);
       setInstructorCourse(data.result.items);
       setTotalPages(data.result.totalPages);
@@ -43,7 +43,7 @@ export default function InstructorCourses({params}) {
       const fetchEmployees = async () => {
         if(userData){
         try{
-        const { data } = await axios.get(`https://localhost:7116/api/Employee/GetAllEmployee`);
+        const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}Employee/GetAllEmployee`);
         console.log(data);
         setEmployees(data.result.items);
       }
@@ -121,8 +121,7 @@ return matchesSearchTerm ;
         >
           <MenuItem value={5}>5</MenuItem>
           <MenuItem value={10}>10</MenuItem>
-          <MenuItem value={20}>20</MenuItem>
-          <MenuItem value={50}>50</MenuItem>
+          <MenuItem value={15}>15</MenuItem>
         </Select>
       </FormControl>
                 <div className="icons d-flex gap-2 pt-2">

@@ -5,7 +5,7 @@ import Layout from '../Layout/Layout'
 import { faCode} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import './Events.css'
-import { Box, FormControl, InputLabel, MenuItem, Pagination, Select, Stack } from '@mui/material';
+import { Box, CircularProgress, FormControl, InputLabel, MenuItem, Pagination, Select, Stack } from '@mui/material';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
@@ -17,14 +17,16 @@ import Expired from './Expired.jsx';
 import Upcoming from './Upcoming.jsx';
 
 export default function page() {
+  const [loading,setLoading] = useState(true);
   const [events, setEvents] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
   const getEvents = async (pageNum = pageNumber, pageSizeNum = pageSize) => {
       try {
+        setLoading(true);
         const { data } = await axios.get(
-          `https://localhost:7116/api/EventContraller/GetAllAccreditEvents?pageNumber=${pageNum}&pageSize=${pageSizeNum}`
+          `${process.env.NEXT_PUBLIC_EDUCODING_API}EventContraller/GetAllAccreditEvents?pageNumber=${pageNum}&pageSize=${pageSizeNum}`
         );
         console.log(data);
         setEvents(data.result.items);
@@ -32,6 +34,9 @@ export default function page() {
 
       } catch (error) {
         console.log(error);
+      }
+      finally{
+        setLoading(false)
       }
     
   };
@@ -53,6 +58,16 @@ export default function page() {
     setValue(newValue);
   };
   return (
+    <>
+    {loading ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
+          <CircularProgress />
+          <div className='loading bg-white position-fixed vh-100 w-100 d-flex justify-content-center align-items-center z-3'>
+      <span class="loader"></span>
+    </div>
+        </Box>
+        
+      ) : (
     <Layout>
      
        <div className='container'>
@@ -95,8 +110,7 @@ export default function page() {
         >
           <MenuItem value={5}>5</MenuItem>
           <MenuItem value={10}>10</MenuItem>
-          <MenuItem value={20}>20</MenuItem>
-          <MenuItem value={50}>50</MenuItem>
+          <MenuItem value={15}>15</MenuItem>
         </Select>
       </FormControl>
     </Stack>
@@ -132,6 +146,6 @@ export default function page() {
       </TabContext>
     </Box>
       </div>
-    </Layout>
+    </Layout>)}</>
   )
 }

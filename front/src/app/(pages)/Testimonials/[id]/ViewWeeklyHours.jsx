@@ -9,7 +9,7 @@ export default function ViewWeeklyHours({id}) {
     const fetchWeeklyHours = async () => {
         if(userData&&userToken){
         try{
-        const { data } = await axios.get(`https://localhost:7116/api/Instructor/GetInstructorOfficeHours?Instructorid=${id}`,
+        const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}Instructor/GetInstructorOfficeHours?Instructorid=${id}`,
         {headers :{Authorization:`Bearer ${userToken}`}}
 
         );

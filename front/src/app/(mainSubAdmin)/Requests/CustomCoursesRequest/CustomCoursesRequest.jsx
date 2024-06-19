@@ -33,7 +33,7 @@ const handleCloseDisplay = () => {
     const fetchRequestsForCustomCourses = async (pageNum = pageNumber, pageSizeNum = pageSize) => {
       if(userData){
       try{
-      const { data } = await axios.get(`https://localhost:7116/api/CourseContraller/GetAllCustomCourses?pageNumber=${pageNum}&pageSize=${pageSize}`,{headers :{Authorization:`Bearer ${userToken}`}});
+      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}CourseContraller/GetAllCustomCourses?pageNumber=${pageNum}&pageSize=${pageSize}`,{headers :{Authorization:`Bearer ${userToken}`}});
       // setLoading(false)
        console.log(data);
       setCustomCourses(data.result.items);
@@ -102,8 +102,7 @@ const handleCloseDisplay = () => {
                 >
                   <MenuItem value={5}>5</MenuItem>
                   <MenuItem value={10}>10</MenuItem>
-                  <MenuItem value={20}>20</MenuItem>
-                  <MenuItem value={50}>50</MenuItem>
+                  <MenuItem value={15}>15</MenuItem>
                 </Select>
               </FormControl>
                 <div className="icons d-flex gap-2 pt-3">

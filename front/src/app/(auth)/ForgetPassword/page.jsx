@@ -7,9 +7,10 @@ import axios from 'axios';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
+import '../RegisterCode/RegisterCode.css'
 
 export default function page() {
-    
+  let [errmsg,setErrmsg] = useState()
     const router = useRouter();
     const [email, setEmail] = useState(null);
     const initialValues={
@@ -29,15 +30,19 @@ const onSubmit = async (values) => {
       const formData = new FormData();
       formData.append('password', values.password);
       formData.append('confirmPassword', values.confirmPassword);
-      const { data } = await axios.patch(`https://localhost:7116/api/UserAuth/ForgetPassword?email=${email}`, formData,{ headers: {
+      const { data } = await axios.patch(`${process.env.NEXT_PUBLIC_EDUCODING_API}UserAuth/ForgetPassword?email=${email}`, formData,{ headers: {
         'Content-Type': 'application/json',
       }});
+      if(data.errorMassages != null){
+        setErrmsg(data.errorMassages)
+      }
+      else{
       console.log(data);
       formik.resetForm();
 
     router.push(`/login`,undefined, { shallow: true })
 
-    } catch (error) {
+    }} catch (error) {
       console.error('Error submitting form:', error);
       console.log('Error response:', error.response);
     }
@@ -89,8 +94,8 @@ const renderInputs = inputs.map((input,index)=>
         <div className="forgetPass">
             <div className="container">
                 <div className="forgetPassSection">
-                    <div className="title text-center">
-                        <h2>Password Reset</h2>
+                    <div className="titleColor text-center">
+                        <h2 className='tit'>Password Reset</h2>
                     </div>
                     <div className="forgetPassForm">
                     <form
@@ -113,6 +118,7 @@ const renderInputs = inputs.map((input,index)=>
                       >
                         Reset
                       </Button>
+                      <p className='text-danger'>{errmsg}</p>
                       </div>
                       </form>
                     </div>

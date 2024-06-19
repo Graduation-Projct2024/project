@@ -21,7 +21,7 @@ export default function Testimonials() {
   let [contacts,setContacts] = useState([]);
   const fetchContacts = async () => {
     try{
-    const { data } = await axios.get(`https://localhost:7116/api/Employee/GetAllEmployee?pageNumber=1&pageSize=1000`);
+    const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}Employee/GetAllEmployee?pageNumber=1&pageSize=1000`);
 
     console.log(data);
     setContacts(data.result.items);
@@ -119,10 +119,10 @@ export default function Testimonials() {
            loop = {true}
         >
 
-           {contacts.length? contacts.map((contact)=>(
+           {contacts.length? contacts.map((contact,index)=>(
             <div> {contact.type == "instructor" &&
           <SwiperSlide key={contact.id} className='py-5' >
-                     <div className="col-md-4" key={contact.id}>
+                     <div className="col-md-4">
                     <div className="card text-center mb-3" style={{ width: "18rem" }}>
                       <div className="card-body m-3">
                       <img src={contact.imageUrl ? contact.imageUrl : "./user1.png"} 

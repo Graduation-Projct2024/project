@@ -13,7 +13,7 @@ export default function UpdateEmployee({id , fName , lName , email, gender, phon
     const [employeeData, setEmployeeData] = useState(null);
     const [selectedGender, setSelectedGender] = useState(gender);
     const {userToken, setUserToken, userData,userId}=useContext(UserContext);
-
+    let [errmsg,setErrmsg] = useState()
     // useEffect(() => {
     //   const fetchEmployeeData = async () => {
     //     if(userData){
@@ -42,7 +42,13 @@ export default function UpdateEmployee({id , fName , lName , email, gender, phon
         // formData.append('role', users.role);
         formData.append('gender', selectedGender); // Use selectedGender from state
 
-        const {data} = await axios.put(`https://localhost:7116/api/Employee/UpdateEmployeeFromAdmin?id=${id}`, formData, { headers: { Authorization: `Bearer ${userToken}` } });
+        const {data} = await axios.put(`${process.env.NEXT_PUBLIC_EDUCODING_API}Employee/UpdateEmployeeFromAdmin?id=${id}`, formData, { headers: { Authorization: `Bearer ${userToken}` } });
+        if(data.errorMassages != null){
+          setErrmsg(data.errorMassages)
+          
+          // console.log(data.errorMassages)
+        }
+        else{
             formik.resetForm();
             setOpenUpdate(false);
             Swal.fire({
@@ -52,7 +58,7 @@ export default function UpdateEmployee({id , fName , lName , email, gender, phon
               });
             
 
-      } catch (error) {
+      } }catch (error) {
         console.error('Error updating employee:', error);
       }}
     };
@@ -185,6 +191,7 @@ export default function UpdateEmployee({id , fName , lName , email, gender, phon
             >
               Update
             </Button>
+            <p className='text-danger'>{errmsg}</p>
       </div>
     </form>
   )

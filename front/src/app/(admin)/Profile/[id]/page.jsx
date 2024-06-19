@@ -28,6 +28,8 @@ export default function page({params}) {
   const [openChange, setOpenChange] = React.useState(false);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+  let [errmsg,setErrmsg] = useState()
+
   const [userIdP, setUserIdP] = useState(null);
 
 const handleClickOpenUpdate = (id) => {
@@ -56,7 +58,7 @@ setOpenChange(false);
       // setLoading(true);
     try {
       //setLoading(false)
-      const {data} = await axios.get(`https://localhost:7116/api/UserAuth/GetProfileInfo?id=${params.id}`,
+      const {data} = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}UserAuth/GetProfileInfo?id=${params.id}`,
       {headers :{Authorization:`Bearer ${userToken}`}}
       );
       console.log(data);
@@ -87,11 +89,11 @@ setOpenChange(false);
     </div>
           {/* <CircularProgress /> */}
           {/* <div className='loading bg-white position-fixed vh-100 w-100 d-flex justify-content-center align-items-center z-3'> */}
-      <span className="loader"></span>
+      {/* <span className="loader"></span> */}
     {/* </div> */}
-        </Box>
+        {/* </Box> */}
         
-      ) : ( */}
+      {/* ) : ( */}
 
         <>
       <div className="container">

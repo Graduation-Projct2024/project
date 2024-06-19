@@ -20,7 +20,7 @@ export default function AccreditEvents() {
     if(userData){
     
     try{
-    const { data } = await axios.get(`https://localhost:7116/api/EventContraller/GetAllEventsToAdmin?pageNumber=${pageNum}&pageSize=${pageSize}`,{
+    const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}EventContraller/GetAllEventsToAdmin?pageNumber=${pageNum}&pageSize=${pageSize}`,{
       headers: {
           Authorization: `Bearer ${userToken}`,
       },
@@ -81,7 +81,7 @@ export default function AccreditEvents() {
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
-            const { data } = await axios.patch(`https://localhost:7116/api/EventContraller/accreditEvent?eventId=${eventId}`, {Status},
+            const { data } = await axios.patch(`${process.env.NEXT_PUBLIC_EDUCODING_API}EventContraller/accreditEvent?eventId=${eventId}`, {Status},
               {
                 headers: {
                   Authorization: `Bearer ${userToken}`,
@@ -175,8 +175,7 @@ const  filteredAccreditEvents= Array.isArray(accreditEvents) ? accreditEvents.fi
         >
           <MenuItem value={5}>5</MenuItem>
           <MenuItem value={10}>10</MenuItem>
-          <MenuItem value={20}>20</MenuItem>
-          <MenuItem value={50}>50</MenuItem>
+          <MenuItem value={15}>15</MenuItem>
         </Select>
       </FormControl>
               <div className="icons d-flex gap-2 pt-3">

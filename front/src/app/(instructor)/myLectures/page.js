@@ -50,7 +50,7 @@ export default function Page() {
     if (userId) {
       try {
         const response = await axios.get(
-          `https://localhost:7116/api/Lectures/GetAllLectureRequest?instructorId=${userId}&pageNumber=${pageNum}&pageSize=${pageSizeNum}`,
+          `${process.env.NEXT_PUBLIC_EDUCODING_API}Lectures/GetAllLectureRequest?instructorId=${userId}&pageNumber=${pageNum}&pageSize=${pageSizeNum}`,
           { headers: { Authorization: `Bearer ${userToken}` } }
         );
         console.log(response);
@@ -102,8 +102,7 @@ export default function Page() {
         >
           <MenuItem value={5}>5</MenuItem>
           <MenuItem value={10}>10</MenuItem>
-          <MenuItem value={20}>20</MenuItem>
-          <MenuItem value={50}>50</MenuItem>
+          <MenuItem value={15}>15</MenuItem>
         </Select>
       </FormControl>
     </Stack>

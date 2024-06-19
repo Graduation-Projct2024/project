@@ -29,7 +29,7 @@ export default function EmployeeContacts() {
     if(userData){
     try{
     // setLoading(true)
-    const { data } = await axios.get(`https://localhost:7116/api/Employee/GetAllEmployee?pageNumber=${pageNum}&pageSize=${pageSize}`,
+    const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}Employee/GetAllEmployee?pageNumber=${pageNum}&pageSize=${pageSize}`,
     {
         headers: {
             Authorization: `Bearer ${userToken}`,
@@ -95,11 +95,11 @@ return matchesSearchTerm ;
     </div>
           {/* <CircularProgress /> */}
           {/* <div className='loading bg-white position-fixed vh-100 w-100 d-flex justify-content-center align-items-center z-3'> */}
-      <span className="loader"></span>
+      {/* <span className="loader"></span> */}
     {/* </div> */}
-        </Box>
+        {/* </Box> */}
         
-      ) : ( */}
+      {/* ) : ( */}
 
         <>
                <div className="filter py-2 text-end ">
@@ -126,8 +126,7 @@ return matchesSearchTerm ;
         >
           <MenuItem value={5}>5</MenuItem>
           <MenuItem value={10}>10</MenuItem>
-          <MenuItem value={20}>20</MenuItem>
-          <MenuItem value={50}>50</MenuItem>
+          <MenuItem value={15}>15</MenuItem>
         </Select>
       </FormControl>
                 <div className="icons d-flex gap-2 pt-3">

@@ -9,14 +9,20 @@ export default function ChangeRole({userId ,   role,    setOpenChange}) {
     const { userData,userToken } = useContext(UserContext);
 
     const [selectedRole, setSelectedRole] = useState(role);
-  
+    let [errmsg,setErrmsg] = useState()
 
     const onSubmit = async () => {
       if(userData){
             try {
        
   
-        const { data } = await axios.patch(`https://localhost:7116/api/Employee/EditroleBetweenSubAdmin&MainSubAdmin?userId=${userId}&role=${selectedRole}`,{},{headers :{Authorization:`Bearer ${userToken}`}},);
+        const { data } = await axios.patch(`${process.env.NEXT_PUBLIC_EDUCODING_API}Employee/EditroleBetweenSubAdmin&MainSubAdmin?userId=${userId}&role=${selectedRole}`,{},{headers :{Authorization:`Bearer ${userToken}`}},);
+        if(data.errorMassages != null){
+          setErrmsg(data.errorMassages)
+          
+          // console.log(data.errorMassages)
+        }
+        else{
           console.log('Profile Updated');
           formik.resetForm();
           setOpenChange(false);
@@ -25,7 +31,7 @@ export default function ChangeRole({userId ,   role,    setOpenChange}) {
             text: `Role changed to ${selectedRole}`,
             icon: "success"
           });
-      } catch (error) {
+      }} catch (error) {
         console.error('Error updating employee:', error);
       }}
     };
@@ -61,7 +67,7 @@ export default function ChangeRole({userId ,   role,    setOpenChange}) {
           <option value="" disabled>
             Select Role
           </option>
-          <option value="subadmin">subadmin</option>
+          <option value="subadmin">sub-admin</option>
           <option value="main-subadmin">main-subadmin</option>
         </select>
 
@@ -76,6 +82,7 @@ export default function ChangeRole({userId ,   role,    setOpenChange}) {
         >
           Update
         </Button>
+        <p className='text-danger'>{errmsg}</p>
       </div>
     </form>
   )

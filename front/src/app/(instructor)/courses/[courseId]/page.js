@@ -162,7 +162,7 @@ const handleCloseViewTaskDialog = () => {
     const getCourses = async () => {
 if(userToken){
       const data = await axios.get(
-        `https://localhost:7116/api/CourseContraller/GetCourseById?id=${courseId}`,
+        `${process.env.NEXT_PUBLIC_EDUCODING_API}CourseContraller/GetCourseById?id=${courseId}`,
         {},
         {headers :{Authorization:`Bearer ${userToken}`}}
 
@@ -173,7 +173,7 @@ if(userToken){
     const getCourseMaterial = async () => {
       if(userToken){
         const { data } = await axios.get(
-          `https://localhost:7116/api/MaterialControllar/GetAllMaterial?CourseId=${courseId}`,
+          `${process.env.NEXT_PUBLIC_EDUCODING_API}MaterialControllar/GetAllMaterial?CourseId=${courseId}`,
           {headers :{Authorization:`Bearer ${userToken}`}}
 
           
@@ -191,7 +191,7 @@ if(userToken){
         if(userToken){
 
         const data = await axios.get(
-          `https://localhost:7116/api/StudentsContraller/GetCourseParticipants?Courseid=${courseId}&pageNumber=${pageNum}&pageSize=${pageSize}`,
+          `${process.env.NEXT_PUBLIC_EDUCODING_API}StudentsContraller/GetCourseParticipants?Courseid=${courseId}&pageNumber=${pageNum}&pageSize=${pageSize}`,
           {headers :{Authorization:`Bearer ${userToken}`}}
 
         );
@@ -330,7 +330,23 @@ if(userToken){
     <div className="tab-pane fade" id="Participants-tab-pane" role="tabpanel" aria-labelledby="Participants-tab" tabIndex={0}>
 
               <div className='mt-5 ms-5'>
-              
+
+                <div className='row justify-content-end'>
+        <FormControl fullWidth className="w-25 pb-3 pe-4">
+                <InputLabel id="page-size-select-label">Page Size</InputLabel>
+                <Select
+                className="justify-content-center"
+                  labelId="page-size-select-label"
+                  id="page-size-select"
+                  value={pageSize}
+                  label="Page Size"
+                  onChange={handlePageSizeChange}
+                >
+                  <MenuItem value={5}>5</MenuItem>
+                  <MenuItem value={10}>10</MenuItem>
+                  <MenuItem value={15}>15</MenuItem>
+                </Select>
+              </FormControl></div>
     {participants?.map((participant, index)=>( 
     <Box
       height={50}

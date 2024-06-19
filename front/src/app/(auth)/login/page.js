@@ -76,7 +76,7 @@ export default function page() {
     console.log(users);
 
     const { data } = await axios.post(
-      "https://localhost:7116/api/UserAuth/Login",
+      `${process.env.NEXT_PUBLIC_EDUCODING_API}UserAuth/Login`,
       users,
 
     );

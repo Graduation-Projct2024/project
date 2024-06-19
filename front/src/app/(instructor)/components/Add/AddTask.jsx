@@ -57,7 +57,7 @@ export default function AddTask({ open, onClose, handleCloseAdd, type, Id }) {
 
       if (userToken) {
         const { data } = await axios.post(
-          "https://localhost:7116/api/MaterialControllar/AddTask",
+          `${process.env.NEXT_PUBLIC_EDUCODING_API}MaterialControllar/AddTask`,
           formData,
           { headers: { Authorization: `Bearer ${userToken}` } }
         );

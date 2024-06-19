@@ -11,7 +11,7 @@ import Swal from 'sweetalert2'
 
 export default function CreateEvent({setOpen}) {
   const {userToken, setUserToken, userData,userId}=useContext(UserContext);
-
+  let [errmsg,setErrmsg] = useState()
   const initialValues={
     name: '',
     content:'',
@@ -38,8 +38,13 @@ const onSubmit = async (values) => {
       formData.append('image', values.image);
     }
 
-    const { data } = await axios.post('https://localhost:7116/api/EventContraller/CreateEvent', formData,{headers :{Authorization:`Bearer ${userToken}`}});
-        
+    const { data } = await axios.post(`${process.env.NEXT_PUBLIC_EDUCODING_API}EventContraller/CreateEvent`, formData,{headers :{Authorization:`Bearer ${userToken}`}});
+    if(data.errorMassages != null){
+      setErrmsg(data.errorMassages)
+      
+      // console.log(data.errorMassages)
+    }
+    else{
     console.log(data);
     console.log('tttt');
     formik.resetForm();
@@ -51,7 +56,7 @@ const onSubmit = async (values) => {
     });
 
     console.log('jhbgyvftrgybuhnjimkjhb');
-  } catch (error) {
+  }} catch (error) {
     // Handle the error here
     console.error('Error submitting form:', error);
     console.log('Error response:', error.response);
@@ -147,7 +152,7 @@ const renderInputs = inputs.slice(0, -1).map((input,index)=>
       />
     );
   return (
-    <form onSubmit={formik.handleSubmit} className="row justify-content-center">
+    <form onSubmit={formik.handleSubmit} encType="multipart/form-data" className="row justify-content-center">
       {renderInputs}
       {textAraeInput}
       {/* <button
@@ -165,6 +170,7 @@ const renderInputs = inputs.slice(0, -1).map((input,index)=>
             >
               Add
             </Button>
+            <p className='text-danger'>{errmsg}</p>
       </div>
     </form>
   )

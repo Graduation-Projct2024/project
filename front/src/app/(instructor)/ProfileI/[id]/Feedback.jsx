@@ -17,7 +17,7 @@ export default function Feedback() {
   const getFeedbacks = async () => {
     if (userId) {
       try {
-        const { data } = await axios.get(`https://localhost:7116/api/Feedback/GetAllInstructorFeedback?instructorId=${userId}`);
+        const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}Feedback/GetAllInstructorFeedback?instructorId=${userId}`);
         console.log(data);
         setFeedbacks(data.result.items || []);
       } catch (error) {

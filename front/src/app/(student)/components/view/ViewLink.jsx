@@ -53,7 +53,7 @@ export default function ViewLink({ materialID }) {
  const getMaterial=async()=>{
   if(userToken){
     try{
-  const {data}= await axios.get(`https://localhost:7116/api/MaterialControllar/GetMaterialById?id=${materialID}`,
+  const {data}= await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}MaterialControllar/GetMaterialById?id=${materialID}`,
   {headers :{Authorization:`Bearer ${userToken}`}}
 
   )

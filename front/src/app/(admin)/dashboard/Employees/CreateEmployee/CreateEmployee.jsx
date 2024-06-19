@@ -11,7 +11,7 @@ import Swal from 'sweetalert2';
 
 export default function CreateEmployee({setOpen}) {
   const router = useRouter();
-
+  let [errmsg,setErrmsg] = useState()
   const {userToken, setUserToken, userData,userId}=useContext(UserContext);
   const [selectedGender, setSelectedGender] = useState('');
   const [selectedRole, setSelectedRole] = useState('');
@@ -48,7 +48,13 @@ const onSubmit = async (users) => {
   
       
   
-      const { data } = await axios.post('https://localhost:7116/api/Employee/CreateEmployee', formData,{ headers: { Authorization: `Bearer ${userToken}` } });
+      const { data } = await axios.post(`${process.env.NEXT_PUBLIC_EDUCODING_API}Employee/CreateEmployee`, formData,{ headers: { Authorization: `Bearer ${userToken}` } });
+      if(data.errorMassages != null){
+        setErrmsg(data.errorMassages)
+        
+        // console.log(data.errorMassages)
+      }
+      else{
       
       //console.log(data);
       setPageLoading(true);
@@ -63,7 +69,7 @@ const onSubmit = async (users) => {
         icon: "success"
       });
 
-    } catch (error) {
+    } }catch (error) {
       // Handle the error here
       console.error('Error submitting form:', error);
       console.log('Error response:', error.response);
@@ -236,6 +242,7 @@ const renderInputs = inputs.map((input,index)=>
             >
               Add
             </Button>
+            <p className='text-danger'>{errmsg}</p>
       </div>
     </form>)}
     </>

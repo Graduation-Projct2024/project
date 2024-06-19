@@ -17,7 +17,7 @@ export default function page() {
   const {userToken, setUserToken,userData, setUserData}=useContext(UserContext);
 
 
-  
+  let [errmsg,setErrmsg] = useState()
   useEffect(() => {
     if(userData && userToken){
       if ( userData.role=="admin") {
@@ -44,7 +44,7 @@ export default function page() {
 };
 
 const resendCode = async()=>{
-  const {data} = await axios.get(`https://localhost:7116/api/UserAuth/reSendCode?email=${email}`);
+  const {data} = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}UserAuth/reSendCode?email=${email}`);
   console.log(data);
   
 }
@@ -52,8 +52,12 @@ const resendCode = async()=>{
 const onSubmit = async (values) => {
       try {
         const { data } = await axios.post(
-            `https://localhost:7116/api/UserAuth/addCode?email=${email}&code=${values.code}`,
+            `${process.env.NEXT_PUBLIC_EDUCODING_API}UserAuth/addCode?email=${email}&code=${values.code}`,
             );
+            if(data.errorMassages != null){
+              setErrmsg(data.errorMassages)
+            }
+            else{
         console.log(data);
         formik.resetForm();
         Swal.fire({
@@ -63,7 +67,7 @@ const onSubmit = async (values) => {
         });
         router.push('/login');
     
-      } catch (error) {
+      }} catch (error) {
         console.error('Error submitting form:', error);
         console.log('Error response:', error.response);
       }
@@ -152,6 +156,7 @@ const onSubmit = async (values) => {
                         >
                           click!
                         </Button>
+                        <p className='text-danger'>{errmsg}</p>
                       </div>
                     </form>
                   </div>

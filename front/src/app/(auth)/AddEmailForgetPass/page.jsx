@@ -7,6 +7,7 @@ import axios from 'axios';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
 import '../RegisterCode/RegisterCode.css'
+import { useState } from 'react';
 
 export default function page() {
 
@@ -15,19 +16,26 @@ export default function page() {
         email: '',
     };
 
+    let [errmsg,setErrmsg] = useState()
+
+
 
 const onSubmit = async (users) => {
     try {
       const formData = new FormData();
       formData.append('email', users.email);
-      const { data } = await axios.post('https://localhost:7116/api/UserAuth/AddEmailForForgetPassword', formData,{ headers: {
+      const { data } = await axios.post(`${process.env.NEXT_PUBLIC_EDUCODING_API}UserAuth/AddEmailForForgetPassword`, formData,{ headers: {
         'Content-Type': 'application/json',
       }});
+      if(data.errorMassages != null){
+        setErrmsg(data.errorMassages)
+      }
+      else{
       console.log(data);
       formik.resetForm();
 
     router.push(`/ForgetCode?email=${users.email}`,undefined, { shallow: true })
-
+      }
     } catch (error) {
       console.error('Error submitting form:', error);
       console.log('Error response:', error.response);
@@ -71,20 +79,22 @@ const renderInputs = inputs.map((input,index)=>
 
   return (
     <Layout>
-      <div className="addEmailForget">
+      <div className="pb-5">
         <div className="container">
-          <div className="row align-items-center">
-            <div className="col-lg-6 pb-5">
-              <div className="addEmailImg">
+          <div className="row align-items-center addEmailForget">
+            <div className="col-lg-6 ">
+              {/* <div className="addEmailImg">
                 <img
                   src="/addEmail2.png"
                   alt="add email "
                   className=" pb-5"
                 />
-              </div>
+              </div> */}
+              <iframe classname="animationForget" src="https://lottie.host/embed/f6b5b6ea-e09e-458e-b071-e4a75fcb4dc4/MtyUSDKS59.json" />
+
             </div>
-            <div className="col-lg-6 pb-5">
-              <div className="addEmailSection pt-3">
+            <div className="col-lg-6 ">
+              <div className=" pt-3">
                 <div className="title pb-4">
                   <h2 className='titleColor'>Insert your email here please</h2>
                 </div>
@@ -109,6 +119,7 @@ const renderInputs = inputs.map((input,index)=>
                       >
                         Add Email
                       </Button>
+                      <p className='text-danger'>{errmsg}</p>
                     </div>
                   </form>
                 </div>

@@ -16,7 +16,7 @@ export default function Upcoming() {
     const getEvents = async (pageNum = pageNumber, pageSizeNum = pageSize) => {
         try {
           const { data } = await axios.get(
-            `https://localhost:7116/api/EventContraller/GetAllAccreditEvents?dateStatus=upcoming&pageNumber=${pageNum}&pageSize=${pageSizeNum}`
+            `${process.env.NEXT_PUBLIC_EDUCODING_API}EventContraller/GetAllAccreditEvents?dateStatus=upcoming&pageNumber=${pageNum}&pageSize=${pageSizeNum}`
           );
           console.log(data);
           setEvents(data.result.items);
@@ -64,8 +64,7 @@ export default function Upcoming() {
         >
           <MenuItem value={5}>5</MenuItem>
           <MenuItem value={10}>10</MenuItem>
-          <MenuItem value={20}>20</MenuItem>
-          <MenuItem value={50}>50</MenuItem>
+          <MenuItem value={15}>15</MenuItem>
         </Select>
       </FormControl>
     </Stack>

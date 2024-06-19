@@ -6,7 +6,6 @@ using iText.Kernel.Pdf;
 using iText.Layout;
 using iText.Layout.Element;
 using iText.Layout.Properties;
-using OfficeOpenXml;
 
 namespace courseProject.Services.Reports.PDF
 {

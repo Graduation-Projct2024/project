@@ -19,7 +19,7 @@ export default function JoinCoursesRequests() {
     const fetchRequestsForJoinCourses = async (pageNum = pageNumber, pageSizeNum = pageSize) => {
       if(userData){
       try{
-      const { data } = await axios.get(`https://localhost:7116/api/Request/GetAllRequestToJoinCourses?pageNumber=${pageNum}&pageSize=${pageSize}`,{headers :{Authorization:`Bearer ${userToken}`}});
+      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}Request/GetAllRequestToJoinCourses?pageNumber=${pageNum}&pageSize=${pageSize}`,{headers :{Authorization:`Bearer ${userToken}`}});
       // setLoading(false)
       // console.log(data);
 
@@ -81,7 +81,7 @@ export default function JoinCoursesRequests() {
         }).then(async (result) => {
           if (result.isConfirmed) {
             try {
-              const { data } = await axios.patch(`https://localhost:7116/api/StudentCourse/ApprovelToJoin?courseId=${courseId}&studentId=${studentId}&status=${status}`, {},
+              const { data } = await axios.patch(`${process.env.NEXT_PUBLIC_EDUCODING_API}StudentCourse/ApprovelToJoin?courseId=${courseId}&studentId=${studentId}&status=${status}`, {},
                 {
                   headers: {
                     Authorization: `Bearer ${userToken}`,
@@ -177,8 +177,7 @@ const filteredRequestsToJoinCourses = Array.isArray(joinCoursesReq) ? joinCourse
                 >
                   <MenuItem value={5}>5</MenuItem>
                   <MenuItem value={10}>10</MenuItem>
-                  <MenuItem value={20}>20</MenuItem>
-                  <MenuItem value={50}>50</MenuItem>
+                  <MenuItem value={15}>15</MenuItem>
                 </Select>
               </FormControl>
                 <div className="icons d-flex gap-2 pt-3">

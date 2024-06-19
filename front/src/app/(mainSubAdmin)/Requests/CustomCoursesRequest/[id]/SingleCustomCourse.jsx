@@ -9,7 +9,7 @@ export default function SingleCustomCourse({id}) {
     const fetchSingleCustomCourse = async () => {
         if(userData){
         try{
-        const { data } = await axios.get(`https://localhost:7116/api/CourseContraller/GetCustomCoursesById?id=${id}`,{headers :{Authorization:`Bearer ${userToken}`}});
+        const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}CourseContraller/GetCustomCoursesById?id=${id}`,{headers :{Authorization:`Bearer ${userToken}`}});
         console.log(data.result);
         setCourse(data.result);
       }

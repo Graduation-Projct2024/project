@@ -38,7 +38,7 @@ formData.append(type, Id);
 formData.append("instructorId",userData.userId);
 
 const { data } = await axios.post(
-  "https://localhost:7116/api/MaterialControllar/AddAnnouncement",
+  `${process.env.NEXT_PUBLIC_EDUCODING_API}MaterialControllar/AddAnnouncement`,
   formData,
   {headers: {
     'Authorization':`Bearer ${userToken}`,

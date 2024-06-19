@@ -33,16 +33,16 @@ namespace courseProject.Services.Courses
           
             var getCourse = await unitOfWork.CourseRepository.GetCourseByIdAsync(courseId);
             if (getCourse == null) return ErrorCourse.NotFound;
-            var dateAdded = getCourse.dateOfAdded;
+           // var dateAdded = getCourse.dateOfAdded;
             mapper.Map(editedCourse, getCourse);
             if (editedCourse.image != null)
             {
                 getCourse.ImageUrl = "Files\\" + await unitOfWork.FileRepository.UploadFile1(editedCourse.image);
             }
             getCourse.dateOfUpdated = DateTime.Now;
-            getCourse.dateOfAdded = dateAdded;
+           // getCourse.dateOfAdded = dateAdded;
             
-            if (getCourse.status.ToLower() == "accredit") return ErrorCourse.NoContent;          
+            if (getCourse.status.ToLower() != "accredit") return ErrorCourse.NoContent;          
             await unitOfWork.CourseRepository.updateCourse(getCourse);
             await unitOfWork.CourseRepository.saveAsync();
             return Result.Updated; 
