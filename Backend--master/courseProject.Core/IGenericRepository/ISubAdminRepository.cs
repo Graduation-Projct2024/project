@@ -11,15 +11,13 @@ namespace courseProject.Core.IGenericRepository
     public interface ISubAdminRepository:IGenericRepository1<SubAdmin>
     {
 
-     
-     
-      
 
-     
-        public  Task<IDbContextTransaction> BeginTransactionAsync();
-        public  Task CommitTransactionAsync();
 
-        public Task RollbackTransactionAsync();
+
+
+        public Task createSubAdminAccountAsync(SubAdmin entity);
+        
+       
         public Task<SubAdmin> GetSubAdminByIdAsync(Guid id); 
     
        

@@ -2,13 +2,7 @@
 using courseProject.Core.IGenericRepository;
 using courseProject.Core.Models;
 using courseProject.Repository.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using courseProject.core.Models;
-using courseProject.Core.Models.DTO;
+
 
 namespace courseProject.Repository.GenericRepository
 {
@@ -24,7 +18,7 @@ namespace courseProject.Repository.GenericRepository
        
        
 
-
+        // add a new office hours
         public async Task AddOfficeHoursAsync(Instructor_Working_Hours instructor_Working_Hours)
         {
             await dbContext.Set<Instructor_Working_Hours>().AddAsync(instructor_Working_Hours);
@@ -35,9 +29,7 @@ namespace courseProject.Repository.GenericRepository
             return  await dbContext.Instructor_Working_Hours.Where(x=>x.InstructorId == instructorId).ToListAsync();
         }
 
-      
-
-        
+            
 
         public async Task<Instructor> getInstructorByIdAsync(Guid id)
         {
@@ -50,19 +42,14 @@ namespace courseProject.Repository.GenericRepository
         }
 
        
-
-       
-        
-
-       
-
+        // get all skills selected by all instructors 
         public async Task<IReadOnlyList<InstructorSkills>> GetAllInstructorSkillsRecoredsAsync()
         {
           return  await dbContext.InstructorSkills.ToListAsync();
         }
 
        
-
+        // get a list of instructor depends on inputs when student added to book a lecture
         public async Task<IReadOnlyList<Instructor_Working_Hours>> getAListOfInstructorDependOnSkillsAndOfficeTime(Guid skillID, TimeSpan startTime, TimeSpan endTime, DateTime date )
         {
             return await dbContext.Instructor_Working_Hours.Include(x => x.instructor).ThenInclude(x => x.Consultations)
@@ -80,8 +67,11 @@ namespace courseProject.Repository.GenericRepository
     .ToListAsync();
         }
 
-        
 
-      
+        public async Task createInstructorAccountAsync(Instructor entity)
+        {
+            await dbContext.Set<Instructor>().AddAsync(entity);
+        }
+
     }
 }

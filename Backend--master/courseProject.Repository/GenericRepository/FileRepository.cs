@@ -1,14 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using courseProject.Core.IGenericRepository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
-using Microsoft.IdentityModel.Tokens;
-using System.Xml.Schema;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.IO;
+using System.Security.Cryptography;
+
+
 
 
 namespace courseProject.Repository.GenericRepository
@@ -32,17 +27,21 @@ namespace courseProject.Repository.GenericRepository
             var uploadPath = "";
             try
             {
+                // Check if the file is null or empty
                 if (file == null || file.Length == 0)
                 {
                     return null;
                 }
-                //var Id = Convert.ToString(httpContextAccessor.HttpContext.User.FindFirst("UserId"));
-                //int.TryParse(Id, out int id);
+
+
+                // Generate a unique file name using the current timestamp
                 var extension = Path.GetExtension(file.FileName);
-                fileName =fileName+"_" +DateTimeOffset.Now.Ticks ;
-                fileName += extension;
+                var name = Path.GetFileName(file.FileName);
+                fileName = name + "_"+DateTimeOffset.Now.Ticks.ToString()+"_" +name;
+                
                  uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "Files\\");
 
+                // Create the directory if it does not exist
                 if (!Directory.Exists(uploadPath))
                 {
                     Directory.CreateDirectory(uploadPath);
@@ -50,22 +49,27 @@ namespace courseProject.Repository.GenericRepository
 
                 var exactPath = Path.Combine(uploadPath, fileName);
 
+                // Save the file to the specified path
                 using (var fileStream = new FileStream(exactPath, FileMode.Create))
                 {
                     await file.CopyToAsync(fileStream);
                 }
+
+              
             }
             catch (Exception ex)
             {
-
+                // Return the error message if an exception occurs
                 fileName = $"Error: {ex.Message}";
             }
          
-           
+           // return file name
             return fileName;
         }
 
 
+
+        //Uploads multiple files to the server and returns a list of file names.
         public async Task<List<string>> UploadFiles(List<IFormFile> files)
         {
             var fileNames = new List<string>();
@@ -73,6 +77,7 @@ namespace courseProject.Repository.GenericRepository
 
             try
             {
+                // Check if the file is null or empty
                 if (files == null || files.Count == 0)
                 {
                     return null;
@@ -90,16 +95,17 @@ namespace courseProject.Repository.GenericRepository
                         fileNames.Add("Error: File is empty or null");
                         continue;
                     }
-
+                   
                     var extension = Path.GetExtension(file.FileName);
-                    var fileName = DateTimeOffset.Now.Ticks.ToString() + extension;
+                    var name = Path.GetFileName(file.FileName);
+                    var fileName = DateTimeOffset.Now.Ticks.ToString()+"_"+name ;
                     var exactPath = Path.Combine(uploadPath, fileName);
-
+                    
                     using (var fileStream = new FileStream(exactPath, FileMode.Create))
                     {
                         await file.CopyToAsync(fileStream);
                     }
-
+                  
                     fileNames.Add(fileName);
                 }
             }
@@ -107,23 +113,31 @@ namespace courseProject.Repository.GenericRepository
             {
                 fileNames.Add($"Error: {ex.Message}");
             }
-
+            // Return the list of file names
             return fileNames;
         }
 
 
+        // Generates a URL for accessing a file on the server.
         public async Task<string> GetFileUrl(string fileName)
         {
+
+            // Get the scheme (http or https), host, and path base from the current HTTP context
             var scheme = httpContextAccessor.HttpContext?.Request.Scheme ?? string.Empty; // http or https
             var host = httpContextAccessor.HttpContext?.Request.Host; //  localhost:7116
             var pathBase = httpContextAccessor.HttpContext?.Request.PathBase ?? string.Empty;
 
-            
+            // Construct the full URL for the file
             var fileUrl = $"{scheme}://{host}{pathBase}/{fileName}";
 
             return fileUrl;
         }
 
-     
+
+
+       
+
+
+
     }
 }

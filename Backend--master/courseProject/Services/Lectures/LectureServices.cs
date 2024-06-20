@@ -4,10 +4,8 @@ using courseProject.Core.IGenericRepository;
 using courseProject.Core.Models;
 using courseProject.Core.Models.DTO.LecturesDTO;
 using courseProject.Core.Models.DTO.UsersDTO;
-using courseProject.Repository.GenericRepository;
 using courseProject.ServiceErrors;
 using ErrorOr;
-using System.Net;
 
 namespace courseProject.Services.Lectures
 {

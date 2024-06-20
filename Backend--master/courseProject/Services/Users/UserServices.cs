@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using courseProject.Common;
 using courseProject.Core.IGenericRepository;
 using courseProject.Core.Models;
 using courseProject.Core.Models.DTO.LoginDTO;
@@ -8,7 +7,6 @@ using courseProject.Core.Models.DTO.UsersDTO;
 using courseProject.Emails;
 using courseProject.ServiceErrors;
 using ErrorOr;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using BC = BCrypt.Net.BCrypt;
 
@@ -83,7 +81,6 @@ namespace courseProject.Services.Users
 
                 var cacheKey = $"VerificationCodeFor-{model.email}";
                 memoryCache.Set(cacheKey, verificationCode, TimeSpan.FromHours(2));
-              //  await unitOfWork.EmailService.SendEmailAsync(model.email, "Your Verification Code", $" Hi {model.userName} , Your code is: {verificationCode}");
 
                  await emailService.SendEmail(model.email, "Your Verification Code" ,EmailTexts.VerificationCode( model.userName,verificationCode));
                 if (success1 > 0 && success2 > 0)
@@ -127,7 +124,6 @@ namespace courseProject.Services.Users
             string verificationCode = await unitOfWork.UserRepository.GenerateSecureVerificationCode(6);
             var cacheKey = $"VerificationCodeFor-{email}";
             memoryCache.Set(cacheKey, verificationCode, TimeSpan.FromHours(2));
-            //  await unitOfWork.EmailService.SendEmailAsync(email, "Your Verification Code", $" Hi {getUser.userName} , Your code is: {verificationCode}");
 
             await emailService.SendEmail(email, "Your Verification Code", EmailTexts.VerificationCode(getUser.userName, verificationCode));
 
@@ -189,7 +185,6 @@ namespace courseProject.Services.Users
             string verificationCode = await unitOfWork.UserRepository.GenerateSecureVerificationCode(6);
             var cacheKey = $"VerificationCodeFor-{email}";
             memoryCache.Set(cacheKey, verificationCode, TimeSpan.FromHours(2));
-            //  await unitOfWork.EmailService.SendEmailAsync(email, "Your Verification Code", $" Hi {getUser.userName} , Your code is: {verificationCode}");
 
             await emailService.SendEmail(email, "Reset Password", EmailTexts.ForgetPassword(getUser.userName, verificationCode));
 

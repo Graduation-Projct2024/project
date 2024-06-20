@@ -1,31 +1,4 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
-using courseProject.Core.IGenericRepository;
-using courseProject.Repository.Data;
-using courseProject.Repository.GenericRepository;
-using courseProject.MappingProfile;
-using AutoMapper;
-using System.Security.Cryptography;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System;
-using Microsoft.Extensions.FileProviders;
 using courseProject.Configuration;
-using Microsoft.AspNetCore.Authorization;
-using courseProject.Authentication;
-using courseProject.Authentication.EnrolledInCourse;
-using courseProject.Authentication.MaterialInEnrolledCourse;
-using FluentValidation.AspNetCore;
-using System.Reflection;
-using FluentValidation;
-using courseProject.Common;
-using courseProject.Core.Models;
-using Microsoft.AspNetCore.Identity;
-using courseProject.Emails;
-using courseProject.Services.Courses;
-using courseProject.Services.BackgroundServices;
-using courseProject.Authentication.CourseParticipantsAuthorize;
 
 
 namespace courseProject
@@ -38,64 +11,17 @@ namespace courseProject
 
      
 
-
-
-            builder.Services.AddCors(a =>
-            {
-                a.AddPolicy("AllowOrigin", policyBuilder =>
-                {
-                    policyBuilder.WithOrigins("http://localhost:3000");
-                    
-                    policyBuilder.AllowAnyMethod();
-                    policyBuilder.AllowAnyHeader();
-                    policyBuilder.AllowCredentials();
-                });
-            });
-
-
-
-
-       //sieve     builder.Services.AddScoped<SieveProcessor>();
-
-            builder.Services
-                   .AddApplication()
-                   .AddServices()
-             //sieve      .AddSieve(builder.Configuration)
-                   // .AddIdentities()
-                   .AddInfrastucture(builder.Configuration)
-                   .AddAuthenticationAndAuthorization(builder.Configuration);
-
-            builder.Services.AddHostedService<DailyCheckBackgroundService>();
-            //builder.Services.AddSingleton<IHostedService, CourseStatusUpdater>();
-
-            //builder.Services.AddHostedService<CourseStatusUpdater>();
-
-
-            builder. Services.AddEmailInfrastucture (builder. Configuration);
-            builder.Services.AddHttpClient();
-
-
+            builder.Services.ConfigureServices(builder.Configuration);
+                   
+                   
           
-
-            //validations 
-            //builder.Services.AddFluentValidation(
-            //    v =>
-            //    {
-            //        v.ImplicitlyValidateChildProperties = true;
-            //        v.ImplicitlyValidateRootCollectionElements = true;
-            //        v.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-            //    }            
-            //    );
-            builder.Services.AddFluentValidation();
-            builder.Services.AddValidatorsFromAssemblyContaining<IAssemblyMarker>();
+            builder.Services.AddHttpClient();
 
 
             builder.Services.AddHttpContextAccessor();
          
 
-            builder.Services.AddScoped<IAuthorizationHandler, GetMaterialForEnrolledCourseHandler>();
-            builder.Services.AddScoped<IAuthorizationHandler, EnrolledInCourseHandler >();
-            builder.Services.AddScoped<IAuthorizationHandler,CourseParticipantsAuthorizeHandler>();
+           
 
            
           
@@ -114,19 +40,7 @@ namespace courseProject
             
            
             app.UseCors("AllowOrigin");
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "Files");
-
-            if (!Directory.Exists(filePath))
-            {
-                Directory.CreateDirectory(filePath);
-            }
-            app.UseStaticFiles();
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                FileProvider = new PhysicalFileProvider(
-        Path.Combine(Directory.GetCurrentDirectory(), "Files")),
-                RequestPath = "/Files"
-            });
+            app.ConfigureStaticFiles();
 
             app.UseHttpsRedirection();
 

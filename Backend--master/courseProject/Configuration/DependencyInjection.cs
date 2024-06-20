@@ -1,239 +1,36 @@
-﻿using courseProject.Authentication;
-using courseProject.Authentication.EnrolledInCourse;
-using courseProject.Authentication.MaterialInEnrolledCourse;
-
-using courseProject.Core.IGenericRepository;
-using courseProject.Core.Models;
-
-using courseProject.Emails;
-using courseProject.MappingProfile;
-using courseProject.Repository.Data;
-using courseProject.Repository.GenericRepository;
-using courseProject.Services.Courses;
-
-using courseProject.Services.Skill;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Cors.Infrastructure;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-
-using System.Runtime.CompilerServices;
-using System.Text;
-
-
+﻿using courseProject.Emails;
 
 namespace courseProject.Configuration
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddApplication (this IServiceCollection services)
+
+        public static IServiceCollection ConfigureServices(this IServiceCollection services, IConfiguration configuration)
         {
-           
-            services.AddScoped(typeof(IGenericRepository1<>), typeof(GenericRepository1<>));
-            services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
-           
-            services.AddAutoMapper(typeof(MappingForStudents));
-            services.AddAutoMapper(typeof(MappingForCourse));
-            services.AddAutoMapper(typeof(MappingForEmployee));
-            services.AddAutoMapper(typeof(MappingForEvents));
-            services.AddAutoMapper(typeof(MappingForContact));
-            services.AddAutoMapper(typeof(MappingForFeedback));
-            services.AddAutoMapper(typeof(MappingForMaterial));
-            services.AddAutoMapper(typeof(MappingForStudentCourses));
+            services.AddApplication();
+
+            services. AddInfrastucture( configuration);
+
+            services.AddAuthenticationAndAuthorization(configuration);
+
+            services.AddServices();
+
+            services.FluentValidation();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowOrigin", CorsPolicySetup.ConfigureCorsPolicy);
+            });
 
 
-            
+            services.AddBackgroundServices();
+
+            services.AddEmailInfrastucture(configuration);
+
+
 
             return services;
         }
 
-      
-
-
-        public static IServiceCollection AddInfrastucture (this IServiceCollection services , IConfiguration configuration)
-        {
-            //AuthenticationScheme.AddJwtAuthentication(services, configuration);
-
-            services.AddDbContext<projectDbContext>(options =>
-            {
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
-                options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
-            });
-
-            services.AddControllers()
-                    .AddNewtonsoftJson(options =>
-                         options.SerializerSettings.ReferenceLoopHandling =
-                                 Newtonsoft.Json.ReferenceLoopHandling.Ignore);
-            services.AddMemoryCache();
-
-
-
-            
-            
-            return services;
-        }
-
-        public static IServiceCollection AddAuthenticationAndAuthorization(this IServiceCollection services , IConfiguration configuration)
-       {
-            // Retrieve the secret key used for JWT authentication from the configuration
-            var Key = configuration.GetValue<string>("Authentication:SecretKey");
-
-
-
-            services.AddAuthentication(x =>
-            {
-                // Set the default authentication scheme to JWT Bearer
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(a =>
-            {
-                a.RequireHttpsMetadata = false;
-                a.SaveToken = true;
-                a.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Key)),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                };
-            });
-
-
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("Admin", policy => policy.RequireRole("admin"));
-                options.AddPolicy("subAdmin", policy => policy.RequireRole("subadmin"));
-                
-                options.AddPolicy("Instructor", policy => policy.RequireRole("instructor"));
-                options.AddPolicy("Student", policy => policy.RequireRole("student"));
-                options.AddPolicy("MainSubAdmin", policy => policy.RequireRole("main-subadmin"));
-                options.AddPolicy("SubAdmin , Main-SubAdmin", policy => policy.RequireRole("subadmin", "main-subadmin"));
-                options.AddPolicy("Admin&subAdmin", policy =>
-                {
-                    policy.RequireAssertion(a =>
-
-                        a.User.IsInRole("admin") ||
-                        a.User.IsInRole("subadmin")
-
-                    );
-
-                });
-                options.AddPolicy("Main-SubAdmin , SubAdmin", policy =>
-                {
-                    policy.RequireAssertion(a =>
-
-
-                        a.User.IsInRole("subadmin") ||
-                        a.User.IsInRole("main-subadmin")
-
-                    );
-
-                });
-                options.AddPolicy("Admin, Main-SubAdmin , SubAdmin", policy =>
-                {
-                    policy.RequireAssertion(a =>
-
-                        a.User.IsInRole("admin") ||
-                        a.User.IsInRole("subadmin")||
-                        a.User.IsInRole("main-subadmin")
-
-                    );
-
-                });
-                options.AddPolicy("Admin , Instructor", policy =>
-                {
-                    policy.RequireAssertion(a =>
-
-                    a.User.IsInRole("admin") ||
-                    a.User.IsInRole("instructor"));
-                });
-
-                options.AddPolicy("Admin , Main_Sub-Admin", policy =>
-                {
-                    policy.RequireAssertion(a =>
-
-                    a.User.IsInRole("admin") ||
-                    a.User.IsInRole("main-subadmin"));
-                });
-
-                options.AddPolicy("Admin , Student", policy =>
-                {
-                    policy.RequireAssertion(a =>
-
-                    a.User.IsInRole("admin") ||
-                    a.User.IsInRole("student"));
-                });
-
-
-                options.AddPolicy("Main-SubAdmin , Student", policy =>
-                {
-                    policy.RequireAssertion(a =>
-                    a.User.IsInRole("main-subadmin") ||
-                    a.User.IsInRole("student"));
-                });
-
-                options.AddPolicy("Main-SubAdmin ,Instructor , Student", policy =>
-                {
-                    policy.RequireAssertion(a =>
-                    a.User.IsInRole("main-subadmin") ||
-                    a.User.IsInRole("instructor") ||
-                    a.User.IsInRole("student"));
-                }
-               );
-
-
-                options.AddPolicy("Admin , EnrolledInCourse", policy =>
-                 policy.Requirements.Add(new CourseParticipantsAuthorizeRequirement()));
-
-
-                options.AddPolicy("EnrolledInCourse", policy =>
-                policy.Requirements.Add(new EnrolledInCourseRequirement()));
-
-                options.AddPolicy("MaterialInEnrolledCourse", policy =>
-                policy.Requirements.Add(new MaterialInEnrolledCourseRequeriment()));
-
-                options.AddPolicy("InstructorGiveTheCourse", policy =>
-                {
-                    policy.Requirements.Add(new EnrolledInCourseRequirement());
-                    policy.RequireRole("instructor");
-                }
-              
-                
-                );
-
-                options.AddPolicy("InstructorwhoGiveTheMaterial", policy =>
-                {
-                    policy.Requirements.Add(new MaterialInEnrolledCourseRequeriment());
-                    policy.RequireRole("instructor");
-                }
-                );
-                
-                options.AddPolicy("MaterialInEnrolledCourseForStudent", policy =>
-                {
-                    policy.Requirements.Add(new MaterialInEnrolledCourseRequeriment());
-                    policy.RequireRole("student");
-                }
-                );
-
-
-
-
-
-
-
-
-            });
-
-            return services;
-        }
-
-
-
-
-
-
-      
     }
 }

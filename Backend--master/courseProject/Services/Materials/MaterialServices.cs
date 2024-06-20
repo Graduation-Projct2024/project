@@ -1,15 +1,9 @@
 ﻿using AutoMapper;
-using courseProject.Common;
 using courseProject.Core.IGenericRepository;
 using courseProject.Core.Models;
 using courseProject.Core.Models.DTO.MaterialsDTO;
 using courseProject.ServiceErrors;
-using Microsoft.AspNetCore.Authentication;
 using ErrorOr;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using System.Collections;
-using System.Net;
 using courseProject.core.Models;
 
 namespace courseProject.Services.Materials
@@ -18,13 +12,13 @@ namespace courseProject.Services.Materials
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
-        private readonly IHttpContextAccessor httpContextAccessor;
+        
 
-        public MaterialServices(IUnitOfWork unitOfWork , IMapper mapper , IHttpContextAccessor httpContextAccessor)
+        public MaterialServices(IUnitOfWork unitOfWork , IMapper mapper )
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
-            this.httpContextAccessor = httpContextAccessor;
+       
         }
 
     

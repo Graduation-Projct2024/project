@@ -1,12 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using courseProject.Core.Models;
-using courseProject.Core.IGenericRepository;
-using AutoMapper;
-using System.Net;
 using Microsoft.AspNetCore.Authorization;
-using courseProject.Core.Models.DTO.CoursesDTO;
-using courseProject.Services.Courses;
-using courseProject.Services.Skill;
 using courseProject.Services.ContactUs;
 using courseProject.Core.Models.DTO.ContactUsDTO;
 using courseProject.Repository.GenericRepository;

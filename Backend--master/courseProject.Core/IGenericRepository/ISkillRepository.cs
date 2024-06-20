@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace courseProject.Core.IGenericRepository
 {
-    public interface ISkillRepository
+    public interface ISkillRepository :IGenericRepository1<Skills>
     {
 
         public Task addSkillOptionsAsync(Skills skill);

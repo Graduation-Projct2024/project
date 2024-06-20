@@ -1,16 +1,11 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using courseProject.Core.IGenericRepository;
 using courseProject.Core.Models;
 using courseProject.Repository.GenericRepository;
-using System.Net;
 using Microsoft.AspNetCore.Authorization;
 using courseProject.Core.Models.DTO.EventsDTO;
-using courseProject.Services.Courses;
 using courseProject.Services.Events;
-using Microsoft.AspNetCore.JsonPatch;
-using System.Linq.Expressions;
+
 
 namespace courseProject.Controllers
 {
@@ -18,19 +13,17 @@ namespace courseProject.Controllers
     [ApiController]
     public class EventContraller : ControllerBase
     {
-        private readonly IUnitOfWork unitOfWork;
-        private readonly IGenericRepository1<Event> eventRepo;
+       
         private readonly IMapper mapper;
         private readonly IEventServices eventServices;
-        private readonly ApiResponce responce;
+       
 
-        public EventContraller(  IUnitOfWork unitOfWork,IGenericRepository1<Event> EventRepo , IMapper mapper , IEventServices eventServices)
+        public EventContraller( IMapper mapper , IEventServices eventServices)
         {
-            this.unitOfWork = unitOfWork;
-            eventRepo = EventRepo;
+          
             this.mapper = mapper;
             this.eventServices = eventServices;
-            responce = new ApiResponce();
+          
         }
 
 

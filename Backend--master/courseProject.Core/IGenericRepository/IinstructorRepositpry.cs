@@ -25,9 +25,9 @@ namespace courseProject.Core.IGenericRepository
         public Task<IReadOnlyList<InstructorSkills>> GetAllInstructorSkillsRecoredsAsync();
 
         public Task<IReadOnlyList<Instructor_Working_Hours>> getAListOfInstructorDependOnSkillsAndOfficeTime(Guid skillID, TimeSpan startTime, TimeSpan endTime, DateTime date );
-       
-      
-       
+
+        public Task createInstructorAccountAsync(Instructor entity);
+
 
     }
 }

@@ -15,5 +15,7 @@ namespace courseProject.Core.IGenericRepository
        
         public Task<string> GetFileUrl(string fileName);
         public  Task<List<string>> UploadFiles(List<IFormFile> files);
+
+       
     }
 }

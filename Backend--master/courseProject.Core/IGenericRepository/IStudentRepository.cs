@@ -18,8 +18,8 @@ namespace courseProject.Core.IGenericRepository
         public Task<IReadOnlyList<Student>> GetAllStudentsInTheSameCourseAsync(Guid courseId);
       
         public  Task AddInStudentConsulationAsync(StudentConsultations consultation);
-      
 
+        public Task<IReadOnlyList<Student>> GetAllStudentsAsync();
         public Task<List<StudentConsultations>> GetAllStudentsInPublicConsulations(Guid consultationId);
         public Task<Student> getStudentByIdAsync(Guid? id);
       

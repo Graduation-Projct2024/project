@@ -2,11 +2,9 @@
 using courseProject.Core.IGenericRepository;
 using courseProject.Core.Models;
 using courseProject.Core.Models.DTO.FeedbacksDTO;
-using courseProject.Repository.GenericRepository;
 using courseProject.ServiceErrors;
 using ErrorOr;
-using System.Net;
-using static Microsoft.IO.RecyclableMemoryStreamManager;
+
 
 namespace courseProject.Services.Feedbacks
 {

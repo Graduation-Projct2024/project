@@ -1,15 +1,8 @@
-﻿using AutoMapper;
-using courseProject.Common;
-using courseProject.Core.Models.DTO.InstructorsDTO;
+﻿using courseProject.Core.Models.DTO.InstructorsDTO;
 using courseProject.Core.Models;
-using courseProject.Repository.GenericRepository;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 using courseProject.Services.Instructors;
-using courseProject.Core.IGenericRepository;
 using Microsoft.AspNetCore.Authorization;
-using courseProject.Core.Models.DTO.EmployeesDTO;
 using courseProject.Core.Models.DTO.LecturesDTO;
 
 namespace courseProject.Controllers
@@ -25,6 +18,13 @@ namespace courseProject.Controllers
             this.instructorServices = instructorServices;
         }
 
+
+        // <summary>
+        /// Allows an instructor to add office hours.
+        /// </summary>
+        /// <param name="InstructorId">The ID of the instructor adding office hours.</param>
+        /// <param name="_Working_Hours">DTO containing the office hours details.</param>
+        /// <returns>An IActionResult representing the outcome of adding office hours.</returns>
         [HttpPost("AddInstructorOfficeHours")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -43,6 +43,11 @@ namespace courseProject.Controllers
 
         }
 
+
+        /// <summary>
+        /// Retrieves office hours of an instructor by their ID.
+        /// </summary>
+        /// <param name="Instructorid">The ID of the instructor whose office hours to retrieve.</param>
         [HttpGet("GetInstructorOfficeHours")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -58,6 +63,10 @@ namespace courseProject.Controllers
         }
 
 
+
+        /// <summary>
+        /// Retrieves a list of instructors for a dropdown list.
+        /// </summary>
         [HttpGet("GetAllInstructorsList")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -69,6 +78,10 @@ namespace courseProject.Controllers
         }
 
 
+
+        /// <summary>
+        /// Retrieves all instructors with their respective office hours.
+        /// </summary>
         [HttpGet("GetAllInstructorsOfficeHours")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -80,6 +93,12 @@ namespace courseProject.Controllers
         }
 
 
+
+        /// <summary>
+        /// Retrieves a list of instructors available for booking lectures based on provided criteria.
+        /// </summary>
+        /// <param name="lectureForm">DTO containing criteria for selecting instructors.</param>
+        /// <returns>An IActionResult representing the list of instructors or appropriate error responses.</returns>
         [HttpPost("GetListOfInstructorForLectures")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -93,6 +112,9 @@ namespace courseProject.Controllers
         }
 
 
+        /// <summary>
+        /// Adds a skill description or biography for an instructor.
+        /// </summary>
         [HttpPatch("AddASkillDescription")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
