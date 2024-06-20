@@ -136,7 +136,6 @@ export default function UnAccreditEvents() {
     <tr>
       <th scope="col">#</th>
       <th scope="col">Name</th>
-      <th scope="col">Content</th>
       <th scope="col">Category</th>
       <th scope="col">Event Date</th>
       <th scope="col">SubAdmin name</th>
@@ -150,7 +149,6 @@ export default function UnAccreditEvents() {
         {/* {console.log(event.id)} */}
       <th scope="row">{++index}</th>
       <td>{event.name}</td>
-      <td>{event.content}</td>
       <td>{event.category}</td>
       <td>{event.dateOfEvent}</td>
       <td>{event.subAdminFName} {event.subAdminLName}</td>
@@ -197,7 +195,7 @@ export default function UnAccreditEvents() {
         </Dialog>
 
 
-      <Link href={'/Profile'}>
+      <Link href={`/AllEvents/${event.id}`}>
         <button  type="button" className='border-0 bg-white' >
         <FontAwesomeIcon icon={faEye}  className='edit-pen '/>
         </button>

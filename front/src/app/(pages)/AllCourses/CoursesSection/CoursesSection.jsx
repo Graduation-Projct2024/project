@@ -2,17 +2,19 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
-import { Button } from '@mui/material';
+import { Box, Button, CircularProgress } from '@mui/material';
 import axios from 'axios';
 import Link from 'next/link';
+import '../../../(admin)/dashboard/loading.css'
 
 
 export default function CoursesSection() {
     const [courses, setCourses] = useState([]);
     const router = useRouter()
-
+  const [loading,setLoading] = useState(true)
     const fetchCourses = async () => {
         try {
+          setLoading(true)
           const { data } = await axios.get(
             `${process.env.NEXT_PUBLIC_EDUCODING_API}CourseContraller/GetAllAccreditCourses?pageNumber=1&pageSize=3`
           );
@@ -21,6 +23,9 @@ export default function CoursesSection() {
         } catch (error) {
           console.log(error);
         }
+        finally{
+          setLoading(false)
+        }
       
     };
   
@@ -28,6 +33,16 @@ export default function CoursesSection() {
       fetchCourses();
     }, []);
   return (
+     <>
+    {loading ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
+          {/* <CircularProgress /> */}
+          <div className='loading bg-white position-fixed vh-100 w-100 d-flex justify-content-center align-items-center z-3'>
+      <span class="loader"></span>
+    </div>
+        </Box>
+        
+      ) : (
     <>
     <div className="CourseSection py-3">
         <div className="container">
@@ -89,6 +104,6 @@ export default function CoursesSection() {
            
         </div>
         </div>
-    </>
+    </>)}</>
   )
 }

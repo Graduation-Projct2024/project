@@ -83,9 +83,9 @@ body{
 }
 @media screen and (max-width: 576px){
   .profile{
-    width: 200px !important;
-    height: 200px !important;
-    border: #4C5372 12px solid;
+    width: 0 !important;
+    height: 0 !important;
+    visibility: hidden;
   }
 }
 .contactName{

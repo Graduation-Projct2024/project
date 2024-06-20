@@ -136,8 +136,7 @@ const handleCloseUpdate = () => {
     <tr>
       <th scope="col">#</th>
       <th scope="col">Name</th>
-      <th scope="col">Content</th>
-      {/* <th scope="col">Category</th> */}
+      <th scope="col">Category</th>
       <th scope="col">Event Date</th>
       <th scope="col">SubAdmin name</th>
       <th scope="col">Option</th>
@@ -150,8 +149,7 @@ const handleCloseUpdate = () => {
         {/* {console.log(++index)} */}
       <th scope="row">{++index}</th>
       <td>{event.name}</td>
-      <td>{event.content}</td>
-      {/* <td>{event.category}</td> */}
+      <td>{event.category}</td>
       <td>{event.dateOfEvent}</td>
       <td>{event.subAdminName}</td>
       <td className='d-flex gap-1'>
@@ -197,7 +195,7 @@ const handleCloseUpdate = () => {
        </DialogActions>
         </Dialog>
 
-      <Link href={'/Profile'}>
+      <Link href={`/AllEvents/${event.id}`}>
         <button  type="button" className='border-0 bg-white' >
         <FontAwesomeIcon icon={faEye}  className='edit-pen '/>
         </button>

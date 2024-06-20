@@ -311,7 +311,6 @@ const handlePageChange = (event, value) => {
             <th scope="col">ID</th>
             <th scope="col">Name</th>
             <th scope="col">Price</th>
-            <th scope="col">Category</th>
             <th scope="col">Status</th>
             <th scope="col">Start Date</th>
             <th scope="col">Instructor</th>
@@ -325,7 +324,6 @@ const handlePageChange = (event, value) => {
                 <th scope="row">{++index}</th>
                 <td>{course.name}</td>
                 <td>{course.price}</td>
-                <td>{course.category}</td>
                 <td>{course.status}</td>
                 <td>{course.startDate}</td>
                 <td>{course.instructorName}</td>

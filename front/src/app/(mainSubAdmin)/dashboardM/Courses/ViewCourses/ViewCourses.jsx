@@ -1,7 +1,7 @@
 'use client'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useContext, useEffect, useState } from 'react'
-import { faArrowUpFromBracket, faEye, faFilter, faPen } from '@fortawesome/free-solid-svg-icons'
+import { faArrowUpFromBracket, faEllipsisVertical, faEye, faFilter, faPen } from '@fortawesome/free-solid-svg-icons'
 import Link from 'next/link';
 import axios from 'axios';
 import CreateCourse from '../CreateCourse/CreateCourse';
@@ -176,6 +176,7 @@ const handleClickOpen = () => {
           mr: 6,
         }}
       >
+
 <Button sx={{px:2,m:0.5}} variant="contained" className='primaryBg' startIcon={<AddCircleOutlineIcon />} onClick={handleClickOpen}>
   Add New
 </Button>
@@ -238,7 +239,6 @@ const handleClickOpen = () => {
       <th scope="col">#</th>
       <th scope="col">Name</th>
       <th scope="col">Price</th>
-      <th scope="col">Category</th>
       <th scope="col">Status</th>
       <th scope="col">Start Date</th>
       <th scope="col">Instructor</th>
@@ -255,7 +255,6 @@ const handleClickOpen = () => {
       <th scope="row">{++index}</th>
       <td>{course.name}</td>
       <td>{course.price}</td>
-      <td>{course.category}</td>
       <td>{course.status}</td>
       <td>{course.startDate}</td>
       <td>{course.instructorName}</td>

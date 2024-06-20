@@ -15,6 +15,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons';
 import '../../(admin)/dashboard/dashboard.css'
 import { faFacebookF, faGithub, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
+import { Tooltip } from '@mui/material';
 
 export default function Testimonials() {
 
@@ -136,10 +137,10 @@ export default function Testimonials() {
                       <h4 className="card-title contactName"><Link href={`/Testimonials/${contact.id}`}>{contact.fName} {contact.lName}</Link></h4>
                         
                         <div className="d-flex justify-content-center gap-3 pt-3 border-top">
-                          <Link className='social' href="#"><FontAwesomeIcon icon={faLinkedinIn} /></Link>
-                          <Link className='social' href="#"><FontAwesomeIcon icon={faGithub} /></Link>
-                          <Link className='social' href="#"><FontAwesomeIcon icon={faFacebookF} /></Link>
-                          <Link className='social' href="#"><FontAwesomeIcon icon={faEnvelope} /></Link>
+                        <Tooltip title="phone" placement="top">
+                          <Link className='social' href={`tel:${contact.phoneNumber}`}><FontAwesomeIcon icon={faPhone} /></Link></Tooltip>
+                        <Tooltip title="Email" placement="top">
+                          <Link className='social' href={`mailto:${contact.email}`}><FontAwesomeIcon icon={faEnvelope} /></Link></Tooltip>
                         </div>
                       </div>
                     </div>

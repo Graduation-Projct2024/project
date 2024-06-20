@@ -356,10 +356,8 @@ export default function ViewEmployees() {
           <tr>
             <th scope="col">#</th>
             <th scope="col">Name</th>
-            <th scope="col">Email</th>
             <th scope="col">Role</th>
             <th scope="col">Gender</th>
-            <th scope="col">Phone No.</th>
             <th scope="col">Address</th>
             <th scope="col">Option</th>
           </tr>
@@ -372,10 +370,8 @@ export default function ViewEmployees() {
                 <td>
                   {employee.fName} {employee.lName}
                 </td>
-                <td>{employee.email}</td>
                 <td>{employee.type}</td>
                 <td>{employee.gender}</td>
-                <td>{employee.phoneNumber}</td>
                 <td>{employee.address}</td>
 
                 <td className="d-flex gap-1">
