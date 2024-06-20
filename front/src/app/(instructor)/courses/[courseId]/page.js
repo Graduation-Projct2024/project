@@ -30,9 +30,12 @@ import AddFile from '../../components/Add/AddFile.jsx';
 import AddLink from '../../components/Add/AddLink.jsx';
 import AddAnnouncement from '../../components/Add/AddAnnouncement.jsx';
 import ViewTask from '../../components/View/ViewTask.jsx';
-import { FormControl, InputLabel, MenuItem, Pagination, Select } from '@mui/material';
+import { FormControl, InputLabel, MenuItem, Pagination, Select, Tooltip } from '@mui/material';
 import { UserContext } from '../../../../context/user/User.jsx';
 import Chip from '@mui/material/Chip';
+import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Swal from 'sweetalert2';
 
 export default function page() {
   const {userToken, setUserToken, userData}=useContext(UserContext);
@@ -159,6 +162,7 @@ const handleCloseViewTaskDialog = () => {
     const { courseId } = useParams();
     // console.log(courseId);
     const [courseName, setCourseName]=useState();
+    const [course, setCourse]=useState({});
     const getCourses = async () => {
 if(userToken){
       const data = await axios.get(
@@ -167,9 +171,47 @@ if(userToken){
         {headers :{Authorization:`Bearer ${userToken}`}}
 
       );
-    
+    setCourse(data.data.result)
+    // console.log(data)
       setCourseName(data.data.result.name);
     }};
+    const accreditCourse = async (courseId , Status) => {
+      if (userData) {
+        Swal.fire({
+          title: `Are you sure?`,
+          text: "You won't be able to revert this!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes!"
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            try {
+              const { data } = await axios.patch(`${process.env.NEXT_PUBLIC_EDUCODING_API}CourseContraller/accreditCourse?courseId=${courseId}`, {Status},
+                {
+                  headers: {
+                    Authorization: `Bearer ${userToken}`,
+                  },
+                });
+    
+              console.log(data);
+              if (Status == "finish") {
+                Swal.fire({
+                  title: `Course Finished Successully`,
+                  text: "The status of course set to finish",
+                  icon: "success"
+                });
+              } 
+    
+            } catch (error) {
+              console.log(error);
+            }
+          }
+        });
+      }
+    };
+  
     const getCourseMaterial = async () => {
       if(userToken){
         const { data } = await axios.get(
@@ -238,9 +280,35 @@ if(userToken){
           mr: 6,
         }}
       >
+               
 <Button sx={{px:2}} variant="contained" startIcon={<AddCircleOutlineIcon />} onClick={handleClickOpen}>
   Add New
 </Button>
+  <div className="dropdown pt-1 px-2">
+                   <Tooltip title="Finish this Course?" placement="top">
+                  <button
+                    className="dropdown-toggle border-0 bg-white edit-pen"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                   <FontAwesomeIcon icon={faEllipsisVertical} />
+                  </button>
+                  </Tooltip>
+                  <ul className="dropdown-menu">
+                  <li>
+                      <button
+                        className="dropdown-item"
+                        href="#"
+                        onClick={()=>accreditCourse(courseId,"finish")}
+                        disabled = {course.status === 'finish' }
+                      >
+                        Finish
+                      </button>
+                    </li>
+                   
+                  </ul>
+                </div>
       </Box>
       <Dialog
         fullScreen={fullScreen}

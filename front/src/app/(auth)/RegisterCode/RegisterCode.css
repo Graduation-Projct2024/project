@@ -26,8 +26,8 @@ body{
     border-radius: 10px;
 }
 .animationForget{
-    width: 500px;
-    height: 500px;
+    width: 500px !important;
+    height: 500px !important;
 }
 .addEmailForget{
     border: 1px solid #4C5372;

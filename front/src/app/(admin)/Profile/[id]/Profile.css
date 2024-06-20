@@ -69,9 +69,9 @@ body{
 .info1{
   border-right: #7C7E9D 1px solid;
 }
-.info2{
+/* .info2{
   border-left: #7C7E9D 1px solid;
-}
+} */
 @media screen and (max-width: 1199px){
   .info1{
     border-right: 0;
@@ -83,9 +83,9 @@ body{
 }
 @media screen and (max-width: 576px){
   .profile{
-    width: 200px !important;
-    height: 200px !important;
-    border: #4C5372 12px solid;
+    width: 0 !important;
+    height: 0 !important;
+    visibility: hidden;
   }
 }
 .contactName{

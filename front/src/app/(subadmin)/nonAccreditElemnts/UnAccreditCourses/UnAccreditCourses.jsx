@@ -134,11 +134,7 @@ const handleCloseUpdate = () => {
             <th scope="col">#</th>
             <th scope="col">Name</th>
             <th scope="col">Price</th>
-            <th scope="col">Category</th>
             <th scope="col">Start Date</th>
-            <th scope="col">LastDate to enroll</th>
-            <th scope="col">Total hours</th>
-            <th scope="col">Max # of Students</th>
             <th scope="col">Instructor</th>
             <th scope="col">Actions</th>
           </tr>
@@ -150,11 +146,7 @@ const handleCloseUpdate = () => {
                 <th scope="row">{++index}</th>
                 <td>{course.name}</td>
                 <td>{course.price}</td>
-                <td>{course.category}</td>
                 <td>{course.startDate}</td>
-                <td>{course.deadline}</td>
-                <td>{course.totalHours}</td>
-                <td>{course.limitNumberOfStudnet}</td>
                 <td>{course.instructorName}</td>
                 <td className="d-flex gap-1">
                 <button className="border-0 bg-white" type="button" onClick={() => handleClickOpenUpdate(course.id)}>
