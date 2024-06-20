@@ -3,7 +3,7 @@ using courseProject.Core.Models;
 using courseProject.Core.Models.DTO.InstructorsDTO;
 using courseProject.ServiceErrors;
 using ErrorOr;
-using System.Net;
+
 
 namespace courseProject.Services.Skill
 {
@@ -26,7 +26,7 @@ namespace courseProject.Services.Skill
             Skills skills = new Skills();
             skills.name = skillName;
             await unitOfWork.skillRepository.addSkillOptionsAsync(skills);
-            await unitOfWork.AdminRepository.saveAsync();
+            await unitOfWork.skillRepository.saveAsync();
             return skillName;
 
 

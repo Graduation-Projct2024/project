@@ -1,17 +1,6 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using courseProject.Core.IGenericRepository;
+﻿using Microsoft.AspNetCore.Mvc;
 using courseProject.Core.Models;
-using System.Net;
-using Microsoft.EntityFrameworkCore;
-using courseProject.Repository.Data;
-using System.Linq;
-using System.Collections;
-using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.AspNetCore.Authorization;
-using courseProject.Repository.GenericRepository;
 using courseProject.Core.Models.DTO.MaterialsDTO;
 using courseProject.Services.Materials;
 
@@ -21,27 +10,25 @@ namespace courseProject.Controllers
     [ApiController]
     public class MaterialControllar : ControllerBase
     {
-        private readonly IUnitOfWork unitOfWork;
-        private readonly IGenericRepository1<CourseMaterial> materialRepo;
-        private readonly IMapper mapper;
-        private readonly projectDbContext dbContext;
+      
         private readonly IMaterialServices materialServices;
-        protected ApiResponce response;
+        
 
-        public MaterialControllar( IUnitOfWork unitOfWork , IGenericRepository1<CourseMaterial> materialRepo ,IMapper mapper , projectDbContext dbContext , IMaterialServices materialServices )
+        public MaterialControllar( IMaterialServices materialServices )
         {
-            this.unitOfWork = unitOfWork;
-            this.materialRepo = materialRepo;
-            this.mapper = mapper;
-            this.dbContext = dbContext;
+           
             this.materialServices = materialServices;
-            response = new ApiResponce();
+           
        }
 
 
-        
 
 
+        /// <summary>
+        /// Adds a task.
+        /// </summary>
+        /// <param name="taskDTO">The DTO containing information about the task to add.</param>
+        /// <returns>An IActionResult representing the result of adding the task or appropriate error responses.</returns>
         [HttpPost("AddTask")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -56,6 +43,11 @@ namespace courseProject.Controllers
         }
 
 
+
+
+        /// <summary>
+        /// Adds a file.
+        /// </summary>
         [HttpPost("AddFile")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -69,6 +61,13 @@ namespace courseProject.Controllers
 
         }
 
+
+
+
+
+        /// <summary>
+        /// Adds an Announcement.
+        /// </summary>
         [HttpPost("AddAnnouncement")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -84,6 +83,11 @@ namespace courseProject.Controllers
         }
 
 
+
+
+        /// <summary>
+        /// Adds a link.
+        /// </summary>
         [HttpPost("AddLink")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -101,6 +105,13 @@ namespace courseProject.Controllers
 
 
 
+
+        /// <summary>
+        /// Edits a task by ID.
+        /// </summary>
+        /// <param name="id">The ID of the task to edit.</param>
+        /// <param name="taskDTO">The DTO containing updated information about the task.</param>
+        /// <returns>An IActionResult representing the result of editing the task or appropriate error responses.</returns>
         [HttpPut("EditTask")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -118,6 +129,10 @@ namespace courseProject.Controllers
 
 
 
+
+        /// <summary>
+        /// Edits a file by ID.
+        /// </summary>
         [HttpPut("EditFile")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -134,6 +149,10 @@ namespace courseProject.Controllers
 
 
 
+
+        /// <summary>
+        /// Edits an Announcement by ID.
+        /// </summary>
         [HttpPut("EditAnnouncement")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -149,6 +168,10 @@ namespace courseProject.Controllers
 
 
 
+
+        /// <summary>
+        /// Edits a link by ID.
+        /// </summary>
         [HttpPut("EditLink")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -163,6 +186,13 @@ namespace courseProject.Controllers
 
 
 
+
+
+        /// <summary>
+        /// Deletes a material by ID.
+        /// </summary>
+        /// <param name="id">The ID of the material to delete.</param>
+        /// <returns>An IActionResult representing the result of deleting the material or appropriate error responses.</returns>
         [HttpDelete("DeleteMaterial")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -176,6 +206,14 @@ namespace courseProject.Controllers
         }
 
 
+
+
+
+        /// <summary>
+        /// Retrieves material details by its ID.
+        /// </summary>
+        /// <param name="id">The ID of the material to retrieve.</param>
+        /// <returns>An IActionResult representing the retrieved material or appropriate error responses.</returns>
         [HttpGet("GetMaterialById")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -189,6 +227,15 @@ namespace courseProject.Controllers
         }
 
 
+
+
+
+        /// <summary>
+        /// Retrieves all materials associated with a course or consultation.
+        /// </summary>
+        /// <param name="CourseId">Optional: The ID of the course to retrieve materials for.</param>
+        /// <param name="ConsultationId">Optional: The ID of the consultation to retrieve materials for.</param>
+        /// <returns>An IActionResult representing the retrieved materials or appropriate error responses.</returns>
         [HttpGet("GetAllMaterial")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -201,6 +248,16 @@ namespace courseProject.Controllers
             return Ok(new ApiResponce { Result = AllMaterials.Value });
         }
 
+         
+
+
+
+        /// <summary>
+        /// Changes the visibility status of a material.
+        /// </summary>
+        /// <param name="Id">The ID of the material to change its status.</param>
+        /// <param name="isHidden">Boolean flag indicating whether the material should be hidden (true) or shown (false).</param>
+        /// <returns>An IActionResult representing the status change or appropriate error responses.</returns>
         [HttpPatch("HideOrShowMaterials")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]

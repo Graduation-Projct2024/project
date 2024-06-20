@@ -1,27 +1,10 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using courseProject.Core.IGenericRepository;
 using courseProject.Core.Models;
-using courseProject.Repository.Data;
 using courseProject.Repository.GenericRepository;
-using System.Net;
-using courseProject.core.Models;
-using Microsoft.AspNetCore.Mvc.Formatters;
-using courseProject.Core.Models.DTO.CoursesDTO;
 using courseProject.Core.Models.DTO.EmployeesDTO;
-using courseProject.Core.Models.DTO.LecturesDTO;
-using courseProject.Core.Models.DTO.InstructorsDTO;
-using courseProject.Core.Models.DTO.StudentsDTO;
-using courseProject.Core.Models.DTO.UsersDTO;
-using courseProject.Core.Models.DTO.RegisterDTO;
 using courseProject.Services.Employees;
-using courseProject.Services.Instructors;
-using courseProject.Services.SubAdmins;
-using courseProject.Services.Users;
+
 
 namespace courseProject.Controllers
 {
@@ -29,27 +12,19 @@ namespace courseProject.Controllers
     [ApiController]
     public class EmployeeController : ControllerBase
     {
-        private readonly projectDbContext dbContext;
-        private readonly IMapper mapper;
+  
         private readonly IEmployeeServices employeeServices;
-        private readonly ISubAdminServices subAdminServices;
-        private readonly IinstructorServices instructorServices;
 
-
-
-
-        public EmployeeController(projectDbContext dbContext,  IMapper mapper , IEmployeeServices employeeServices  ,
-             ISubAdminServices subAdminServices , IinstructorServices instructorServices)
-            
-        {
-            this.dbContext = dbContext;          
-            this.mapper = mapper;
+        public EmployeeController( IEmployeeServices employeeServices )                       
+        {        
             this.employeeServices = employeeServices;
-            this.subAdminServices = subAdminServices;
-            this.instructorServices = instructorServices;
-
         }
 
+
+        /// <summary>
+        /// Retrieves all employees with pagination.
+        /// </summary>
+        /// <param name="paginationRequest">The pagination request containing page number and page size.</param>
         [HttpGet("GetAllEmployee")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -61,6 +36,12 @@ namespace courseProject.Controllers
         }
 
 
+
+        /// <summary>
+        /// Creates a new employee. This action can only be performed by an admin.
+        /// </summary>
+        /// <param name="model">The DTO containing the details of the employee to create.</param>
+        /// <returns>An IActionResult indicating the outcome of the employee creation.</returns>
 
         [HttpPost("CreateEmployee")]
         [ProducesResponseType(200)]
@@ -79,10 +60,14 @@ namespace courseProject.Controllers
 
              return Ok(new ApiResponce { Result="The employee is create successfully" } );
         }
-    
 
 
 
+        /// <summary>
+        /// Retrieves an employee by their ID.
+        /// </summary>
+        /// <param name="id">The ID of the employee to retrieve.</param>
+        /// <returns>An IActionResult containing the employee details or appropriate error responses.</returns>
         [HttpGet("GetEmployeeById")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -96,6 +81,12 @@ namespace courseProject.Controllers
         }
 
 
+
+        /// <summary>
+        /// Updates employee details from an admin perspective.
+        /// </summary>
+        /// <param name="id">The ID of the employee to update.</param>
+        /// <param name="EmpolyeeModel">The DTO containing the updated employee details.</param>
         [HttpPut("UpdateEmployeeFromAdmin")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -112,9 +103,13 @@ namespace courseProject.Controllers
         }
 
 
-       
 
 
+        /// <summary>
+        /// Edits the role of a user between SubAdmin and MainSubAdmin roles.
+        /// </summary>
+        /// <param name="userId">The ID of the user whose role is to be edited.</param>
+        /// <param name="role">The new role to assign to the user.</param>
         [HttpPatch("EditroleBetweenSubAdmin&MainSubAdmin")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]

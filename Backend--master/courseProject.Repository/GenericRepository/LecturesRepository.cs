@@ -2,11 +2,7 @@
 using courseProject.Core.Models;
 using courseProject.Repository.Data;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace courseProject.Repository.GenericRepository
 {
@@ -20,6 +16,8 @@ namespace courseProject.Repository.GenericRepository
         }
 
 
+
+       // Checks if the selected time is available for any instructor on a given date.
         public async Task<IReadOnlyList<Instructor_Working_Hours>> showifSelectedTimeIsAvilable(TimeSpan startTime, TimeSpan endTime, DateTime date)
         {
             return await dbContext.Instructor_Working_Hours.Include(x => x.instructor).ThenInclude(x => x.Consultations)
@@ -32,10 +30,7 @@ namespace courseProject.Repository.GenericRepository
              (startTime <= y.startTime && endTime >= y.endTime)
          )))
      .ToListAsync();
-            //.Where(x=>!x.instructor.Consultations.Any(y=> y.date==date.Date && y.startTime==startTime && y.endTime==endTime))
-            //.Where(x=>!x.instructor.Consultations.Any(y=> startTime>y.startTime && startTime<y.endTime && y.date==date))
-            //.Where(x => !x.instructor.Consultations.Any(y => endTime > y.startTime && endTime < y.endTime && y.date==date))
-            //.Where(x=>x.day == date.DayOfWeek &&x.startTime>= startTime&&x.endTime <=endTime  ).ToListAsync();                 
+                           
         }
 
 
@@ -67,10 +62,11 @@ namespace courseProject.Repository.GenericRepository
                                                                .ThenInclude(x => x.user)
                                                        .Include(x => x.Student)
                                                                .ThenInclude(x => x.user)
-                                                       // .DistinctBy(x=>x.consultationId)
+                                                       
                                                        .ToListAsync();
         }
 
+        // get all private consultations , where student by student id does not enroll in it 
         public async Task<IReadOnlyList<StudentConsultations>> GetAllOtherPrivateConsultationsAsync(Guid studentId)
         {
             return await dbContext.StudentConsultations.Where(x => x.consultation.type.ToLower() == "private")
@@ -82,6 +78,8 @@ namespace courseProject.Repository.GenericRepository
                                                                .ThenInclude(x => x.user)
                                                        .ToListAsync();
         }
+
+
 
         public async Task<IReadOnlyList<StudentConsultations>> GetAllBookedPrivateConsultationsAsync(Guid studentId)
         {

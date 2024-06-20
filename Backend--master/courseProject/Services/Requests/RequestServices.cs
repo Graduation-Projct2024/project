@@ -3,10 +3,9 @@ using courseProject.Core.IGenericRepository;
 using courseProject.Core.Models;
 using courseProject.Core.Models.DTO.CoursesDTO;
 using courseProject.Core.Models.DTO.StudentsDTO;
-using courseProject.Repository.GenericRepository;
 using courseProject.ServiceErrors;
 using ErrorOr;
-using System.Net;
+
 
 namespace courseProject.Services.Requests
 {

@@ -2,19 +2,15 @@
 using courseProject.Core.Models;
 using courseProject.Repository.Data;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace courseProject.Repository.GenericRepository
 {
-    public class SkillRepository : ISkillRepository
+    public class SkillRepository :GenericRepository1<Skills> , ISkillRepository
     {
         private readonly projectDbContext dbContext;
 
-        public SkillRepository(projectDbContext dbContext)
+        public SkillRepository(projectDbContext dbContext) :base(dbContext) 
         {
             this.dbContext = dbContext;
         }
@@ -59,7 +55,7 @@ namespace courseProject.Repository.GenericRepository
             dbContext.InstructorSkills.Remove(instructorSkills);
         }
 
-
+        // get all skilss where instructor by instructor id soes not selected it 
         public async Task<IReadOnlyList<Skills>> getAllUnregisteredSkillsOfTheInstructor(Guid instructorId)
         {
             return await dbContext.Skills.Where(x => !x.instructorSkills.Any(y => y.InstructorId == instructorId)).ToListAsync();

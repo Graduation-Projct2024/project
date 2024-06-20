@@ -42,7 +42,7 @@ namespace courseProject.Emails
             var message = new MimeMessage();
 
             // Set the sender's email address and display name
-            message.From.Add(new MailboxAddress("Course Academy", _emailConfig.From));
+            message.From.Add(new MailboxAddress("EduCoding Academy", _emailConfig.From));
 
             // Set the recipient's email address
             message.To.Add(new MailboxAddress("", toEmail));

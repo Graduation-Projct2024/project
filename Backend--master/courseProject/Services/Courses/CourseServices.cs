@@ -1,17 +1,12 @@
 ﻿using AutoMapper;
-using courseProject.Common;
 using courseProject.Core.IGenericRepository;
 using courseProject.Core.Models;
-using courseProject.Core.Models.DTO;
 using courseProject.Core.Models.DTO.CoursesDTO;
-using courseProject.Core.Models.DTO.StudentsDTO;
-using courseProject.Repository.GenericRepository;
 using courseProject.ServiceErrors;
 using ErrorOr;
 using Microsoft.AspNetCore.JsonPatch;
-using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
-using System.Net;
+
 
 namespace courseProject.Services.Courses
 {
@@ -33,14 +28,14 @@ namespace courseProject.Services.Courses
           
             var getCourse = await unitOfWork.CourseRepository.GetCourseByIdAsync(courseId);
             if (getCourse == null) return ErrorCourse.NotFound;
-           // var dateAdded = getCourse.dateOfAdded;
+         
             mapper.Map(editedCourse, getCourse);
             if (editedCourse.image != null)
             {
                 getCourse.ImageUrl = "Files\\" + await unitOfWork.FileRepository.UploadFile1(editedCourse.image);
             }
             getCourse.dateOfUpdated = DateTime.Now;
-           // getCourse.dateOfAdded = dateAdded;
+        
             
             if (getCourse.status.ToLower() != "accredit") return ErrorCourse.NoContent;          
             await unitOfWork.CourseRepository.updateCourse(getCourse);
@@ -60,7 +55,7 @@ namespace courseProject.Services.Courses
                 }
             }
 
-          ///  CommonClass.EditImageInFor(courses, null);
+          
             return courses;
             
         }
@@ -75,8 +70,7 @@ namespace courseProject.Services.Courses
                 getCourse.ImageUrl = await unitOfWork.FileRepository.GetFileUrl(getCourse.ImageUrl);
             }
            
-        //    CommonClass.EditImageInFor(null, getCourse);
-            //if (getCourse == null) return ErrorCourse.NotFound;
+       
             return getCourse is null ? ErrorCourse.NotFound : getCourse;
         }
 
@@ -90,7 +84,7 @@ namespace courseProject.Services.Courses
                     course.ImageUrl = await unitOfWork.FileRepository.GetFileUrl(course.ImageUrl);
                 }
             }
-       //     CommonClass.EditImageInFor(courses, null);
+     
             return courses;
             
         }
@@ -106,7 +100,7 @@ namespace courseProject.Services.Courses
                     course.ImageUrl = await unitOfWork.FileRepository.GetFileUrl(course.ImageUrl);
                 }
             }
-        //    CommonClass.EditImageInFor(courses, null);
+        
             return courses;
         }
 
@@ -167,14 +161,13 @@ namespace courseProject.Services.Courses
         {
             var getCourse = await unitOfWork.CourseRepository.GetCourseByIdAsync(courseId);
             if (getCourse == null) return ErrorCourse.NotFound;
-          //  unitOfWork.CourseRepository.DetachEntity(getCourse);
+          
             mapper.Map(course, getCourse);
             if (course.image != null)
             {
                 getCourse.ImageUrl = "Files\\" + await unitOfWork.FileRepository.UploadFile1(course.image);
             }
-            // Re-attach and update the course entity
-          //  unitOfWork.CourseRepository.AttachEntity(getCourse);
+            
             await unitOfWork.CourseRepository.updateCourse(getCourse);
             await unitOfWork.CourseRepository.saveAsync() ;
             return Result.Updated;
@@ -193,7 +186,7 @@ namespace courseProject.Services.Courses
                     course.ImageUrl = await unitOfWork.FileRepository.GetFileUrl(course.ImageUrl);
                 }
             }
-          //  CommonClass.EditImageInFor(allUndefinedCourses, null);
+       
             return allUndefinedCourses.ToErrorOr() ;
 
             
@@ -211,7 +204,7 @@ namespace courseProject.Services.Courses
                     course.ImageUrl = await unitOfWork.FileRepository.GetFileUrl(course.ImageUrl);
                 }
             }
-          //  CommonClass.EditImageInFor(courseFond, null);
+   
             return courseFond.ToErrorOr();
             
         }
@@ -247,7 +240,7 @@ namespace courseProject.Services.Courses
                     course.ImageUrl = await unitOfWork.FileRepository.GetFileUrl(course.ImageUrl);
                 }
             }
-         //   CommonClass.EditImageInFor(courseFound, null);
+       
             return enrolledCourses.ToErrorOr();
         }
     }

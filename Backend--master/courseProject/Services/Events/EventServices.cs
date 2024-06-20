@@ -2,13 +2,11 @@
 using courseProject.Core.IGenericRepository;
 using courseProject.Core.Models;
 using courseProject.Core.Models.DTO.EventsDTO;
-using courseProject.Repository.GenericRepository;
 using courseProject.ServiceErrors;
 using ErrorOr;
 using Microsoft.AspNetCore.JsonPatch;
 using System.Linq.Expressions;
-using System.Net;
-using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
+
 
 namespace courseProject.Services.Events
 {

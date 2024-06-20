@@ -1,26 +1,17 @@
-﻿using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Protocols;
+﻿using Microsoft.EntityFrameworkCore;
 using courseProject.Core.IGenericRepository;
 using courseProject.Core.Models;
 using courseProject.Repository.Data;
-
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using courseProject.Core.Models.DTO;
+using Microsoft.EntityFrameworkCore.Storage;
 
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using MailKit.Search;
 
 namespace courseProject.Repository.GenericRepository
 {
     public class GenericRepository1<T> : IGenericRepository1<T> where T : class
     {
         private readonly projectDbContext dbContext;
+        private IDbContextTransaction _currentTransaction;
 
 
         public GenericRepository1(projectDbContext dbContext )
@@ -33,18 +24,7 @@ namespace courseProject.Repository.GenericRepository
 
       
 
-        public async Task<IReadOnlyList<T>> GetAllStudentsAsync()
-        {
-            if (typeof(T) == typeof(Student))
-            {
-                return (IReadOnlyList<T>)await dbContext.students.Include(x => x.user).Where(x => x.user.IsVerified == true)
-                    .OrderByDescending(x=>x.user.dateOfAdded)
-                    .ToListAsync();
-
-            }
-            return await dbContext.Set<T>().ToListAsync();
-
-        }
+       
 
 
         public async Task<IReadOnlyList<T>> GetAllEmployeeAsync()
@@ -61,88 +41,13 @@ namespace courseProject.Repository.GenericRepository
         }
 
 
-        public async Task<IReadOnlyList<T>> GetAllEventsAsync(string? dateStatus)
-        {
-            // Check if the generic type T is Event
-            if (typeof(T) == typeof(Event))
-            {
-                // Query to get events with status "accredit" and include related SubAdmin and User entities
-                var events = dbContext.events
-                    .Include(x => x.SubAdmin.user)
-                    .Where(x => x.status == "accredit");
-
-                // Filter events based on the dateStatus parameter
-                if (dateStatus == "upcoming")
-                {
-                    // Get events with dates in the future or today
-                    events = events.Where(x => x.dateOfEvent.Value.Date >= DateTime.UtcNow.Date);
-                }
-                else if (dateStatus == "expired")
-                {
-                    // Get events with dates in the past
-                    events = events.Where(x => x.dateOfEvent.Value.Date < DateTime.UtcNow.Date);
-                }
-                // Return the list of events as IReadOnlyList<T>
-                return (IReadOnlyList<T>)await events.ToListAsync();
-            }
-            // If T is not Event, return all entities of type T
-            return await dbContext.Set<T>().ToListAsync();
-        }
-
-
-        public async Task<IReadOnlyList<T>> GetAllStudentsForContactAsync()
-        {
-            if(typeof(T) == typeof(Student))
-            {
-                return (IReadOnlyList<T>)await dbContext.students.Include(x => x.user).ToListAsync();
-            }
-            return await dbContext.Set<T>().ToListAsync();
-        }
-
-
-
-
-        public async Task<IReadOnlyList<T>> GetAllCoursesForAccreditAsync()
-        {
-            if(typeof(T) == typeof(Course))
-            {
-                return (IReadOnlyList<T>) await dbContext.courses
-                   
-                    .Include(x => x.SubAdmin.user).Include(x => x.Instructor.user).OrderByDescending(x=>x.dateOfAdded).ToListAsync();
-            }
-            return await dbContext.Set<T>().ToListAsync();
-        }
-
-        public async Task<IReadOnlyList<T>> GetAllEventsForAccreditAsync()
-        {
-            if(typeof(T) == typeof(Event))
-            {
-                return (IReadOnlyList<T>)await dbContext.events
-                    
-                    .Include(x => x.SubAdmin.user).OrderByDescending(x=>x.dateOfAdded).ToListAsync();
-            }
-            return await dbContext.Set<T>().ToListAsync();
-        }
-
-        public async Task createSubAdminAccountAsync(T entity)
-        {
-             await dbContext.Set<T>().AddAsync(entity);
-        }
+       
 
         public async Task<int> saveAsync()
         => await dbContext.SaveChangesAsync();
 
-        public async Task createInstructorAccountAsync(T entity)
-        {
-            await dbContext.Set<T>().AddAsync(entity);
-        }
+        
 
-        public async Task updateSubAdminAsync(T entity)
-        {
-            dbContext.Entry(entity).State = EntityState.Modified;
-          //  dbContext.Set<T>().Update(entity);
-            
-        }
 
         public async Task<T> GetEmployeeById(Guid id)
         {
@@ -160,99 +65,27 @@ namespace courseProject.Repository.GenericRepository
         }
 
 
-    
-
-      
-
-
-        public async Task<T> ViewProfileAsync(Guid id ,string role)
+        public async Task updateEmployeeAsync(T entity)
         {
-            if(role.ToLower() == "admin")
-            {
-              return (T)(object) await dbContext.users.Include(x => x.admin).FirstOrDefaultAsync(x => x.UserId == id);
-            }
-            if (role.ToLower() == "subadmin" || role.ToLower() == "main-subadmin")
-            {
-                return (T)(object)await dbContext.users.Include(x => x.subadmin).FirstOrDefaultAsync(x => x.UserId == id);
-            }
-            if (role.ToLower() == "instructor")
-            {
-                return (T)(object)await dbContext.users.Include(x => x.instructor).FirstOrDefaultAsync(x => x.UserId == id);
-            }
-            if (role.ToLower() == "student")
-            {
-                return (T)(object)await dbContext.users.Include(x => x.student).FirstOrDefaultAsync(x => x.UserId == id);
-            }
-            return await dbContext.Set<T>().FindAsync(id);
-        }
-
-        public async Task<User> GetAdminId()
-        {
-            return await dbContext.users.FirstOrDefaultAsync(x=>x.role.ToLower()=="admin");
-        }
-
-        public async Task<IReadOnlyList<T>> Search(object searchObject, string searchQuery)
-        {
-
-            //searchQuery = "%" + searchQuery.ToLower() + "%";
-
-            //var Coursesql = @"
-            //SELECT * FROM courses 
-            //WHERE LOWER(name) LIKE {0} 
-            //OR LOWER(description) LIKE {0} 
-            //OR LOWER(price) LIKE {0} 
-            //OR LOWER(category) LIKE {0} 
-            //OR LOWER(status) LIKE {0}";
-
-            var query = dbContext.Set<T>().AsQueryable();
-
-            // Get all properties of the searchObject
-            var properties = searchObject.GetType().GetProperties();
-
-            foreach (var propertyInfo in properties)
-            {
-                var propertyValue = propertyInfo.GetValue(searchObject);
-
-                if (propertyValue != null)
-                {
-                    // Check if the property type is string, int, or DateTime
-
-                    query = query.Where(p => EF.Functions.Like(propertyInfo.GetValue(p).ToString().ToLower(), $"%{searchQuery.ToLower()}%"));
-
-                }
-
+            dbContext.Entry(entity).State = EntityState.Modified;
             
         }
-            return await query.ToListAsync();
 
+        //Begins a new transaction asynchronously if there is no current transaction.
+        public async Task<IDbContextTransaction> BeginTransactionAsync()
+        {
+            if (_currentTransaction != null)
+            {
+                return null;
+            }
+
+            _currentTransaction = await dbContext.Database.BeginTransactionAsync();
+            return _currentTransaction;
         }
 
 
 
-
-        //public async Task<T> GetUserInformationByIdAsync(int id)
-        //{
-        //    if(typeof(T) == typeof(Admin))
-        //    {
-        //        return 
-        //    }
-        //}
-
-
-        //public async Task<IEnumerable<T>> createSubAdminAccountAsync(SubAdmin subadmin , User user)
-        //{
-        //   var sub = dbContext.subadmins.Where(x=>x.Id == subadmin.Id).FirstOrDefaultAsync();
-        //    var auser = dbContext.users.Where(x => x.email == user.email).FirstOrDefaultAsync();
-        //    var subAdminUser = new User()
-        //    {
-        //        email = user.email,
-        //    };
-        //    dbContext.users.AddAsync(user);
-        //    dbContext.SaveChanges();
-        //    dbContext.subadmins.AddAsync(subadmin);
-        //    dbContext.SaveChanges();
-        //    return true;
-        //}
+       
 
     }
 }

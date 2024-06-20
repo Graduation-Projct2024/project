@@ -6,9 +6,8 @@ using courseProject.ServiceErrors;
 using ErrorOr;
 using Microsoft.AspNetCore.JsonPatch;
 using System.Linq.Expressions;
-using System.Net;
 using courseProject.Emails;
-using courseProject.Repository.GenericRepository;
+
 
 namespace courseProject.Services.StudentCourses
 {

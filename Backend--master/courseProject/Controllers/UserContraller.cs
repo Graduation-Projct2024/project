@@ -1,24 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using courseProject.Core.IGenericRepository;
 using courseProject.Core.Models;
-using System.Net;
-using System.Threading.Tasks.Dataflow;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using AutoMapper;
-using courseProject.Repository.Data;
-using Microsoft.EntityFrameworkCore;
-using courseProject.Repository.GenericRepository;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication;
 using courseProject.Core.Models.DTO.UsersDTO;
 using courseProject.Core.Models.DTO.LoginDTO;
 using courseProject.Core.Models.DTO.RegisterDTO;
 using Microsoft.Extensions.Caching.Memory;
-using BCrypt.Net;
 using courseProject.Services.Users;
-using courseProject.Common;
+
 
 
 namespace courseProject.Controllers
@@ -28,26 +17,27 @@ namespace courseProject.Controllers
     public class UserContraller : ControllerBase
     {
        
-        private readonly IUnitOfWork unitOfWork;
-        private readonly IMapper mapper;
-        private readonly projectDbContext dbContext;
+      
         protected ApiResponce response;
    
         private readonly IMemoryCache memoryCache;
         private readonly IUserServices userServices;
 
-        public UserContraller(   IUnitOfWork unitOfWork, IMapper mapper, projectDbContext dbContext, IMemoryCache memoryCache , IUserServices userServices)
+        public UserContraller( IMemoryCache memoryCache , IUserServices userServices)
         {
 
-            this.unitOfWork = unitOfWork;
-            this.mapper = mapper;
-            this.dbContext = dbContext;
-            this.response = new();
-       
             this.memoryCache = memoryCache;
             this.userServices = userServices;
         }
 
+
+
+
+
+        /// <summary>
+        /// Endpoint to retrieve the User ID from the token.
+        /// </summary>
+        /// <returns>An IActionResult containing the User ID extracted from the token.</returns>
         [HttpGet("GetUserIdFromToken")]
         [Authorize]
         public IActionResult GetUserIdFromToken()
@@ -59,9 +49,18 @@ namespace courseProject.Controllers
             }
             return Ok(Id);
         }
-        
-       
 
+
+
+
+
+
+
+        /// <summary>
+        /// Endpoint for user login.
+        /// </summary>
+        /// <param name="loginRequestDTO">DTO containing login credentials.</param>
+        /// <returns>An IActionResult containing the result of the login attempt.</returns>
         [HttpPost("Login")]
         [AllowAnonymous]
         
@@ -74,6 +73,16 @@ namespace courseProject.Controllers
 
 
 
+
+
+
+
+
+        /// <summary>
+        /// Endpoint for user registration.
+        /// </summary>
+        /// <param name="model">DTO containing registration details.</param>
+        /// <returns>An IActionResult containing the result of the registration attempt.</returns>
         [HttpPost("Register")]
         [AllowAnonymous]
         public async Task<IActionResult> Register(RegistrationRequestDTO model)
@@ -82,9 +91,20 @@ namespace courseProject.Controllers
             if (registeUser.IsError) return Ok(new ApiResponce { ErrorMassages=registeUser.FirstError.Description});
             return Ok(new ApiResponce { Result = model});
         }
-            
-                    
 
+
+
+
+
+
+
+
+        /// <summary>
+        /// Endpoint to add verification code for email.
+        /// </summary>
+        /// <param name="email">The email address to add the verification code.</param>
+        /// <param name="code">The verification code to be added.</param>
+        /// <returns>An IActionResult indicating success or failure of the code addition.</returns>
         [HttpPost("addCode")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -99,6 +119,16 @@ namespace courseProject.Controllers
 
 
 
+
+
+
+
+
+        /// <summary>
+        /// Endpoint to resend verification code to email.
+        /// </summary>
+        /// <param name="email">The email address to resend the verification code.</param>
+        /// <returns>An IActionResult indicating success or failure of resending the code.</returns>
         [HttpGet("reSendCode")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -113,6 +143,18 @@ namespace courseProject.Controllers
         }
 
 
+
+
+
+
+
+
+        /// <summary>
+        /// Endpoint for editing user profile.
+        /// </summary>
+        /// <param name="id">The ID of the user whose profile is being edited.</param>
+        /// <param name="profile">DTO containing updated profile information.</param>
+        /// <returns>An IActionResult indicating success or failure of the profile update.</returns>
         [HttpPut("EditProfile")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -127,6 +169,16 @@ namespace courseProject.Controllers
         }
 
 
+
+
+
+
+
+        /// <summary>
+        /// Endpoint to retrieve user profile information.
+        /// </summary>
+        /// <param name="id">The ID of the user whose profile information is requested.</param>
+        /// <returns>An IActionResult containing the user's profile information.</returns>
         [HttpGet("GetProfileInfo")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -141,6 +193,17 @@ namespace courseProject.Controllers
 
 
 
+
+
+
+
+
+        /// <summary>
+        /// Endpoint for changing user password.
+        /// </summary>
+        /// <param name="UserId">The ID of the user whose password is being changed.</param>
+        /// <param name="chengePasswordDTO">DTO containing the new password.</param>
+        /// <returns>An IActionResult indicating success or failure of the password change.</returns>
         [HttpPatch("changePassword")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -155,6 +218,16 @@ namespace courseProject.Controllers
         }
 
 
+
+
+
+
+
+        /// <summary>
+        /// Endpoint to add email for forget password.
+        /// </summary>
+        /// <param name="emailDTO">DTO containing the email address.</param>
+        /// <returns>An IActionResult indicating success or failure of adding the email.</returns>
         [HttpPost("AddEmailForForgetPassword")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -167,6 +240,17 @@ namespace courseProject.Controllers
         }
 
 
+
+
+
+
+
+        /// <summary>
+        /// Endpoint for forgetting user password.
+        /// </summary>
+        /// <param name="email">The email address of the user whose password is being reset.</param>
+        /// <param name="forgetPassword">DTO containing the new password.</param>
+        /// <returns>An IActionResult indicating success or failure of the password reset.</returns>
         [HttpPatch("ForgetPassword")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]

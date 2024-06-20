@@ -1,14 +1,9 @@
-﻿using AutoMapper;
-using courseProject.Core.Models.DTO.StudentsDTO;
-using courseProject.core.Models;
+﻿using courseProject.Core.Models.DTO.StudentsDTO;
 using courseProject.Core.Models;
 using courseProject.Repository.GenericRepository;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 using courseProject.Services.Submissions;
-using courseProject.Core.IGenericRepository;
 using courseProject.Core.Models.DTO.MaterialsDTO;
 
 namespace courseProject.Controllers
@@ -24,6 +19,18 @@ namespace courseProject.Controllers
             this.submissionServices = submissionServices;
         }
 
+
+
+
+
+
+
+        /// <summary>
+        /// Endpoint to retrieve all submissions for a specific task.
+        /// </summary>
+        /// <param name="taskId">The ID of the task for which submissions are requested.</param>
+        /// <param name="paginationRequest">Pagination parameters for specifying page number and page size.</param>
+        /// <returns>An IActionResult containing a paginated list of submissions.</returns>
         [HttpGet("GetAllSubmissionForTask")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -39,6 +46,19 @@ namespace courseProject.Controllers
         }
 
 
+
+
+
+
+
+
+        /// <summary>
+        /// Endpoint for a student to add a submission for a task.
+        /// </summary>
+        /// <param name="Studentid">The ID of the student submitting the task.</param>
+        /// <param name="Id">The ID of the task being submitted.</param>
+        /// <param name="submissions">DTO containing submission details.</param>
+        /// <returns>An IActionResult indicating success or failure of the submission.</returns>
         [HttpPost("AddTaskSubmission")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
