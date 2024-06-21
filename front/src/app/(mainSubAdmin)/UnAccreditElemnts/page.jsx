@@ -1,12 +1,29 @@
 'use client'
-import React from 'react'
+import React, { useEffect } from 'react'
 import Layout from '../MainSumAdminLayout/Layout'
 import '../../(admin)/dashboard/dashboard.css'
-import '../../../../node_modules/bootstrap/dist/js/bootstrap.bundle'
-import UnAccreditEvents from '@/app/(subadmin)/nonAccreditElemnts/UnAccreditEvents/UnAccreditEvents'
-import UnAccreditCourses from '@/app/(subadmin)/nonAccreditElemnts/UnAccreditCourses/UnAccreditCourses'
+// import '../../../../node_modules/bootstrap/dist/js/bootstrap.bundle'
+// import UnAccreditEvents from '@/app/(subadmin)/nonAccreditElemnts/UnAccreditEvents/UnAccreditEvents'
+// import UnAccreditCourses from '@/app/(subadmin)/nonAccreditElemnts/UnAccreditCourses/UnAccreditCourses'
+import dynamic from 'next/dynamic';
+
+// Import 'MapComponent' dynamically and disable server-side rendering (SSR)
+const UnAccreditCourses = dynamic(
+  () => import('@/app/(subadmin)/nonAccreditElemnts/UnAccreditCourses/UnAccreditCourses'),
+  { ssr: false }
+);
+
+const UnAccreditEvents = dynamic(
+  () => import('@/app/(subadmin)/nonAccreditElemnts/UnAccreditEvents/UnAccreditEvents'),
+  { ssr: false }
+);
 
 export default function page() {
+  useEffect(() => {
+    if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+      require('bootstrap/dist/js/bootstrap.bundle.min.js');
+    }
+  }, []);
   return (
     <Layout title = "Non-Accredit Elemnts">
 

@@ -10,12 +10,12 @@ namespace courseProject.MappingProfile
         {
             CreateMap<FeedbackDTO, Feedback>();
             CreateMap<Feedback, FeedbackForRetriveDTO>()
-                .ForMember(x => x.name, o => o.MapFrom(y => y.User.userName + " " + y.User.student.LName))
-                .ForMember(x => x.imageUrl, o => o.MapFrom(y => y.User.student.ImageUrl));
+                .ForMember(x => x.name, o => o.MapFrom(y => y.User.userName + " " + y.User.LName))
+                .ForMember(x => x.imageUrl, o => o.MapFrom(y => y.User.ImageUrl));
 
             CreateMap<Feedback, AllFeedbackForRetriveDTO>()
-                .ForMember(x => x.name, o => o.MapFrom(y => y.User.userName + " " + y.User.student.LName))
-                .ForMember(x => x.imageUrl, o => o.MapFrom(y => y.User.student.ImageUrl));
+                .ForMember(x => x.name, o => o.MapFrom(y => y.User.userName + " " + y.User.LName))
+                .ForMember(x => x.imageUrl, o => o.MapFrom(y => y.User.ImageUrl));
 
         }
     }

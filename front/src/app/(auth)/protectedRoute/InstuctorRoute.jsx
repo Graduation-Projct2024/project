@@ -12,7 +12,6 @@ export default function InstuctorRoute({children}) {
      
   if(localStorage.getItem("userToken")==null||userData.role!='instructor'){
     return router.push('/login')
-    
  }}
 }
 

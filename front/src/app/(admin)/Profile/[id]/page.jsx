@@ -4,7 +4,7 @@ import { useParams } from 'next/navigation.js';
 import axios from 'axios';
 import { faFacebookF, faGithub, faLinkedinIn } from '@fortawesome/free-brands-svg-icons'
 import { faUser } from '@fortawesome/free-regular-svg-icons';
-import { faEnvelope, faPen } from '@fortawesome/free-solid-svg-icons'
+import { faEnvelope, faPen, faUnlockKeyhole } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './Profile.css'
 import Layout from '../../AdminLayout/Layout';
@@ -28,6 +28,8 @@ export default function page({params}) {
   const [openChange, setOpenChange] = React.useState(false);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+  let [errmsg,setErrmsg] = useState()
+
   const [userIdP, setUserIdP] = useState(null);
 
 const handleClickOpenUpdate = (id) => {
@@ -56,7 +58,7 @@ setOpenChange(false);
       // setLoading(true);
     try {
       //setLoading(false)
-      const {data} = await axios.get(`https://localhost:7116/api/UserAuth/GetProfileInfo?id=${params.id}`,
+      const {data} = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}UserAuth/GetProfileInfo?id=${params.id}`,
       {headers :{Authorization:`Bearer ${userToken}`}}
       );
       console.log(data);
@@ -87,16 +89,16 @@ setOpenChange(false);
     </div>
           {/* <CircularProgress /> */}
           {/* <div className='loading bg-white position-fixed vh-100 w-100 d-flex justify-content-center align-items-center z-3'> */}
-      <span className="loader"></span>
+      {/* <span className="loader"></span> */}
     {/* </div> */}
-        </Box>
+        {/* </Box> */}
         
-      ) : ( */}
+      {/* ) : ( */}
 
         <>
       <div className="container">
         <div className="row">
-          <div className="col-xl-4 text-center">
+          <div className="col-xl-4 text-xl-center text-sm-start text-md-center text-start pt-4">
             <h1 className="pr">PROFILE</h1>
           </div>
         </div>
@@ -185,7 +187,7 @@ setOpenChange(false);
                       type="button"
                       onClick={() => handleClickOpenChange(params.id)}
                     >
-                      <SyncLockIcon className="edit-pen" />
+                      <FontAwesomeIcon icon={faUnlockKeyhole} className='edit-pen' />
                     </button>
                   </Tooltip>
                 )}
@@ -248,26 +250,26 @@ setOpenChange(false);
                     </div>
                   </div> */}
 
-              <div className="d-flex ps-xl-4 pt-3 gap-2 role justify-content-xl-start fs-5 fw-bold justify-content-lg-center justify-content-md-center justify-content-sm-center justify-content-center">
-                <FontAwesomeIcon icon={faUser} className="pt-1" />
+              <div className="d-flex ps-xl-4 pt-3 gap-2 role justify-content-xl-start fs-5 fw-bold justify-content-lg-center justify-content-md-center justify-content-sm-start ">
+                <FontAwesomeIcon icon={faUser} className="pt-1 " />
                 <p className="text-uppercase">{user.role}</p>
               </div>
             </div>
             <div className="row ps-1 pt-3">
-              <div className="col-xl-6 ps-4">
+              <div className="col-xl-6 ">
                 <div className="row info1 border-">
                   <div className="col-xl-10 ">
-                    <div className="d-flex justify-content-xl-start justify-content-lg-center justify-content-md-center justify-content-sm-center justify-content-center">
-                      <p className="fw-bold labels">Gender:</p>
-                      <p className=" info ps-4">{user.gender}</p>
+                    <div className="d-flex justify-content-xl-start justify-content-lg-center justify-content-md-center justify-content-sm-start ">
+                      <p className="fw-bold labels ps-1">Gender:</p>
+                      <p className=" info ps-3 ">{user.gender}</p>
                     </div>
-                    <div className="d-flex justify-content-xl-start justify-content-lg-center justify-content-md-center justify-content-sm-center justify-content-center">
-                      <p className="fw-bold labels">Phone:</p>
-                      <p className=" info ps-4">{user.phoneNumber}</p>
+                    <div className="d-flex justify-content-xl-start justify-content-lg-center justify-content-md-center justify-content-sm-start ">
+                      <p className="fw-bold labels ps-1">Phone:</p>
+                      <p className=" info  ps-3">{user.phoneNumber}</p>
                     </div>
-                    <div className="d-flex justify-content-xl-start justify-content-lg-center justify-content-md-center justify-content-sm-center justify-content-center">
-                      <p className="fw-bold labels">Date of birth:</p>
-                      <p className=" info ps-4">{user.dateOfBirth}</p>
+                    <div className="d-flex justify-content-xl-start justify-content-lg-center justify-content-md-center justify-content-sm-start ">
+                      <p className="fw-bold labels ps-1">Date of birth:</p>
+                      <p className=" info ps-3 ">{user.dateOfBirth}</p>
                     </div>
                   </div>
                 </div>
@@ -275,17 +277,17 @@ setOpenChange(false);
               <div className="col-xl-6">
                 <div className="row info2">
                   <div className="col-xl-10">
-                    <div className="d-flex justify-content-xl-start justify-content-lg-center justify-content-md-center justify-content-sm-center justify-content-center">
+                    <div className="d-flex justify-content-xl-start justify-content-lg-center justify-content-md-center justify-content-sm-start ">
                       <p className="fw-bold labels">Email:</p>
                       <p className=" info ps-2">{user.email}</p>
                     </div>
-                    <div className="d-flex justify-content-xl-start justify-content-lg-center justify-content-md-center justify-content-sm-center justify-content-center">
-                      <p className="fw-bold labels">Address:</p>
-                      <p className=" info ps-2">{user.address}</p>
+                    <div className="d-flex justify-content-xl-start justify-content-lg-center justify-content-md-center justify-content-sm-start ">
+                      <p className="fw-bold labels ">Address:</p>
+                      <p className=" info  ps-2">{user.address}</p>
                     </div>
                   </div>
 
-                  <ul className="d-flex gap-4 justify-content-center">
+                  {/* <ul className="d-flex gap-4 justify-content-center">
                     <li className=" social">
                       <FontAwesomeIcon icon={faLinkedinIn} />
                     </li>
@@ -298,7 +300,7 @@ setOpenChange(false);
                     <li className=" social">
                       <FontAwesomeIcon icon={faEnvelope} />
                     </li>
-                  </ul>
+                  </ul> */}
                 </div>
               </div>
             </div>

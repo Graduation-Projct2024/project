@@ -1,13 +1,9 @@
-﻿using AutoMapper;
-using courseProject.Core.Models.DTO.CoursesDTO;
+﻿using courseProject.Core.Models.DTO.CoursesDTO;
 using courseProject.Core.Models;
 using courseProject.Repository.GenericRepository;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 using courseProject.Services.Requests;
-using courseProject.Core.IGenericRepository;
 using courseProject.Core.Models.DTO.StudentsDTO;
 
 namespace courseProject.Controllers
@@ -23,12 +19,21 @@ namespace courseProject.Controllers
             this.requestServices = requestServices;
         }
 
+
+
+
+
+        /// <summary>
+        /// Retrieves all requests from students to join courses.
+        /// </summary>
+        /// <param name="paginationRequest">Pagination parameters for paging through results.</param>
+        /// <returns>An IActionResult containing paginated list of join course requests or appropriate error responses.</returns>
         [HttpGet("GetAllRequestToJoinCourses")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "MainSubAdmin")]
-        //not try
+        
         public async Task<IActionResult> GetAllRequestFromStudentsToJoinCourses([FromQuery] PaginationRequest paginationRequest)
         {
             
@@ -38,12 +43,23 @@ namespace courseProject.Controllers
         }
 
 
+
+
+
+
+
+        /// <summary>
+        /// Allows a student to request creation of a custom course.
+        /// </summary>
+        /// <param name="studentid">The ID of the student making the request.</param>
+        /// <param name="studentCustomCourse">DTO containing details of the custom course requested.</param>
+        /// <returns>An IActionResult indicating success or failure of the request.</returns>
         [HttpPost("RequestToCreateCustomCourse")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "Student")]
-        //not try
+        
         public async Task<IActionResult> RequestToCreateACustomCourse(Guid studentid, [FromForm] StudentCustomCourseDTO studentCustomCourse)
         {
             var customCourse = await requestServices.RequestToCreateCustomCourse(studentid, studentCustomCourse);

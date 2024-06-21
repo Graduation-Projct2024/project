@@ -66,9 +66,9 @@ body{
   color: #FFFDF6;
   transform: rotate(360deg);
 }
-.info1{
+/* .info1{
   border-right: #7C7E9D 1px solid;
-}
+} */
 .info2{
   border-left: #7C7E9D 1px solid;
 }
@@ -83,9 +83,9 @@ body{
 }
 @media screen and (max-width: 576px){
   .profile{
-    width: 200px !important;
-    height: 200px !important;
-    border: #4C5372 12px solid;
+    width: 0 !important;
+    height: 0 !important;
+    visibility: hidden;
   }
 }
 .contactName{

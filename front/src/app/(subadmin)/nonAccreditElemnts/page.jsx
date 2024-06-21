@@ -1,12 +1,17 @@
 'use client'
-import React from 'react'
+import React, { useEffect } from 'react'
 import UnAccreditCourses from './UnAccreditCourses/UnAccreditCourses'
 import '../../(admin)/dashboard/dashboard.css'
-import '../../../../node_modules/bootstrap/dist/js/bootstrap.bundle'
+// import '../../../../node_modules/bootstrap/dist/js/bootstrap.bundle'
 import Layout from '../SubAdminLayout/Layout'
 import UnAccreditEvents from './UnAccreditEvents/UnAccreditEvents'
 
 export default function page() {
+  useEffect(() => {
+    if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+      require('bootstrap/dist/js/bootstrap.bundle.min.js');
+    }
+  }, []);
   return (
     <Layout title = "Non-Accredit Elemnts">
 

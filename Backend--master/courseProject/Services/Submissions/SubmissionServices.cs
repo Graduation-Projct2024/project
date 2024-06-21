@@ -1,10 +1,7 @@
 ﻿using AutoMapper;
 using courseProject.core.Models;
 using courseProject.Core.Models.DTO.StudentsDTO;
-using courseProject.Core.Models;
-using courseProject.Repository.GenericRepository;
 using ErrorOr;
-using System.Net;
 using courseProject.Core.IGenericRepository;
 using courseProject.ServiceErrors;
 using courseProject.Core.Models.DTO.MaterialsDTO;
@@ -62,10 +59,7 @@ namespace courseProject.Services.Submissions
             }
             await unitOfWork.submissionRepository.SubmitTaskAsync(student_Task);
              await unitOfWork.StudentRepository.saveAsync();
-            ////if (submissions.pdf != null)
-            ////{
-            ////    student_Task.pdfUrl = "http://localhost:5134/" + student_Task.pdfUrl;
-            ////}
+           
             return Result.Created;
         }
     }

@@ -44,7 +44,7 @@ const handleCloseUpdate = () => {
       try{
         const data = JSON.stringify(courses);
         const response = await axios.get(
-          `https://localhost:7116/api/Reports/export-all-Data-To-PDF?data=course`,
+          `${process.env.NEXT_PUBLIC_EDUCODING_API}Reports/export-all-Data-To-PDF?data=course`,
           {
             headers: { Authorization: `Bearer ${userToken}`, 'Content-Type': 'application/json' },
             responseType: 'blob'
@@ -73,7 +73,7 @@ const handleCloseUpdate = () => {
       try{
         const data = JSON.stringify(courses);
         const response = await axios.get(
-          `https://localhost:7116/api/Reports/export-all-data-to-excel?data=course`,
+          `${process.env.NEXT_PUBLIC_EDUCODING_API}export-all-data-to-excel?data=course`,
           {
             headers: { Authorization: `Bearer ${userToken}`, 'Content-Type': 'application/json' },
             responseType: 'blob'
@@ -115,7 +115,7 @@ const handleCloseUpdate = () => {
   const fetchCourses = async (pageNum = pageNumber, pageSizeNum = pageSize) => {
     if (userData) {
       try {
-        const {data} = await axios.get(`https://localhost:7116/api/CourseContraller/GetAllAccreditCourses?pageNumber=${pageNum}&pageSize=${pageSizeNum}`, {
+        const {data} = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}CourseContraller/GetAllAccreditCourses?pageNumber=${pageNum}&pageSize=${pageSizeNum}`, {
           headers: {
             Authorization: `Bearer ${userData.token}`,  // Assuming you have a token for authorization
           },
@@ -141,7 +141,7 @@ const handleCloseUpdate = () => {
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
-            const { data } = await axios.patch(`https://localhost:7116/api/CourseContraller/accreditCourse?courseId=${courseId}`, {Status},
+            const { data } = await axios.patch(`${process.env.NEXT_PUBLIC_EDUCODING_API}CourseContraller/accreditCourse?courseId=${courseId}`, {Status},
               {
                 headers: {
                   Authorization: `Bearer ${userToken}`,
@@ -185,9 +185,13 @@ const handlePageChange = (event, value) => {
   setPageNumber(value);
 };
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState(null);
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
+  };
+  const handleStatusFilter = (type) => {
+    setSelectedStatus(type);
   };
 
   const filteredCourses = Array.isArray(courses) ? courses.filter((course) => {
@@ -196,11 +200,13 @@ const handlePageChange = (event, value) => {
         typeof value === "string" &&
         value.toLowerCase().includes(searchTerm.toLowerCase())
     );
-    return matchesSearchTerm;
+    const matchesStatus = selectedStatus ? course.status.toLowerCase() === selectedStatus.toLowerCase() : true;
+    return matchesSearchTerm && matchesStatus;
   }) : [];
+
   return (
     <>
-      <div className="filter py-2 text-end">
+      <div className="filter pe-5 py-2 text-end">
         <nav className="navbar">
           <div className="container justify-content-end">
             <form className="d-flex gap-2" role="search">
@@ -225,21 +231,60 @@ const handlePageChange = (event, value) => {
         >
           <MenuItem value={5}>5</MenuItem>
           <MenuItem value={10}>10</MenuItem>
-          <MenuItem value={20}>20</MenuItem>
-          <MenuItem value={50}>50</MenuItem>
+          <MenuItem value={15}>15</MenuItem>
         </Select>
       </FormControl>
               <div className="icons d-flex gap-2 pt-2">
-                <div className="dropdown">
+                <div className="dropdown ">
+                   <Tooltip title="Filter by Status" placement="top">
                   <button
                     className="dropdown-toggle border-0 bg-white edit-pen"
                     type="button"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
                   >
-                    <FontAwesomeIcon icon={faFilter} />
+                    <FontAwesomeIcon icon={faFilter} className="pt-1"/>
                   </button>
-                  <ul className="dropdown-menu"></ul>
+                  </Tooltip>
+                  <ul className="dropdown-menu">
+                    <li>
+                      <a
+                        className="dropdown-item"
+                        href="#"
+                        onClick={() => handleStatusFilter("")}
+                        
+                      >
+                        All
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        className="dropdown-item"
+                        href="#"
+                        onClick={() => handleStatusFilter("start")}
+                      >
+                        Start
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        className="dropdown-item"
+                        href="#"
+                        onClick={() => handleStatusFilter("finish")}
+                      >
+                        Finish
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        className="dropdown-item"
+                        href="#"
+                        onClick={() => handleStatusFilter("accredit")}
+                      >
+                        Accredit
+                      </a>
+                    </li>
+                  </ul>
                 </div>
                 
               </div>
@@ -260,17 +305,16 @@ const handlePageChange = (event, value) => {
 
 
 
-      <table className="table ">
+      <table className="table">
         <thead>
           <tr>
             <th scope="col">ID</th>
             <th scope="col">Name</th>
             <th scope="col">Price</th>
-            <th scope="col">Category</th>
             <th scope="col">Status</th>
             <th scope="col">Start Date</th>
             <th scope="col">Instructor</th>
-            <th scope="col">Option</th>
+            <th scope="col ">Option</th>
           </tr>
         </thead>
         <tbody>
@@ -280,16 +324,11 @@ const handlePageChange = (event, value) => {
                 <th scope="row">{++index}</th>
                 <td>{course.name}</td>
                 <td>{course.price}</td>
-                <td>{course.category}</td>
                 <td>{course.status}</td>
                 <td>{course.startDate}</td>
                 <td>{course.instructorName}</td>
-                <td className="d-flex gap-1">
-                <Tooltip title="Edit course" placement="top">
-                <button className="border-0 bg-white" type="button" onClick={() => handleClickOpenUpdate(course.id)}>
-                <FontAwesomeIcon icon={faPen} className="edit-pen" />
-            </button>
-            </Tooltip>
+                <td className="d-flex gap-1 ">
+                  
 
             <Dialog
         fullScreen={fullScreen}
@@ -301,7 +340,7 @@ const handlePageChange = (event, value) => {
             "& .MuiPaper-root": {
               width: "100%",
               maxWidth: "600px!important",  
-              height: "400px!important",            },
+              height: "600px!important",            },
           },
           
         }}
@@ -361,18 +400,27 @@ const handlePageChange = (event, value) => {
                   </Tooltip>
                   <ul className="dropdown-menu">
                   <li>
-                      <a
+                      <button
                         className="dropdown-item"
                         href="#"
                         onClick={()=>accreditCourse(course.id,"finish")}
-                        disabled = {course.status == 'finish' }
+                        disabled = {course.status === 'finish' }
                       >
                         Finish
-                      </a>
+                      </button>
                     </li>
                    
                   </ul>
                 </div>
+{userData && course.status == "accredit" &&
+                 
+                <Tooltip title="Edit course" placement="top">
+                <button className="border-0 bg-white" type="button" onClick={() => handleClickOpenUpdate(course.id)}>
+                <FontAwesomeIcon icon={faPen} className="edit-pen" />
+            </button>
+            </Tooltip>
+             }
+
                 </td>
               </tr>
             ))

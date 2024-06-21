@@ -19,6 +19,18 @@ namespace courseProject.Core.Models
         public string password { get; set; }
         public string role { get; set; }
         public bool IsVerified { get; set; }
+        public string? LName { get; set; }
+        public DateTime? DateOfBirth { get; set; }
+
+        [DataType(DataType.PhoneNumber)]
+        public string? phoneNumber { get; set; }
+
+        public string? gender { get; set; }
+
+        public string? address { get; set; }
+        public string? ImageUrl { get; set; }
+        public DateTime dateOfAdded {  get; set; }
+
         public Student student { get; set; }
 
         public Instructor instructor { get; set; }

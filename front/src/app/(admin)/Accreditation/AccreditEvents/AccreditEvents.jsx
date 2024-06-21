@@ -1,3 +1,4 @@
+'use client'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useContext, useEffect, useState } from 'react'
 import { faArrowUpFromBracket, faEye, faFilter } from '@fortawesome/free-solid-svg-icons'
@@ -20,12 +21,12 @@ export default function AccreditEvents() {
     if(userData){
     
     try{
-    const { data } = await axios.get(`https://localhost:7116/api/EventContraller/GetAllEventsToAdmin?pageNumber=${pageNum}&pageSize=${pageSize}`,{
+    const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}EventContraller/GetAllEventsToAdmin?pageNumber=${pageNum}&pageSize=${pageSize}`,{
       headers: {
           Authorization: `Bearer ${userToken}`,
       },
   });
-    // console.log(data);
+    console.log(data);
     // setAccreditEvents(data);
     setTotalPages(data.result.totalPages);
     setAccreditEvents(data.result.items);
@@ -81,7 +82,7 @@ export default function AccreditEvents() {
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
-            const { data } = await axios.patch(`https://localhost:7116/api/EventContraller/accreditEvent?eventId=${eventId}`, {Status},
+            const { data } = await axios.patch(`${process.env.NEXT_PUBLIC_EDUCODING_API}EventContraller/accreditEvent?eventId=${eventId}`, {Status},
               {
                 headers: {
                   Authorization: `Bearer ${userToken}`,
@@ -146,7 +147,16 @@ const  filteredAccreditEvents= Array.isArray(accreditEvents) ? accreditEvents.fi
   return matchesSearchTerm;
 }) : [];
 
-
+const getStatusStyle = (status) => {
+  switch (status) {
+    case 'accredit':
+      return { borderRadius:'6px', color: 'green',backgroundColor:'rgba(0, 128, 0, 0.1)'};
+    case 'reject':
+      return {  borderRadius:'6px', color: 'red' ,backgroundColor:'rgba(255, 0, 0, 0.1)'};
+    default:
+      return {  borderRadius:'6px', color: 'rgb(101, 101, 101)' ,backgroundColor:'rgba(128, 128, 128, 0.07)'};
+  }
+};
   return (
     
 
@@ -175,8 +185,7 @@ const  filteredAccreditEvents= Array.isArray(accreditEvents) ? accreditEvents.fi
         >
           <MenuItem value={5}>5</MenuItem>
           <MenuItem value={10}>10</MenuItem>
-          <MenuItem value={20}>20</MenuItem>
-          <MenuItem value={50}>50</MenuItem>
+          <MenuItem value={15}>15</MenuItem>
         </Select>
       </FormControl>
               <div className="icons d-flex gap-2 pt-3">
@@ -206,11 +215,11 @@ const  filteredAccreditEvents= Array.isArray(accreditEvents) ? accreditEvents.fi
           <tr>
             <th scope="col">#</th>
             <th scope="col">Name</th>
-            <th scope="col">Content</th>
             <th scope="col">Category</th>
             <th scope="col">Event Date</th>
-            <th scope="col">SubAdmin name</th>
-            <th scope="col">Option</th>
+            <th className='text-center' scope="col">SubAdmin</th>
+            <th className='text-center' scope="col">Status</th>
+            <th className='text-center' scope="col">Option</th>
           </tr>
         </thead>
         <tbody>
@@ -219,11 +228,11 @@ const  filteredAccreditEvents= Array.isArray(accreditEvents) ? accreditEvents.fi
                <tr key={event.id} /*className={event.accredited ? "accredited-row" : ""}*/>
               {/* <tr key={event.id} style={{ backgroundColor: accreditRow(event) ? 'green' : (rejectRow(event) ? 'red' : 'white') }}> */}
                 <th scope="row">{++index}</th>
-                <td>{event.name}</td>
-                <td>{event.content}</td>
-                <td>{event.eventCategory}</td>
+                <td >{event.name}</td>
+                <td>{event.category}</td>
                 <td>{event.dateOfEvent}</td>
-                <td>{event.subAdminFName} {event.subAdminLName}</td>
+                <td className='text-center'>{event.subAdminFName} {event.subAdminLName}</td>
+                <td className='text-center align-content-center'><span className='p-2 border-2' style={getStatusStyle(event.status)}>{event.status}</span></td>
                 {/* {console.log (event.status)} */}
                 <td className="d-flex gap-1">
                   {/* <Link href={"/Profile"}>

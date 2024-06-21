@@ -1,3 +1,4 @@
+'use client'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUpFromBracket, faBook, faEye, faFileCsv, faFilter } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios';
@@ -19,7 +20,7 @@ export default function ViewStudents() {
       try{
         const data = JSON.stringify(students);
         const response = await axios.get(
-          `https://localhost:7116/api/Reports/export-all-Data-To-PDF?data=student`,
+          `${process.env.NEXT_PUBLIC_EDUCODING_API}Reports/export-all-Data-To-PDF?data=student`,
           {
             headers: { Authorization: `Bearer ${userToken}`, 'Content-Type': 'application/json' },
             responseType: 'blob'
@@ -48,7 +49,7 @@ export default function ViewStudents() {
       try{
         const data = JSON.stringify(students);
         const response = await axios.get(
-          `https://localhost:7116/api/Reports/export-all-data-to-excel?data=student`,
+          `${process.env.NEXT_PUBLIC_EDUCODING_API}Reports/export-all-data-to-excel?data=student`,
           {
             headers: { Authorization: `Bearer ${userToken}`, 'Content-Type': 'application/json' },
             responseType: 'blob'
@@ -76,7 +77,7 @@ export default function ViewStudents() {
   const fetchStudents =  async (pageNum = pageNumber, pageSizeNum = pageSize) => {
     if(userData){
     try{
-    const { data } = await axios.get(`https://localhost:7116/api/StudentsContraller/GetAllStudents?pageNumber=${pageNum}&pageSize=${pageSize}`,{ headers: { Authorization: `Bearer ${userToken}` } });
+    const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}StudentsContraller/GetAllStudents?pageNumber=${pageNum}&pageSize=${pageSize}`,{ headers: { Authorization: `Bearer ${userToken}` } });
     //console.log(data);
     setStudents(data.result.items);
     setTotalPages(data.result.totalPages);
@@ -146,8 +147,7 @@ return matchesSearchTerm ;
         >
           <MenuItem value={5}>5</MenuItem>
           <MenuItem value={10}>10</MenuItem>
-          <MenuItem value={20}>20</MenuItem>
-          <MenuItem value={50}>50</MenuItem>
+          <MenuItem value={15}>15</MenuItem>
         </Select>
       </FormControl>
                 <div className="icons d-flex gap-2 pt-3">

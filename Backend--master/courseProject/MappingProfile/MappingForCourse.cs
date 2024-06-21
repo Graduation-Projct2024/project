@@ -22,8 +22,8 @@ namespace courseProject.MappingProfile
            
 
             CreateMap<Course, CourseInformationDto>()
-                .ForMember(x => x.InstructorName, o => o.MapFrom(y => y.Instructor.user.userName + " " + y.Instructor.LName))
-                .ForMember(x => x.SubAdminName, o => o.MapFrom(y => y.SubAdmin.user.userName + " " + y.SubAdmin.LName))
+                .ForMember(x => x.InstructorName, o => o.MapFrom(y => y.Instructor.user.userName + " " + y.Instructor.user.LName))
+                .ForMember(x => x.SubAdminName, o => o.MapFrom(y => y.SubAdmin.user.userName + " " + y.SubAdmin.user.LName))
                 .ForMember(x => x.startDate, o => o.MapFrom(y => y.startDate.HasValue ? y.startDate.Value.ToString("dd/MM/yyyy") : null))
                 .ForMember(x => x.endDate, o => o.MapFrom(y => y.endDate.HasValue ? y.endDate.Value.ToString("dd/MM/yyyy") : null))
                 .ForMember(x => x.Deadline, o => o.MapFrom(y => y.Deadline.HasValue ? y.Deadline.Value.ToString("dd/MM/yyyy") : null));
@@ -31,8 +31,8 @@ namespace courseProject.MappingProfile
                 
 
             CreateMap<Course, CourseInfoForStudentsDTO>()
-                .ForMember(x => x.InstructorName, o => o.MapFrom(y => y.Instructor.user.userName + " " + y.Instructor.LName))
-                .ForMember(x => x.SubAdminName, o => o.MapFrom(y => y.SubAdmin.user.userName + " " + y.Instructor.LName))
+                .ForMember(x => x.InstructorName, o => o.MapFrom(y => y.Instructor.user.userName + " " + y.Instructor.user.LName))
+                .ForMember(x => x.SubAdminName, o => o.MapFrom(y => y.SubAdmin.user.userName + " " + y.Instructor.user.LName))
                 .ForMember(x => x.startDate, o => o.MapFrom(y => y.startDate.HasValue ? y.startDate.Value.ToString("dd/MM/yyyy") : null))
                 .ForMember(x => x.endDate, o => o.MapFrom(y => y.endDate.HasValue ? y.endDate.Value.ToString("dd/MM/yyyy") : null))
                 .ForMember(x => x.Deadline, o => o.MapFrom(y => y.Deadline.HasValue ? y.Deadline.Value.ToString("dd/MM/yyyy") : null))
@@ -40,9 +40,9 @@ namespace courseProject.MappingProfile
 
             CreateMap<Course, CourseAccreditDTO>()
                 .ForMember(x => x.SubAdminFName, o => o.MapFrom(y => y.SubAdmin.user.userName))
-                .ForMember(x => x.SubAdminLName, o => o.MapFrom(y => y.SubAdmin.LName))
+                .ForMember(x => x.SubAdminLName, o => o.MapFrom(y => y.SubAdmin.user.LName))
                 .ForMember(x => x.InstructorFName, o => o.MapFrom(y => y.Instructor.user.userName))
-                .ForMember(x => x.InstructorLName, o => o.MapFrom(y => y.Instructor.LName))
+                .ForMember(x => x.InstructorLName, o => o.MapFrom(y => y.Instructor.user.LName))
                 .ForMember(x => x.endDate, o => o.MapFrom(y => y.endDate.HasValue ? y.endDate.Value.ToString("dd/MM/yyyy") : null))
                 .ForMember(x => x.startDate, o => o.MapFrom(y => y.startDate.HasValue ? y.startDate.Value.ToString("dd/MM/yyyy") : null));
            
@@ -63,7 +63,7 @@ namespace courseProject.MappingProfile
 
             CreateMap<Request, CustomCourseForRetriveDTO>()
                 .ForMember(x => x.StudentFName, o => o.MapFrom(y => y.Student.user.userName))
-                .ForMember(x => x.StudentLName, o => o.MapFrom(y => y.Student.LName))      
+                .ForMember(x => x.StudentLName, o => o.MapFrom(y => y.Student.user.LName))      
                 .ForMember(x => x.startDate, o => o.MapFrom(y => y.startDate.HasValue ? y.startDate.Value.ToString("dd/MM/yyyy" ) :null))
                 .ForMember(x => x.endDate, o => o.MapFrom(y => y.endDate.HasValue ? y.endDate.Value.ToString("dd/MM/yyyy") : null));
 

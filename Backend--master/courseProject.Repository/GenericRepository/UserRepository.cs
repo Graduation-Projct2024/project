@@ -4,16 +4,11 @@ using Microsoft.IdentityModel.Tokens;
 using courseProject.Core.IGenericRepository;
 using courseProject.Core.Models;
 using courseProject.Repository.Data;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 using BC = BCrypt.Net.BCrypt;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using courseProject.Core.Models.DTO.LoginDTO;
 using courseProject.Core.Models.DTO.RegisterDTO;
 using System.Security.Cryptography;
@@ -108,20 +103,30 @@ namespace courseProject.Repository.GenericRepository
             {
                 return null;
             }
-            var passHash = BC.HashPassword(registerRequestDTO.password);           
+            var passHash = BC.HashPassword(registerRequestDTO.password);
             User user = new User()
             {
-               
+
                 userName = registerRequestDTO.userName,
-                email= registerRequestDTO.email,
-                password= passHash,
-                role= registerRequestDTO.role.ToLower(),
-                IsVerified = false
+                email = registerRequestDTO.email,
+                password = passHash,
+                role = registerRequestDTO.role.ToLower(),
+                IsVerified = false,
+                dateOfAdded = DateTime.Now
             };
            await dbContext.users.AddAsync(user);
-          // await dbContext.SaveChangesAsync();
-          //  user.password = "";
             return  user;
+        }
+
+        public async Task<User> createEmployeeAccount(User user)
+        {
+            var passHash = BC.HashPassword(user.password);
+            user.IsVerified= true;
+            user.password = passHash;
+            user.role= user.role.ToLower();
+            user.dateOfAdded = DateTime.Now;
+            dbContext.Set<User>().AddAsync(user);
+            return user;
         }
 
         public async Task<string> GenerateSecureVerificationCode(int length)
@@ -174,6 +179,29 @@ namespace courseProject.Repository.GenericRepository
             {
                 return null;
             }
+        }
+
+
+
+        public async Task<User> ViewProfileAsync(Guid id, string role)
+        {
+            if (role.ToLower() == "admin")
+            {
+                return await dbContext.users.Include(x => x.admin).FirstOrDefaultAsync(x => x.UserId == id);
+            }
+            if (role.ToLower() == "subadmin" || role.ToLower() == "main-subadmin")
+            {
+                return await dbContext.users.Include(x => x.subadmin).FirstOrDefaultAsync(x => x.UserId == id);
+            }
+            if (role.ToLower() == "instructor")
+            {
+                return await dbContext.users.Include(x => x.instructor).FirstOrDefaultAsync(x => x.UserId == id);
+            }
+            if (role.ToLower() == "student")
+            {
+                return await dbContext.users.Include(x => x.student).FirstOrDefaultAsync(x => x.UserId == id);
+            }
+            return await dbContext.Set<User>().FindAsync(id);
         }
     }
 }

@@ -15,7 +15,7 @@ import Layout from '../instructorLayout/Layout.jsx'
 import { UserContext } from '../../../context/user/User.jsx';
 export default function page() {
   const [courses, setCourses] = useState([]);
-  const [loading , setLoading]=useState(true);
+  // const [loading , setLoading]=useState(true);
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
@@ -25,7 +25,7 @@ export default function page() {
   const getCourses = async (pageNum = pageNumber, pageSizeNum = pageSize) => {
     if(userData){
     const data = await axios.get(
-      `https://localhost:7116/api/CourseContraller/GetAllCoursesGivenByInstructor?Instructorid=${userData.userId}&pageNumber=${pageNum}&pageSize=${pageSize}`,{headers :{Authorization:`Bearer ${userToken}`}}
+      `${process.env.NEXT_PUBLIC_EDUCODING_API}CourseContraller/GetAllCoursesGivenByInstructor?Instructorid=${userData.userId}&pageNumber=${pageNum}&pageSize=${pageSize}`,{headers :{Authorization:`Bearer ${userToken}`}}
     );
     setCourses(data.data.result.items);
     setTotalPages(data.data.result.totalPages);
@@ -48,13 +48,13 @@ export default function page() {
         setPageNumber(value);
       };
 
-  if (loading) {
-    return (
-      <Box sx={{ display: "flex", justifyContent: "center" }}>
-        <CircularProgress color="primary" />
-      </Box>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <Box sx={{ display: "flex", justifyContent: "center" }}>
+  //       <CircularProgress color="primary" />
+  //     </Box>
+  //   );
+  // }
   return (
     <Layout title='Dashboard'>
       <div>
@@ -90,8 +90,7 @@ export default function page() {
                 >
                   <MenuItem value={5}>5</MenuItem>
                   <MenuItem value={10}>10</MenuItem>
-                  <MenuItem value={20}>20</MenuItem>
-                  <MenuItem value={50}>50</MenuItem>
+                  <MenuItem value={15}>15</MenuItem>
                 </Select>
               </FormControl></div>
     

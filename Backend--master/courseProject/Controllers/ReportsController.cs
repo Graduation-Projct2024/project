@@ -1,34 +1,4 @@
-﻿
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using iText.Layout;
-using iText.Layout.Element;
-using iText.Kernel.Pdf;
-using iText.Layout.Properties;
-using courseProject.Services.Students;
-using Microsoft.AspNetCore.Mvc;
-using Org.BouncyCastle;
-
-using iText.Layout.Element;
-using courseProject.Services.Students;
-
-using iText.Layout.Properties;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using OfficeOpenXml;
-using OfficeOpenXml.Style;
-using iText.Kernel.Pdf;
-using iText.Layout.Element;
-using iText.Layout.Properties;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
-using iText.Kernel.Pdf;
-using iText.Layout;
+﻿using Microsoft.AspNetCore.Mvc;
 using courseProject.Services.Reports.PDF;
 using courseProject.Services.Reports.EXCEL;
 using Microsoft.AspNetCore.Authorization;
@@ -54,11 +24,14 @@ namespace courseProject.Controllers
         }
 
 
-    
 
 
 
-        // Endpoint to export Data to PDF
+        /// <summary>
+        /// Endpoint to export data to PDF based on specified data type.
+        /// </summary>
+        /// <param name="reportDTO">DTO containing the data type to export.</param>
+        /// <returns>An IActionResult representing the PDF file export or appropriate error responses.</returns>
         [HttpGet("export-all-Data-To-PDF")]
         [Authorize(Policy = "Admin")]
         public async Task<IActionResult> ExportAllDataToPdf([FromQuery] ReportDTO reportDTO)
@@ -90,11 +63,15 @@ namespace courseProject.Controllers
                 return File(pdfBytes, "application/pdf", $"{dataType}.pdf");
             }
 
-    
 
 
 
 
+        /// <summary>
+        /// Endpoint to export data to Excel based on specified data type.
+        /// </summary>
+        /// <param name="reportDTO">DTO containing the data type to export.</param>
+        /// <returns>An IActionResult representing the Excel file export or appropriate error responses.</returns>
         [HttpGet("export-all-data-to-excel")]
         [Authorize(Policy ="Admin")]
         public async Task<IActionResult> ExportAllDataToExcel([FromQuery] ReportDTO reportDTO)
@@ -144,71 +121,7 @@ namespace courseProject.Controllers
 
 
 
-    //[HttpGet("export-all")]
-    //    public async Task<IActionResult> ExportAllDataToExcel()
-    //    {
-    //        try
-    //        {
-    //            var students = await _studentService.GetAllStudents();
 
-    //            if (students == null || students.Count == 0)
-    //            {
-    //                return NotFound("No students found to export.");
-    //            }
-
-    //        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-
-    //        using (var memoryStream = new MemoryStream())
-    //        {
-    //            using (var package = new ExcelPackage(memoryStream))
-    //            {
-    //                var worksheet = package.Workbook.Worksheets.Add("Students");
-
-    //                // Add the header row
-    //                worksheet.Cells[1, 1].Value = "Date";
-    //                worksheet.Cells[1, 2].Value = DateTime.Now.ToString("yyyy-MM-dd");
-    //                worksheet.Cells[2, 1].Value = "Day";
-    //                worksheet.Cells[2, 2].Value = DateTime.Now.DayOfWeek.ToString();
-    //                worksheet.Cells[4, 1].Value = "Students Table";
-
-    //                // Set styles
-    //                worksheet.Cells[4, 1, 4, 3].Merge = true;
-    //                worksheet.Cells[4, 1, 4, 3].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-    //                worksheet.Cells[4, 1, 4, 3].Style.Font.Size = 20;
-    //                worksheet.Cells[4, 1, 4, 3].Style.Font.Bold = true;
-
-    //                // Define column headers
-    //                var headerRow = new List<string[]> { new string[] { "#", "Name", "Email" } };
-    //                worksheet.Cells[6, 1, 6, 3].LoadFromArrays(headerRow);
-    //                worksheet.Cells[6, 1, 6, 3].Style.Font.Bold = true;
-    //                worksheet.Cells[6, 1, 6, 3].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-
-    //                // Add student data
-    //                int rowIndex = 7;
-    //                int index = 1;
-    //                foreach (var student in students)
-    //                {
-    //                    worksheet.Cells[rowIndex, 1].Value = index++;
-    //                    worksheet.Cells[rowIndex, 2].Value = student.userName;
-    //                    worksheet.Cells[rowIndex, 3].Value = student.email;
-    //                    rowIndex++;
-    //                }
-
-    //                // Auto-fit columns
-    //                worksheet.Cells.AutoFitColumns();
-
-    //                package.Save();
-    //            }
-
-    //            return File(memoryStream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "students.xlsx");
-    //        }
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        // Log the exception (not shown in this example)
-    //        return StatusCode(500, "An error occurred while generating the Excel file.");
-    //    }
-    //}
 }
 
 

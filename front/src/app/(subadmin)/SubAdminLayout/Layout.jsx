@@ -174,12 +174,12 @@ function Layout(props) {
     </div>
   );
 
-  const container = window !== undefined ? () => window().document.body : undefined;
+  const container = typeof window !== 'undefined' ? () => window.document.body : undefined;
 
   return (
     <SubAdminRoute>
     <div className='side-drawer2'>
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex' }} className = 'drawerSide'>
       <CssBaseline />
       <Stack
         position="absolute"
@@ -198,7 +198,7 @@ function Layout(props) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h4" noWrap component="div" >
+          <Typography variant="h4" noWrap component="div" className='titleSide'>
           {title}
           </Typography>
           <Link  >

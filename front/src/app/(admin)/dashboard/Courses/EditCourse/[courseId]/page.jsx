@@ -19,9 +19,11 @@ export default function EditCourse({courseId , startDate , Deadline , Instructor
 
   const { userData, userToken } = useContext(UserContext);
   let [instructors,setInstructors] = useState([]);
+  let [errmsg,setErrmsg] = useState()
+
   const [selectedIns, setSelectedIns] = useState(InstructorId || '');
   const fetchIns = async ()=>{
-    const {data} = await axios.get('https://localhost:7116/api/Instructor/GetAllInstructorsList',{headers :{Authorization:`Bearer ${userToken}`}});
+    const {data} = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}Instructor/GetAllInstructorsList`,{headers :{Authorization:`Bearer ${userToken}`}});
     // console.log(data)
      setInstructors(data.result);
   }
@@ -49,7 +51,13 @@ export default function EditCourse({courseId , startDate , Deadline , Instructor
           formData.append('image', updatedData.image);
         }
 
-        const { data } = await axios.put(`https://localhost:7116/api/CourseContraller/EditOnCourseAfterAccredit?courseId=${courseId}`, formData, { headers: { Authorization: `Bearer ${userToken}` } });
+        const { data } = await axios.put(`${process.env.NEXT_PUBLIC_EDUCODING_API}CourseContraller/EditOnCourseAfterAccredit?courseId=${courseId}`, formData, { headers: { Authorization: `Bearer ${userToken}` } });
+        if(data.errorMassages != null){
+          setErrmsg(data.errorMassages)
+          
+          // console.log(data.errorMassages)
+        }
+        else{
           console.log(data);
         formik.resetForm();
           setOpenUpdate(false);
@@ -57,7 +65,7 @@ export default function EditCourse({courseId , startDate , Deadline , Instructor
             title: "Course updated successfully",
             text: "You can see the data updated in courses page",
             icon: "success"
-          });
+          });}
       } catch (error) {
         console.error('Error updating Course:', error);
       }
@@ -202,6 +210,7 @@ export default function EditCourse({courseId , startDate , Deadline , Instructor
             >
               Update
             </Button>
+            <p className='text-danger'>{errmsg}</p>
       </div>
       
     </form>

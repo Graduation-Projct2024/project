@@ -126,19 +126,19 @@ namespace courseProject.Repository.Data
             });
 
 
-            modelBuilder.Entity<SubAdmin>()
-           .Property(c => c.DateOfBirth)
-           .HasColumnType("date");
+           // modelBuilder.Entity<SubAdmin>()
+           //.Property(c => c.DateOfBirth)
+           //.HasColumnType("date");
 
-            modelBuilder.Entity<Admin>()
-           .Property(c => c.DateOfBirth)
-           .HasColumnType("date");
+           // modelBuilder.Entity<Admin>()
+           //.Property(c => c.DateOfBirth)
+           //.HasColumnType("date");
 
-            modelBuilder.Entity<Instructor>()
-           .Property(c => c.DateOfBirth)
-           .HasColumnType("date");
+           // modelBuilder.Entity<Instructor>()
+           //.Property(c => c.DateOfBirth)
+           //.HasColumnType("date");
 
-            modelBuilder.Entity<Student>()
+            modelBuilder.Entity<User>()
            .Property(c => c.DateOfBirth)
            .HasColumnType("date");
 

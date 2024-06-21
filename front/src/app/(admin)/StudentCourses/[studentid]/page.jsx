@@ -23,7 +23,7 @@ export default function page({params}) {
       if(userData){
     try {
       //setLoading(false)
-      const {data} = await axios.get(`https://localhost:7116/api/CourseContraller/GetAllEnrolledCoursesForAStudent?studentid=${params.studentid}&pageNumber=${pageNum}&pageSize=${pageSize}`,{ headers: { Authorization: `Bearer ${userToken}` } });
+      const {data} = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}CourseContraller/GetAllEnrolledCoursesForAStudent?studentid=${params.studentid}&pageNumber=${pageNum}&pageSize=${pageSize}`,{ headers: { Authorization: `Bearer ${userToken}` } });
         console.log(data.result);
       setStudentCourses(data.result.items);
       setTotalPages(data.result.totalPages);
@@ -41,7 +41,7 @@ export default function page({params}) {
       const fetchStudents = async () => {
         if(userData){
         try{
-        const { data } = await axios.get(`https://localhost:7116/api/StudentsContraller/GetAllStudents?pageNumber=1&pageSize=100000`,{ headers: { Authorization: `Bearer ${userToken}` } });
+        const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}StudentsContraller/GetAllStudents?pageNumber=1&pageSize=100000`,{ headers: { Authorization: `Bearer ${userToken}` } });
         // console.log(data);
         setStudents(data.result.items);
       }
@@ -117,8 +117,7 @@ return matchesSearchTerm ;
         >
           <MenuItem value={5}>5</MenuItem>
           <MenuItem value={10}>10</MenuItem>
-          <MenuItem value={20}>20</MenuItem>
-          <MenuItem value={50}>50</MenuItem>
+          <MenuItem value={15}>15</MenuItem>
         </Select>
       </FormControl>
                 

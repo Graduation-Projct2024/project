@@ -1,13 +1,10 @@
-﻿using AutoMapper;
-using courseProject.Core.Models.DTO.FeedbacksDTO;
+﻿using courseProject.Core.Models.DTO.FeedbacksDTO;
 using courseProject.Core.Models;
 using courseProject.Repository.GenericRepository;
 using courseProject.Services.Feedbacks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
-using courseProject.Core.IGenericRepository;
+
 
 namespace courseProject.Controllers
 {
@@ -23,12 +20,15 @@ namespace courseProject.Controllers
         }
 
 
+        /// <summary>
+        /// Allows a student to add feedback for an instructor.
+        /// </summary>
         [HttpPost("AddInstructorFeedback")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "Student")]
-       //not try
+     
         public async Task<IActionResult> AddInstructorFeedback(Guid studentId, Guid InstructorId, FeedbackDTO Feedback)
         {
             var addedFeddback = await feedbackServices.AddInstructorFeedback(studentId, InstructorId, Feedback);
@@ -37,7 +37,9 @@ namespace courseProject.Controllers
         }
 
 
-
+        /// <summary>
+        /// Allows a student to add feedback for a Course he enrolled in .
+        /// </summary>
         [HttpPost("AddCourseFeedback")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -52,6 +54,9 @@ namespace courseProject.Controllers
         }
 
 
+        /// <summary>
+        /// Allows a student to add feedback for a website in general.
+        /// </summary>
         [HttpPost("AddGeneralFeedback")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -65,7 +70,9 @@ namespace courseProject.Controllers
         }
 
 
-
+        /// <summary>
+        /// Retrieves all general feedback entries with pagination.
+        /// </summary>
         [HttpGet("GetAllGeneralFeedback")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -78,6 +85,9 @@ namespace courseProject.Controllers
         }
 
 
+        /// <summary>
+        /// Retrieves all instructors feedback entries with pagination.
+        /// </summary>
         [HttpGet("GetAllInstructorFeedback")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -91,6 +101,10 @@ namespace courseProject.Controllers
         }
 
 
+
+        /// <summary>
+        /// Retrieves all courses feedback entries with pagination.
+        /// </summary>
         [HttpGet("GetAllCourseFeedback")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -104,6 +118,10 @@ namespace courseProject.Controllers
         }
 
 
+
+        /// <summary>
+        /// Retrieves all feedback with all types entries with pagination.
+        /// </summary>
         [HttpGet("GetAllFeedback")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -117,6 +135,9 @@ namespace courseProject.Controllers
         }
 
 
+        /// <summary>
+        /// Retrieves feedback information by its ID.
+        /// </summary>
         [HttpGet("GetFeedbackById")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]

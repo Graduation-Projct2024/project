@@ -23,7 +23,7 @@ namespace courseProject.Services.ContactUs
             await unitOfWork.contactRepository.saveAsync();
         }
 
-        public async Task<IReadOnlyList<Contact>> GetAllMessages()
+        public async Task<IReadOnlyList<Contact>> GetAllMessages( )
         {
             return await unitOfWork.contactRepository.GetAllContactsAsync();
         }

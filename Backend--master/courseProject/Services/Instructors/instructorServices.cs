@@ -7,7 +7,7 @@ using courseProject.Core.Models.DTO.InstructorsDTO;
 using courseProject.Core.Models.DTO.LecturesDTO;
 using courseProject.ServiceErrors;
 using ErrorOr;
-using System.Net;
+
 
 namespace courseProject.Services.Instructors
 {
@@ -104,7 +104,7 @@ namespace courseProject.Services.Instructors
             if (instructor == null) return ErrorInstructor.NotFound;
 
             instructor.skillDescription = skillDescriptionDTO.skillDescription;
-            await unitOfWork.instructorRepositpry.updateSubAdminAsync(instructor);
+            await unitOfWork.instructorRepositpry.updateEmployeeAsync(instructor);
             await unitOfWork.instructorRepositpry.saveAsync();
             return Result.Updated;
         }

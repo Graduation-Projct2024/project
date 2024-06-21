@@ -15,13 +15,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons';
 import '../../(admin)/dashboard/dashboard.css'
 import { faFacebookF, faGithub, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
+import { Tooltip } from '@mui/material';
 
 export default function Testimonials() {
 
   let [contacts,setContacts] = useState([]);
   const fetchContacts = async () => {
     try{
-    const { data } = await axios.get(`https://localhost:7116/api/Employee/GetAllEmployee?pageNumber=1&pageSize=1000`);
+    const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}Employee/GetAllEmployee?pageNumber=1&pageSize=1000`);
 
     console.log(data);
     setContacts(data.result.items);
@@ -119,10 +120,10 @@ export default function Testimonials() {
            loop = {true}
         >
 
-           {contacts.length? contacts.map((contact)=>(
+           {contacts.length? contacts.map((contact,index)=>(
             <div> {contact.type == "instructor" &&
           <SwiperSlide key={contact.id} className='py-5' >
-                     <div className="col-md-4" key={contact.id}>
+                     <div className="col-md-4">
                     <div className="card text-center mb-3" style={{ width: "18rem" }}>
                       <div className="card-body m-3">
                       <img src={contact.imageUrl ? contact.imageUrl : "./user1.png"} 
@@ -136,10 +137,10 @@ export default function Testimonials() {
                       <h4 className="card-title contactName"><Link href={`/Testimonials/${contact.id}`}>{contact.fName} {contact.lName}</Link></h4>
                         
                         <div className="d-flex justify-content-center gap-3 pt-3 border-top">
-                          <Link className='social' href="#"><FontAwesomeIcon icon={faLinkedinIn} /></Link>
-                          <Link className='social' href="#"><FontAwesomeIcon icon={faGithub} /></Link>
-                          <Link className='social' href="#"><FontAwesomeIcon icon={faFacebookF} /></Link>
-                          <Link className='social' href="#"><FontAwesomeIcon icon={faEnvelope} /></Link>
+                        <Tooltip title="phone" placement="top">
+                          <Link className='social' href={`tel:${contact.phoneNumber}`}><FontAwesomeIcon icon={faPhone} /></Link></Tooltip>
+                        <Tooltip title="Email" placement="top">
+                          <Link className='social' href={`mailto:${contact.email}`}><FontAwesomeIcon icon={faEnvelope} /></Link></Tooltip>
                         </div>
                       </div>
                     </div>

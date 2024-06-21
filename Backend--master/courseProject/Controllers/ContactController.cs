@@ -1,12 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using courseProject.Core.Models;
-using courseProject.Core.IGenericRepository;
-using AutoMapper;
-using System.Net;
 using Microsoft.AspNetCore.Authorization;
-using courseProject.Core.Models.DTO.CoursesDTO;
-using courseProject.Services.Courses;
-using courseProject.Services.Skill;
 using courseProject.Services.ContactUs;
 using courseProject.Core.Models.DTO.ContactUsDTO;
 using courseProject.Repository.GenericRepository;
@@ -20,12 +14,13 @@ namespace courseProject.Controllers
     {
 
         private readonly IContactServices contactServices;
-      
+        
+
         public ContactController(  IContactServices contactServices )
         {
             
             this.contactServices = contactServices;
-
+          
         }
 
 
@@ -69,8 +64,9 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [Authorize(Policy = "Admin , Main_Sub-Admin")]
         
-        public async Task<IActionResult> GetAllContact([FromQuery] PaginationRequest paginationRequest)
+        public async Task<IActionResult> GetAllContact([FromQuery] PaginationRequest paginationRequest )
         {
             var allContact = await contactServices.GetAllMessages();
             return Ok(Pagination<Contact>.CreateAsync(allContact , paginationRequest.pageNumber, paginationRequest.pageSize).Result);
@@ -92,13 +88,16 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        
+        [Authorize(Policy = "Admin , Main_Sub-Admin")]
+
         public async Task<IActionResult> GetContactById(Guid Contactid)
         {
             return Ok(await contactServices.getContactById(Contactid));
         }
 
 
+
+      
 
     }
 }

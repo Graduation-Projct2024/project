@@ -33,7 +33,7 @@ export default function GeneralFeedback() {
       const [feedbacks, setFeedbacks] = useState([]);
  const fetchFeedbacks = async ()  => {
         try{
-        const { data } = await axios.get(`https://localhost:7116/api/Feedback/GetAllGeneralFeedback?pageNumber=1&pageSize=20`);
+        const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}Feedback/GetAllGeneralFeedback?pageNumber=1&pageSize=12`);
         
         setFeedbacks(data.result.items);
 
@@ -53,9 +53,11 @@ useEffect(() => {
       <div className="container">
         <div className="row">
           <div className="col-lg-6 col-md-12">
-            <div className="feedbackImg py-4">
+            {/* <div className="feedbackImg py-4">
               <img src="/layer.png" alt="img" className="img-fluid pt-5" />
-            </div>
+            </div> */}
+<iframe className='animation' src="https://lottie.host/embed/20ddc489-8898-4456-ab3b-c9d58e746cfc/sFr46ok18G.json" />
+
           </div>
           <div className="col-lg-6 col-md-12">
             <div className="feedback-content py-4">
@@ -185,8 +187,8 @@ useEffect(() => {
                 loop={true}
                 className="row justify-content-center align-items-center"
               >
-                {feedbacks.length?feedbacks.map((feedback)=>
-<SwiperSlide className="py-3">
+                {feedbacks.length?feedbacks.map((feedback,index)=>
+<SwiperSlide key={++index} className="py-3">
                   <div className="singleFeedbackContent">
                     <div className="feedbackPara">
                       <p className="contentfeed">

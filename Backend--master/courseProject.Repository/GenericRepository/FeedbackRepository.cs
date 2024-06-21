@@ -2,11 +2,7 @@
 using courseProject.Core.Models;
 using courseProject.Repository.Data;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace courseProject.Repository.GenericRepository
 {
@@ -27,7 +23,9 @@ namespace courseProject.Repository.GenericRepository
 
         public async Task<IReadOnlyList<Feedback>> GetAllFeedbacksAsync()
         {
-            return await dbContext.feedbacks.Include(x => x.User).Include(x => x.User.student).ToListAsync();
+            return await dbContext.feedbacks.Include(x => x.User).Include(x => x.User.student)
+                .OrderByDescending(x=>x.dateOfAdded)
+                .ToListAsync();
         }
 
         public async Task<IReadOnlyList<Feedback>> GetFeedbacksByTypeAsync(string type, Guid? instructorId, Guid? courseId)
@@ -48,7 +46,7 @@ namespace courseProject.Repository.GenericRepository
             }
 
             // Execute the query and return the result
-            return await query.ToListAsync();
+            return await query.OrderByDescending(x => x.dateOfAdded).ToListAsync();
         }
 
         public async Task<Feedback> GetFeedbackByIdAsync(Guid id)

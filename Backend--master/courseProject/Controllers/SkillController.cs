@@ -1,15 +1,10 @@
 ﻿using AutoMapper;
-using courseProject.Common;
-using courseProject.Core.IGenericRepository;
 using courseProject.Core.Models;
-using courseProject.Core.Models.DTO.EmployeesDTO;
 using courseProject.Core.Models.DTO.InstructorsDTO;
 using courseProject.Repository.GenericRepository;
 using courseProject.Services.Skill;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 
 namespace courseProject.Controllers
 {
@@ -17,20 +12,32 @@ namespace courseProject.Controllers
     [ApiController]
     public class SkillController : ControllerBase
     {
-        private readonly IMapper mapper;
+       
         private readonly ISkillsServices skillsServices;
         private readonly ApiResponce response;
         
 
-        public SkillController(IMapper mapper , ISkillsServices skillsServices)
+        public SkillController(ISkillsServices skillsServices)
         {
-            this.mapper = mapper;
+          
             this.skillsServices = skillsServices;
             response=new ApiResponce();
            
         }
 
 
+
+
+
+
+
+
+
+        /// <summary>
+        /// Endpoint for an admin to add a new skill option.
+        /// </summary>
+        /// <param name="skillName">The name of the skill to add.</param>
+        /// <returns>An IActionResult indicating success or failure of adding the skill.</returns>
         [HttpPost("AddSkillOptionsByAdmin")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -45,19 +52,43 @@ namespace courseProject.Controllers
         }
 
 
+
+
+
+
+
+
+
+
+        /// <summary>
+        /// Endpoint to get all skill options .
+        /// </summary>
+        /// <returns>An IActionResult containing a list of all skill options.</returns>
         [HttpGet("GetAllSkillOptions")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "Admin , Student")]
-        public async Task<IActionResult> GetAllOptions()
+        public async Task<IActionResult> GetAllOptions([FromQuery] PaginationRequest paginationRequest)
         {
-            
-            return Ok( new ApiResponce { Result = await skillsServices.getAllSkillesAddedByAdmin() });
-
+            var skills = await skillsServices.getAllSkillesAddedByAdmin();
+            return Ok( new ApiResponce { Result =  
+            (Pagination<Skills>.CreateAsync(skills, paginationRequest.pageNumber, paginationRequest.pageSize)).Result}); 
         }
 
 
+
+
+
+
+
+
+
+        /// <summary>
+        /// Endpoint to get all skill options specifically for an instructor's dropdown, Which he has not chosen yet.
+        /// </summary>
+        /// <param name="instructorId">The ID of the instructor.</param>
+        /// <returns>An IActionResult containing skill options for the specified instructor.</returns>
         [HttpGet("GetAllSkillOptionsToInstructor")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -70,6 +101,19 @@ namespace courseProject.Controllers
 
         }
 
+
+
+
+
+
+
+
+        /// <summary>
+        /// Endpoint for an instructor to select new skills.
+        /// </summary>
+        /// <param name="instructorId">The ID of the instructor.</param>
+        /// <param name="array">List of skill IDs selected by the instructor.</param>
+        /// <returns>An IActionResult indicating success or failure of selecting skills.</returns>
         [HttpPost("selectAnInstructorSkills")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -92,6 +136,18 @@ namespace courseProject.Controllers
 
 
 
+
+
+
+
+
+
+        /// <summary>
+        /// Endpoint for an instructor to delete a selected skill.
+        /// </summary>
+        /// <param name="InstructorId">The ID of the instructor.</param>
+        /// <param name="SkillId">The ID of the skill to delete.</param>
+        /// <returns>An IActionResult indicating success or failure of deleting the skill.</returns>
         [HttpDelete("DeleteAnInstructorSkill")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -104,6 +160,18 @@ namespace courseProject.Controllers
             return new ApiResponce { Result = "The skill is deleted successfully" };
         }
 
+
+
+
+
+
+
+
+        /// <summary>
+        /// Endpoint to get all skills associated with a specific instructor.
+        /// </summary>
+        /// <param name="instructorId">The ID of the instructor.</param>
+        /// <returns>An IActionResult containing a list of skills for the instructor.</returns>
         [HttpGet("GetAllInstructorSkills")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]

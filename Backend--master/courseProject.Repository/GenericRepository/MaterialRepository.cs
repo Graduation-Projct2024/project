@@ -2,11 +2,7 @@
 using courseProject.Core.Models;
 using courseProject.Repository.Data;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace courseProject.Repository.GenericRepository
 {
@@ -31,11 +27,11 @@ namespace courseProject.Repository.GenericRepository
             IReadOnlyList<CourseMaterial>? materials = null;
             if (userType.ToLower() == "student")
             {
-                materials = await dbContext.courseMaterials.Include(x => x.MaterialFiles).Where(x => (x.courseId == Courseid || x.consultationId == consultationId) && x.isHidden == false).ToListAsync();
+                materials = await dbContext.courseMaterials.Include(x => x.MaterialFiles).Where(x => (x.courseId == Courseid && x.consultationId == consultationId) && x.isHidden == false).ToListAsync();
             }
             else if (userType.ToLower() == "instructor")
             {
-                materials = await dbContext.courseMaterials.Include(x => x.MaterialFiles).Where(x => (x.courseId == Courseid || x.consultationId == consultationId) ).ToListAsync();
+                materials = await dbContext.courseMaterials.Include(x => x.MaterialFiles).Where(x => (x.courseId == Courseid && x.consultationId == consultationId) ).ToListAsync();
             }
             return materials;
         }

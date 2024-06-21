@@ -1,4 +1,5 @@
 'use client';
+import './navbar.css'
 import React, { useContext } from 'react'
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -17,7 +18,7 @@ import Link from '@mui/material/Link';
 import { useRouter } from 'next/navigation'
 const pages = ['About', 'ContactUs', 'FAQ', 'AllCourses', 'AllEvents'];
 const settings = ['Login', 'Register'];
-import './navbar.css'
+
 import { UserContext } from '@/context/user/User';
 export default function Navbar({role}) {
   const router = useRouter();
@@ -47,11 +48,11 @@ export default function Navbar({role}) {
     setUserData(null);
     setUserId(null);
     router.push("/login");
-  };
+    };
 
 
   return (
-    <AppBar position="fixed">
+    <AppBar position="fixed" className='nav'>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           {/* <Link className='text-decoration-none d-flex gap-1 text-white' href='/'> */}
@@ -130,6 +131,7 @@ export default function Navbar({role}) {
               color: 'inherit',
               textDecoration: 'none',
             }}
+            className='typo'
           >
             LOGO
           </Typography>

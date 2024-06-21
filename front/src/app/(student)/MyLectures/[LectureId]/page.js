@@ -81,7 +81,7 @@ export default function page() {
     if (userToken && LectureId) {
       try {
         const { data } = await axios.get(
-          `https://localhost:7116/api/MaterialControllar/GetAllMaterial?ConsultationId=${LectureId}`,
+          `${process.env.NEXT_PUBLIC_EDUCODING_API}MaterialControllar/GetAllMaterial?ConsultationId=${LectureId}`,
           { headers: { Authorization: `Bearer ${userToken}` } }
         );
         console.log(data);

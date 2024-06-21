@@ -55,7 +55,7 @@ formData.append(type, Id);
 formData.append("instructorId", userData.userId);
 
 const { data } = await axios.put(
- `https://localhost:7116/api/MaterialControllar/EditTask?id=${materialID}`,
+ `${process.env.NEXT_PUBLIC_EDUCODING_API}MaterialControllar/EditTask?id=${materialID}`,
   formData,
   {headers :{Authorization:`Bearer ${userToken}`}}
 

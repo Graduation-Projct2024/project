@@ -1,17 +1,8 @@
-﻿using courseProject.core.Models;
-using courseProject.Core.IGenericRepository;
+﻿using courseProject.Core.IGenericRepository;
 using courseProject.Core.Models;
 using courseProject.Repository.Data;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Data.SqlTypes;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+
 
 namespace courseProject.Repository.GenericRepository
 {
@@ -49,15 +40,23 @@ namespace courseProject.Repository.GenericRepository
         public async Task<IReadOnlyList<Student>> GetAllStudentsInTheSameCourseAsync(Guid courseId)
         {
             return await dbContext.students.Include(x=>x.user)
-                          .Where(student => student.studentCourses.Any(sc => sc.courseId == courseId))
+                          .Where(student => student.studentCourses.Any(sc => sc.courseId == courseId && sc.status.ToLower()== "joind"))
                           .ToListAsync();
         }
 
-       
 
-       
 
-       
+        public async Task<IReadOnlyList<Student>> GetAllStudentsAsync()
+        {
+          
+                return await dbContext.students.Include(x => x.user).Where(x => x.user.IsVerified == true)
+                    .OrderByDescending(x => x.user.dateOfAdded)
+                    .ToListAsync();
+
+           
+        }
+
+
 
         public async Task<Student> getStudentByIdAsync(Guid? id )
         {          

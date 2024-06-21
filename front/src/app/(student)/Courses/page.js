@@ -30,7 +30,7 @@ const [role, setRole]=useState('student');
       if(userId&&userToken){
         try{
       const data = await axios.get(
-        `https://localhost:7116/api/CourseContraller/GetAllCoursesToStudent?studentId=${userId}&pageNumber=${pageNumber}&pageSize=6`,
+        `${process.env.NEXT_PUBLIC_EDUCODING_API}CourseContraller/GetAllCoursesToStudent?studentId=${userId}&pageNumber=${pageNumber}&pageSize=6`,
         {headers :{Authorization:`Bearer ${userToken}`}}
 
       );

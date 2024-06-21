@@ -238,7 +238,7 @@ const formatDate = (dateString) => {
 
 export default function EditProfile({ id, FName, LName, gender, phoneNumber, DateOfBirth, address, image,openUpdate,setOpenUpdate }) {
   const router = useRouter();
-
+  let [errmsg,setErrmsg] = useState()
   const { userData,userToken } = useContext(UserContext);
 
   const [selectedGender, setSelectedGender] = useState(gender);
@@ -261,7 +261,13 @@ export default function EditProfile({ id, FName, LName, gender, phoneNumber, Dat
         formData.append('image', updatedData.image);
       }
 
-      const { data } = await axios.put(`https://localhost:7116/api/UserAuth/EditProfile?id=${id}`, formData,{headers :{Authorization:`Bearer ${userToken}`}},);
+      const { data } = await axios.put(`${process.env.NEXT_PUBLIC_EDUCODING_API}UserAuth/EditProfile?id=${id}`, formData,{headers :{Authorization:`Bearer ${userToken}`}},);
+      if(data.errorMassages != null){
+        setErrmsg(data.errorMassages)
+        
+        // console.log(data.errorMassages)
+      }
+      else{
         console.log('Profile Updated');
         formik.resetForm();
         setOpenUpdate(false);
@@ -272,7 +278,7 @@ export default function EditProfile({ id, FName, LName, gender, phoneNumber, Dat
         });
 // router.refresh();
       
-    } catch (error) {
+    } }catch (error) {
       console.error('Error updating employee:', error);
     }}
   };
@@ -365,7 +371,7 @@ export default function EditProfile({ id, FName, LName, gender, phoneNumber, Dat
   ));
 
   return (
-    <form onSubmit={formik.handleSubmit} className="row justify-content-center">
+    <form onSubmit={formik.handleSubmit} encType="multipart/form-data" className="row justify-content-center">
       {renderInputs}
       <div className="col-md-6">
         <select
@@ -395,6 +401,7 @@ export default function EditProfile({ id, FName, LName, gender, phoneNumber, Dat
         >
           Update
         </Button>
+        <p className='text-danger'>{errmsg}</p>
       </div>
     </form>
   );

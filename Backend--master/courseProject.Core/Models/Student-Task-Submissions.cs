@@ -21,6 +21,7 @@ namespace courseProject.core.Models
         public string? description { get; set; }
         [NotMapped] public IFormFile? pdf { get; set; }
         public string? pdfUrl { get; set; }
+        public DateTime dateOfAdded { get; set; }=DateTime.Now;
         public Student Student { get; set; }
         public CourseMaterial CourseMaterial { get; set; }
     }

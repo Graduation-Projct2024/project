@@ -9,6 +9,7 @@ import { UserContext } from '@/context/user/User';
 import { Box, FormControl, InputLabel, MenuItem, Pagination, Select, Stack } from '@mui/material';
 import Swal from 'sweetalert2';
 import '../../dashboard/loading.css'
+import { Padding } from '@mui/icons-material';
 
 
 export default function AccreditCourses() {
@@ -26,7 +27,7 @@ export default function AccreditCourses() {
     if(userData){
       // setLoading(true)
     try{
-    const { data } = await axios.get(`https://localhost:7116/api/CourseContraller/GetAllCoursesForAccredit?pageNumber=${pageNum}&pageSize=${pageSize}`);
+    const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}CourseContraller/GetAllCoursesForAccredit?pageNumber=${pageNum}&pageSize=${pageSize}`);
     // console.log(data);
     setAccreditCourses(data.result.items);
     setTotalPages(data.result.totalPages);
@@ -71,7 +72,7 @@ export default function AccreditCourses() {
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
-            const { data } = await axios.patch(`https://localhost:7116/api/CourseContraller/accreditCourse?courseId=${courseId}`, {Status},
+            const { data } = await axios.patch(`${process.env.NEXT_PUBLIC_EDUCODING_API}CourseContraller/accreditCourse?courseId=${courseId}`, {Status},
               {
                 headers: {
                   Authorization: `Bearer ${userToken}`,
@@ -129,6 +130,21 @@ const filteredAccreditCourses = Array.isArray(accreditCourses) ? accreditCourses
   return matchesSearchTerm;
 }) : [];
 
+const getStatusStyle = (status) => {
+  switch (status) {
+    case 'accredit':
+      return { borderRadius:'6px', color: 'green',backgroundColor:'rgba(0, 128, 0, 0.1)'};
+    case 'reject':
+      return {  borderRadius:'6px', color: 'red' ,backgroundColor:'rgba(255, 0, 0, 0.1)'};
+    case 'finish':
+      return { borderRadius:'6px', color: 'blue',backgroundColor:'rgba(0, 0, 255, 0.1)' };
+    case 'start':
+      return {  borderRadius:'10px', color: 'purple',backgroundColor:'#4c53721d' };
+    default:
+      return {  borderRadius:'6px', color: 'rgb(101, 101, 101)' ,backgroundColor:'rgba(128, 128, 128, 0.07)'};
+  }
+};
+
 
   return (
     <>
@@ -167,8 +183,7 @@ const filteredAccreditCourses = Array.isArray(accreditCourses) ? accreditCourses
         >
           <MenuItem value={5}>5</MenuItem>
           <MenuItem value={10}>10</MenuItem>
-          <MenuItem value={20}>20</MenuItem>
-          <MenuItem value={50}>50</MenuItem>
+          <MenuItem value={15}>15</MenuItem>
         </Select>
       </FormControl>
               <div className="icons d-flex gap-2 pt-3">
@@ -200,11 +215,9 @@ const filteredAccreditCourses = Array.isArray(accreditCourses) ? accreditCourses
             <th scope="col">#</th>
             <th scope="col">Name</th>
             <th scope="col">Price</th>
-            <th scope="col">Category</th>
             <th scope="col">Start Date</th>
             <th scope="col">Instructor</th>
             <th scope="col">SubAdmin</th>
-            <th scope="col">Hours</th>
             <th scope="col">Status</th>
             <th scope='col'>Det.</th>
             <th scope="col">Action</th>
@@ -219,12 +232,10 @@ const filteredAccreditCourses = Array.isArray(accreditCourses) ? accreditCourses
                 <th scope="row">{++index}</th>
                 <td>{course.name}</td>
                 <td>{course.price}</td>
-                <td>{course.category}</td>
                 <td>{course.startDate}</td>
                 <td>{course.instructorFName} {course.instructorLName}</td>
                 <td>{course.subAdminFName} {course.subAdminLName}</td>
-                <td>{course.totalHours}</td>
-                <td>{course.status}</td>
+                <td className='text-center align-content-center'><span className='p-2 border-2' style={getStatusStyle(course.status)}>{course.status}</span></td>
                 <td>
                 <Link href={`CourseDetails/${course.id}`}>
                     <button

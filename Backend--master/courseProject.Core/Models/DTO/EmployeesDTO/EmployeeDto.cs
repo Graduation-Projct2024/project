@@ -17,6 +17,7 @@
 
         public string? address { get; set; }
         public string? skillDescription { get; set; }
+        public DateTime dateOfAdded { get; set; }
 
     }
 }

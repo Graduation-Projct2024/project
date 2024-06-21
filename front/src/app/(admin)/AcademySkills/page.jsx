@@ -8,13 +8,16 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUpFromBracket, faFilter } from '@fortawesome/free-solid-svg-icons';
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, useMediaQuery, useTheme } from '@mui/material';
-import '../../../../node_modules/bootstrap/dist/js/bootstrap.bundle'
 import AddSkill from './AddSkill/AddSkill';
 import '../dashboard/loading.css'
 
-export default function page() {
+export default function AcademySkills() {
 
-    
+  useEffect(() => {
+    if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+      require('bootstrap/dist/js/bootstrap.bundle.min.js');
+    }
+  }, []);
     const {userToken, setUserToken, userData}=useContext(UserContext);
     const [skills, setSkills] = useState([]);
     const [open, setOpen] = React.useState(false);
@@ -33,7 +36,7 @@ export default function page() {
       if(userData){
         // setLoading(true);
       try{
-      const { data } = await axios.get(`https://localhost:7116/api/Skill/GetAllSkillOptions`,{ headers: { Authorization: `Bearer ${userToken}` } });
+      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}Skill/GetAllSkillOptions`,{ headers: { Authorization: `Bearer ${userToken}` } });
       // setLoading(false)
       console.log(data);
       setSkills(data.result);
@@ -80,9 +83,9 @@ const filteredSkills = Array.isArray(skills) ? skills.filter((skill) => {
           {/* <div className='loading bg-white position-fixed vh-100 w-100 d-flex justify-content-center align-items-center z-3'> */}
       {/* <span className="loader"></span> */}
     {/* </div> */}
-       </Box>
+        {/* </Box> */}
         
-      ) : ( 
+      {/* ) : ( */} 
 
         <>
     <div className="filter py-2 text-end">

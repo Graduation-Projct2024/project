@@ -1,13 +1,9 @@
 ﻿using courseProject.Core.Models;
 using courseProject.Core.Models.DTO.StudentsDTO;
-using courseProject.Repository.GenericRepository;
 using courseProject.Services.StudentCourses;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq.Expressions;
-using System.Net;
+
 
 namespace courseProject.Controllers
 {
@@ -24,6 +20,16 @@ namespace courseProject.Controllers
 
 
 
+
+
+
+
+
+        /// <summary>
+        /// Endpoint for a student to enroll in a course.
+        /// </summary>
+        /// <param name="studentCourseDTO">Data required to enroll in the course.</param>
+        /// <returns>An IActionResult indicating success or failure of enrolling in the course.</returns>
         [HttpPost("EnrollInCourse")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -44,6 +50,17 @@ namespace courseProject.Controllers
 
 
 
+
+
+
+
+        /// <summary>
+        /// Endpoint for a main sub-admin to approve or reject a student's request to join a course.
+        /// </summary>
+        /// <param name="courseId">The ID of the course.</param>
+        /// <param name="studentId">The ID of the student.</param>
+        /// <param name="status">The status to set for the approval ('approved' or 'rejected').</param>
+        /// <returns>An IActionResult indicating success or failure of updating the approval status.</returns>
         [HttpPatch("ApprovelToJoin")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]

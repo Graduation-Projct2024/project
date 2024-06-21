@@ -30,6 +30,8 @@ namespace courseProject.Core.Models
         public int? limitNumberOfStudnet { get; set; }
         public int? totalHours { get; set; }
 
+        [NotMapped] public bool? isAvailable { get; set; }
+
         [ForeignKey("Instructor")]
         public Guid InstructorId { get; set; } 
 

@@ -27,24 +27,6 @@ namespace courseProject.Repository.Migrations
                     b.Property<Guid>("AdminId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("DateOfBirth")
-                        .HasColumnType("date");
-
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("address")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("gender")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("phoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("AdminId");
 
                     b.ToTable("admins");
@@ -52,7 +34,7 @@ namespace courseProject.Repository.Migrations
                     b.HasData(
                         new
                         {
-                            AdminId = new Guid("1adead10-ed9e-45a4-98d5-d0a209b48254")
+                            AdminId = new Guid("6b8929ec-a3be-4431-abca-a7603b0a09b7")
                         });
                 });
 
@@ -113,6 +95,9 @@ namespace courseProject.Repository.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("dateOfAdded")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("email")
                         .IsRequired()
@@ -344,25 +329,6 @@ namespace courseProject.Repository.Migrations
                     b.Property<Guid>("InstructorId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("DateOfBirth")
-                        .HasColumnType("date");
-
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("address")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("gender")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("phoneNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("skillDescription")
                         .HasColumnType("nvarchar(max)");
 
@@ -482,24 +448,6 @@ namespace courseProject.Repository.Migrations
                     b.Property<Guid>("StudentId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("DateOfBirth")
-                        .HasColumnType("date");
-
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("address")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("gender")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("phoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("StudentId");
 
                     b.ToTable("students");
@@ -512,6 +460,9 @@ namespace courseProject.Repository.Migrations
 
                     b.Property<Guid>("TaskId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("dateOfAdded")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("description")
                         .HasColumnType("nvarchar(max)");
@@ -571,25 +522,6 @@ namespace courseProject.Repository.Migrations
                     b.Property<Guid>("SubAdminId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("DateOfBirth")
-                        .HasColumnType("date");
-
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("address")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("gender")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("phoneNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("SubAdminId");
 
                     b.ToTable("subadmins");
@@ -601,15 +533,36 @@ namespace courseProject.Repository.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime?>("DateOfBirth")
+                        .HasColumnType("date");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsVerified")
                         .HasColumnType("bit");
+
+                    b.Property<string>("LName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("dateOfAdded")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("gender")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("password")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("phoneNumber")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("role")
@@ -627,8 +580,9 @@ namespace courseProject.Repository.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("1adead10-ed9e-45a4-98d5-d0a209b48254"),
+                            UserId = new Guid("6b8929ec-a3be-4431-abca-a7603b0a09b7"),
                             IsVerified = true,
+                            dateOfAdded = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             email = "programming.academy24@gmail.com",
                             password = "$2a$11$cCCo7VY/4sxtIpeWDUFDROiDL/QPhi8AtawQhx4RGqKMAYgk8UIse",
                             role = "admin",

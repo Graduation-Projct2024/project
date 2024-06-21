@@ -1,11 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using courseProject.Core.IGenericRepository;
 using courseProject.Repository.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 using courseProject.Core.Models;
 using Microsoft.AspNetCore.Http;
 
@@ -17,21 +13,16 @@ namespace courseProject.Repository.GenericRepository
 
        
     
-        private readonly projectDbContext dbContext;
-        private readonly IHttpContextAccessor httpContextAccessor;
-      
-        private IConfiguration configuration;
+
 
         public UnitOfWork(projectDbContext dbContext , IConfiguration configuration , IHttpContextAccessor httpContextAccessor )
         {
-            this.dbContext = dbContext;
-            this.httpContextAccessor = httpContextAccessor;
+        
            
             SubAdminRepository = new SubAdminRepository(dbContext);
             UserRepository = new UserRepository(dbContext, configuration, httpContextAccessor);
             instructorRepositpry = new instructorRepositpry(dbContext);
-            StudentRepository=new StudentRepository(dbContext);
-            AdminRepository = new AdminRepository(dbContext);
+            StudentRepository=new StudentRepository(dbContext);          
             FileRepository = new FileRepository(httpContextAccessor);
             CourseRepository = new CourseRepository(dbContext);
             materialRepository = new MaterialRepository(dbContext);
@@ -43,15 +34,14 @@ namespace courseProject.Repository.GenericRepository
             studentCourseRepository = new StudentCourseRepository(dbContext);
             submissionRepository = new SubmissionRepository(dbContext);
             contactRepository = new ContactRepository(dbContext);
-     //       EmailService = new SmtpEmailService(configuration);
+ 
 
         }
 
         public ISubAdminRepository SubAdminRepository { get; set; }
         public IUserRepository UserRepository { get; set ; }
         public IinstructorRepositpry instructorRepositpry { get ; set ; }
-        public IStudentRepository StudentRepository { get; set ; }
-        public IAdminRepository AdminRepository { get; set ; }
+        public IStudentRepository StudentRepository { get; set ; }       
         public IFileRepository FileRepository { get; set; }
         public ICourseRepository<Course> CourseRepository { get; set ; }
         public IMaterialRepository materialRepository { get; set ; }
@@ -64,7 +54,7 @@ namespace courseProject.Repository.GenericRepository
         public IStudentCourseRepository studentCourseRepository { get; set ; }
         public ISubmissionRepository submissionRepository { get; set ; }
         public IContactRepository contactRepository { get; set ; }
-        //  Core.IGenericRepository.ICourseRepository<Course> IUnitOfWork.CourseRepository { get ; set; }
+    
     }
 }
 

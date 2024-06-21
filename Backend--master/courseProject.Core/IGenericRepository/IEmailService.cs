@@ -9,7 +9,7 @@ namespace courseProject.Core.IGenericRepository
     public interface IEmailService
     {
       //  public Task SendEmailAsync(string to, string subject, string body);
-       public Task SendVerificationEmail(string ToEmail, string Subject, string Body);
+       public Task SendEmail(string ToEmail, string Subject, string Body);
         //  public void SendEmail(string email, string subject, string messageBody);
     }
 }

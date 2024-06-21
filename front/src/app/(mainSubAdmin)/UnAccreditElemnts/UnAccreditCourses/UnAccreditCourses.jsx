@@ -35,7 +35,7 @@ const handleCloseUpdate = () => {
     if (userData) {
       try {
         const { data } = await axios.get(
-          `http://localhost:5134/api/CourseContraller/GetallUndefinedCoursesToSubAdmin?subAdminId=${userId}&pageNumber=${pageNum}&pageSize=${pageSize}`,{
+          `${process.env.NEXT_PUBLIC_EDUCODING_API}CourseContraller/GetallUndefinedCoursesToSubAdmin?subAdminId=${userId}&pageNumber=${pageNum}&pageSize=${pageSize}`,{
             headers: {
                 Authorization: `Bearer ${userToken}`,
             },
@@ -106,8 +106,7 @@ const handleCloseUpdate = () => {
         >
           <MenuItem value={5}>5</MenuItem>
           <MenuItem value={10}>10</MenuItem>
-          <MenuItem value={20}>20</MenuItem>
-          <MenuItem value={50}>50</MenuItem>
+          <MenuItem value={15}>15</MenuItem>
         </Select>
       </FormControl>
               <div className="icons d-flex gap-2 pt-3">

@@ -35,7 +35,7 @@ const handleCloseUpdate = () => {
     if (userData) {
       try {
         const { data } = await axios.get(
-          `https://localhost:7116/api/CourseContraller/GetallUndefinedCoursesToSubAdmin?subAdminId=${userId}&pageNumber=${pageNum}&pageSize=${pageSize}`,{
+          `${process.env.NEXT_PUBLIC_EDUCODING_API}CourseContraller/GetallUndefinedCoursesToSubAdmin?subAdminId=${userId}&pageNumber=${pageNum}&pageSize=${pageSize}`,{
             headers: {
                 Authorization: `Bearer ${userToken}`,
             },
@@ -106,8 +106,7 @@ const handleCloseUpdate = () => {
         >
           <MenuItem value={5}>5</MenuItem>
           <MenuItem value={10}>10</MenuItem>
-          <MenuItem value={20}>20</MenuItem>
-          <MenuItem value={50}>50</MenuItem>
+          <MenuItem value={15}>15</MenuItem>
         </Select>
       </FormControl>
               <div className="icons d-flex gap-2 pt-3">
@@ -135,11 +134,7 @@ const handleCloseUpdate = () => {
             <th scope="col">#</th>
             <th scope="col">Name</th>
             <th scope="col">Price</th>
-            <th scope="col">Category</th>
             <th scope="col">Start Date</th>
-            <th scope="col">LastDate to enroll</th>
-            <th scope="col">Total hours</th>
-            <th scope="col">Max # of Students</th>
             <th scope="col">Instructor</th>
             <th scope="col">Actions</th>
           </tr>
@@ -151,11 +146,7 @@ const handleCloseUpdate = () => {
                 <th scope="row">{++index}</th>
                 <td>{course.name}</td>
                 <td>{course.price}</td>
-                <td>{course.category}</td>
                 <td>{course.startDate}</td>
-                <td>{course.deadline}</td>
-                <td>{course.totalHours}</td>
-                <td>{course.limitNumberOfStudnet}</td>
                 <td>{course.instructorName}</td>
                 <td className="d-flex gap-1">
                 <button className="border-0 bg-white" type="button" onClick={() => handleClickOpenUpdate(course.id)}>

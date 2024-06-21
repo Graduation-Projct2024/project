@@ -162,7 +162,7 @@ const handleCloseViewTaskDialog = () => {
     const getLecture = async () => {
 if(userToken&&LectureId){
       const data = await axios.get(
-        `https://localhost:7116/api/Lectures/GetConsultationById?consultationId=${LectureId}`,
+        `${process.env.NEXT_PUBLIC_EDUCODING_API}Lectures/GetConsultationById?consultationId=${LectureId}`,
         {headers :{Authorization:`Bearer ${userToken}`}}
 
       );
@@ -173,7 +173,7 @@ if(userToken&&LectureId){
       if(userToken&&LectureId){
         try{
         const { data } = await axios.get(
-          `https://localhost:7116/api/MaterialControllar/GetAllMaterial?ConsultationId=${LectureId}`,
+          `${process.env.NEXT_PUBLIC_EDUCODING_API}MaterialControllar/GetAllMaterial?ConsultationId=${LectureId}`,
           {headers :{Authorization:`Bearer ${userToken}`}}
 
           

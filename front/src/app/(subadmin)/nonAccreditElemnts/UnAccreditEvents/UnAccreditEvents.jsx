@@ -34,7 +34,7 @@ export default function UnAccreditEvents() {
       if (userData) {
         try {
           const { data } = await axios.get(
-            `https://localhost:7116/api/EventContraller/GetAllUndefinedEventsToSubAdmin?subAdminId=${userId}&pageNumber=${pageNum}&pageSize=${pageSize}`,{
+            `${process.env.NEXT_PUBLIC_EDUCODING_API}EventContraller/GetAllUndefinedEventsToSubAdmin?subAdminId=${userId}&pageNumber=${pageNum}&pageSize=${pageSize}`,{
               headers: {
                   Authorization: `Bearer ${userToken}`,
               },
@@ -105,8 +105,7 @@ export default function UnAccreditEvents() {
         >
           <MenuItem value={5}>5</MenuItem>
           <MenuItem value={10}>10</MenuItem>
-          <MenuItem value={20}>20</MenuItem>
-          <MenuItem value={50}>50</MenuItem>
+          <MenuItem value={15}>15</MenuItem>
         </Select>
       </FormControl>
                 <div className="icons d-flex gap-2 pt-3">
@@ -137,7 +136,6 @@ export default function UnAccreditEvents() {
     <tr>
       <th scope="col">#</th>
       <th scope="col">Name</th>
-      <th scope="col">Content</th>
       <th scope="col">Category</th>
       <th scope="col">Event Date</th>
       <th scope="col">SubAdmin name</th>
@@ -151,7 +149,6 @@ export default function UnAccreditEvents() {
         {/* {console.log(event.id)} */}
       <th scope="row">{++index}</th>
       <td>{event.name}</td>
-      <td>{event.content}</td>
       <td>{event.category}</td>
       <td>{event.dateOfEvent}</td>
       <td>{event.subAdminFName} {event.subAdminLName}</td>
@@ -198,7 +195,7 @@ export default function UnAccreditEvents() {
         </Dialog>
 
 
-      <Link href={'/Profile'}>
+      <Link href={`/AllEvents/${event.id}`}>
         <button  type="button" className='border-0 bg-white' >
         <FontAwesomeIcon icon={faEye}  className='edit-pen '/>
         </button>

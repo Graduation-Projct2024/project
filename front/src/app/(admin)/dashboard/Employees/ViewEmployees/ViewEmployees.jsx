@@ -15,8 +15,12 @@ import ChangeRole from '../ChangeRole/[userId]/ChangeRole';
 import CategoryIcon from '@mui/icons-material/Category';
 import '../../loading.css'
 
+const api = process.env.NEXT_PUBLIC_EDUCODING_API;
+
+
 export default function ViewEmployees() {
 
+    console.log("Api" , api)
       const {userToken, setUserToken, userData}=useContext(UserContext);
       const [employees, setEmployees] = useState([]);
       // const [loading,setLoading] = useState(true);
@@ -59,7 +63,7 @@ export default function ViewEmployees() {
         if(userData){
           // setLoading(true);
         try{
-        const { data } = await axios.get(`https://localhost:7116/api/Employee/GetAllEmployee?pageNumber=${pageNum}&pageSize=${pageSize}`);
+        const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}Employee/GetAllEmployee?pageNumber=${pageNum}&pageSize=${pageSize}`);
         // setLoading(false)
       //  console.log(data);
         setEmployees(data.result.items);
@@ -212,8 +216,7 @@ export default function ViewEmployees() {
         >
           <MenuItem value={5}>5</MenuItem>
           <MenuItem value={10}>10</MenuItem>
-          <MenuItem value={20}>20</MenuItem>
-          <MenuItem value={50}>50</MenuItem>
+          <MenuItem value={15}>15</MenuItem>
         </Select>
       </FormControl>
               <div className="icons d-flex gap-2 pt-3">
@@ -353,10 +356,8 @@ export default function ViewEmployees() {
           <tr>
             <th scope="col">#</th>
             <th scope="col">Name</th>
-            <th scope="col">Email</th>
             <th scope="col">Role</th>
             <th scope="col">Gender</th>
-            <th scope="col">Phone No.</th>
             <th scope="col">Address</th>
             <th scope="col">Option</th>
           </tr>
@@ -369,10 +370,8 @@ export default function ViewEmployees() {
                 <td>
                   {employee.fName} {employee.lName}
                 </td>
-                <td>{employee.email}</td>
                 <td>{employee.type}</td>
                 <td>{employee.gender}</td>
-                <td>{employee.phoneNumber}</td>
                 <td>{employee.address}</td>
 
                 <td className="d-flex gap-1">
@@ -392,7 +391,7 @@ export default function ViewEmployees() {
             "& .MuiPaper-root": {
               width: "100%",
               maxWidth: "700px!important",  
-              height: "400px!important",            },
+              height: "600px!important",            },
           },
           
         }}

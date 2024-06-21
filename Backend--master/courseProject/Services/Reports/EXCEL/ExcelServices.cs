@@ -86,7 +86,7 @@ namespace courseProject.Services.Reports.EXCEL
         private byte[] GenerateExcel(string title, List<string?[]> data, string[] headers)
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial; // Set license context
-
+           
             using (var package = new ExcelPackage())
             {
                 // Add a new worksheet to the empty workbook

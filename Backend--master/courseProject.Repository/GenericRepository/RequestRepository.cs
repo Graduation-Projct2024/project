@@ -2,11 +2,7 @@
 using courseProject.Core.Models;
 using courseProject.Repository.Data;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace courseProject.Repository.GenericRepository
 {
@@ -32,7 +28,9 @@ namespace courseProject.Repository.GenericRepository
 
         public async Task<IReadOnlyList<Request>> GerAllCoursesRequestAsync()
         {
-            return await dbContext.requests.Include(x => x.Student.user).Where(x => x.satus == "custom-course").ToListAsync();
+            return await dbContext.requests.Include(x => x.Student.user).Where(x => x.satus == "custom-course")
+                .OrderByDescending(x => x.date)
+                .ToListAsync();
         }
 
 
@@ -48,6 +46,7 @@ namespace courseProject.Repository.GenericRepository
                                                       .ThenInclude(x => x.user)
                                                  .Include(x => x.Course)
                                                  .Where(x => x.status.ToLower() == "waiting")
+                                                 .OrderByDescending(x=>x.EnrollDate)
                                                  .ToListAsync();
         }
 

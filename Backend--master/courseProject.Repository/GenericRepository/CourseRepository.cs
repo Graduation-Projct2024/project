@@ -3,11 +3,7 @@ using courseProject.Core.Models;
 using courseProject.Repository.Data;
 using Microsoft.EntityFrameworkCore;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 
 namespace courseProject.Repository.GenericRepository
@@ -25,6 +21,7 @@ namespace courseProject.Repository.GenericRepository
 
         
 
+        //get a course by it's Id
         public async Task<Course> GetCourseByIdAsync(Guid? id)
         {
            return  await dbContext.courses.Include(x=>x.Instructor).ThenInclude(x=>x.user)
@@ -32,61 +29,84 @@ namespace courseProject.Repository.GenericRepository
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 
+
+        //get total student number in a course by it's Id
         public async Task<int> GetNumberOfStudentsInTHeCourseAsync(Guid courseId)
         {
            return   dbContext.studentCourses.Where(x => x.courseId == courseId).Count();
         }
 
-        public Task EditCourseAfterAccreditAsync(Guid courseId)
-        {
-            throw new NotImplementedException();
-        }
+     
 
-       
+       // get all course created by subAdmin by it's Id , before accredit it by admin
 
         public async Task<IReadOnlyList<Course>> GetAllUndefinedCoursesBySubAdminIdAsync(Guid subAdminId)
         {
             return await dbContext.courses.Include(x=>x.Instructor).ThenInclude(x=>x.user)
                                           .Include(x=>x.SubAdmin).ThenInclude(x=>x.user)
-                .Where(x=>x.SubAdminId == subAdminId && x.status.ToLower()=="undefined").ToListAsync();
+                .Where(x=>x.SubAdminId == subAdminId && x.status.ToLower()=="undefined")
+                .OrderByDescending(x=>x.dateOfAdded)
+                .ToListAsync();
         }
 
+
+        // get a accredit courses by it's Id , stutus => { accredit , start , finish}
         public async Task<Course> getAccreditCourseByIdAcync(Guid courseId)
         {
             return await dbContext.courses.Where(x => x.status.ToLower() != "undefined" || x.status.ToLower() != "reject").FirstOrDefaultAsync(x => x.Id == courseId);
         }
 
+
+        // get all courses given by istructor by it's id , and after accrefit it 
         public async Task<IReadOnlyList<Course>> GetAllCoursesGivenByInstructorIdAsync(Guid Instructorid)
         {
-            return await dbContext.courses.Where(x => x.InstructorId == Instructorid && (x.status.ToLower() == "accredit" || x.status.ToLower() == "start" || x.status.ToLower() == "finish")).ToListAsync();
+            return await dbContext.courses.Where(x => x.InstructorId == Instructorid && (x.status.ToLower() == "accredit" || x.status.ToLower() == "start" || x.status.ToLower() == "finish"))
+                .OrderByDescending(x => x.dateOfAdded)
+                .ToListAsync();
         }
 
+
+
+        // get all enrolled courses by student
         public async Task<IReadOnlyList<StudentCourse>> GetAllCoursesForStudentAsync(Guid Studentid)
         {
-            return await dbContext.studentCourses.Include(x => x.Course).Where(x => x.StudentId == Studentid && x.status.ToLower() == "joind").ToListAsync();
+            return await dbContext.studentCourses.Include(x => x.Course).Where(x => x.StudentId == Studentid && x.status.ToLower() == "joind")
+                .OrderByDescending(x=>x.EnrollDate)
+                .ToListAsync();
         }
 
 
-
+        // get all courses to view it in courses to student , and to show if he can enroll in it , or not , or already enroll it 
         public async Task<IReadOnlyList<Course>> GetAllCoursesAsync(Guid studentId)
         {
+
+            // Fetch all courses from the database that are not undefined or rejected
             var allCourses = await dbContext.courses
                 .Where(x => x.status.ToLower() != "undefined" || x.status.ToLower()!="reject")
                 
                 .Include(x => x.studentCourses)
                 .Include(x => x.Instructor).ThenInclude(x => x.user)
                 .Include(x => x.SubAdmin).ThenInclude(x => x.user)
+                .OrderByDescending(x=>x.dateOfAdded)
                 .ToListAsync();
 
-            if (allCourses.Count > 0)
+
+            // Check if any courses are retrieved
+            if (allCourses.Any())
             {
 
                 StudentCourse studentCourse;
+                int studentCourseCount;
+
+                // Iterate over each course to determine its availability and enrollment status
                 foreach (var course in allCourses)
                 {
                     studentCourse = course.studentCourses.FirstOrDefault(x => x.StudentId == studentId && course.Id == x.courseId);
+                    studentCourseCount = course.studentCourses.Count();
 
-                    if (studentCourse != null &&( course.studentCourses.Any(x => x.courseId == course.Id && x.StudentId == studentId) ))/*&& (x.Course.Deadline >= DateTime.Today.Date || x.Course.Deadline == null)))*/
+
+                    // If the student is enrolled in the course, mark it as enrolled
+                    if (studentCourse != null &&( course.studentCourses.Any(x => x.courseId == course.Id && x.StudentId == studentId) ))
                     {
 
                         studentCourse.isEnrolled = true;
@@ -94,25 +114,15 @@ namespace courseProject.Repository.GenericRepository
 
                     else
                     {
-                        // Check if the course's deadline is less than today's date
-                        if ((course.Deadline.Value < DateTime.Now.Date) && course.status.ToLower()!="finish")
+                        // If the course deadline has passed or the course limit is reached and the course is not finished, mark it as unavailable
+                        if (((course.Deadline.Value < DateTime.Now.Date) ||course.limitNumberOfStudnet <= studentCourseCount) && course.status.ToLower()!="finish")
                         {
-                            // If there is no studentCourse entry for this student and course, create one
-                            if (studentCourse == null)
-                            {
 
-                                studentCourse = new StudentCourse
-                                {
-                                    StudentId = studentId,
-                                    courseId = course.Id,
-                                    isEnrolled = true
-                                };
-                            }
-                            else
-                            {
-                                studentCourse.isEnrolled = true;
-                            }
-                            course.studentCourses.Add(studentCourse);
+                            course.isAvailable = false;
+                        }
+                        else
+                        {
+                            course.isAvailable = true;
                         }
                     }
                 }
@@ -121,6 +131,8 @@ namespace courseProject.Repository.GenericRepository
         }
 
 
+
+        
         public async Task CreateCourse(Course model)
         {
             await dbContext.Set<Course>().AddAsync(model);
@@ -140,21 +152,21 @@ namespace courseProject.Repository.GenericRepository
 
                 return await dbContext.courses
                     .Where(x => x.status.ToLower() == "accredit" || x.status.ToLower() == "start" || x.status.ToLower() == "finish")
-                    .Include(x => x.Instructor.user).Include(x => x.SubAdmin.user).ToListAsync();
+                    .Include(x => x.Instructor.user).Include(x => x.SubAdmin.user)
+                    .OrderByDescending(x=>x.dateOfAdded)
+                    .ToListAsync();
            
-            //// Apply filtering and sorting using Sieve without pagination
-            //var filteredAndSortedCourses = sieveProcessor.Apply(sieveModel, courses, applyPagination: false);
-
-            //// Get the total count after filtering and sorting but before pagination
-            //var totalCount = await filteredAndSortedCourses.CountAsync();
-
-            //// Apply pagination
-            //var pagedCourses = await sieveProcessor.Apply(sieveModel, filteredAndSortedCourses).ToListAsync();
+           
+           
+        }
 
 
-            // Create and return the PagedResponse
-       //    return PaginationClass<Course>.CreateAsync(pagedCourses,totalCount, sieveModel.Page , sieveModel.PageSize ).Result;
-          //  return await sieveProcessor.Apply(sieveModel, courses).ToListAsync();
+        //return all courses with all status
+        public async Task<IReadOnlyList<Course>> GetAllCoursesForAccreditAsync()
+        {
+            
+                return await dbContext.courses
+                    .Include(x => x.SubAdmin.user).Include(x => x.Instructor.user).OrderByDescending(x => x.dateOfAdded).ToListAsync();
            
         }
 

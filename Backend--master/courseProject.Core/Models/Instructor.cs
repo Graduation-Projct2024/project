@@ -14,18 +14,18 @@ namespace courseProject.Core.Models
         [Key]
         [ForeignKey("User")]
         public Guid InstructorId { get; set; }
-        public string? LName { get; set; }
-        public DateTime? DateOfBirth { get; set; }
+        //public string? LName { get; set; }
+        //public DateTime? DateOfBirth { get; set; }
 
-        [DataType(DataType.PhoneNumber)]
-        public string phoneNumber { get; set; }
+        //[DataType(DataType.PhoneNumber)]
+        //public string phoneNumber { get; set; }
 
-        public static string type { get; set; } = "Instructor";
+        //public static string type { get; set; } = "Instructor";
 
-        public string? gender { get; set; }
+        //public string? gender { get; set; }
 
-        public string? address { get; set; }
-        public string? ImageUrl { get; set; }
+        //public string? address { get; set; }
+        //public string? ImageUrl { get; set; }
 
         public string? skillDescription { get; set; }
         public User user { get; set; }

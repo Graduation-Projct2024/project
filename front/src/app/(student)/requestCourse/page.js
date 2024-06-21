@@ -44,7 +44,7 @@ console.log( courses.startDate)
 console.log( courses.endDate)
 
 const { data } = await axios.post(
-  `https://localhost:7116/api/Request/RequestToCreateCustomCourse?studentid=${userId}`,
+  `${process.env.NEXT_PUBLIC_EDUCODING_API}Request/RequestToCreateCustomCourse?studentid=${userId}`,
  formData,
  {headers: {
   'Content-Type': 'application/json', 'Content-Type': 'charset=utf-8',

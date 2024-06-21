@@ -1,24 +1,13 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using courseProject.Core.IGenericRepository;
 using courseProject.Core.Models;
 using courseProject.Repository.Data;
 using courseProject.Repository.GenericRepository;
-using System.Net;
-using Microsoft.AspNetCore.JsonPatch;
-using System.Linq.Expressions;
-using System;
-using static System.Net.WebRequestMethods;
-using courseProject.Common;
-using System.Net.NetworkInformation;
 using Microsoft.AspNetCore.Authorization;
-using courseProject.Core.Models.DTO.EventsDTO;
 using courseProject.Core.Models.DTO.CoursesDTO;
 using courseProject.Services.Courses;
-using courseProject.Validations;
+
 
 
 namespace courseProject.Controllers
@@ -27,34 +16,26 @@ namespace courseProject.Controllers
     [ApiController]
     public class CourseContraller : ControllerBase
     {
-        private readonly ICourseServices courseServices;
-        private readonly IUnitOfWork unitOfWork;
-        private readonly projectDbContext dbContext;
-        private readonly IGenericRepository1<Course> courseRepo;
-        private readonly IGenericRepository1<Request> requestRepo;
+        private readonly ICourseServices courseServices;    
         private readonly IMapper mapper;
         protected ApiResponce responce;
 
-        //  private Request request;
+   
 
-        public CourseContraller(ICourseServices courseServices, IUnitOfWork unitOfWork, projectDbContext dbContext, IGenericRepository1<Course> CourseRepo, IGenericRepository1<Request> RequestRepo, IMapper mapper)
+        public CourseContraller(ICourseServices courseServices, IMapper mapper)
         {
-            this.courseServices = courseServices;
-            this.unitOfWork = unitOfWork;
-            this.dbContext = dbContext;
-            courseRepo = CourseRepo;
-            requestRepo = RequestRepo;
+            this.courseServices = courseServices;          
             this.mapper = mapper;
             responce = new ApiResponce();
         
         }
-
+        /// <summary>
+        /// Retrieves all courses where status = "accredit" or "start" or "finish"
+        /// </summary>
         [HttpGet("GetAllAccreditCourses")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        
-        //get all accredits courses , whit status = accredit , start or finish
         public async Task<IActionResult> GetAllCoursesAsync([FromQuery] PaginationRequest paginationRequest)
         {
            
@@ -83,8 +64,6 @@ namespace courseProject.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "Student")]
-
-        //this is to retrive all courses to students to enroll in, and another course that he is already enroll in it 
         public async Task<IActionResult> GetAllCoursesToStudent(Guid studentId, [FromQuery] PaginationRequest paginationRequest)
         {
 
@@ -94,12 +73,15 @@ namespace courseProject.Controllers
                             
         }
 
+
+        /// <summary>
+        /// Retrieves all courses whit all status
+        /// </summary>
         [HttpGet("GetAllCoursesForAccredit")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-
-        //get all courses , with all status 
+         
         public async Task<IActionResult> GetAllCoursesForAccreditAsync([FromQuery] PaginationRequest paginationRequest)
         {
             var courses = await courseServices.GetAllCoursesForAccreditAsync();
@@ -110,6 +92,12 @@ namespace courseProject.Controllers
 
 
 
+        /// <summary>
+        /// Creates a new course. This action can be performed by a SubAdmin or Main-SubAdmin.
+        /// </summary>
+        /// <param name="model">The DTO containing the course details to create.</param>
+        /// <param name="StudentId">Optional Student ID associated with the course creation.</param>
+        /// <returns>An IActionResult indicating the outcome of the course creation.</returns>
         [HttpPost("CreateCourse")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -118,7 +106,6 @@ namespace courseProject.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize(Policy = "SubAdmin , Main-SubAdmin")]
 
-        // a create course , created by subAdmin or main subAdmin
         public async Task<IActionResult> createCourse([FromForm] CourseForCreateDTO model, Guid? StudentId)
         {
          
@@ -134,14 +121,19 @@ namespace courseProject.Controllers
         }
 
 
-        
 
 
+        /// <summary>
+        /// Changes the status of a course. This action can be performed by an Admin or Instructor.
+        /// </summary>
+        /// <param name="courseId">The ID of the course to update.</param>
+        /// <param name="courseStatus">The new status of the course (reject, accredit, finish, start).</param>
+        /// <returns>An IActionResult indicating the outcome of the status update.</returns>
         [HttpPatch("accreditCourse")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        [Authorize(Policy = "Admin")]
+        [Authorize(Policy = "Admin , Instructor")]
 
         // this to change the status of courses to reject , accredit , finish , start
         public async Task<IActionResult> EditCourseStatus(Guid courseId, CourseStatusDTO courseStatus)
@@ -158,7 +150,12 @@ namespace courseProject.Controllers
         }
 
 
-        // after accredit the course , the admin only can edit in the course
+        /// <summary>
+        /// Allows an admin to edit a course after it has been accredited.
+        /// </summary>
+        /// <param name="courseId">The ID of the course to edit.</param>
+        /// <param name="editedCourse">The DTO containing the edited course details.</param>
+        /// <returns>An IActionResult indicating the outcome of the course edit.</returns>
         [HttpPut("EditOnCourseAfterAccredit")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -169,21 +166,21 @@ namespace courseProject.Controllers
         {
 
             var courseService = await courseServices.EditOnCourseAfterAccredit(courseId, editedCourse);
-            responce.Result = courseService;
+           
             if (courseService.IsError == true) responce.ErrorMassages = courseService.FirstError.Description;
-            return Ok(responce);
+            return Ok(new ApiResponce { Result="course updated successfully"});
 
         }
 
 
 
-
+        /// <summary>
+        /// Retrieves a course by its ID.
+        /// </summary>
         [HttpGet("GetCourseById")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-
-        // get course by it's id
         public async Task<IActionResult> GetCourseById(Guid id)
         {
 
@@ -195,7 +192,9 @@ namespace courseProject.Controllers
 
 
 
-
+        /// <summary>
+        /// Allows a SubAdmin or Main-SubAdmin to edit a course before it has been accredited or rejected by an admin.
+        /// </summary>
         [HttpPut("EditCourse")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -214,14 +213,14 @@ namespace courseProject.Controllers
         }
 
 
-
+        /// <summary>
+        /// Retrieves all undefined courses created by a SubAdmin based on their ID.
+        /// </summary>
         [HttpGet("GetallUndefinedCoursesToSubAdmin")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "SubAdmin , Main-SubAdmin")]
-
-        // get all undefinded course created by a subAdmin depend on his id
         public async Task<IActionResult> GetALlUndefinedCoursesForSubAdmins(Guid subAdminId , [FromQuery] PaginationRequest paginationRequest)
         {          
                 var getCourses = await courseServices.GetALlUndefinedCoursesForSubAdmins(subAdminId);
@@ -231,7 +230,15 @@ namespace courseProject.Controllers
         }
 
 
-        
+
+
+
+        /// <summary>
+        /// Retrieves all courses given by a specific instructor, paginated.
+        /// </summary>
+        /// <param name="Instructorid">The ID of the instructor whose courses are to be retrieved.</param>
+        /// <param name="paginationRequest">Pagination parameters (pageNumber, pageSize).</param>
+        /// <returns>An IActionResult containing the paginated list of courses or appropriate error responses.</returns>
         [HttpGet("GetAllCoursesGivenByInstructor")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -248,22 +255,35 @@ namespace courseProject.Controllers
         }
 
 
+
+
+        /// <summary>
+        /// Retrieves all custom courses for Main-SubAdmins and Students, paginated.
+        /// </summary>
+        /// <param name="paginationRequest">Pagination parameters (pageNumber, pageSize).</param>
+        /// <returns>An IActionResult containing the paginated list of custom courses or appropriate error responses.</returns>
         [HttpGet("GetAllCustomCourses")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy = "Main-SubAdmin , Student")]
-        // not try
+       
         public async Task<IActionResult> GetAllCustomCoursesToMainSubAdmin([FromQuery] PaginationRequest paginationRequest)
         {
 
             var GetCustomCourses = await courseServices.GetAllCustomCourses();
 
             return Ok(new ApiResponce { Result= (Pagination<CustomCourseForRetriveDTO>.CreateAsync(GetCustomCourses, paginationRequest.pageNumber, paginationRequest.pageSize)).Result });
-            }
+        }
 
 
 
+
+        /// <summary>
+        /// Retrieves a custom course by its ID for Main-SubAdmins and Students.
+        /// </summary>
+        /// <param name="id">The ID of the custom course to retrieve.</param>
+        /// <returns>An IActionResult containing the custom course or appropriate error responses.</returns>
         [HttpGet("GetCustomCoursesById")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -280,6 +300,10 @@ namespace courseProject.Controllers
         }
 
 
+
+        /// <summary>
+        /// Retrieves all courses a student is enrolled in.
+        /// </summary>
         [HttpGet("GetAllEnrolledCoursesForAStudent")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -295,6 +319,10 @@ namespace courseProject.Controllers
         }
 
 
+
+
+
+       
     }
     }
 
