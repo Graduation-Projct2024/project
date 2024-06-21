@@ -1,13 +1,18 @@
 'use client'
-import React from 'react'
+import React, { useEffect } from 'react'
 import Layout from '../SubAdminLayout/Layout'
 import '../../(admin)/dashboard/dashboard.css'
-import '../../../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js'
+// import '../../../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js'
 import ViewCourses from './Courses/ViewCourses/ViewCourses'
 import ViewEvents from './Events/ViewEvents/ViewEvents'
 
 
 export default function page() {
+  useEffect(() => {
+    if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+      require('bootstrap/dist/js/bootstrap.bundle.min.js');
+    }
+  }, []);
   return (
     <Layout title = "Dashboard">
 

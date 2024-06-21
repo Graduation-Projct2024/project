@@ -66,9 +66,9 @@ body{
   color: #FFFDF6;
   transform: rotate(360deg);
 }
-.info1{
+/* .info1{
   border-right: #7C7E9D 1px solid;
-}
+} */
 .info2{
   border-left: #7C7E9D 1px solid;
 }

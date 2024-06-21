@@ -180,7 +180,7 @@ const sidebarItems = [
   return (
     <AdminRoute>
     <div className='side-drawer2'>
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex' }} className = 'drawerSide'>
       <CssBaseline />
       <Stack
         position="absolute"
@@ -199,16 +199,16 @@ const sidebarItems = [
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h4" noWrap component="div" >
+          <Typography variant="h4" noWrap component="div" className='titleSide'>
           {title}
           </Typography>
-          <Link  >
-          {/* <Link href={`/Profile/${userId}`}> <button type="button" > */}
+          
+          <Link href={`/Profile/${userId}`}>
             {userData&&userData.imageUrl?(  
-            <Avatar alt="profile picture" src={userData.imageUrl} sx={{ width: 60, height: 60,mr:7 ,mt:3,}} />
-            ):(<Avatar alt="Remy Sharp" sx={{ width: 60, height: 60,mr:7 ,mt:3,}} />)} 
-             {/* </button></Link> */}
-         </Link>
+            <Avatar alt="profile picture" src={userData.imageUrl} sx={{ width: 60, height: 60,mr:7 ,mt:3,}}   onClick={() => router.push(`/Profile/${userId}`)}/>
+            ):(<Avatar alt="Remy Sharp" sx={{ width: 60, height: 60,mr:7 ,mt:3,}} onClick={()=>router.push(`/Profile/${userId}`)} />)} 
+             </Link>
+        
         </Toolbar>
       </Stack>
       <Box

@@ -8,13 +8,16 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUpFromBracket, faFilter } from '@fortawesome/free-solid-svg-icons';
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, useMediaQuery, useTheme } from '@mui/material';
-import '../../../../node_modules/bootstrap/dist/js/bootstrap.bundle'
 import AddSkill from './AddSkill/AddSkill';
 import '../dashboard/loading.css'
 
 export default function AcademySkills() {
 
-    
+  useEffect(() => {
+    if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+      require('bootstrap/dist/js/bootstrap.bundle.min.js');
+    }
+  }, []);
     const {userToken, setUserToken, userData}=useContext(UserContext);
     const [skills, setSkills] = useState([]);
     const [open, setOpen] = React.useState(false);

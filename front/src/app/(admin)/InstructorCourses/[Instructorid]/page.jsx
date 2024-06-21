@@ -7,7 +7,7 @@ import Link from 'next/link'
 import React, { useContext, useEffect, useState } from 'react'
 import '../../dashboard/dashboard.css'
 import { UserContext } from '@/context/user/User'
-import { FormControl, InputLabel, MenuItem, Pagination, Select, Stack } from '@mui/material'
+import { FormControl, InputLabel, MenuItem, Pagination, Select, Stack, Tooltip } from '@mui/material'
 
 export default function InstructorCourses({params}) {
     // console.log(params.Instructorid)
