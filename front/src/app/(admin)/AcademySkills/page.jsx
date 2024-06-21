@@ -70,19 +70,19 @@ const filteredSkills = Array.isArray(skills) ? skills.filter((skill) => {
 
   return (
     <Layout title="Skills in academy">
-      {/* {loading ? (
+      {loading ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
           <CircularProgress />
-          <div className='loading bg-white position-fixed vh-100 w-100 d-flex justify-content-center align-items-center z-3'>
+          {/* <div className='loading bg-white position-fixed vh-100 w-100 d-flex justify-content-center align-items-center z-3'>
       <span className="loader"></span>
-    </div>
+    </div> */}
           {/* <CircularProgress /> */}
           {/* <div className='loading bg-white position-fixed vh-100 w-100 d-flex justify-content-center align-items-center z-3'> */}
-      <span className="loader"></span>
+      {/* <span className="loader"></span> */}
     {/* </div> */}
-        </Box>
+       </Box>
         
-      ) : ( */}
+      ) : ( 
 
         <>
     <div className="filter py-2 text-end">
@@ -208,7 +208,7 @@ const filteredSkills = Array.isArray(skills) ? skills.filter((skill) => {
       </table>
       </>
     
-      {/* )}  */}
+        )}
     </Layout>
   )
 }
