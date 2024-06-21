@@ -179,7 +179,7 @@ function Layout(props) {
   return (
     <SubAdminRoute>
     <div className='side-drawer2'>
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex' }} className = 'drawerSide'>
       <CssBaseline />
       <Stack
         position="absolute"
@@ -198,7 +198,7 @@ function Layout(props) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h4" noWrap component="div" >
+          <Typography variant="h4" noWrap component="div" className='titleSide'>
           {title}
           </Typography>
           <Link  >

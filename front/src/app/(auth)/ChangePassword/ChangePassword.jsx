@@ -125,7 +125,7 @@ export default function ChangePassword({setOpenChange}) {
               type : 'password',
               id:'password',
               name:'password',
-              title:'old Password',
+              title:'Old Password',
               value:formik.values.password,
           },
           {

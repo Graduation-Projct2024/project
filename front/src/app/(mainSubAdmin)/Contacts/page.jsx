@@ -45,7 +45,11 @@ const handleClickOpen = () => {
   const fetchContacts = async (pageNum = pageNumber, pageSizeNum = pageSize) => {
     if(userData){
     try{
-    const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}Contact/GetAllContact?pageNumber=${pageNum}&pageSize=${pageSize}`);
+    const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}Contact/GetAllContact?pageNumber=${pageNum}&pageSize=${pageSize}`,{
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${userToken}`
+      }});
     // console.log(data);
     setContacts(data.items);
     setTotalPages(data.totalPages);

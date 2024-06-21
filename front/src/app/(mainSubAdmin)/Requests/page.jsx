@@ -1,11 +1,16 @@
 'use client'
-import React from 'react'
+import React, { useEffect } from 'react'
 import '../../(admin)/dashboard/dashboard.css'
-import '../../../../node_modules/bootstrap/dist/js/bootstrap.bundle'
+// import '../../../../node_modules/bootstrap/dist/js/bootstrap.bundle'
 import CustomCoursesRequest from './CustomCoursesRequest/CustomCoursesRequest'
 import Layout from '../MainSumAdminLayout/Layout'
 import JoinCoursesRequests from './JoinCoursesRequests/JoinCoursesRequests'
 export default function Requests() {
+  useEffect(() => {
+    if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+      require('bootstrap/dist/js/bootstrap.bundle.min.js');
+    }
+  }, []);
   return (
     <Layout title = "Requests">
       {/* <CustomCoursesRequest/> */}

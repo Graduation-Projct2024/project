@@ -15,7 +15,7 @@ import Layout from '../instructorLayout/Layout.jsx'
 import { UserContext } from '../../../context/user/User.jsx';
 export default function page() {
   const [courses, setCourses] = useState([]);
-  const [loading , setLoading]=useState(true);
+  // const [loading , setLoading]=useState(true);
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
@@ -48,13 +48,13 @@ export default function page() {
         setPageNumber(value);
       };
 
-  if (loading) {
-    return (
-      <Box sx={{ display: "flex", justifyContent: "center" }}>
-        <CircularProgress color="primary" />
-      </Box>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <Box sx={{ display: "flex", justifyContent: "center" }}>
+  //       <CircularProgress color="primary" />
+  //     </Box>
+  //   );
+  // }
   return (
     <Layout title='Dashboard'>
       <div>
