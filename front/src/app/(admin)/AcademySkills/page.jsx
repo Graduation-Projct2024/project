@@ -36,7 +36,7 @@ export default function AcademySkills() {
       if(userData){
         // setLoading(true);
       try{
-      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}Skill/GetAllSkillOptions`,{ headers: { Authorization: `Bearer ${userToken}` } });
+      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}Skill/GetAllSkillOptions,{ headers: { Authorization: Bearer ${userToken} } }`);
       // setLoading(false)
       console.log(data);
       setSkills(data.result);
@@ -73,12 +73,12 @@ const filteredSkills = Array.isArray(skills) ? skills.filter((skill) => {
 
   return (
     <Layout title="Skills in academy">
-      {loading ? (
+      {/* {loading ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
           <CircularProgress />
-          {/* <div className='loading bg-white position-fixed vh-100 w-100 d-flex justify-content-center align-items-center z-3'>
+          <div className='loading bg-white position-fixed vh-100 w-100 d-flex justify-content-center align-items-center z-3'>
       <span className="loader"></span>
-    </div> */}
+    </div>
           {/* <CircularProgress /> */}
           {/* <div className='loading bg-white position-fixed vh-100 w-100 d-flex justify-content-center align-items-center z-3'> */}
       {/* <span className="loader"></span> */}
@@ -211,7 +211,7 @@ const filteredSkills = Array.isArray(skills) ? skills.filter((skill) => {
       </table>
       </>
     
-        )}
+      {/* )}  */}
     </Layout>
   )
 }

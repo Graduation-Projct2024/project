@@ -29,7 +29,7 @@ export default function page() {
     );
     setCourses(data.data.result.items);
     setTotalPages(data.data.result.totalPages);
-    setLoading(false);
+    // setLoading(false);
     }
     
   };
