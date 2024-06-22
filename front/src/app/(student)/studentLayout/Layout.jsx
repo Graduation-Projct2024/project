@@ -103,7 +103,7 @@ const sidebarItems = [
   };
 
   const drawer = (
-    <div>
+    <div className='side-drawer'>
       <Stack spacing={1} direction='row' alignItems='center'  justifyContent='center' sx={{ ml:6, my:3}}  >
             <AdbIcon sx={{color:deepPurple[50]}}/>
           <Link
@@ -121,7 +121,7 @@ const sidebarItems = [
           </Link>
             </Stack>
       <Divider />
-      <List sx={{ my:4, pt:5 }} >
+      <List sx={{ my:4, pt:5 }} className = "sideContent">
               {sidebarItems.map(({ name, href, icon: Icon }) =>{
                 return(
                 // <ListItem key={name} 
@@ -143,7 +143,7 @@ const sidebarItems = [
                 //   </ListItemButton>
                 //   </Link>
                 // </ListItem>
-                <ListItem key={name}>
+                <ListItem key={name} className='sideItem'>
                 <ListItemButton 
                   className={`sidebar__link ${router.pathname === href ? "sidebar__link--active" : ""}`}
                   onClick={() => router.push(href)}
@@ -157,7 +157,7 @@ const sidebarItems = [
                 )
                 })}
             </List>
-      <List sx={{my:'auto',pt:2}}>
+      <List sx={{my:'auto',pt:2}} className='sideFoot'>
                 <ListItem >
                   <ListItemButton onClick={logout} sx={{color:deepPurple[50], alignSelf: 'flex-end'}}>
                     <ListItemIcon>
@@ -174,7 +174,8 @@ const sidebarItems = [
 
   return (
     <StudentRoute>
-    <Box sx={{ display: 'flex' }}>
+      <div className='side-drawer2'>
+    <Box sx={{ display: 'flex' }} className="drawerSide">
       <CssBaseline />
       <Stack
         position="absolute"
@@ -193,7 +194,7 @@ const sidebarItems = [
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h4" noWrap component="div" >
+          <Typography variant="h4" noWrap component="div" className='titleSide'>
           {title}
           </Typography>
           <Link  >
@@ -244,6 +245,7 @@ const sidebarItems = [
         { children }
       </Box>
     </Box>
+    </div>
     </StudentRoute>
   );
 }
