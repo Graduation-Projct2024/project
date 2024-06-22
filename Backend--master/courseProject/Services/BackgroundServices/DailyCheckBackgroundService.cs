@@ -1,13 +1,15 @@
-﻿namespace courseProject.Services.BackgroundServices
+﻿using courseProject.Core.Models;
+using Microsoft.EntityFrameworkCore;
+using courseProject.Repository.Data;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace courseProject.Services.BackgroundServices
 {
-    using courseProject.Core.Models;
-    using Microsoft.EntityFrameworkCore;
-    using courseProject.Repository.Data;
-    using Microsoft.Extensions.Hosting;
-    using Microsoft.Extensions.Logging;
-    using System;
-    using System.Threading;
-    using System.Threading.Tasks;
+  
 
 
 
