@@ -7,7 +7,7 @@ import axios from 'axios';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUpFromBracket, faFilter } from '@fortawesome/free-solid-svg-icons';
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, useMediaQuery, useTheme } from '@mui/material';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Pagination, Select, Stack, useMediaQuery, useTheme } from '@mui/material';
 import AddSkill from './AddSkill/AddSkill';
 import '../dashboard/loading.css'
 
@@ -21,6 +21,9 @@ export default function AcademySkills() {
     const {userToken, setUserToken, userData}=useContext(UserContext);
     const [skills, setSkills] = useState([]);
     const [open, setOpen] = React.useState(false);
+    const [pageNumber, setPageNumber] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
+    const [totalPages, setTotalPages] = useState(0);
     // const [loading, setLoading] = useState(true);
 
     const theme = useTheme();
@@ -32,14 +35,16 @@ export default function AcademySkills() {
            setOpen(false);
          };
 
-    const fetchSkills = async () => {
+    const fetchSkills = async (pageNum = pageNumber, pageSizeNum = pageSize) => {
       if(userData){
         // setLoading(true);
       try{
-      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}Skill/GetAllSkillOptions,{ headers: { Authorization: Bearer ${userToken} } }`);
+
+      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}Skill/GetAllSkillOptions?pageNumber=${pageNum}&pageSize=${pageSize}`,{ headers: { Authorization: `Bearer ${userToken}` } });
       // setLoading(false)
       console.log(data);
-      setSkills(data.result);
+      setSkills(data.result.items);
+      setTotalPages(data.result.totalPages);
     }
       catch(error){
         console.log(error);
@@ -52,7 +57,15 @@ export default function AcademySkills() {
 
     useEffect(() => {
         fetchSkills();
-    }, [skills,userData]);
+    }, [skills,userData, pageNumber, pageSize]);
+    const handlePageSizeChange = (event) => {
+      setPageSize(event.target.value);
+      setPageNumber(1); // Reset to the first page when page size changes
+    };
+    
+    const handlePageChange = (event, value) => {
+      setPageNumber(value);
+    };
 
     const [searchTerm, setSearchTerm] = useState('');
   
@@ -100,6 +113,21 @@ const filteredSkills = Array.isArray(skills) ? skills.filter((skill) => {
                 value={searchTerm}
                 onChange={handleSearch}
               />
+              <FormControl fullWidth className="w-50">
+        <InputLabel id="page-size-select-label">Page Size</InputLabel>
+        <Select
+        className="justify-content-center"
+          labelId="page-size-select-label"
+          id="page-size-select"
+          value={pageSize}
+          label="Page Size"
+          onChange={handlePageSizeChange}
+        >
+          <MenuItem value={5}>5</MenuItem>
+          <MenuItem value={10}>10</MenuItem>
+          <MenuItem value={15}>15</MenuItem>
+        </Select>
+      </FormControl>
               <div className="icons d-flex gap-2 pt-2">
                 <div className="dropdown">
                   <button
@@ -209,6 +237,19 @@ const filteredSkills = Array.isArray(skills) ? skills.filter((skill) => {
           )}
         </tbody>
       </table>
+      <Stack spacing={2} sx={{ width: '100%', maxWidth: 500, margin: '0 auto' }}>
+     
+      <Pagination
+      className="pb-3"
+        count={totalPages}
+        page={pageNumber}
+        onChange={handlePageChange}
+        variant="outlined"
+        color="secondary"
+        showFirstButton
+        showLastButton
+      />
+    </Stack>
       </>
     
       {/* )}  */}

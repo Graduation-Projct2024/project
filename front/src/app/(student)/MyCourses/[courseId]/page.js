@@ -12,7 +12,7 @@ import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import EmailIcon from '@mui/icons-material/Email';
 import Link from '@mui/material/Link';
 import Box from '@mui/material/Box';
-import '../../../../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js'
+// import '../../../../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js'
 import './style.css'
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
@@ -28,6 +28,11 @@ import Layout from '../../studentLayout/Layout.jsx';
 import { UserContext } from '../../../../context/user/User.jsx';
 
 export default function page() {
+  useEffect(() => {
+    if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+      require('bootstrap/dist/js/bootstrap.bundle.min.js');
+    }
+  }, []);
   const {userToken, setUserToken, userData}=useContext(UserContext);
   const [error, setError] = useState(null);
 
