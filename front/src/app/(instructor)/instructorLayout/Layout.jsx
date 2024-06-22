@@ -116,7 +116,7 @@ const sidebarItems = [
           </Link>
             </Stack>
       <Divider />
-      <List sx={{ my:4, pt:5 }} >
+      <List sx={{ my:4, pt:5 }}  className='sidelist'>
               {sidebarItems.map(({ name, href, icon: Icon }) =>{
                 return(
                 // <ListItem key={name} 
@@ -152,7 +152,7 @@ const sidebarItems = [
                 )
                 })}
             </List>
-      <List sx={{my:'auto',pt:5}}>
+      <List sx={{my:'auto',pt:5}} className='sidelist'>
                 <ListItem >
                   <ListItemButton onClick={logout} sx={{color:deepPurple[50], alignSelf: 'flex-end',pt:2}}>
                     <ListItemIcon>
