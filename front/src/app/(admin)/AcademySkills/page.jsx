@@ -39,6 +39,7 @@ export default function AcademySkills() {
       if(userData){
         // setLoading(true);
       try{
+
       const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}Skill/GetAllSkillOptions?pageNumber=${pageNum}&pageSize=${pageSize}`,{ headers: { Authorization: `Bearer ${userToken}` } });
       // setLoading(false)
       console.log(data);

@@ -63,6 +63,7 @@ export default function ViewEmployees() {
         if(userData){
           // setLoading(true);
         try{
+          // ${process.env.NEXT_PUBLIC_EDUCODING_API}
         const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}Employee/GetAllEmployee?pageNumber=${pageNum}&pageSize=${pageSize}`);
         // setLoading(false)
       //  console.log(data);
