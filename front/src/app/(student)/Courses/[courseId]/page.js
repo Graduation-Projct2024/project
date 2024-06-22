@@ -126,7 +126,7 @@ try{
             <Typography variant="h6">Deadline :{course.deadline}</Typography>
             <Typography variant="h6">Total hours :{course.totalHours}</Typography>
             <Typography variant="h6">Instructor :{course.instructorName}</Typography>
-            {isEnrolled=='true' || isAvaliable == "false"?(<Button disabled variant="contained" sx={{mt:2}}>Enroll Now!</Button>):(<Button onClick={enrollCourse} variant="contained" sx={{mt:2}}>Enroll Now!</Button>)}
+            {isEnrolled=='true'  == "false"?(<Button disabled variant="contained" sx={{mt:2}}>Enroll Now!</Button>):(<Button onClick={enrollCourse} variant="contained" sx={{mt:2}}>Enroll Now!</Button>)}
 
           </Box>
         </Grid>
@@ -145,7 +145,7 @@ try{
         {course.description}
         </TabPanel>
         <TabPanel value="2">
-        <Review courseId={courseId} isEnrolled = {isEnrolled} isAvaliable = {isAvaliable}/>
+        <Review courseId={courseId} isEnrolled = {isEnrolled} />
         </TabPanel>
       </TabContext>
     </Box>

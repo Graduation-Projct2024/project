@@ -125,7 +125,7 @@ function Layout(props) {
           </Link>
             </Stack>
       <Divider />
-      <List sx={{ my:7, pt:5 }} >
+      <List sx={{ my:7, pt:5 }}  className='sidelist'>
               {sidebarItems.map(({ name, href, icon: Icon }) =>{
                 return(
                 // <ListItem key={name} 
@@ -161,7 +161,7 @@ function Layout(props) {
                 )
                 })}
             </List>
-      <List sx={{my:'auto',pt:5}}>
+      <List sx={{my:'auto',pt:5}} className='sidelist'>
                 <ListItem >
                   <ListItemButton onClick={logout} sx={{/*color:deepPurple[50],*/ alignSelf: 'flex-end',pt:5}}>
                     <ListItemIcon>

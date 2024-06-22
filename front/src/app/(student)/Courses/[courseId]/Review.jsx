@@ -34,7 +34,7 @@ import Stack from '@mui/material/Stack';
 import TextArea from '../../../../component/input/TextArea.jsx';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
-export default function Review({courseId,isEnrolled,isAvaliable}) {
+export default function Review({courseId,isEnrolled}) {
   const { userToken, userId } = useContext(UserContext);
   const [feedbacks, setFeedbacks] = useState([]);
   const [reviews, setReviews]= useState([]);
