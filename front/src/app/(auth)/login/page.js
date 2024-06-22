@@ -41,7 +41,7 @@ export default function page() {
       router.push('/dashboardM');
     }
     else if ( userData.role=="instructor") {
-      router.push('/myDashboard');
+      router.push('/dashboardI');
     }
     else if ( userData.role=="student") {
       router.push('/MyDashboard');
@@ -102,7 +102,7 @@ export default function page() {
       router.push('/MyDashboard');
       }
       if(data.result.user.role == "instructor") {
-        router.push('/myDashboard');
+        router.push('/dashboardI');
         }
         if(data.result.user.role == "main-subadmin") {
           router.push('/dashboardM');

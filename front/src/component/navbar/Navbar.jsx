@@ -175,7 +175,7 @@ export default function Navbar({role}) {
           // onClick={() => router.push('/myDashboard')}
           sx={{ my: 2, color: 'white', display: 'block' }}
         >
-           <Link href="/myDashboard" color="inherit" underline='none' >Dashboard</Link>
+           <Link href="/dashboardI" color="inherit" underline='none' >Dashboard</Link>
            {/* Dashboard */}
           
         </Button>)||

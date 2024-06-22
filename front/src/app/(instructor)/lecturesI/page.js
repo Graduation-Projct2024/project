@@ -1,11 +1,12 @@
 'use client'
-import React, { useContext, useEffect, useState } from 'react'
+
+import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import Typography from '@mui/material/Typography';
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import Link from '@mui/material/Link';
-import './style.css'
-import Layout from '../studentLayout/Layout.jsx';
+import './style.css';
+import Layout from '../instructorLayout/Layout.jsx';
 import { UserContext } from '../../../context/user/User.jsx';
 import { Box, FormControl, InputLabel, MenuItem, Pagination, Select, Stack } from '@mui/material';
 import Table from '@mui/material/Table';
@@ -37,28 +38,30 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-export default function page() {
+export default function Page() {
   const { userToken, userId } = useContext(UserContext);
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
   const [lectures, setLectures] = useState([]);
-  // const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
+
   const getLectures = async (pageNum = pageNumber, pageSizeNum = pageSize) => {
     if (userId) {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_EDUCODING_API}Lectures/GetAllConsultations?studentId=${userId}&pageNumber=${pageNum}&pageSize=${pageSizeNum}`,
+          `${process.env.NEXT_PUBLIC_EDUCODING_API}Lectures/GetAllLectureRequest?instructorId=${userId}&pageNumber=${pageNum}&pageSize=${pageSizeNum}`,
           { headers: { Authorization: `Bearer ${userToken}` } }
         );
-        console.log(response.data);
-        setLectures(response.data.result.items);
-        setTotalPages(response.data.result.totalPages);
+        console.log(response);
+        const data = response.data.result;
+        setLectures(data.items);
+        setTotalPages(data.totalPages);
       } catch (error) {
         console.error('Error fetching lectures:', error);
-      }// } finally {
-      //   setLoading(false);
-      // }
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -75,12 +78,12 @@ export default function page() {
     setPageNumber(value);
   };
 
-  // if (loading) {
-  //   return <div>Loading...</div>;
-  // }
-  
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
-    <Layout title='My Lectures'>
+    <Layout title="Lectures">
       <Stack
       direction="row"
       justifyContent="flex-end"
@@ -103,8 +106,8 @@ export default function page() {
         </Select>
       </FormControl>
     </Stack>
-      <TableContainer component={Paper} sx={{ width: '90%', mt: 5 }} className=''>
-        <Table sx={{ minWidth: 700 }} aria-label="customized table" className=''>
+      <TableContainer component={Paper} sx={{ width: '90%', mt: 5 }}>
+        <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead>
             <TableRow>
               <StyledTableCell>Lecture title</StyledTableCell>
@@ -114,11 +117,11 @@ export default function page() {
           <TableBody>
             {lectures.length ? (
               lectures.map((lecture) => (
-                <StyledTableRow key={lecture.consultationId}>
+                <StyledTableRow key={lecture.id}>
                   <StyledTableCell component="th" scope="row">
-                  <Link href={`MyLectures/${lecture.consultationId}`}>{lecture.name}</Link>
+                  <Link  href={`myLectures/${lecture.id}`}>{lecture.name}</Link>
                   </StyledTableCell>
-                  <StyledTableCell align="center">{lecture.date}</StyledTableCell>
+                  <StyledTableCell align="center">{lecture.date.split(' ')[0]}</StyledTableCell>
                 </StyledTableRow>
               ))
             ) : (
@@ -131,7 +134,7 @@ export default function page() {
           </TableBody>
         </Table>
       </TableContainer>
-      <Stack spacing={2} sx={{ width: '100%', maxWidth: 500, margin: '0 auto' }} className='pt-5'>
+      <Stack spacing={2} sx={{ width: '100%', maxWidth: 500, margin: '0 auto' }}>
         <Pagination
           className="pb-3"
           count={totalPages}
@@ -143,7 +146,6 @@ export default function page() {
           showLastButton
         />
       </Stack>
-</Layout>
-
-  )
+    </Layout>
+  );
 }

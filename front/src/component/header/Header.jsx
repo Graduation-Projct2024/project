@@ -28,7 +28,7 @@ export default function Header({role}) {
         (role == "main-subadmin" && <Link className="btn btn-purple mt-3 px-3 py-2" 
         href='/dashboardM'  color="inherit"  underline='none'>Start Now!</Link>)||
         (role == "instructor" && <Link className="btn btn-purple mt-3 px-3 py-2" 
-        href='/myDashboard'  color="inherit"  underline='none'>Start Now!</Link>)||
+        href='/dashboardI'  color="inherit"  underline='none'>Start Now!</Link>)||
         (role == "student" && <Link className="btn btn-purple mt-3 px-3 py-2" 
         href='/MyDashboard'  color="inherit"  underline='none'>Start Now!</Link>)
       )

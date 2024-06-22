@@ -34,7 +34,7 @@ import Stack from '@mui/material/Stack';
 import TextArea from '../../../../component/input/TextArea.jsx';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
-export default function Review({courseId}) {
+export default function Review({courseId,isEnrolled,isAvaliable}) {
   const { userToken, userId } = useContext(UserContext);
   const [feedbacks, setFeedbacks] = useState([]);
   const [reviews, setReviews]= useState([]);
@@ -130,6 +130,8 @@ export default function Review({courseId}) {
       touched={formik.touched}
       errors={formik.errors}
       key={index}
+      fullWidth
+
     />
   ));
   return (
@@ -200,9 +202,10 @@ export default function Review({courseId}) {
         </DialogActions>
       </Dialog>
     <Box sx={{display:'flex', justifyContent: 'flex-end'}}>
+      {isEnrolled &&
     <IconButton aria-label="add" sx={{alignself:'end'}} onClick={handleClickOpen}>
   <AddCommentIcon sx={{color:"#4c5372" , fontSize:30, mr:3}} />
-</IconButton>
+</IconButton>}
     </Box>
     <List sx={{ width: '100%', bgcolor: 'background.paper' }} className='Reviews'>
   {reviews?.length ? (
