@@ -112,21 +112,21 @@ try{
             <img
               width={300}
               height={280}
-              className="rounded"
+              className="rounded pe-5"
               src={`${course.imageUrl}`}
               alt="course Image"
             />
           </Box>
         </Grid>
         <Grid item xs={6} sx={{mt:4}}>
-          <Box m={3}>
+          <Box m={3} p={5}>
             <Typography variant="h6" >Category :{course.category}</Typography>
             <Typography variant="h6">Price :{course.price}</Typography>
             <Typography variant="h6">Started At :{course.startDate}</Typography>
             <Typography variant="h6">Deadline :{course.deadline}</Typography>
             <Typography variant="h6">Total hours :{course.totalHours}</Typography>
             <Typography variant="h6">Instructor :{course.instructorName}</Typography>
-            {isEnrolled=='true'  == "false"?(<Button disabled variant="contained" sx={{mt:2}}>Enroll Now!</Button>):(<Button onClick={enrollCourse} variant="contained" sx={{mt:2}}>Enroll Now!</Button>)}
+            {isEnrolled=='true'  == "false"?(<Button disabled variant="contained" className="addButton" sx={{mt:2}}>Enroll Now!</Button>):(<Button onClick={enrollCourse} variant="contained" sx={{mt:2}}>Enroll Now!</Button>)}
 
           </Box>
         </Grid>

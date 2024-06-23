@@ -66,11 +66,11 @@ const sidebarItems = [
       href: "/lecturesI",
       icon: LocalLibraryIcon,
     },
-    {
-      name: "Notification",
-      href: "/notification",
-      icon: NotificationsIcon,
-    },
+    // {
+    //   name: "Notification",
+    //   href: "/notification",
+    //   icon: NotificationsIcon,
+    // },
  
 ];
   const [mobileOpen, setMobileOpen] = React.useState(false);
