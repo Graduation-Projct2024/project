@@ -5,7 +5,7 @@ import { UserContext } from '@/context/user/User';
 import { Button } from '@mui/material';
 import axios from 'axios';
 import { useFormik } from 'formik';
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import Swal from 'sweetalert2';
 
 export default function AddSkill({setOpen}) {

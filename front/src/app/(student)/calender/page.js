@@ -69,18 +69,17 @@ function getCurrentDateFormatted(date) {
     const getInstructors = async () => {
         let currntDate=getCurrentDateFormatted(date);
         if(userToken&&skill){
-console.log(`skill ${skill} , start: ${start}, end: ${end}, currntDate ${currntDate}`)
+// console.log(`skill ${skill} , start: ${start}, end: ${end}, currntDate ${currntDate}`)
     try {
 
-      const formData = new FormData();
-formData.append("skillId", skill);
-formData.append("startTime", start);
-formData.append("endTime", end);
-formData.append("date", currntDate);
-console.log( `${process.env.NEXT_PUBLIC_EDUCODING_API}Instructor/GetListOfInstructorForLectures`);
-      const {data} = await axios.post(
-        `${process.env.NEXT_PUBLIC_EDUCODING_API}Instructor/GetListOfInstructorForLectures`,
-        formData,
+//       const formData = new FormData();
+// formData.append("skillId", skill);
+// formData.append("startTime", start);
+// formData.append("endTime", end);
+// formData.append("date", currntDate);
+// console.log( `${process.env.NEXT_PUBLIC_EDUCODING_API}Instructor/GetListOfInstructorForLectures?skillId=${skill}&startTime=${start}&endTime=${end}&date=${currntDate}`);
+      const {data} = await axios.get(
+        `${process.env.NEXT_PUBLIC_EDUCODING_API}Instructor/GetListOfInstructorForLectures?skillId=${skill}&startTime=${start}&endTime=${end}&date=${currntDate}`,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -88,8 +87,8 @@ console.log( `${process.env.NEXT_PUBLIC_EDUCODING_API}Instructor/GetListOfInstru
           }
         }
       );
-      console.log(data);
-//  setInstructors(response.data.result.value);
+      // console.log(data);
+      setInstructors(data.result);
         // console.error('Error in response:', response.data);
       
     } catch (error) {
@@ -114,7 +113,7 @@ console.log( `${process.env.NEXT_PUBLIC_EDUCODING_API}Instructor/GetListOfInstru
     );
     // console.log(data);
    setSkills(data.data.result.items);
-    setSkill(data.data.result.items[0].id);
+    //setSkill(data.data.result.items[1].id);
   }catch(error){
     console.log(error);
   }
@@ -160,7 +159,14 @@ console.log( `${process.env.NEXT_PUBLIC_EDUCODING_API}Instructor/GetListOfInstru
     try{
     const [startHour, startMinute] = lectures.startTime.split(':').map(Number);
     const [endHour, endMinute] = lectures.endTime.split(':').map(Number);
+   const selectedSkillName = skills.find(skill => skill.id == selectedSkillId);
+    console.log(skill);
 
+   console.log(selectedSkillName?.name);
+
+     setSkillName(selectedSkillName?.name);
+    
+    console.log(selectedSkillName);
     let durationMinutes = (endHour * 60 + endMinute) - (startHour * 60 + startMinute);
 
     if (durationMinutes < 0) {
@@ -175,11 +181,14 @@ console.log( `${process.env.NEXT_PUBLIC_EDUCODING_API}Instructor/GetListOfInstru
 
     const duration=`${formattedHours}:${formattedMinutes}`;
     const formData = new FormData();
-formData.append("name", skillName);
+    console.log(selectedSkillName?.name);
+formData.append("name", selectedSkillName?.name);
 formData.append("description", lectures.description);
 formData.append("type", status);
 formData.append("InstructorId", selectedInstructor);
-
+formData.forEach((value, key) => {
+  console.log(`${key}: ${value}`);
+});
 
 
 const { data } = await axios.post(
@@ -194,7 +203,7 @@ const { data } = await axios.post(
   setAlertOpen(true);
   setOpen(false);
  formik.resetForm();
- //setAlertOpen(true);
+ setAlertOpen(true);
 
 
   }catch(error){
@@ -369,6 +378,28 @@ const textAraeInput = (
   const handleCloseAlert = () => {
     setAlertOpen(false);
   };
+  const [selectedSkillName, setSelectedSkillName] = useState('');
+  const handleChangeSkill = (event) => {
+   // formik.handleChange(e); // Formik's handleChange to update the form state
+   // setSelectedSkillId(e.target.value);
+     setSkill(event.target.value);
+     const selectedOption = event.target.options[event.target.selectedIndex];
+     const selectedId = selectedOption.value;
+     const selectedName = selectedOption.getAttribute('data-name');
+ 
+     setSelectedSkillId(selectedId);
+     setSelectedSkillName(selectedName);
+    // console.log(e.target.value);
+    // Find the selected skill object from the skills array
+    //const selectedSkillName = skills.find(skill => skill.id == selectedSkillId);
+    // console.log(selectedSkill);
+
+   // console.log(selectedSkillName?.name);
+
+     // setSkillName(selectedSkillName?.name);
+    
+    // console.log(skillName);
+  };
   
   //const [calevents, setCalvents] =React.useState([]);
 
@@ -491,43 +522,29 @@ const textAraeInput = (
         <DialogContent>
         <form onSubmit={formik.handleSubmit} encType="multipart/form-data">  
         <div className="col-md-12 mb-3">
-
         <select
-        lable='Select topic'
-  className="form-select p-3"
-  aria-label="Default select example"
-  name="selectedSkill" // Ensure the name attribute matches the form field in Formik
-  value={selectedSkillId}
-  onChange={(e) => {
-    formik.handleChange(e); // Formik's handleChange to update the form state
-    setSelectedSkillId(e.target.value);
-    setSkill(selectedSkillId);
-    console.log(skill);
-    // Find the selected skill object from the skills array
-    const selectedSkillName = skills.find(skill => skill.id == selectedSkillId);
-    // console.log(selectedSkill);
-
-    console.log(selectedSkillName?.name);
-
-      setSkillName(selectedSkillName?.name);
-    
-    // console.log(skillName);
-  }}
->
-  
-  <option value="" disabled>
-    Select topic
-  </option>
-  {skills?.length ? (
-    skills.map((skill) => (
-      <option key={skill.id} value={skill.id}>
-        {skill.name}
-      </option>
-    ))
-  ): (
+        label='Select topic'
+        className="form-select p-3"
+        aria-label="Default select example"
+        name="selectedSkill"
+        value={selectedSkillId}
+        onChange={handleChangeSkill}
+      >
+        <option value="" disabled>
+          Select topic
+        </option>
+        {skills?.length ? (
+          skills.map((skill) => (
+            <option key={skill.id} value={skill.id} data-name={skill.name}>
+              {skill.name}
+            </option>
+          ))
+        ) : (
           <option disabled>No data</option>
         )}
       </select>
+
+    
       </div>      
         {renderInputs}
         <div className="col-md-12 mb-3">
