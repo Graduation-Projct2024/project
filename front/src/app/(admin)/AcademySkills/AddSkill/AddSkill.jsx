@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import Input from '@/component/input/Input';
 import { addSkills } from '@/component/validation/validation';
 import { UserContext } from '@/context/user/User';
