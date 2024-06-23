@@ -32,7 +32,11 @@ import ChangePassword from '@/app/(auth)/ChangePassword/ChangePassword';
 
 export default function page({params}) {
   const {userToken, setUserToken, userData,userId}=useContext(UserContext);
+  const [value, setValue] = React.useState(0);
 
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
   let [user,setUser] = useState({})
   // const [loading, setLoading] = useState(true);
   const [openUpdate, setOpenUpdate] = React.useState(false);
@@ -317,7 +321,25 @@ setOpenChange(false);
             </div>
           </div>
         </div>
-        
+        <Box sx={{ width: '100%', typography: 'body1', mt:5 }}>
+      <TabContext value={value}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <TabList onChange={handleChange} aria-label="lab API tabs example" centered>
+
+            <Tab icon={< PersonIcon/>} label="About" value="0"/>
+      <Tab icon={<SchoolIcon />} label="Education" value="1" />
+      <Tab icon={<AccessTimeIcon />} label="Availability" value="2"/>
+      <Tab icon={<ReviewsIcon />} label="ReviewS" value="3"/>
+
+          </TabList>
+        </Box>
+        <TabPanel value="0" active><About id={params.id}/></TabPanel>
+        <TabPanel value="1"><Education id={params.id}/></TabPanel>
+        <TabPanel value="2"><ViewWeeklyHours id={params.id}/> <WeeklyHours/></TabPanel>
+        <TabPanel value="3"><Feedback id={params.id}/></TabPanel>
+
+      </TabContext>
+    </Box>
       </div>
       </>
       {/* )} */}

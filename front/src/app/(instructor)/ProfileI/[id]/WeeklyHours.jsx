@@ -350,7 +350,7 @@ import Swal from 'sweetalert2';
 import { UserContext } from '@/context/user/User';
 
 export default function WeeklyHours({id}) {
-  const {userToken, setUserToken, userData}=useContext(UserContext);
+  const {userToken, setUserToken, userData , userId}=useContext(UserContext);
 
  const[hours,setHours] = useState([{}])
  const [selectedDay, setSelectedDay] = useState('');
@@ -368,7 +368,7 @@ const onSubmit = async (hours) => {
       formData.append('startTime', hours.startTime);
       formData.append('endTime', hours.endTime);
       formData.append('day', selectedDay); // Use selectedGender from state
-      const { data } = await axios.post(`${process.env.NEXT_PUBLIC_EDUCODING_API}Instructor/AddInstructorOfficeHours?InstructorId=${id}`, formData,
+      const { data } = await axios.post(`${process.env.NEXT_PUBLIC_EDUCODING_API}Instructor/AddInstructorOfficeHours?InstructorId=${userId}`, formData,
       {headers :{Authorization:`Bearer ${userToken}`}}
 
       );
