@@ -90,7 +90,7 @@ export default function Page() {
       alignItems="center"
       spacing={2}
     >
-      <FormControl fullWidth className="page-Size mt-5 me-5">
+      <FormControl fullWidth  sx={{ width: '15%' }} className="page-Size mt-5 me-5">
         <InputLabel id="page-size-select-label">Page Size</InputLabel>
         <Select
           className="justify-content-center"
@@ -136,7 +136,7 @@ export default function Page() {
       </TableContainer>
       <Stack spacing={2} sx={{ width: '100%', maxWidth: 500, margin: '0 auto' }}>
         <Pagination
-          className="pb-3"
+          className="py-3"
           count={totalPages}
           page={pageNumber}
           onChange={handlePageChange}

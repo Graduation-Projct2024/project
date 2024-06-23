@@ -281,7 +281,7 @@ if(userToken){
         }}
       >
                
-<Button sx={{px:2}} variant="contained" startIcon={<AddCircleOutlineIcon />} onClick={handleClickOpen}>
+<Button sx={{px:2}} variant="contained" className='buttondd' startIcon={<AddCircleOutlineIcon />} onClick={handleClickOpen}>
   Add New
 </Button>
   <div className="dropdown pt-1 px-2">
@@ -349,8 +349,8 @@ if(userToken){
    alignItems="center"
    spacing={1}
     >
-     <Icon sx={{fontSize:50, }}/>
-     <Typography variant='h6'> {type}</Typography>
+     <Icon sx={{fontSize:50, }} className='itemColor'/>
+     <Typography variant='h6' className='itemColor'> {type}</Typography>
      </Stack>
      </Button>
 ))}
@@ -375,12 +375,12 @@ if(userToken){
       className={material.type}
     >
       <div className='d-flex align-items-center '>
-      {material.type=='Task'&&<AssignmentIcon sx={{fontSize:50, }}/>}
-      {material.type=='File'&&<InsertDriveFileIcon sx={{fontSize:50, }}/>}
-      {material.type=='Link'&&<LinkIcon  sx={{fontSize:50, }}/>}
-      {material.type=='Announcement'&&<MessageIcon sx={{fontSize:50, }}/>}
+      {material.type=='Task'&&<AssignmentIcon sx={{fontSize:50, }} className='itemColor'/>}
+      {material.type=='File'&&<InsertDriveFileIcon sx={{fontSize:50, }} className='itemColor'/>}
+      {material.type=='Link'&&<LinkIcon  sx={{fontSize:50, }} className='itemColor'/>}
+      {material.type=='Announcement'&&<MessageIcon sx={{fontSize:50, }} className='itemColor'/>}
       <Link href={`${courseId}/${material.id}`} underline="none">
-     <Typography variant='h6'> {material.name}</Typography>
+     <Typography variant='h6 ' className='itemColor'> {material.name}</Typography>
      </Link>
      </div>
      {material.isHidden?(<Chip label="Hidden" color="error" />):(<Chip label="Active" color="success" />)}
@@ -400,7 +400,7 @@ if(userToken){
               <div className='mt-5 ms-5'>
 
                 <div className='row justify-content-end'>
-        <FormControl fullWidth className="w-25 pb-3 pe-4">
+        <FormControl fullWidth sx={{ width: '15%' }} className="pb-3 pe-4">
                 <InputLabel id="page-size-select-label">Page Size</InputLabel>
                 <Select
                 className="justify-content-center"
@@ -423,13 +423,13 @@ if(userToken){
       alignItems="center"
       gap={4}
       p={2}
-      sx={{ border: '1px solid grey' ,borderRadius: 3, justifyContent: 'space-between', mt:1 }}
-      className={index%2==0?"bg-purple1":'bg-purple2 '}
+      sx={{ border: '1px solid grey' ,borderRadius: 3, justifyContent: 'space-between', mt:1 , mb:2 }}
+      className={index%2==0?"bg-purple1":'bg-purple2'}
     >
-     <Typography variant='h6'> {participant.userName}</Typography>
+     <Typography variant='h6' className='contactIcon'> {participant.userName}</Typography>
      <div className='m-2'>
-     <Link href={`https://wa.me/${participant.phoneNumber}`} className='m-2' ><WhatsAppIcon/></Link>
-     <Link href={`mailto:${participant.email}`} ><EmailIcon/></Link>
+     <Link href={`https://wa.me/${participant.phoneNumber}`} className='m-2' ><WhatsAppIcon className='contactIcon'/></Link>
+     <Link href={`mailto:${participant.email}`} ><EmailIcon className='contactIcon'/></Link>
      </div>
     
 
