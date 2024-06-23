@@ -69,7 +69,7 @@ function getCurrentDateFormatted(date) {
     const getInstructors = async () => {
         let currntDate=getCurrentDateFormatted(date);
         if(userToken&&skill){
-// console.log(`skill ${skill} , start: ${start}, end: ${end}, currntDate ${currntDate}`)
+console.log(`skill ${skill} , start: ${start}, end: ${end}, currntDate ${currntDate}`)
     try {
 
       const formData = new FormData();
@@ -77,8 +77,8 @@ formData.append("skillId", skill);
 formData.append("startTime", start);
 formData.append("endTime", end);
 formData.append("date", currntDate);
-
-      const response = await axios.post(
+console.log( `${process.env.NEXT_PUBLIC_EDUCODING_API}Instructor/GetListOfInstructorForLectures`);
+      const {data} = await axios.post(
         `${process.env.NEXT_PUBLIC_EDUCODING_API}Instructor/GetListOfInstructorForLectures`,
         formData,
         {
@@ -88,11 +88,12 @@ formData.append("date", currntDate);
           }
         }
       );
- setInstructors(response.data.result.value);
+      console.log(data);
+//  setInstructors(response.data.result.value);
         // console.error('Error in response:', response.data);
       
     } catch (error) {
-      console.error('Error fetching instructors:', error);
+      console.log('Error fetching instructors:', error);
     }}}
   ;
   
@@ -111,8 +112,9 @@ formData.append("date", currntDate);
         }
 
     );
-    setSkills(data.data.result);
-    setSkill(data.data.result[0].id);
+    // console.log(data);
+   setSkills(data.data.result.items);
+    setSkill(data.data.result.items[0].id);
   }catch(error){
     console.log(error);
   }
