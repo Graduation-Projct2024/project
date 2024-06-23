@@ -125,9 +125,13 @@ export default function ViewTask({ materialID , type, Id}) {
   if(userToken){
     try{
   const {data}= await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}MaterialControllar/GetMaterialById?id=${materialID}`,
-  {headers :{Authorization:`Bearer ${userToken}`}}
+    { headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${userToken}`
+    }}
 
   )
+
 
   setMaterial(data.result);
   setIsChecked(data.result.isHidden);

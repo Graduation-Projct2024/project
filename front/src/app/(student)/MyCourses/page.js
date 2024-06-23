@@ -61,7 +61,7 @@ console.log(userToken);
         <Typography variant='h5'>{course.course.name }</Typography>
       {  console.log(course.courseId)}
         {/* <Link href={`MyCourses/${course.courseId}`}> <ArrowCircleRightIcon sx={{ fontSize: 40 }} /></Link> */}
-         <Button onClick={()=>router.push(`MyCourses/${course.courseId}`)}><ArrowCircleRightIcon sx={{ fontSize: 40 }} /></Button>
+         <Button onClick={()=>router.push(`MyCourses/${course.courseId}`)}><ArrowCircleRightIcon sx={{ fontSize: 40 }} className='arrowIcon'/></Button>
         </Box>
         ))
         ) : (

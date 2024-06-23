@@ -79,6 +79,7 @@ export default function ViewFile({ materialID ,type, Id }) {
  const handleClickOpen = () => {
   setOpen(true);
 };
+
 const DownloadMaterial = async (url) => {
   let cleanUrl = url.replace("https://localhost:7116/", "");
   let fileName = url.replace("https://localhost:7116/Files\\", "");
@@ -109,10 +110,13 @@ const handleClose = () => {
    setOpenAlert(false);
  };
  const getMaterial=async()=>{
-  if(userToken){
+  if(userData){
     try{
   const {data}= await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}MaterialControllar/GetMaterialById?id=${materialID}`,
-  {headers :{Authorization:`Bearer ${userToken}`}}
+    { headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${userToken}`
+    }}
 )
 
   setMaterial(data.result);
@@ -126,14 +130,18 @@ const handleClose = () => {
   }
 }
  }
+ console.log(material)
  const [isChecked, setIsChecked] = useState();
 
  const hideMaterial= async(event)=>{
   try{
     setIsChecked(event.target.checked);
     const {data}= await axios.patch(`${process.env.NEXT_PUBLIC_EDUCODING_API}MaterialControllar/HideOrShowMaterials?Id=${materialID}&isHidden=${event.target.checked}`,
-      {},
-      {headers :{Authorization:`Bearer ${userToken}`}}
+      
+      { headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${userToken}`
+      }}
     
       )
     console.log(data);

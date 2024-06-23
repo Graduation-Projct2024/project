@@ -6,7 +6,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import { CardActionArea, Grid } from '@mui/material';
+import { CardActionArea, FormControl, Grid, InputLabel, MenuItem, Select } from '@mui/material';
 import Rating from "@mui/material/Rating";
 import Link from '@mui/material/Link';
 import { Box } from '@mui/material'
@@ -19,43 +19,69 @@ import { UserContext } from '@/context/user/User';
 import { useRouter } from 'next/navigation'
 
 export default function page() {
+  
+  const {userToken, setUserToken, userData,userId}=useContext(UserContext);
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
-  const {userToken, setUserToken, userData,userId}=useContext(UserContext);
   const router = useRouter();
 const [role, setRole]=useState('student');
     const [courses, setCourses] = useState([]);
-    const getCourses = async () => {
+    const getCourses = async (pageNum = pageNumber, pageSizeNum = pageSize)=> {
       if(userId&&userToken){
         try{
       const data = await axios.get(
-        `${process.env.NEXT_PUBLIC_EDUCODING_API}CourseContraller/GetAllCoursesToStudent?studentId=${userId}&pageNumber=${pageNumber}&pageSize=6`,
+        `${process.env.NEXT_PUBLIC_EDUCODING_API}CourseContraller/GetAllCoursesToStudent?studentId=${userId}&pageNumber=${pageNumber}&pageSize=${pageSize}`,
         {headers :{Authorization:`Bearer ${userToken}`}}
 
       );
     
       console.log(data);
        setCourses(data.data.result.items);
+       setTotalPages(data.result.totalPages);
     }catch(error){
       console.log(error);
     }}
     };
+
+    const handlePageSizeChange = (event) => {
+      setPageSize(event.target.value);
+      setPageNumber(1); // Reset to the first page when page size changes
+    };
+    
     const handlePageChange = (event, value) => {
       setPageNumber(value);
     };
+
     const handleClick = (course) => {
       router.push(`/Courses/${course.id}?isEnrolled=${course.isEnrolled}`);
     };
     
   useEffect(() => {
     getCourses();
-  }, [page,userId,userToken]);
+  }, [page,userId,userToken, pageNumber, pageSize]);
+
+  
 if (role=='student'){
   return (
     <Layout title='Courses'>
          <Grid container spacing={2}>
       <Grid item xs={12} sm={9} my={2}>
+      <FormControl fullWidth className=""  sx={{ width: '15%' }}>
+        <InputLabel id="page-size-select-label">Page Size</InputLabel>
+        <Select
+        className="justify-content-center"
+          labelId="page-size-select-label"
+          id="page-size-select"
+          value={pageSize}
+          label="Page Size"
+          onChange={handlePageSizeChange}
+        >
+          <MenuItem value={5}>5</MenuItem>
+          <MenuItem value={10}>10</MenuItem>
+          <MenuItem value={15}>15</MenuItem>
+        </Select>
+      </FormControl>
         <Box display="flex" flexWrap="wrap">
         {courses.length ? (
           courses.map((course, index) => (
@@ -98,6 +124,19 @@ if (role=='student'){
              <p>No courses yet</p>
            )}
         </Box>
+        <Stack spacing={2} sx={{ width: '100%', maxWidth: 500, margin: '0 auto' }}>
+     
+     <Pagination
+     className="pb-3"
+       count={totalPages}
+       page={pageNumber}
+       onChange={handlePageChange}
+       variant="outlined"
+       color="secondary"
+       showFirstButton
+       showLastButton
+     />
+   </Stack>
       </Grid>
       <Grid item xs={12} sm={3} my={3}>
         <Box
@@ -117,7 +156,7 @@ if (role=='student'){
            alignItems="center"
            >
          <Typography sx={{p:3}}> Choose specific topics to create your own course</Typography> 
-         <Button variant="contained"><Link href='/requestCourse' color='inherit' underline='none'>Create Now!</Link></Button>
+         <Button variant="contained" className='iconCreate'><Link href='/requestCourse' color='inherit' underline='none'>Create Now!</Link></Button>
 
         </Box>
         <Box
@@ -125,7 +164,7 @@ if (role=='student'){
            alignItems="center"
            >
          <Typography sx={{p:3}}> If you have questions about a specific topic Book a lecture now!</Typography> 
-         <Button variant="contained"><Link href='/calender' color='inherit' underline='none'>Book Now!</Link></Button>
+         <Button variant="contained" className='iconCreate'><Link href='/calender' color='inherit' underline='none'>Book Now!</Link></Button>
 
         </Box>
         </Box>

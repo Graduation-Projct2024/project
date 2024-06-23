@@ -18,15 +18,19 @@ export default function page() {
 console.log(useParams())
 const{materialId, courseId}=useParams();
     const getMaterial=async()=>{
-      if(userToken){
+      if(userData){
         try{
         const {data}= await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}MaterialControllar/GetMaterialById?id=${materialId}`,
-        {headers :{Authorization:`Bearer ${userToken}`}}
+          { headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${userToken}`
+          }}
 
         )
       
         setType(data.result.type);
         setName(data.result.name);
+        console.log(data)
 
         console.log(data)
         }catch(error){
@@ -34,9 +38,10 @@ const{materialId, courseId}=useParams();
         }
     }
     }
+    console.log(type)
     useEffect(() => {
         getMaterial();
-      }, [userToken,type]);
+      }, [userData,type]);
     
   return (
    
