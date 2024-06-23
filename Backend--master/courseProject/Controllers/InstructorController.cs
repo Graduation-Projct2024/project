@@ -99,16 +99,16 @@ namespace courseProject.Controllers
         /// </summary>
         /// <param name="lectureForm">DTO containing criteria for selecting instructors.</param>
         /// <returns>An IActionResult representing the list of instructors or appropriate error responses.</returns>
-        [HttpPost("GetListOfInstructorForLectures")]
+        [HttpGet("GetListOfInstructorForLectures")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [Authorize(Policy ="Student")]
-        public async Task<IActionResult> GetAListOfInstrcutorsForBookALectures(LectureFormDTO lectureForm)
+        public async Task<IActionResult> GetAListOfInstrcutorsForBookALectures([FromQuery]LectureFormDTO lectureForm)
         {
             var getInstructors = await instructorServices.GetListOfInstructorForLectures(lectureForm);
             if (getInstructors.IsError) return Ok(new ApiResponce { ErrorMassages = getInstructors.FirstError.Description });
-            return Ok(new ApiResponce { Result = getInstructors });
+            return Ok(new ApiResponce { Result = getInstructors.Value });
         }
 
 
