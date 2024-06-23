@@ -281,10 +281,10 @@ if(userToken){
         }}
       >
                
-<Button sx={{px:2}} variant="contained" startIcon={<AddCircleOutlineIcon />} onClick={handleClickOpen} className = 'AddIcon'>
+<Button sx={{px:2}} variant="contained" startIcon={<AddCircleOutlineIcon />} onClick={handleClickOpen}>
   Add New
 </Button>
-  <div className="dropdown pt-1 px-2 " >
+  <div className="dropdown pt-1 px-2">
                    <Tooltip title="Finish this Course?" placement="top">
                   <button
                     className="dropdown-toggle border-0 bg-white edit-pen"
@@ -292,7 +292,7 @@ if(userToken){
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
                   >
-                   <FontAwesomeIcon icon={faEllipsisVertical} className='finishCourse'/>
+                   <FontAwesomeIcon icon={faEllipsisVertical} />
                   </button>
                   </Tooltip>
                   <ul className="dropdown-menu">
@@ -375,12 +375,12 @@ if(userToken){
       className={material.type}
     >
       <div className='d-flex align-items-center '>
-      {material.type=='Task'&&<AssignmentIcon sx={{fontSize:50, }} />}
-      {material.type=='File'&&<InsertDriveFileIcon sx={{fontSize:50, }} />}
-      {material.type=='Link'&&<LinkIcon  sx={{fontSize:50, }} />}
-      {material.type=='Announcement'&&<MessageIcon sx={{fontSize:50, }} />}
+      {material.type=='Task'&&<AssignmentIcon sx={{fontSize:50, }}/>}
+      {material.type=='File'&&<InsertDriveFileIcon sx={{fontSize:50, }}/>}
+      {material.type=='Link'&&<LinkIcon  sx={{fontSize:50, }}/>}
+      {material.type=='Announcement'&&<MessageIcon sx={{fontSize:50, }}/>}
       <Link href={`${courseId}/${material.id}`} underline="none">
-     <Typography variant='h6' className='typography'> {material.name}</Typography>
+     <Typography variant='h6'> {material.name}</Typography>
      </Link>
      </div>
      {material.isHidden?(<Chip label="Hidden" color="error" />):(<Chip label="Active" color="success" />)}
@@ -395,7 +395,7 @@ if(userToken){
 
 
     </div>
-    <div className="tab-pane fade" id="Participants-tab-pane" role="tabpanel" aria-labelledby="Participants-tab" tabIndex={1}>
+    <div className="tab-pane fade" id="Participants-tab-pane" role="tabpanel" aria-labelledby="Participants-tab" tabIndex={0}>
 
               <div className='mt-5 ms-5'>
 

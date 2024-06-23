@@ -46,7 +46,7 @@ const sidebarItems = [
   },
   {
     name: "Dashboard",
-    href: "/myDashboard",
+    href: "/dashboardI",
     icon: DashboardIcon,
     
   },
@@ -58,12 +58,12 @@ const sidebarItems = [
 
   {
       name: "Courses",
-      href: "/courses",
+      href: "/coursesI",
       icon: LibraryBooksIcon,
     },
     {
       name: "Lectures",
-      href: "/myLectures",
+      href: "/lecturesI",
       icon: LocalLibraryIcon,
     },
     {
@@ -98,7 +98,7 @@ const sidebarItems = [
   };
 
   const drawer = (
-    <div>
+    <div className='side-drawer'>
       <Stack spacing={1} direction='row' alignItems='center'  justifyContent='center' sx={{ ml:6, my:3}}  >
             <AdbIcon sx={{color:deepPurple[50]}}/>
           <Link
@@ -116,7 +116,7 @@ const sidebarItems = [
           </Link>
             </Stack>
       <Divider />
-      <List sx={{ my:4, pt:5 }} >
+      <List sx={{ my:4, pt:5 }}  className='sidelist'>
               {sidebarItems.map(({ name, href, icon: Icon }) =>{
                 return(
                 // <ListItem key={name} 
@@ -152,7 +152,7 @@ const sidebarItems = [
                 )
                 })}
             </List>
-      <List sx={{my:'auto',pt:5}}>
+      <List sx={{my:'auto',pt:5}} className='sidelist'>
                 <ListItem >
                   <ListItemButton onClick={logout} sx={{color:deepPurple[50], alignSelf: 'flex-end',pt:2}}>
                     <ListItemIcon>
@@ -169,7 +169,8 @@ const sidebarItems = [
 
   return (
     <InstuctorRoute>
-    <Box sx={{ display: 'flex' }}>
+      <div className='side-drawer2'>
+    <Box sx={{ display: 'flex' }} className="drawerSide">
       <CssBaseline />
       <Stack
         position="absolute"
@@ -188,7 +189,7 @@ const sidebarItems = [
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h4" noWrap component="div" >
+          <Typography variant="h4" noWrap component="div" className='titleSide'>
           {title}
           </Typography>
           <Link  >
@@ -240,6 +241,7 @@ const sidebarItems = [
         { children }
       </Box>
     </Box>
+    </div>
     </InstuctorRoute>
   );
 }
