@@ -44,8 +44,7 @@ console.log(userToken);
 
   return (
     <Layout title='Courses'>
-      <Stack direction="row" justifyContent="flex-end" alignItems="center">
-       <FormControl fullWidth className="page-Size mt-5 me-5 " >
+      <FormControl fullWidth className=""  sx={{ width: '10%' }}>
                 <InputLabel id="page-size-select-label">Page Size</InputLabel>
                 <Select
                 className="justify-content-center"
@@ -60,6 +59,8 @@ console.log(userToken);
                   <MenuItem value={15}>15</MenuItem>
                 </Select>
               </FormControl>
+      <Stack direction="row" justifyContent="flex-end" alignItems="center">
+      
               </Stack>
       {courses?(
           courses?.map((course) => (
@@ -81,7 +82,7 @@ console.log(userToken);
           alt='htgkkkkkkkkkkk'
         />  
         <Typography variant='h5'>{course.name }</Typography>
-        <Link href={`courses/${course.id}`}> <ArrowCircleRightIcon sx={{ fontSize: 40 }} /></Link>
+        <Link href={`coursesI/${course.id}`}> <ArrowCircleRightIcon sx={{ fontSize: 40 }} className='arrowIcon'/></Link>
          
         </Box>
         ))

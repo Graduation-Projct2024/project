@@ -87,7 +87,7 @@ export default function page() {
       alignItems="center"
       spacing={2}
     >
-      <FormControl fullWidth className="page-Size mt-5 me-5">
+      <FormControl fullWidth sx={{ width: '15%' }} className="page-Size mt-5 me-5" >
         <InputLabel id="page-size-select-label">Page Size</InputLabel>
         <Select
           className="justify-content-center"

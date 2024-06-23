@@ -227,12 +227,12 @@ const [materialId, setMaterialId]=useState();
       sx={{ border: '1px solid grey' ,borderRadius: 3, mt:2}}
       className={material.type}
     >
-      {material.type=='Task'&&<AssignmentIcon sx={{fontSize:50, }}/>}
-      {material.type=='File'&&<InsertDriveFileIcon sx={{fontSize:50, }}/>}
-      {material.type=='Link'&&<LinkIcon  sx={{fontSize:50, }}/>}
-      {material.type=='Announcement'&&<MessageIcon sx={{fontSize:50, }}/>}
+      {material.type=='Task'&&<AssignmentIcon sx={{fontSize:50, }} className='itemMaterial'/>}
+      {material.type=='File'&&<InsertDriveFileIcon sx={{fontSize:50, }} className='itemMaterial'/>}
+      {material.type=='Link'&&<LinkIcon  sx={{fontSize:50, }} className='itemMaterial'/>}
+      {material.type=='Announcement'&&<MessageIcon sx={{fontSize:50, }} className='itemMaterial'/>}
       <Link href={`${courseId}/${material.id}`} underline="none">
-     <Typography variant='h6'> {material.name}</Typography>
+     <Typography variant='h6' className='itemMaterial'> {material.name}</Typography>
      </Link>
 
     </Box>
@@ -254,12 +254,12 @@ const [materialId, setMaterialId]=useState();
       gap={4}
       p={2}
       sx={{ border: '1px solid grey' ,borderRadius: 3, justifyContent: 'space-between' }}
-      className={index%2==0?"bg-purple1":'bg-purple2 mb-2'}
+      className={index%2==0?"bg-purple1":'bg-purple2 my-2 py-1'}
     >
-     <Typography variant='h6'> {participant.userName}</Typography>
+     <Typography variant='h6' className='contactIcon'> {participant.userName}</Typography>
      <div className='m-2'>
-     <Link href={`https://wa.me/${participant.phoneNumber}`} className='m-2' ><WhatsAppIcon/></Link>
-     <Link href={`mailto:${participant.email}`} ><EmailIcon/></Link>
+     <Link href={`https://wa.me/${participant.phoneNumber}`} className='m-2' ><WhatsAppIcon className='contactIcon'/></Link>
+     <Link href={`mailto:${participant.email}`} ><EmailIcon className='contactIcon'/></Link>
      </div>
     
 
