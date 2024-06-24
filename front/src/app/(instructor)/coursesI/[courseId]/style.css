@@ -84,3 +84,10 @@ background-color:#e2d4e0;
     .contactIcon{
         color: #FFFDF6 !important;
     }
+    .item .itemmm{
+    color: blue !important;
+    background-color: violet !important;
+    }
+    .addTitle{
+        color: #4c5372 !important;
+    }

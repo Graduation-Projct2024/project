@@ -325,11 +325,11 @@ if(userToken){
           
         }}
         >
-        <DialogTitle id="responsive-dialog-title">
+        <DialogTitle id="responsive-dialog-title" className='addTitle'>
           {"ADD NEW"}
         </DialogTitle>
         
-        <AddTask open={openTaskDialog} onClose={handleCloseTaskDialog} handleCloseAdd={handleClose} type='courseId' Id={courseId}/>
+        <AddTask open={openTaskDialog} onClose={handleCloseTaskDialog} handleCloseAdd={handleClose} type='courseId' Id={courseId} />
         <AddFile open={openFileDialog} onClose={handleCloseFileDialog} handleCloseAdd={handleClose} type='courseId' Id={courseId} />
         <AddLink open={openLinkDialog} onClose={handleCloseLinkDialog} handleCloseAdd={handleClose} type='courseId' Id={courseId}/>
         <AddAnnouncement open={openAnnouncementDialog} onClose={handleCloseAnnouncementDialog} type='courseId' handleCloseAdd={handleClose} Id={courseId} />
@@ -342,15 +342,19 @@ if(userToken){
     >
   
 {contents.map(({ icon: Icon, type})=>( 
-  <Button onClick={()=>handleAddContent(type)}>
+  <Button onClick={()=>handleAddContent(type)} className=''>
    <Stack
    direction="column"
    justifyContent="center"
    alignItems="center"
    spacing={1}
+   className=''
     >
-     <Icon sx={{fontSize:50, }} className='itemColor'/>
-     <Typography variant='h6' className='itemColor'> {type}</Typography>
+    <div className='item text-danger'>
+      <Icon sx={{fontSize:50, }}  className='itemmm text-black'/>
+     <Typography variant='h6' className='itemmm text-black'> {type}</Typography>
+    </div>
+     
      </Stack>
      </Button>
 ))}
@@ -395,7 +399,7 @@ if(userToken){
 
 
     </div>
-    <div className="tab-pane fade" id="Participants-tab-pane" role="tabpanel" aria-labelledby="Participants-tab" tabIndex={0}>
+    <div className="tab-pane fade" id="Participants-tab-pane" role="tabpanel" aria-labelledby="Participants-tab" tabIndex={1}>
 
               <div className='mt-5 ms-5'>
 
