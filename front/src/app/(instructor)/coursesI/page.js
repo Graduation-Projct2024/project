@@ -42,28 +42,60 @@ console.log(userToken);
     getCourses();
   }, [userData, pageNumber, pageSize]);
 
+  const [searchTerm, setSearchTerm] = useState('');
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+const filteredCourses = Array.isArray(courses) ? courses.filter((course) => {
+  const matchesSearchTerm = Object.values(course).some(
+    (value) =>
+      typeof value === "string" &&
+      value.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  return matchesSearchTerm;
+}) : [];
+
+
   return (
     <Layout title='Courses'>
-      <FormControl fullWidth className=""  sx={{ width: '10%' }}>
-                <InputLabel id="page-size-select-label">Page Size</InputLabel>
-                <Select
-                className="justify-content-center"
-                  labelId="page-size-select-label"
-                  id="page-size-select"
-                  value={pageSize}
-                  label="Page Size"
-                  onChange={handlePageSizeChange}
-                >
-                  <MenuItem value={5}>5</MenuItem>
-                  <MenuItem value={10}>10</MenuItem>
-                  <MenuItem value={15}>15</MenuItem>
-                </Select>
-              </FormControl>
+      <div className="filter py-2 text-end pe-5">
+        <nav className="navbar">
+          <div className="container justify-content-end">
+            <form className="d-flex" role="search">
+              <input
+                className="form-control me-2"
+                type="search"
+                placeholder="Search"
+                aria-label="Search"
+                value={searchTerm}
+                onChange={handleSearch}
+              />
+              <FormControl fullWidth  sx={{ width: '50%' }} >
+        <InputLabel id="page-size-select-label">Page Size</InputLabel>
+        <Select
+        className="justify-content-center"
+          labelId="page-size-select-label"
+          id="page-size-select"
+          value={pageSize}
+          label="Page Size"
+          onChange={handlePageSizeChange}
+        >
+          <MenuItem value={5}>5</MenuItem>
+          <MenuItem value={10}>10</MenuItem>
+          <MenuItem value={15}>15</MenuItem>
+        </Select>
+      </FormControl>
+              
+            </form>
+          </div>
+        </nav>
+      </div>
       <Stack direction="row" justifyContent="flex-end" alignItems="center">
       
               </Stack>
-      {courses?(
-          courses?.map((course) => (
+      {filteredCourses?(
+          filteredCourses?.map((course) => (
     <Box
       height={150}
       width={1000}

@@ -55,10 +55,26 @@ export default function page() {
   //     </Box>
   //   );
   // }
+  
+  const [searchTerm, setSearchTerm] = useState('');
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+const filteredCourses = Array.isArray(courses) ? courses.filter((course) => {
+  const matchesSearchTerm = Object.values(course).some(
+    (value) =>
+      typeof value === "string" &&
+      value.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  return matchesSearchTerm;
+}) : [];
+
   return (
     <Layout title='Dashboard'>
       <div>
         <>
+        
         <div className='d-flex justify-content-center'>
   <Box
     height={250}
@@ -76,9 +92,9 @@ export default function page() {
     <Typography variant='h6' sx={{ ml: 3 }} color={deepPurple[50]}>Have a nice day!</Typography>
   </Box>
 </div>
-<div className='d-flex gap-3'><Typography gutterBottom variant="h5" component="div">
+<div className='d-flex justify-content-between'><Typography className='ps-4' gutterBottom variant="h5" component="div">
           Your Courses         </Typography>
-          <FormControl fullWidth className="page-Size">
+          {/* <FormControl fullWidth className="page-Size">
                 <InputLabel id="page-size-select-label">Page Size</InputLabel>
                 <Select
                 className="justify-content-center"
@@ -92,10 +108,44 @@ export default function page() {
                   <MenuItem value={10}>10</MenuItem>
                   <MenuItem value={15}>15</MenuItem>
                 </Select>
-              </FormControl></div>
+              </FormControl> */}
+              <div className="filter py-2 text-end pe-5">
+        <nav className="navbar">
+          <div className="container justify-content-end">
+            <form className="d-flex" role="search">
+              <input
+                className="form-control me-2"
+                type="search"
+                placeholder="Search about course"
+                aria-label="Search"
+                value={searchTerm}
+                onChange={handleSearch}
+              />
+              <FormControl fullWidth className="w-50">
+        <InputLabel id="page-size-select-label">Page Size</InputLabel>
+        <Select
+        className="justify-content-center"
+          labelId="page-size-select-label"
+          id="page-size-select"
+          value={pageSize}
+          label="Page Size"
+          onChange={handlePageSizeChange}
+        >
+          <MenuItem value={5}>5</MenuItem>
+          <MenuItem value={10}>10</MenuItem>
+          <MenuItem value={15}>15</MenuItem>
+        </Select>
+      </FormControl>
+              
+            </form>
+          </div>
+        </nav>
+      </div>
+              
+              </div>
     
-        {courses?.length ? (
-          courses.map((course) => (
+        {filteredCourses?.length ? (
+          filteredCourses.map((course) => (
             <Link href={`courses/${course.id}`}>
 <Card sx={{ maxWidth: 200 , borderRadius: 3, height:270 , display:'inline-block', m:2}}  key={course.id}>
       <CardActionArea>

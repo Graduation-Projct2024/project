@@ -44,11 +44,11 @@ export default function Footer() {
             <div className="footer-menu ">
               <ul className='text-center' >
                 <li className="list-unstyled"><a href="#" className="text-decoration-none">Home</a></li>
-                <li className="list-unstyled"><a href="#" className="text-decoration-none">About Us</a></li>
-                <li className="list-unstyled"><a href="#" className="text-decoration-none">All Courses</a></li>
-                <li className="list-unstyled"><a href="#" className="text-decoration-none">Events</a></li>
+                <li className="list-unstyled"><a href="/About" className="text-decoration-none">About Us</a></li>
+                <li className="list-unstyled"><a href="/AllCourses" className="text-decoration-none">Courses</a></li>
+                <li className="list-unstyled"><a href="/AllEvents" className="text-decoration-none">Events</a></li>
                 <li className="list-unstyled"><a href="#" className="text-decoration-none">Feedback</a></li>
-                <li className="list-unstyled"><a href="#" className="text-decoration-none">Contact Us</a></li>
+                <li className="list-unstyled"><a href="/ContactUs" className="text-decoration-none">Contact Us</a></li>
 
 
               </ul>

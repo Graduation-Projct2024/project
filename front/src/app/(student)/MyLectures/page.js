@@ -75,6 +75,22 @@ export default function page() {
     setPageNumber(value);
   };
 
+
+  const [searchTerm, setSearchTerm] = useState('');
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+const filteredLectures = Array.isArray(lectures) ? lectures.filter((lecture) => {
+  const matchesSearchTerm = Object.values(lecture).some(
+    (value) =>
+      typeof value === "string" &&
+      value.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  return matchesSearchTerm;
+}) : [];
+
+
   // if (loading) {
   //   return <div>Loading...</div>;
   // }
@@ -87,7 +103,7 @@ export default function page() {
       alignItems="center"
       spacing={2}
     >
-      <FormControl fullWidth sx={{ width: '15%' }} className="page-Size mt-5 me-5" >
+      {/* <FormControl fullWidth sx={{ width: '15%' }} className="page-Size mt-5 me-5" >
         <InputLabel id="page-size-select-label">Page Size</InputLabel>
         <Select
           className="justify-content-center"
@@ -101,7 +117,39 @@ export default function page() {
           <MenuItem value={10}>10</MenuItem>
           <MenuItem value={15}>15</MenuItem>
         </Select>
+      </FormControl> */}
+      <div className="filter py-2 text-end pe-5">
+        <nav className="navbar">
+          <div className="container justify-content-end">
+            <form className="d-flex" role="search">
+              <input
+                className="form-control me-2"
+                type="search"
+                placeholder="Search"
+                aria-label="Search"
+                value={searchTerm}
+                onChange={handleSearch}
+              />
+              <FormControl fullWidth  sx={{ width: '50%' }} >
+        <InputLabel id="page-size-select-label">Page Size</InputLabel>
+        <Select
+        className="justify-content-center"
+          labelId="page-size-select-label"
+          id="page-size-select"
+          value={pageSize}
+          label="Page Size"
+          onChange={handlePageSizeChange}
+        >
+          <MenuItem value={5}>5</MenuItem>
+          <MenuItem value={10}>10</MenuItem>
+          <MenuItem value={15}>15</MenuItem>
+        </Select>
       </FormControl>
+              
+            </form>
+          </div>
+        </nav>
+      </div>
     </Stack>
       <TableContainer component={Paper} sx={{ width: '90%', mt: 5 }} className=''>
         <Table sx={{ minWidth: 700 }} aria-label="customized table" className=''>
@@ -112,8 +160,8 @@ export default function page() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {lectures.length ? (
-              lectures.map((lecture) => (
+            {filteredLectures.length ? (
+              filteredLectures.map((lecture) => (
                 <StyledTableRow key={lecture.consultationId}>
                   <StyledTableCell component="th" scope="row">
                   <Link href={`MyLectures/${lecture.consultationId}`}>{lecture.name}</Link>
