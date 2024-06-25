@@ -28,7 +28,6 @@ export default function page() {
   const {userToken, setUserToken,userData, setUserData}=useContext(UserContext);
   const router = useRouter();
 
-  
   useEffect(() => {
     if(userData && userToken){
       if ( userData.role=="admin") {
@@ -57,6 +56,15 @@ export default function page() {
   
     const handleLoginClick = () => {
         setIsActive(false);
+    };
+    const [signUpMode, setSignUpMode] = useState(false);
+
+    const handleSignUpClick = () => {
+      setSignUpMode(true);
+    };
+  
+    const handleSignInClick = () => {
+      setSignUpMode(false);
     };
   
   const initialValues={
@@ -159,15 +167,14 @@ export default function page() {
           Log in succssfully!
         </Alert>
       </Snackbar>
-    <div className='Body'>
-      <div className={isActive ? "logIncontainer active loginBody" : "logIncontainer loginBody"}id="container">
+    {/* <div className='Body'>
+      <div className={isActive ? "logIncontainer active  loginBody" : "logIncontainer loginBody"} id="container">
         <Register/>
   <div className="form-container sign-in">
     <form onSubmit={formik.handleSubmit}>
       <h1 className='pb-3'>Log In</h1>
       
         {renderInputs}
-        {/* {console.log(errmsg)} */}
         <Link className='bg-transparent border-0 text-primary text-decoration-underline' href='/AddEmailForgetPass'>Forget Password?</Link>
         
         <div className="text-center mt-3 loginActions">
@@ -178,7 +185,6 @@ export default function page() {
               >
                 Login
               </button>
-              {/* <Link  to='/sendCode'>Forget Password?</Link> */}
             </div>
             <p className='text-danger'>{errmsg}</p>
     </form>
@@ -200,6 +206,56 @@ export default function page() {
 </div>
 
  
+    </div> */}
+     <div className={`Authcontainer ${signUpMode ? 'sign-up-mode' : ''}`}>
+      <div className="forms-container">
+        <div className="signin-signup">
+          <form onSubmit={formik.handleSubmit} className="sign-in-form">
+            <h2 className="title">Sign in</h2>
+            {renderInputs}
+            <Link className='bg-transparent border-0 text-primary text-decoration-underline' href='/AddEmailForgetPass'>Forget Password?</Link>
+        
+        <div className="text-center mt-3 loginActions">
+              <button
+                className="m-2 btn solid "
+                type="submit"
+                disabled={!formik.isValid ||formik.isSubmitting || Object.keys(formik.errors).length > 0 || Object.keys(formik.touched).length === 0}
+              >
+                Login
+              </button>
+            </div>
+            <p className='text-danger'>{errmsg}</p>           
+          </form>
+         <Register/>
+        </div>
+      </div>
+
+      <div className="panels-container">
+        <div className="panel left-panel">
+          <div className="content">
+            <h3>EduCoding</h3>
+            <p>
+            Welcome back to EduCoding! We're thrilled to see you again. Please sign in to continue your journey with us. <br/>Don't have an account?
+            </p>
+            <button className="btn transparent" onClick={handleSignUpClick}>
+              Sign up
+            </button>
+          </div>
+          <img src="img/log.svg" className="image" alt="" />
+        </div>
+        <div className="panel right-panel">
+          <div className="content">
+          <h3>EduCoding</h3>
+            <p>
+            Join EduCoding today! Sign up to explore and enjoy all the amazing features we offer.<br/>do you have an account?
+            </p>
+            <button className="btn transparent" onClick={handleSignInClick}>
+              Sign in
+            </button>
+          </div>
+          <img src="img/register.svg" className="image" alt="" />
+        </div>
+      </div>
     </div>
     </Layout>
     </>
