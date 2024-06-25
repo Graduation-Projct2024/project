@@ -150,7 +150,24 @@ setErrors(error.response.data.errors.errorMassages);
           You have registered successfully!
         </Alert>
       </Snackbar>
-      <div className="form-container sign-up">
+          <form onSubmit={formik.handleSubmit} encType="multipart/form-data" className="sign-up-form">
+            <h2 className="title">Sign up</h2>
+            {renderInputs}
+
+            <div className="text-center mt-3">
+        <button
+              className="m-2 btn "
+              type="submit"
+              disabled={!formik.isValid}
+            >
+              Register
+            </button>
+        </div>
+        {errors&&<p className='text-danger'>{errors}</p>}
+        <p className='text-danger'>{errmsg}</p>
+          
+          </form>
+      {/* <div className="form-container sign-up">
       <form onSubmit={formik.handleSubmit} encType="multipart/form-data">
         <h2>Create Account</h2>
         
@@ -167,7 +184,7 @@ setErrors(error.response.data.errors.errorMassages);
         {errors&&<p className='text-danger'>{errors}</p>}
         <p className='text-danger'>{errmsg}</p>
       </form>
-    </div>
+    </div> */}
     </>
   );
 }
