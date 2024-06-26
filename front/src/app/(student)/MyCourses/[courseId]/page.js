@@ -26,6 +26,7 @@ import { useTheme } from '@mui/material/styles';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import Layout from '../../studentLayout/Layout.jsx';
 import { UserContext } from '../../../../context/user/User.jsx';
+import AuthError from '../../../../component/Error/AuthError.jsx';
 
 export default function page() {
   useEffect(() => {
@@ -35,7 +36,9 @@ export default function page() {
   }, []);
   const {userToken, setUserToken, userData}=useContext(UserContext);
   const [error, setError] = useState(null);
-
+if(!userToken){
+  return(<AuthError/>)
+}
     const contents=[
         {
             title:'Task 1',
