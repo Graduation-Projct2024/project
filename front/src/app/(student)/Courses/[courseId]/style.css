@@ -69,3 +69,9 @@ font-size:1rem !important;
 .addButton{
   background-color: #4c5372 !important;
 }
+.courseDetails{
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}

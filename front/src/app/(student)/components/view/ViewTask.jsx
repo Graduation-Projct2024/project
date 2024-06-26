@@ -117,8 +117,8 @@ if (loading) {
   return (
     <>
         <div className='studentTask mt-5'>
-        <TableContainer component={Paper} sx={{ width: '84%', mt: 7 , align:'center', ml:7, }}>
-      <Table sx={{ minWidth: 700 }} aria-label="customized table">
+        <TableContainer component={Paper} sx={{ width: '84%', mt: 7 , align:'center', ml:7, }} className='taskk'>
+      <Table aria-label="customized table">
         <TableBody>
          
             <StyledTableRow >

@@ -111,8 +111,8 @@ if (loading) {
 }
   return (
     <div className='studentMaterial mt-5 pt-5'>
-         <TableContainer component={Paper} sx={{ width: '84%', mt: 7 , align:'center', ml:7, }}>
-      <Table sx={{ minWidth: 700 }} aria-label="customized table">
+         <TableContainer component={Paper} sx={{ width: '84%', mt: 7 , align:'center', ml:7, }} className='filee'>
+      <Table  aria-label="customized table">
         <TableBody>
          
             <StyledTableRow >

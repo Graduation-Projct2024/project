@@ -52,3 +52,23 @@ width:85%;
     font-size:30px;
     color:#4c5372 !important ;
 }
+
+
+@media screen and (max-width: 576px){
+  .announ{
+    width: auto !important;
+    height: auto;
+}  
+.linkk{
+    width: auto !important;
+    height: auto;
+}
+.filee{
+    width: auto !important;
+    height: auto;
+}
+.taskk{
+    width: auto !important;
+    height: auto;
+}
+}

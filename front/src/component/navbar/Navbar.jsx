@@ -54,17 +54,17 @@ export default function Navbar({role}) {
   return (
     <AppBar position="fixed" className='nav'>
       <Container maxWidth="xl">
-        <Toolbar disableGutters>
+        <Toolbar disableGutters  sx={{ flexGrow: 1, display: { xs: 'flex', md: 'flex' } }} >
           {/* <Link className='text-decoration-none d-flex gap-1 text-white' href='/'> */}
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          {/* <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} /> */}
           <Typography
             variant="h6"
             noWrap
             component="a"
-            href="/"
-            className='pe-5'
+            href='/'
+            
             sx={{
-              mr: 2,
+              // mr: 2,
               display: { xs: 'none', md: 'flex' },
               fontFamily: 'monospace',
               fontWeight: 700,
@@ -72,9 +72,14 @@ export default function Navbar({role}) {
               color: 'inherit',
               textDecoration: 'none',
             }}
+            // className='justify-content-center'
           >
-            LOGO
+            {/* LOGO */}
+            {/* <Link href='/'> */}
+            <img src="./logoEdu.png" alt="" className='img-fluid w-50' />
+            {/* </Link> */}
           </Typography>
+          
           
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -106,8 +111,68 @@ export default function Navbar({role}) {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-
+              <MenuItem onClick={handleCloseNavMenu}>
+              <Typography textAlign="center">
+                {userToken  && ((role == "admin" &&
+              <Button
+              key='1'
+              // onClick={handleCloseNavMenu}
+              // onClick={() => router.push('/dashboard')}
+              sx={{ display: 'block' }}
+            >
+               <Link href="/dashboard" color="black" underline='none' >Dashboard</Link>
+               {/* { Dashboard} */}
+            </Button>
+          )
+             || (role == "main-subadmin" &&
+              <Button
+              key='1'
+              // onClick={handleCloseNavMenu}
+              // onClick={() => router.push('/dashboardM')}
+              sx={{   display: 'block' }}
+            >
+               <Link href="/dashboardM" color="black"  underline='none' >Dashboard</Link>
+               {/* Dashboard */}
+            </Button>)||
+            (role == "subadmin" &&
+            <Button
+            key='1'
+            // onClick={handleCloseNavMenu}
+            // onClick={() => router.push('/dashboardS')}
+            sx={{  display: 'block' }}
+          >
+             <Link href="/dashboardS" color="black" underline='none' >Dashboard</Link>
+             {/* Dashboard */}
+          </Button>)||
+          (role == "instructor" &&
+          <Button
+          key='1'
+          // onClick={handleCloseNavMenu}
+          // onClick={() => router.push('/myDashboard')}
+          sx={{   display: 'block' }}
+        >
+           <Link href="/dashboardI" underline='none' color="black" >Dashboard</Link>
+           {/* Dashboard */}
+          
+        </Button>)||
+        (role == "student" &&
+        <Button
+        key='1'
+        // onClick={handleCloseNavMenu}
+        // onClick={() => router.push('/MyDashboard')}
+        sx={{  display: 'block' }}
+      >
+         <Link href="/MyDashboard" color="black" underline='none' >Dashboard</Link>
+         {/* Dashboard */}
+      </Button>)
+                    
+          )
+            }
+              </Typography>
+              
+              </MenuItem>
               {pages.map((page) => (
+                          
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
@@ -115,14 +180,14 @@ export default function Navbar({role}) {
             </Menu>
           </Box>
           {/* <Link href = '/' className='d-flex text-decoration-none gap-1' > */}
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+          {/* <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} /> */}
           <Typography
             variant="h5"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
+            href="/"
             sx={{
-              mr: 2,
+              // mr: 2,
               display: { xs: 'flex', md: 'none' },
               flexGrow: 1,
               fontFamily: 'monospace',
@@ -130,11 +195,15 @@ export default function Navbar({role}) {
               letterSpacing: '.3rem',
               color: 'inherit',
               textDecoration: 'none',
+              
             }}
-            className='typo'
+            className='justify-content-center'
           >
-            LOGO
+            {/* LOGO */}
+            <img src="./logoEdu.png" alt="" className='img-fluid w-50' />
           </Typography>
+          
+
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {console.log(role)}
             {userToken  && ((role == "admin" &&

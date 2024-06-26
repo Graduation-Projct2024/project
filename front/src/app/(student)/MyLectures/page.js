@@ -151,8 +151,8 @@ const filteredLectures = Array.isArray(lectures) ? lectures.filter((lecture) => 
         </nav>
       </div>
     </Stack>
-      <TableContainer component={Paper} sx={{ width: '90%', mt: 5 }} className=''>
-        <Table sx={{ minWidth: 700 }} aria-label="customized table" className=''>
+      <TableContainer component={Paper} sx={{ width: '90%', mt: 5 }} className='lecturesTable'>
+        <Table  aria-label="customized table" className=''>
           <TableHead>
             <TableRow>
               <StyledTableCell>Lecture title</StyledTableCell>

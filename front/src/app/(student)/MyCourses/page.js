@@ -108,6 +108,7 @@ const filteredCourses = Array.isArray(courses) ? courses.filter((course) => {
       display="flex"
       alignItems="center"
       gap={4}
+      className='singleCourse'
     
     >
 <img

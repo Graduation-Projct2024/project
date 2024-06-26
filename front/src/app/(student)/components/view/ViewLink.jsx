@@ -92,8 +92,8 @@ if (loading) {
 }
   return (
     <div className='material pt-5 mt-5'>
-      <TableContainer component={Paper} sx={{ width: '84%', mt: 7 , align:'center', ml:7, }}>
-      <Table sx={{ minWidth: 700 }} aria-label="customized table">
+      <TableContainer component={Paper} sx={{ width: '84%', mt: 7 , align:'center', ml:7, }} className='linkk'>
+      <Table  aria-label="customized table">
         <TableBody>
          
             <StyledTableRow >

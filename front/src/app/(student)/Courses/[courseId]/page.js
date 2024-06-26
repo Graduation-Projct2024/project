@@ -101,8 +101,10 @@ try{
           Your request to join this course done successfully, please wait for Accreditation!
         </Alert>
       </Snackbar>
+
            <Grid container spacing={2}>
-        <Grid item xs={3} m={3}>
+            <div className="row justify-content-center align-items-center "></div>
+        <Grid item  className='col-xl-4 co-lg-4 col-sm-12 ps-5 pt-5'>
           <Box
             height={250}
             width={300}
@@ -118,7 +120,7 @@ try{
             />
           </Box>
         </Grid>
-        <Grid item xs={6} sx={{mt:4}}>
+        <Grid item  className='col-xl-6 co-lg-6 col-sm-12'>
           <Box m={3} p={5}>
             <Typography variant="h6" >Category :{course.category}</Typography>
             <Typography variant="h6">Price :{course.price}</Typography>
@@ -131,6 +133,8 @@ try{
           </Box>
         </Grid>
       </Grid>
+
+
       <Box sx={{ width: '100%', typography: 'body1', mt:3,  }}>
       <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider', }}>

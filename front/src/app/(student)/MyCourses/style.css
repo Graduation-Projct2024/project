@@ -38,3 +38,9 @@ color:#4c5372 ;
   .arrowIcon{
     color: #4c5372 !important;
   }
+  @media screen and (max-width: 576px){
+      .singleCourse{
+        width: fit-content !important;
+        height: auto;
+      }
+  }

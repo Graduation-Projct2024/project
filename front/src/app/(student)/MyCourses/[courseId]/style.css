@@ -71,3 +71,16 @@ color: #FFFDF6;
 .itemMaterial{
     color: #4c5372 !important;
 }
+@media screen and (max-width: 576px){
+
+.singleMaterial{
+    width: auto !important;
+    height: auto;
+}
+.singeParticipant{
+    width: auto !important;
+    height: auto;
+    background-color: #4c5372;
+}
+
+}

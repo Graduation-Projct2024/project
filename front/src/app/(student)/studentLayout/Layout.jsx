@@ -104,24 +104,23 @@ const sidebarItems = [
 
   const drawer = (
     <div className='side-drawer'>
-      <Stack spacing={1} direction='row' alignItems='center'  justifyContent='center' sx={{ ml:6, my:3}}  >
-            <AdbIcon sx={{color:deepPurple[50]}}/>
+<Stack spacing={1} direction='row' alignItems='center'  justifyContent='center' sx={{ my:3, px:3}}  >
+            {/* <AdbIcon sx={color:deepPurple[50]}/> */}
           <Link
             variant='h4'
             href="/"
             underline='none'
-            color={deepPurple[50]}
+            // color={deepPurple[50]}
             flexGrow= {1}
             fontFamily= 'monospace'
             fontWeight= {700}
-            mr={2}
-
           >
-            LOGO
+            {/* LOGO */}
+            <img src="./logoEdu.png" alt="Educoding" className='img-fluid'/>
           </Link>
             </Stack>
       <Divider />
-      <List sx={{ my:4, pt:5 }} className = "sideContent">
+      <List sx={{ my:4, }} className = "sideContent">
               {sidebarItems.map(({ name, href, icon: Icon }) =>{
                 return(
                 // <ListItem key={name} 
@@ -184,7 +183,8 @@ const sidebarItems = [
           ml: { sm: `${drawerWidth}px` },
         }}
       >
-        <Toolbar sx={{ justifyContent: 'space-between' }}>
+        <Toolbar sx={{ justifyContent: 'space-between' }} >
+          {/* <div className="row justify-content-between align-items-center"> */}
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -192,7 +192,7 @@ const sidebarItems = [
             onClick={handleDrawerToggle}
             sx={{ mr: 2, display: { sm: 'none' } }}
           >
-            <MenuIcon />
+            <MenuIcon className='menuIcon'/>
           </IconButton>
           <Typography variant="h4" noWrap component="div" className='titleSide'>
           {title}
@@ -200,6 +200,7 @@ const sidebarItems = [
           <Link  >
             {userData&&userData.imageUrl?(<Avatar alt="profile picture" src={userData.imageUrl} sx={{ width: 60, height: 60,mr:7 ,mt:3,}} />):(<Avatar alt="Remy Sharp" sx={{ width: 60, height: 60,mr:7 ,mt:3,}} />)} 
           </Link>
+          {/* </div> */}
         </Toolbar>
       </Stack>
       <Box

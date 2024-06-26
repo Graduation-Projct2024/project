@@ -99,20 +99,21 @@ const sidebarItems = [
 
   const drawer = (
     <div className='side-drawer'>
-      <Stack spacing={1} direction='row' alignItems='center'  justifyContent='center' sx={{ ml:6, my:3}}  >
-            <AdbIcon sx={{color:deepPurple[50]}}/>
+<Stack spacing={1} direction='row' alignItems='center'  justifyContent='center' sx={{ my:3, px:3}}  >
+            {/* <AdbIcon sx={color:deepPurple[50]}/> */}
           <Link
             variant='h4'
             href="/"
             underline='none'
-            color={deepPurple[50]}
+            // color={deepPurple[50]}
             flexGrow= {1}
             fontFamily= 'monospace'
             fontWeight= {700}
-            mr={2}
+           
 
           >
-            LOGO
+            {/* LOGO */}
+            <img src="/logoEdu.png" alt="" className='img-fluid' />
           </Link>
             </Stack>
       <Divider />

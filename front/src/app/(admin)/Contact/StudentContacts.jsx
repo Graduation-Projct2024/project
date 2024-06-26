@@ -101,7 +101,7 @@ export default function StudentContacts() {
           <MenuItem value={15}>15</MenuItem>
         </Select>
       </FormControl>
-                <div className="icons d-flex gap-2 pt-3">
+                {/* <div className="icons d-flex gap-2 pt-3">
                     
                     <div className="dropdown">
   <button className="dropdown-toggle border-0 bg-white edit-pen" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -113,7 +113,7 @@ export default function StudentContacts() {
 </div>
 <FontAwesomeIcon icon={faArrowUpFromBracket} />
                     
-                </div>
+                </div> */}
                 </form>
                
 

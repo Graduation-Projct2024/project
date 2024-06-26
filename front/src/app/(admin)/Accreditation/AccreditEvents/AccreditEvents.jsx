@@ -188,7 +188,7 @@ const getStatusStyle = (status) => {
           <MenuItem value={15}>15</MenuItem>
         </Select>
       </FormControl>
-              <div className="icons d-flex gap-2 pt-3">
+              {/* <div className="icons d-flex gap-2 pt-3">
                 <div className="dropdown">
                   <button
                     className="dropdown-toggle border-0 bg-white edit-pen"
@@ -203,7 +203,7 @@ const getStatusStyle = (status) => {
                   </ul>
                 </div>
                 <FontAwesomeIcon icon={faArrowUpFromBracket} />
-              </div>
+              </div> */}
             </form>
           </div>
         </nav>
