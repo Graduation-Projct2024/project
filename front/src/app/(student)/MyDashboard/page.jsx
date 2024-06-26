@@ -78,14 +78,16 @@ const filteredCourses = Array.isArray(courses) ? courses.filter((course) => {
     gap={4}
     p={2}
     sx={{ border: '1px solid grey', borderRadius: 3, boxShadow: 3 }}
+    className='studentDash'
   >
-    {userData &&<Typography variant='h4' sx={{ mt: 6, ml: 3 }} color={deepPurple[50]}>Welcome {userData.userName},</Typography>}
-    <Typography variant='h6' sx={{ ml: 3 }} color={deepPurple[50]}>Have a nice day!</Typography>
+    {userData &&<Typography className='welcome' variant='h4' sx={{ mt: 6, ml: 3 }} color={deepPurple[50]}>Welcome {userData.userName}, </Typography>}
+    <Typography variant='h6' className='wel' sx={{ ml: 3 }} color={deepPurple[50]}>Have a nice day!</Typography>
   </Box>
 </div>
-<div className="d-flex justify-content-between">
-<Typography gutterBottom variant="h5" component="div">
-          Your Courses         </Typography>
+<div className="d-flex justify-content-between courses">
+<Typography gutterBottom variant="h5" component="div" className='pe-1'>
+          Your Courses         
+          </Typography>
 
           <div className="filter py-2 text-end pe-5">
         <nav className="navbar">

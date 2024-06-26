@@ -101,7 +101,7 @@ const filteredSkills = Array.isArray(skills) ? skills.filter((skill) => {
                 value={searchTerm}
                 onChange={handleSearch}
               />
-              <div className="icons d-flex gap-2 pt-2">
+              {/* <div className="icons d-flex gap-2 pt-2">
                 <div className="dropdown">
                   <button
                     className="dropdown-toggle border-0 bg-white edit-pen"
@@ -124,7 +124,7 @@ const filteredSkills = Array.isArray(skills) ? skills.filter((skill) => {
                   </ul>
                 </div>
                 <FontAwesomeIcon icon={faArrowUpFromBracket} />
-              </div>
+              </div> */}
             </form>
 
             {/* <button type="button" className="btn btn-primary ms-2 addEmp" data-bs-toggle="modal" data-bs-target="#staticBackdrop2">

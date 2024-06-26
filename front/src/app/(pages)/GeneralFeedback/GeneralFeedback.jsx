@@ -52,7 +52,7 @@ useEffect(() => {
     <div className="generalFeedback py-5">
       <div className="container">
         <div className="row">
-          <div className="col-lg-6 col-md-12">
+          <div className="col-lg-6 col-md-12 justify-content-center">
             {/* <div className="feedbackImg py-4">
               <img src="/layer.png" alt="img" className="img-fluid pt-5" />
             </div> */}
@@ -62,7 +62,7 @@ useEffect(() => {
           <div className="col-lg-6 col-md-12">
             <div className="feedback-content py-4">
               <div className="title d-flex justify-content-between align-items-center">
-                <h3 className="feedbackTitle">
+                <h3 className="feedbackTitle text-center">
                   Our Students Are Our Strength.
                   <br /> See What They Say About Us!
                 </h3>

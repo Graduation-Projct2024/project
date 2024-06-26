@@ -228,7 +228,7 @@ export default function page() {
                 gap={4}
                 p={2}
                 sx={{ border: "1px solid grey", borderRadius: 3, mt: 2 }}
-                className={material.type}
+                className={`${material.type} singleMat`}
               >
                 {material.type == "Task" && (
                   <AssignmentIcon sx={{ fontSize: 50 }} />

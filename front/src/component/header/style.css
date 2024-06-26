@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
 .header {
     height: 100vh;
     background-size: cover;
@@ -5,6 +6,7 @@
   h1 {
     font-size: 60px;
     color: rgb(63, 61, 86);
+    font-family:  "Nunito", sans-serif !important;
   }
   .btn-purple {
     background-color: rgb(63, 61, 86);
@@ -27,4 +29,14 @@
       box-shadow: 0 2px 48px 0 rgba(0, 0, 0, 0.08);
   
   }
+  .animation{
+    width: 500px;
+    height: 500px;
+}
+@media screen and (max-width: 576px){
+    .animation{
+        width: 300px;
+        height: 300px;
+    }   
+}
   

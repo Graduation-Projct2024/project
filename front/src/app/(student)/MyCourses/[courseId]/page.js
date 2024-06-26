@@ -145,7 +145,7 @@ const [materialId, setMaterialId]=useState();
   return (
     <Layout title={courseName}>
     <div>
-  <ul className="nav nav-tabs" id="myTab" role="tablist">
+  <ul className="nav nav-tabs pt-3" id="myTab" role="tablist">
     <li className="nav-item" role="presentation">
       <button className="nav-link active" id="content-tab" data-bs-toggle="tab" data-bs-target="#content-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Content</button>
     </li>
@@ -225,7 +225,7 @@ const [materialId, setMaterialId]=useState();
       gap={4}
       p={2}
       sx={{ border: '1px solid grey' ,borderRadius: 3, mt:2}}
-      className={material.type}
+      className={`${material.type} singleMaterial` }
     >
       {material.type=='Task'&&<AssignmentIcon sx={{fontSize:50, }} className='itemMaterial'/>}
       {material.type=='File'&&<InsertDriveFileIcon sx={{fontSize:50, }} className='itemMaterial'/>}
@@ -254,7 +254,7 @@ const [materialId, setMaterialId]=useState();
       gap={4}
       p={2}
       sx={{ border: '1px solid grey' ,borderRadius: 3, justifyContent: 'space-between' }}
-      className={index%2==0?"bg-purple1":'bg-purple2 my-2 py-1'}
+      className={`${index%2==0?"bg-purple1":'bg-purple2'}my-2 py-1 singeParticipant `}
     >
      <Typography variant='h6' className='contactIcon'> {participant.userName}</Typography>
      <div className='m-2'>
