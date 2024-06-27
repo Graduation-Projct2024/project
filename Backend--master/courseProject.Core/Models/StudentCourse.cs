@@ -11,7 +11,7 @@ namespace courseProject.Core.Models
     public class StudentCourse
     {
         [Key]
-        [ForeignKey("Student")]
+        [ForeignKey("User")]
         public Guid StudentId {  get; set; }
         [Key]
         [ForeignKey("Course")]
@@ -21,7 +21,7 @@ namespace courseProject.Core.Models
         public string status { get; set; } = "waiting";
         [NotMapped] public bool isEnrolled { get; set; }= false;
 
-        public Student Student { get; set; }
+        public User Student { get; set; }
 
         public Course Course { get; set; }
 

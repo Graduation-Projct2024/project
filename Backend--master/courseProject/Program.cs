@@ -1,6 +1,5 @@
 using courseProject.Configuration;
 
-
 namespace courseProject
 {
     public class Program
@@ -9,22 +8,22 @@ namespace courseProject
         {
             var builder = WebApplication.CreateBuilder(args);
 
-     
+
 
             builder.Services.ConfigureServices(builder.Configuration);
-                   
-                   
-          
+
+
+
             builder.Services.AddHttpClient();
 
 
             builder.Services.AddHttpContextAccessor();
-         
 
-           
 
-           
-          
+
+
+
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -37,8 +36,8 @@ namespace courseProject
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-            
-           
+
+
             app.UseCors("AllowOrigin");
             app.ConfigureStaticFiles();
 

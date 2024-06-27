@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace courseProject.Repository.GenericRepository
 {
-    public class StudentRepository : GenericRepository1<Student>, IStudentRepository
+    public class StudentRepository : GenericRepository1<User>, IStudentRepository
     {
         private readonly projectDbContext dbContext;
 
@@ -23,9 +23,9 @@ namespace courseProject.Repository.GenericRepository
             await dbContext.Set<StudentConsultations>().AddAsync(consultation);
         }
 
-        public async Task CreateStudentAccountAsync(Student student)
+        public async Task CreateStudentAccountAsync(User student)
         {
-          await  dbContext.Set<Student>().AddAsync(student);
+          await  dbContext.Set<User>().AddAsync(student);
         }
 
        
@@ -37,20 +37,20 @@ namespace courseProject.Repository.GenericRepository
 
        
 
-        public async Task<IReadOnlyList<Student>> GetAllStudentsInTheSameCourseAsync(Guid courseId)
+        public async Task<IReadOnlyList<User>> GetAllStudentsInTheSameCourseAsync(Guid courseId)
         {
-            return await dbContext.students.Include(x=>x.user)
+            return await dbContext.users
                           .Where(student => student.studentCourses.Any(sc => sc.courseId == courseId && sc.status.ToLower()== "joind"))
                           .ToListAsync();
         }
 
 
 
-        public async Task<IReadOnlyList<Student>> GetAllStudentsAsync()
+        public async Task<IReadOnlyList<User>> GetAllStudentsAsync()
         {
           
-                return await dbContext.students.Include(x => x.user).Where(x => x.user.IsVerified == true)
-                    .OrderByDescending(x => x.user.dateOfAdded)
+                return await dbContext.users.Where(x => x.IsVerified == true && x.role.ToLower()=="student")
+                    .OrderByDescending(x => x.dateOfAdded)
                     .ToListAsync();
 
            
@@ -58,9 +58,9 @@ namespace courseProject.Repository.GenericRepository
 
 
 
-        public async Task<Student> getStudentByIdAsync(Guid? id )
+        public async Task<User> getStudentByIdAsync(Guid? id )
         {          
-            return await dbContext.students.FirstOrDefaultAsync(x => x.StudentId == id);
+            return await dbContext.users.Where(x=>x.role.ToLower()=="student").FirstOrDefaultAsync(x => x.UserId == id);
         }
 
        
@@ -68,7 +68,7 @@ namespace courseProject.Repository.GenericRepository
         {
             return await dbContext.StudentConsultations.Where(x=>x.consultationId== consultationId)
                 .Where(x => x.consultation.type.ToLower() == "public")
-                .Include(x=>x.Student).ThenInclude(x=>x.user).ToListAsync();
+                .Include(x=>x.Student).ToListAsync();
         }
 
        

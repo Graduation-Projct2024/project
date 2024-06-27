@@ -1,4 +1,6 @@
-﻿namespace courseProject.Emails
+﻿using iText.Kernel.Pdf.Canvas.Parser.ClipperLib;
+
+namespace courseProject.Emails
 {
     public class EmailTexts
     {
@@ -211,6 +213,44 @@
             return body;
         }
 
+        public static string SendBookingEmailAsync(string studentName, string lectureTitle, DateTime lectureDate , TimeSpan startTime, TimeSpan endTime, string instructorName)
+        {
+
+            var startDateTime = DateTime.Today.Add(startTime);
+            var endDateTime = DateTime.Today.Add(endTime);
+
+
+            var body = $@"
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset='UTF-8'>
+            <title>Lecture Booking Confirmation</title>
+        </head>
+        <body>
+           
+            <p>Dear {instructorName},</p>
+            <p>We are pleased to inform you that a student has booked a lecture with you. Here are the details:</p>
+            <ul>
+                <li><strong>Student Name:</strong> {studentName}</li>
+                <li><strong>Lecture Title:</strong> {lectureTitle}</li>
+                <li><strong>Lecture Date:</strong> {lectureDate:MMMM dd, yyyy} from {startDateTime:hh:mm tt} to {endDateTime:hh:mm tt}</li>
+            </ul>
+            <p>Please prepare accordingly and reach out to the student if necessary.</p>
+            <p>Thank you,</p>
+            <p>The EduCoding Team</p>
+<tr>
+                      
+                            <p style='margin: 0;'>© {DateTime.Now.Year} EduCoding Academy. All rights reserved.</p>
+                        </td>
+                    </tr>
+        </body>
+        </html>";
+
+
+
+                  return body;
+        }
 
         }
 }

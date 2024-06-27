@@ -20,7 +20,7 @@ namespace courseProject.Repository.GenericRepository
         {
             return await dbContext.Student_Task_Submissions
                 .Include(x => x.Student)
-                .ThenInclude(x => x.user)
+                
                 .Where(x => x.TaskId == taskId).ToListAsync();
         }
 

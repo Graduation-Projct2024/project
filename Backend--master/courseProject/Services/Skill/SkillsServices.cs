@@ -34,7 +34,7 @@ namespace courseProject.Services.Skill
 
         public async Task<ErrorOr<Created>> chooseANewSkillToInstructor(Guid instructorId, ListIntegerDTO array)
         {
-            var FoundInstrutor = await unitOfWork.instructorRepositpry.getInstructorByIdAsync(instructorId);
+            var FoundInstrutor = await unitOfWork.UserRepository.ViewProfileAsync(instructorId , "instructor");
             if (FoundInstrutor == null)
             {
                 return ErrorInstructor.NotFound;
@@ -58,10 +58,12 @@ namespace courseProject.Services.Skill
             return allSkills;
         }
 
-        public async Task<IReadOnlyList<Skills>> getAllSkillOptionsToInstructor(Guid instructorId)
+        public async Task<ErrorOr<IReadOnlyList<Skills>>> getAllSkillOptionsToInstructor(Guid instructorId)
         {
+            var getinstructor = await unitOfWork.instructorRepositpry.getInstructorById(instructorId);
+            if (getinstructor == null) return ErrorInstructor.NotFound;
             var allSkills = await unitOfWork.skillRepository.getAllUnregisteredSkillsOfTheInstructor(instructorId);
-            return allSkills;
+            return allSkills.ToErrorOr();
             
 
         }
@@ -78,7 +80,7 @@ namespace courseProject.Services.Skill
 
             var getInstructorSkillsRecords = await unitOfWork.instructorRepositpry.GetAllInstructorSkillsRecoredsAsync();
             if (!getInstructorSkillsRecords.Any(x => x.InstructorId == InstructorId && x.skillId == SkillId))
-            {
+            {   
                 return ErrorSkills.NotHasSkill;
             }
            

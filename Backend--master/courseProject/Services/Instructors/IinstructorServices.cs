@@ -9,8 +9,8 @@ namespace courseProject.Services.Instructors
 {
     public interface IinstructorServices
     {
-        public Task<IReadOnlyList<Instructor>> GetAllInstructors();
-        public Task<ErrorOr<Instructor>> getInstructorById(Guid InstructorId);
+        public Task<IReadOnlyList<User>> GetAllInstructors();
+        public Task<ErrorOr<User>> getInstructorById(Guid InstructorId);
         public Task<ErrorOr<Created>> AddOfficeHours(Guid InstructorId, WorkingHourDTO _Working_Hours);
         public Task<ErrorOr<IReadOnlyList<GetWorkingHourDTO>>> GetInstructorOfficeHours(Guid InstructorId);
         public Task<IReadOnlyList<EmployeeListDTO>> GetAllInstructorsList();

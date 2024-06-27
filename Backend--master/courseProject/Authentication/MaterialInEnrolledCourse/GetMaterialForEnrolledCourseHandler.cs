@@ -46,7 +46,7 @@ namespace courseProject.Authentication.MaterialInEnrolledCourse
 
                     if (Guid.TryParse(userIdAsString, out var userId))
                     {
-                        var instructorInCourse = await dbContext.courses.AnyAsync(c=>c.Id==courseId && c.InstructorId==userId);
+                        var instructorInCourse = await dbContext.courses.AnyAsync(c=>c.Id==courseId && c.InstructorId ==userId);
                         var enrolledInCourse = await dbContext.studentCourses.AnyAsync(sc => sc.courseId == courseId && sc.StudentId == userId );
                         var enrolledInConsultation = await dbContext.consultations.AnyAsync(cm => cm.Id == consultationId && cm.InstructorId == userId);
                         var studentInConsultation = await dbContext.StudentConsultations.AnyAsync(cm => cm.consultationId == consultationId && cm.StudentId == userId);

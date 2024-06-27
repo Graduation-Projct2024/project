@@ -7,6 +7,9 @@ namespace courseProject.Configuration
 
         public static IServiceCollection ConfigureServices(this IServiceCollection services, IConfiguration configuration)
         {
+
+            
+
             services.AddApplication();
 
             services. AddInfrastucture( configuration);

@@ -15,13 +15,13 @@ namespace courseProject.Core.Models
 
         public DateTime dateOfAdded { get; set; }
 
-        [ForeignKey("Student")]
+        [ForeignKey("User")]
         public Guid StudentId { get; set; }
 
         [ForeignKey("Course")]
         public Guid courseId { get; set; }
 
-        public Student Student { get; set; }
+        public User Student { get; set; }
         public Course course { get; set; }
 
     }

@@ -12,7 +12,7 @@ namespace courseProject.Core.Models
     public class StudentConsultations
     {
         [Key]
-        [ForeignKey("Student")]
+        [ForeignKey("User")]
         public Guid StudentId { get; set; }
         [Key]
         [ForeignKey("Consultation")]
@@ -20,7 +20,7 @@ namespace courseProject.Core.Models
 
         public DateTime EnrollDate { get; set; }= DateTime.Now;
 
-        public Student Student { get; set; }
+        public User Student { get; set; }
 
         public Consultation consultation { get; set; }
     }

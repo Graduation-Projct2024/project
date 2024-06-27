@@ -1,13 +1,6 @@
-﻿using courseProject.Core.Models.DTO;
-using System;
-using System.Collections.Generic;
+﻿
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using courseProject.Core.Models;
 using System.Diagnostics.CodeAnalysis;
-using System.Net;
 namespace courseProject.Core.Models
 {
     public class Request
@@ -25,21 +18,19 @@ namespace courseProject.Core.Models
         public DateTime? startDate { get; set; }
         public DateTime? endDate { get; set; }
 
-       // [ForeignKey("Admin")]
-       // public Guid AdminId { get; set; } 
+        //[ForeignKey("User")]
+        //[AllowNull]
+        //public Guid? SubAdminId { get; set; }
 
-        [ForeignKey("Student")]
+        [ForeignKey("User")]
         [AllowNull]
         public Guid? StudentId { get; set; }
-        [ForeignKey("SubAdmin")]
-        [AllowNull]
-        public Guid? SubAdminId { get; set; } 
 
-      //  public Admin Admin { get; set; }
-        public SubAdmin SubAdmin { get; set; }  
-        public Student Student { get; set; }
+       
+   //     public User subAdmin { get; set; }
+        public User student { get; set; }
 
-        public Event Event { get; set; }
-        public Course Course { get; set; }
+    //    public Event Event { get; set; }
+    //    public Course Course { get; set; }
     }
 }

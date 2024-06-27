@@ -8,20 +8,20 @@ using System.Threading.Tasks;
 
 namespace courseProject.Core.IGenericRepository
 {
-    public interface IStudentRepository : IGenericRepository1<Student>
+    public interface IStudentRepository : IGenericRepository1<User>
     {
 
-        public Task CreateStudentAccountAsync(Student student);
+        public Task CreateStudentAccountAsync(User student);
         public Task EnrollCourse(StudentCourse studentCourse);
       
        
-        public Task<IReadOnlyList<Student>> GetAllStudentsInTheSameCourseAsync(Guid courseId);
+        public Task<IReadOnlyList<User>> GetAllStudentsInTheSameCourseAsync(Guid courseId);
       
         public  Task AddInStudentConsulationAsync(StudentConsultations consultation);
 
-        public Task<IReadOnlyList<Student>> GetAllStudentsAsync();
+        public Task<IReadOnlyList<User>> GetAllStudentsAsync();
         public Task<List<StudentConsultations>> GetAllStudentsInPublicConsulations(Guid consultationId);
-        public Task<Student> getStudentByIdAsync(Guid? id);
+        public Task<User> getStudentByIdAsync(Guid? id);
       
        
         public Task<StudentCourse> GetFromStudentCourse(Guid courseId, Guid studentId);

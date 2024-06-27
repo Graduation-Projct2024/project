@@ -1,4 +1,7 @@
-﻿using courseProject.Core.Models;
+﻿
+namespace courseProject.Services.BackgroundServices
+{
+  using courseProject.Core.Models;
 using Microsoft.EntityFrameworkCore;
 using courseProject.Repository.Data;
 using Microsoft.Extensions.Hosting;
@@ -7,9 +10,6 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace courseProject.Services.BackgroundServices
-{
-  
 
 
 

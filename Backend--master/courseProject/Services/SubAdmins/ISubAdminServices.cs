@@ -5,7 +5,7 @@ namespace courseProject.Services.SubAdmins
 {
     public interface ISubAdminServices
     {
-        public Task<IReadOnlyList<SubAdmin>> GetAllSubAdmins();
-        public Task<ErrorOr<SubAdmin>> getSubAdminById(Guid subAdminId);
+        public Task<IReadOnlyList<User>> GetAllSubAdmins();
+        public Task<ErrorOr<User>> getSubAdminById(Guid subAdminId);
     }
 }

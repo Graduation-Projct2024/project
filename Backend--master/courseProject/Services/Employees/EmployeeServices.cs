@@ -3,8 +3,6 @@ using courseProject.Core.IGenericRepository;
 using courseProject.Core.Models;
 using courseProject.Core.Models.DTO.EmployeesDTO;
 using courseProject.ServiceErrors;
-using courseProject.Services.Instructors;
-using courseProject.Services.SubAdmins;
 using ErrorOr;
 
 namespace courseProject.Services.Employees
@@ -25,14 +23,13 @@ namespace courseProject.Services.Employees
 
         public async Task<IReadOnlyList<EmployeeDto>> getAllEmployees()
         {
-            var SubAdmins = await unitOfWork.SubAdminRepository.GetAllEmployeeAsync();
-            var instructors = await unitOfWork.instructorRepositpry.GetAllEmployeeAsync();
+            var employees = await unitOfWork.UserRepository.GetAllEmployeeAsync();
+         
 
-            var mapperSubAdmin = mapper.Map<IReadOnlyList<SubAdmin>, IReadOnlyList<EmployeeDto>>(SubAdmins);
+            var mapperemployees= mapper.Map<IReadOnlyList<User>, IReadOnlyList<EmployeeDto>>(employees);
           
-            var mapperInstructor = mapper.Map<IReadOnlyList<Instructor>, IReadOnlyList<EmployeeDto>>(instructors);
-           
-            var allEmployees = (mapperSubAdmin.Concat(mapperInstructor)).OrderByDescending(x => x.dateOfAdded).ToList();
+         
+            var allEmployees = mapperemployees.OrderByDescending(x => x.dateOfAdded).ToList();
             foreach (var employee in allEmployees)
             {
                 if (employee.ImageUrl != null)
@@ -51,32 +48,18 @@ namespace courseProject.Services.Employees
 
             if (!ifUserIsUniqe) return ErrorUser.ExistEmail;
 
-            using (var transaction = await unitOfWork.SubAdminRepository.BeginTransactionAsync())
+            using (var transaction = await unitOfWork.UserRepository.BeginTransactionAsync())
             {
            
                 var userupdated = mapper.Map<User>(employee);
              
                 await unitOfWork.UserRepository.createEmployeeAccount(userupdated);
-                await unitOfWork.UserRepository.saveAsync();
-                if (employee.role.ToLower() == "subadmin" || employee.role.ToLower() == "main-subadmin")
-                {
-                    var modelMapped = mapper.Map<SubAdmin>(employee);
-                
-                    modelMapped.SubAdminId = userupdated.UserId;
-                    await unitOfWork.SubAdminRepository.createSubAdminAccountAsync(modelMapped);
-                }
-                else if (employee.role.ToLower() == "instructor")
-                {
-                    var modelMapped = mapper.Map<Instructor>(employee);
+                var success = await unitOfWork.UserRepository.saveAsync();
                
-                    modelMapped.InstructorId = userupdated.UserId;
-                    await unitOfWork.instructorRepositpry.createInstructorAccountAsync(modelMapped);
-                }
-                var success2 = await unitOfWork.SubAdminRepository.saveAsync();
 
 
 
-                if ( success2 > 0)
+                if (success > 0)
                 {
                     await transaction.CommitAsync();
                     return Result.Created;
@@ -91,30 +74,29 @@ namespace courseProject.Services.Employees
         public async Task<ErrorOr<object>> GetEmployeeById(Guid id)
         {
             
-             var getSubAdmin = await unitOfWork.SubAdminRepository.GetSubAdminByIdAsync(id);
-            var getInstructor = await unitOfWork.instructorRepositpry.getInstructorByIdAsync(id);
+            
             var UserToGet = await unitOfWork.UserRepository.getUserByIdAsync(id);
-            if (UserToGet == null) return ErrorUser.NotFound;
 
             object employee=null;
-            if (getSubAdmin == null && (UserToGet.role.ToLower() == "subadmin"|| UserToGet.role.ToLower() == "main-subadmin")) return ErrorSubAdmin.NotFound;
+            if (UserToGet == null && (UserToGet.role.ToLower() == "subadmin"|| UserToGet.role.ToLower() == "main-subadmin")) return ErrorSubAdmin.NotFound;
             
-            else if (getSubAdmin != null && (UserToGet.role.ToLower() == "subadmin" || UserToGet.role.ToLower() == "main-subadmin"))
+            else if (UserToGet != null && (UserToGet.role.ToLower() == "subadmin" || UserToGet.role.ToLower() == "main-subadmin"))
             {
                
-                var mappedEmployee = mapper.Map<SubAdmin, EmployeeDto>(getSubAdmin);
+                var mappedEmployee = mapper.Map<User, EmployeeDto>(UserToGet);
                
                 employee= mappedEmployee;
             }
-            if (getInstructor == null && UserToGet.role.ToLower() == "instructor") return ErrorInstructor.NotFound;
+            if (UserToGet == null && UserToGet.role.ToLower() == "instructor") return ErrorInstructor.NotFound;
 
-            else if (getInstructor != null && UserToGet.role.ToLower() == "instructor")
+            else if (UserToGet != null && UserToGet.role.ToLower() == "instructor")
             {
                 
-                var mappedEmployee = mapper.Map<Instructor, EmployeeDto>(getInstructor);
+                var mappedEmployee = mapper.Map<User, EmployeeDto>(UserToGet);
                
                 employee= mappedEmployee;
             }
+            if (UserToGet == null) return ErrorUser.NotFound;
             return employee;
 
 
@@ -155,7 +137,7 @@ namespace courseProject.Services.Employees
             if (getAllMainSubAdmins.Count() >= 1 && role.ToLower() == "main-subadmin")
                 return ErrorEmployee.existsMainSub;
             getUser.role = role.ToLower();
-            await unitOfWork.SubAdminRepository.editRole(getUser);
+            await unitOfWork.UserRepository.editRole(getUser);
             await unitOfWork.UserRepository.saveAsync();
 
             return Result.Updated;

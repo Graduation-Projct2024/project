@@ -20,7 +20,7 @@ namespace courseProject.Repository.GenericRepository
         public async Task<Event> GetEventByIdAsync(Guid eventId)
         {
             return await dbContext.events
-                .Include(x=>x.SubAdmin) .ThenInclude(x=>x.user)
+                .Include(x=>x.subAdmin) 
                 .FirstOrDefaultAsync(x => x.Id == eventId);
         }
 
@@ -28,7 +28,7 @@ namespace courseProject.Repository.GenericRepository
         // get all events created by subAdmin by it's Id , and does not accredit or reject yet
         public async Task<IReadOnlyList<Event>> GetAllUndefindEventBySubAdminIdAsync(Guid subAdminId)
         {
-            return await dbContext.events.Include(e => e.SubAdmin).ThenInclude(s => s.user)
+            return await dbContext.events.Include(e => e.subAdmin)
                  .Where(e => e.SubAdminId == subAdminId && e.status.ToLower() == "undefined")
                  .OrderByDescending(x=>x.dateOfAdded)
                  .ToListAsync();
@@ -52,7 +52,7 @@ namespace courseProject.Repository.GenericRepository
           
                 // Query to get events with status "accredit" and include related SubAdmin and User entities
                 var events = dbContext.events
-                    .Include(x => x.SubAdmin.user)
+                    .Include(x => x.subAdmin)
                     .Where(x => x.status == "accredit");
 
                 // Filter events based on the dateStatus parameter
@@ -77,7 +77,7 @@ namespace courseProject.Repository.GenericRepository
         {
             
                 return await dbContext.events
-                    .Include(x => x.SubAdmin.user).OrderByDescending(x => x.dateOfAdded).ToListAsync();
+                    .Include(x => x.subAdmin).OrderByDescending(x => x.dateOfAdded).ToListAsync();
            
         }
 

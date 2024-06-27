@@ -108,10 +108,11 @@ namespace courseProject.Services.Materials
             var Taskmapper = mapper.Map(taskDTO, TaskToUpdate);
             Taskmapper.Id = id;
             Taskmapper.type = "Task";       
+            
             await unitOfWork.materialRepository.EditMaterial(Taskmapper);
             var success1 = await unitOfWork.instructorRepositpry.saveAsync();
-         
-            if (taskDTO.pdf.Any())
+
+            if (taskDTO.pdf != null && taskDTO.pdf.Count() > 0)
             {
                 var uploadedFileNames = await unitOfWork.FileRepository.UploadFiles(taskDTO.pdf);
               
@@ -159,7 +160,7 @@ namespace courseProject.Services.Materials
 
             var success1 = await unitOfWork.instructorRepositpry.saveAsync();
 
-            if (fileDTO.pdf.Any())
+            if (fileDTO.pdf != null && fileDTO.pdf.Count() > 0)
             {
                 var uploadedFileNames = await unitOfWork.FileRepository.UploadFiles(fileDTO.pdf);
 

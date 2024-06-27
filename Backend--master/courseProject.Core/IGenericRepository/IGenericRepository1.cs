@@ -11,7 +11,7 @@ namespace courseProject.Core.IGenericRepository
 
         public Task<int> saveAsync();
         Task<IReadOnlyList<T>> GetAllEmployeeAsync();            
-        Task<T> GetEmployeeById(Guid id);
+     //   Task<T> GetEmployeeById(Guid id);
         public Task updateEmployeeAsync(T entity);
         public Task<IDbContextTransaction> BeginTransactionAsync();
        

@@ -19,7 +19,7 @@ namespace courseProject.Repository.GenericRepository
         {
         
            
-            SubAdminRepository = new SubAdminRepository(dbContext);
+          //  SubAdminRepository = new SubAdminRepository(dbContext);
             UserRepository = new UserRepository(dbContext, configuration, httpContextAccessor);
             instructorRepositpry = new instructorRepositpry(dbContext);
             StudentRepository=new StudentRepository(dbContext);          
