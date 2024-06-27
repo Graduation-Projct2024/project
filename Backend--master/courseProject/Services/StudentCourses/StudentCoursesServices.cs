@@ -31,10 +31,11 @@ namespace courseProject.Services.StudentCourses
             
                 var foundStudent = await unitOfWork.StudentRepository.getStudentByIdAsync(studentCourseDTO.StudentId);
             if (foundStudent == null) return ErrorStudent.NotFound;
-                var course = await unitOfWork.CourseRepository.GetCourseByIdAsync(studentCourseDTO.courseId);
-            if(course == null) return ErrorCourse.NotFound;
+            var accreditCourse = await unitOfWork.CourseRepository.getAccreditCourseByIdAcync(studentCourseDTO.courseId);
+            
+            if(accreditCourse == null) return ErrorCourse.NotFound;
                 var studnetNumber = await unitOfWork.CourseRepository.GetNumberOfStudentsInTHeCourseAsync(studentCourseDTO.courseId);
-            if (studnetNumber >= course.limitNumberOfStudnet)
+            if (studnetNumber >= accreditCourse.limitNumberOfStudnet)
                 return ErrorCourse.fullCourse;
                 var mapped = mapper.Map<StudentCourseDTO, StudentCourse>(studentCourseDTO);
                 await unitOfWork.StudentRepository.EnrollCourse(mapped);

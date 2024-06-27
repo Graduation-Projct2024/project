@@ -12,8 +12,8 @@ using courseProject.Repository.Data;
 namespace courseProject.Repository.Migrations
 {
     [DbContext(typeof(projectDbContext))]
-    [Migration("20240602200019_addMaterialFiles")]
-    partial class addMaterialFiles
+    [Migration("20240626204818_edit consultation")]
+    partial class editconsultation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,40 +23,6 @@ namespace courseProject.Repository.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("courseProject.Core.Models.Admin", b =>
-                {
-                    b.Property<Guid>("AdminId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("DateOfBirth")
-                        .HasColumnType("date");
-
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("address")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("gender")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("phoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("AdminId");
-
-                    b.ToTable("admins");
-
-                    b.HasData(
-                        new
-                        {
-                            AdminId = new Guid("266972e6-d478-4405-98fe-1734e464d248")
-                        });
-                });
 
             modelBuilder.Entity("courseProject.Core.Models.Consultation", b =>
                 {
@@ -93,10 +59,6 @@ namespace courseProject.Repository.Migrations
                     b.Property<TimeSpan>("startTime")
                         .HasColumnType("time");
 
-                    b.Property<string>("status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("type")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -108,6 +70,35 @@ namespace courseProject.Repository.Migrations
                     b.HasIndex("StudentId");
 
                     b.ToTable("consultations");
+                });
+
+            modelBuilder.Entity("courseProject.Core.Models.Contact", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("dateOfAdded")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("subject")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("contacts");
                 });
 
             modelBuilder.Entity("courseProject.Core.Models.Course", b =>
@@ -123,9 +114,6 @@ namespace courseProject.Repository.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("InstructorId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("SubAdminId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("category")
@@ -155,16 +143,15 @@ namespace courseProject.Repository.Migrations
                     b.Property<double>("price")
                         .HasColumnType("float");
 
-                    b.Property<Guid>("requestId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime?>("startDate")
                         .HasColumnType("date");
 
                     b.Property<string>("status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("subAdminId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int?>("totalHours")
                         .HasColumnType("int");
@@ -173,10 +160,7 @@ namespace courseProject.Repository.Migrations
 
                     b.HasIndex("InstructorId");
 
-                    b.HasIndex("SubAdminId");
-
-                    b.HasIndex("requestId")
-                        .IsUnique();
+                    b.HasIndex("subAdminId");
 
                     b.ToTable("courses");
                 });
@@ -205,14 +189,14 @@ namespace courseProject.Repository.Migrations
                     b.Property<string>("description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("isHidden")
+                        .HasColumnType("bit");
+
                     b.Property<string>("linkUrl")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("pdfUrl")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("type")
@@ -260,9 +244,6 @@ namespace courseProject.Repository.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("requestId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -270,9 +251,6 @@ namespace courseProject.Repository.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("SubAdminId");
-
-                    b.HasIndex("requestId")
-                        .IsUnique();
 
                     b.ToTable("events");
                 });
@@ -287,6 +265,7 @@ namespace courseProject.Repository.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("InstructorId")
+                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("StudentId")
@@ -310,41 +289,11 @@ namespace courseProject.Repository.Migrations
 
                     b.HasIndex("CourseId");
 
+                    b.HasIndex("InstructorId");
+
                     b.HasIndex("StudentId");
 
                     b.ToTable("feedbacks");
-                });
-
-            modelBuilder.Entity("courseProject.Core.Models.Instructor", b =>
-                {
-                    b.Property<Guid>("InstructorId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("DateOfBirth")
-                        .HasColumnType("date");
-
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("address")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("gender")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("phoneNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("skillDescription")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("InstructorId");
-
-                    b.ToTable("instructors");
                 });
 
             modelBuilder.Entity("courseProject.Core.Models.Instructor_Working_Hours", b =>
@@ -403,9 +352,6 @@ namespace courseProject.Repository.Migrations
                     b.Property<Guid?>("StudentId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("SubAdminId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("date")
                         .HasColumnType("datetime2");
 
@@ -430,8 +376,6 @@ namespace courseProject.Repository.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.HasIndex("SubAdminId");
-
                     b.ToTable("requests");
                 });
 
@@ -453,34 +397,6 @@ namespace courseProject.Repository.Migrations
                     b.ToTable("Skills");
                 });
 
-            modelBuilder.Entity("courseProject.Core.Models.Student", b =>
-                {
-                    b.Property<Guid>("StudentId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("DateOfBirth")
-                        .HasColumnType("date");
-
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("address")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("gender")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("phoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("StudentId");
-
-                    b.ToTable("students");
-                });
-
             modelBuilder.Entity("courseProject.core.Models.Student_Task_Submissions", b =>
                 {
                     b.Property<Guid>("StudentId")
@@ -488,6 +404,9 @@ namespace courseProject.Repository.Migrations
 
                     b.Property<Guid>("TaskId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("dateOfAdded")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("description")
                         .HasColumnType("nvarchar(max)");
@@ -542,9 +461,10 @@ namespace courseProject.Repository.Migrations
                     b.ToTable("studentCourses");
                 });
 
-            modelBuilder.Entity("courseProject.Core.Models.SubAdmin", b =>
+            modelBuilder.Entity("courseProject.Core.Models.User", b =>
                 {
-                    b.Property<Guid>("SubAdminId")
+                    b.Property<Guid>("UserId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("DateOfBirth")
@@ -553,43 +473,37 @@ namespace courseProject.Repository.Migrations
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsVerified")
+                        .HasColumnType("bit");
+
                     b.Property<string>("LName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("address")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("gender")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("phoneNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("SubAdminId");
-
-                    b.ToTable("subadmins");
-                });
-
-            modelBuilder.Entity("courseProject.Core.Models.User", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsVerified")
-                        .HasColumnType("bit");
+                    b.Property<DateTime>("dateOfAdded")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("email")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("gender")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("phoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("role")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("skillDescription")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("userName")
@@ -603,8 +517,9 @@ namespace courseProject.Repository.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("266972e6-d478-4405-98fe-1734e464d248"),
+                            UserId = new Guid("d00536fe-77d8-4e82-a7ff-33b0fcd384bb"),
                             IsVerified = true,
+                            dateOfAdded = new DateTime(2024, 6, 26, 23, 48, 17, 809, DateTimeKind.Local).AddTicks(2237),
                             email = "programming.academy24@gmail.com",
                             password = "$2a$11$cCCo7VY/4sxtIpeWDUFDROiDL/QPhi8AtawQhx4RGqKMAYgk8UIse",
                             role = "admin",
@@ -612,26 +527,15 @@ namespace courseProject.Repository.Migrations
                         });
                 });
 
-            modelBuilder.Entity("courseProject.Core.Models.Admin", b =>
-                {
-                    b.HasOne("courseProject.Core.Models.User", "user")
-                        .WithOne("admin")
-                        .HasForeignKey("courseProject.Core.Models.Admin", "AdminId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("user");
-                });
-
             modelBuilder.Entity("courseProject.Core.Models.Consultation", b =>
                 {
-                    b.HasOne("courseProject.Core.Models.Instructor", "instructor")
-                        .WithMany("Consultations")
+                    b.HasOne("courseProject.Core.Models.User", "instructor")
+                        .WithMany("consultations")
                         .HasForeignKey("InstructorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("courseProject.Core.Models.Student", "student")
+                    b.HasOne("courseProject.Core.Models.User", "student")
                         .WithMany()
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -644,35 +548,27 @@ namespace courseProject.Repository.Migrations
 
             modelBuilder.Entity("courseProject.Core.Models.Course", b =>
                 {
-                    b.HasOne("courseProject.Core.Models.Instructor", "Instructor")
-                        .WithMany()
+                    b.HasOne("courseProject.Core.Models.User", "instructor")
+                        .WithMany("courses")
                         .HasForeignKey("InstructorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("courseProject.Core.Models.SubAdmin", "SubAdmin")
+                    b.HasOne("courseProject.Core.Models.User", "subAdmin")
                         .WithMany()
-                        .HasForeignKey("SubAdminId")
+                        .HasForeignKey("subAdminId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("courseProject.Core.Models.Request", "Request")
-                        .WithOne("Course")
-                        .HasForeignKey("courseProject.Core.Models.Course", "requestId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("instructor");
 
-                    b.Navigation("Instructor");
-
-                    b.Navigation("Request");
-
-                    b.Navigation("SubAdmin");
+                    b.Navigation("subAdmin");
                 });
 
             modelBuilder.Entity("courseProject.Core.Models.CourseMaterial", b =>
                 {
-                    b.HasOne("courseProject.Core.Models.Instructor", "Instructor")
-                        .WithMany("Materials")
+                    b.HasOne("courseProject.Core.Models.User", "instructor")
+                        .WithMany()
                         .HasForeignKey("InstructorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -687,28 +583,20 @@ namespace courseProject.Repository.Migrations
 
                     b.Navigation("Course");
 
-                    b.Navigation("Instructor");
-
                     b.Navigation("consultation");
+
+                    b.Navigation("instructor");
                 });
 
             modelBuilder.Entity("courseProject.Core.Models.Event", b =>
                 {
-                    b.HasOne("courseProject.Core.Models.SubAdmin", "SubAdmin")
+                    b.HasOne("courseProject.Core.Models.User", "subAdmin")
                         .WithMany("events")
                         .HasForeignKey("SubAdminId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("courseProject.Core.Models.Request", "Request")
-                        .WithOne("Event")
-                        .HasForeignKey("courseProject.Core.Models.Event", "requestId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Request");
-
-                    b.Navigation("SubAdmin");
+                    b.Navigation("subAdmin");
                 });
 
             modelBuilder.Entity("courseProject.Core.Models.Feedback", b =>
@@ -717,32 +605,29 @@ namespace courseProject.Repository.Migrations
                         .WithMany("Feedbacks")
                         .HasForeignKey("CourseId");
 
-                    b.HasOne("courseProject.Core.Models.User", "User")
+                    b.HasOne("courseProject.Core.Models.User", "instructor")
                         .WithMany("feedbacks")
+                        .HasForeignKey("InstructorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("courseProject.Core.Models.User", "student")
+                        .WithMany()
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
-
                     b.Navigation("course");
-                });
 
-            modelBuilder.Entity("courseProject.Core.Models.Instructor", b =>
-                {
-                    b.HasOne("courseProject.Core.Models.User", "user")
-                        .WithOne("instructor")
-                        .HasForeignKey("courseProject.Core.Models.Instructor", "InstructorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("instructor");
 
-                    b.Navigation("user");
+                    b.Navigation("student");
                 });
 
             modelBuilder.Entity("courseProject.Core.Models.Instructor_Working_Hours", b =>
                 {
-                    b.HasOne("courseProject.Core.Models.Instructor", "instructor")
-                        .WithMany("Instructor_Working_Hours")
+                    b.HasOne("courseProject.Core.Models.User", "instructor")
+                        .WithMany()
                         .HasForeignKey("InstructorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -752,7 +637,7 @@ namespace courseProject.Repository.Migrations
 
             modelBuilder.Entity("courseProject.Core.Models.InstructorSkills", b =>
                 {
-                    b.HasOne("courseProject.Core.Models.Instructor", "Instructor")
+                    b.HasOne("courseProject.Core.Models.User", "instructor")
                         .WithMany("instructorSkills")
                         .HasForeignKey("InstructorId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -764,9 +649,9 @@ namespace courseProject.Repository.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Instructor");
-
                     b.Navigation("Skills");
+
+                    b.Navigation("instructor");
                 });
 
             modelBuilder.Entity("courseProject.Core.Models.MaterialFiles", b =>
@@ -782,34 +667,17 @@ namespace courseProject.Repository.Migrations
 
             modelBuilder.Entity("courseProject.Core.Models.Request", b =>
                 {
-                    b.HasOne("courseProject.Core.Models.Student", "Student")
+                    b.HasOne("courseProject.Core.Models.User", "student")
                         .WithMany("requests")
                         .HasForeignKey("StudentId");
 
-                    b.HasOne("courseProject.Core.Models.SubAdmin", "SubAdmin")
-                        .WithMany("requests")
-                        .HasForeignKey("SubAdminId");
-
-                    b.Navigation("Student");
-
-                    b.Navigation("SubAdmin");
-                });
-
-            modelBuilder.Entity("courseProject.Core.Models.Student", b =>
-                {
-                    b.HasOne("courseProject.Core.Models.User", "user")
-                        .WithOne("student")
-                        .HasForeignKey("courseProject.Core.Models.Student", "StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("user");
+                    b.Navigation("student");
                 });
 
             modelBuilder.Entity("courseProject.core.Models.Student_Task_Submissions", b =>
                 {
-                    b.HasOne("courseProject.Core.Models.Student", "Student")
-                        .WithMany("Student_Task_Submissions")
+                    b.HasOne("courseProject.Core.Models.User", "Student")
+                        .WithMany()
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -827,8 +695,8 @@ namespace courseProject.Repository.Migrations
 
             modelBuilder.Entity("courseProject.Core.Models.StudentConsultations", b =>
                 {
-                    b.HasOne("courseProject.Core.Models.Student", "Student")
-                        .WithMany("studentConsultations")
+                    b.HasOne("courseProject.Core.Models.User", "Student")
+                        .WithMany()
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -846,7 +714,7 @@ namespace courseProject.Repository.Migrations
 
             modelBuilder.Entity("courseProject.Core.Models.StudentCourse", b =>
                 {
-                    b.HasOne("courseProject.Core.Models.Student", "Student")
+                    b.HasOne("courseProject.Core.Models.User", "Student")
                         .WithMany("studentCourses")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -861,17 +729,6 @@ namespace courseProject.Repository.Migrations
                     b.Navigation("Course");
 
                     b.Navigation("Student");
-                });
-
-            modelBuilder.Entity("courseProject.Core.Models.SubAdmin", b =>
-                {
-                    b.HasOne("courseProject.Core.Models.User", "user")
-                        .WithOne("subadmin")
-                        .HasForeignKey("courseProject.Core.Models.SubAdmin", "SubAdminId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("user");
                 });
 
             modelBuilder.Entity("courseProject.Core.Models.Consultation", b =>
@@ -895,64 +752,26 @@ namespace courseProject.Repository.Migrations
                     b.Navigation("Student_Task_Submissions");
                 });
 
-            modelBuilder.Entity("courseProject.Core.Models.Instructor", b =>
-                {
-                    b.Navigation("Consultations");
-
-                    b.Navigation("Instructor_Working_Hours");
-
-                    b.Navigation("Materials");
-
-                    b.Navigation("instructorSkills");
-                });
-
-            modelBuilder.Entity("courseProject.Core.Models.Request", b =>
-                {
-                    b.Navigation("Course")
-                        .IsRequired();
-
-                    b.Navigation("Event")
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("courseProject.Core.Models.Skills", b =>
                 {
                     b.Navigation("instructorSkills");
                 });
 
-            modelBuilder.Entity("courseProject.Core.Models.Student", b =>
-                {
-                    b.Navigation("Student_Task_Submissions");
-
-                    b.Navigation("requests");
-
-                    b.Navigation("studentConsultations");
-
-                    b.Navigation("studentCourses");
-                });
-
-            modelBuilder.Entity("courseProject.Core.Models.SubAdmin", b =>
-                {
-                    b.Navigation("events");
-
-                    b.Navigation("requests");
-                });
-
             modelBuilder.Entity("courseProject.Core.Models.User", b =>
                 {
-                    b.Navigation("admin")
-                        .IsRequired();
+                    b.Navigation("consultations");
+
+                    b.Navigation("courses");
+
+                    b.Navigation("events");
 
                     b.Navigation("feedbacks");
 
-                    b.Navigation("instructor")
-                        .IsRequired();
+                    b.Navigation("instructorSkills");
 
-                    b.Navigation("student")
-                        .IsRequired();
+                    b.Navigation("requests");
 
-                    b.Navigation("subadmin")
-                        .IsRequired();
+                    b.Navigation("studentCourses");
                 });
 #pragma warning restore 612, 618
         }

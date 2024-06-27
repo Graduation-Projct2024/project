@@ -1,12 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using courseProject.Core.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using courseProject.core.Models;
-using System.Security.Claims;
 
 namespace courseProject.Repository.Data
 {
@@ -31,12 +25,11 @@ namespace courseProject.Repository.Data
                            email = "programming.academy24@gmail.com",
                            password = "$2a$11$cCCo7VY/4sxtIpeWDUFDROiDL/QPhi8AtawQhx4RGqKMAYgk8UIse",
                            role = "admin",
-                           IsVerified=true
+                           IsVerified=true,
+                           dateOfAdded= DateTime.Now,
                            });
 
-            modelBuilder.Entity<Admin>().HasData(
-                          new Admin { AdminId = userId }
-                         );
+          
             modelBuilder.Entity<Instructor_Working_Hours>(
                 e =>
                 {
@@ -54,35 +47,43 @@ namespace courseProject.Repository.Data
 
             modelBuilder.Entity<User>()
        .HasMany(u => u.feedbacks)  // User has many Feedbacks
-       .WithOne(f => f.User)       // Each Feedback belongs to one User
+       .WithOne(f => f.instructor)       // Each Feedback belongs to one User
        .HasForeignKey(f => f.InstructorId);
 
-            modelBuilder.Entity<User>()
-        .HasMany(u => u.feedbacks)  // User has many Feedbacks
-        .WithOne(f => f.User)       // Each Feedback belongs to one User
-        .HasForeignKey(f => f.StudentId);
+            //     modelBuilder.Entity<User>()
+            // .HasMany(u => u.feedbacks)  // User has many Feedbacks
+            // .WithOne(f => f.student)       // Each Feedback belongs to one User
+            // .HasForeignKey(f => f.StudentId);
 
             modelBuilder.Entity<User>()
-                .HasOne(x => x.instructor)
-                .WithOne(u => u.user)
-                .HasForeignKey<Instructor>(x => x.InstructorId);
+       .HasMany(u => u.consultations)
+       .WithOne(f => f.instructor)
+       .HasForeignKey(f => f.InstructorId);
+
+            //     modelBuilder.Entity<User>()
+            //.HasMany(u => u.consultations)
+            //.WithOne(f => f.student)
+            //.HasForeignKey(f => f.StudentId);
 
             modelBuilder.Entity<User>()
-                .HasOne(x => x.student)
-                .WithOne(u => u.user)
-                .HasForeignKey<Student>(x => x.StudentId);
+       .HasMany(u => u.courses)
+       .WithOne(f => f.instructor)
+       .HasForeignKey(f => f.InstructorId);
+
+            //     modelBuilder.Entity<User>()
+            // .HasMany(u => u.courses)
+            // .WithOne(f => f.subAdmin)
+            // .HasForeignKey(f => f.subAdminId);
+
+            //     modelBuilder.Entity<User>()
+            //.HasMany(u => u.requests)
+            //.WithOne(f => f.subAdmin)
+            //.HasForeignKey(f => f.SubAdminId);
 
             modelBuilder.Entity<User>()
-                .HasOne(x => x.admin)
-                .WithOne(u => u.user)
-                .HasForeignKey<Admin>(x => x.AdminId);
-
-            modelBuilder.Entity<User>()
-                .HasOne(x => x.subadmin)
-                .WithOne(u => u.user)
-                .HasForeignKey<SubAdmin>(x => x.SubAdminId);
-
-
+       .HasMany(u => u.requests)
+       .WithOne(f => f.student)
+       .HasForeignKey(f => f.StudentId);
 
             modelBuilder.Entity<StudentCourse>(
                 e =>
@@ -113,11 +114,11 @@ namespace courseProject.Repository.Data
                       .IsRequired(false);
             });
 
-            modelBuilder.Entity<Request>(entity =>
-            {
-                entity.Property(e => e.SubAdminId)
-                      .IsRequired(false);
-            });
+            //modelBuilder.Entity<Request>(entity =>
+            //{
+            //    entity.Property(e => e.SubAdminId)
+            //          .IsRequired(false);
+            //});
 
             modelBuilder.Entity<CourseMaterial>(entity =>
             {
@@ -126,17 +127,7 @@ namespace courseProject.Repository.Data
             });
 
 
-           // modelBuilder.Entity<SubAdmin>()
-           //.Property(c => c.DateOfBirth)
-           //.HasColumnType("date");
-
-           // modelBuilder.Entity<Admin>()
-           //.Property(c => c.DateOfBirth)
-           //.HasColumnType("date");
-
-           // modelBuilder.Entity<Instructor>()
-           //.Property(c => c.DateOfBirth)
-           //.HasColumnType("date");
+        
 
             modelBuilder.Entity<User>()
            .Property(c => c.DateOfBirth)
@@ -169,22 +160,15 @@ namespace courseProject.Repository.Data
             modelBuilder.Entity<Request>()
            .Property(c => c.endDate)
            .HasColumnType("date");
-            // modelBuilder.Entity<Student>()
-            //.Property(s => s.Id)
-            //.ValueGeneratedOnAdd()
-            //.UseIdentityColumn();
-
+          
         }
 
         public DbSet<User> users { get; set; }
 
-        public DbSet<Instructor> instructors { get; set; }
 
-        public DbSet<Student> students { get; set; }    
 
         public DbSet<Instructor_Working_Hours> Instructor_Working_Hours { get; set; }
-        public DbSet<Admin> admins { get; set; }
-        public DbSet<SubAdmin> subadmins { get; set; }
+   
 
         public DbSet<Request> requests { get; set; }
 
@@ -193,9 +177,7 @@ namespace courseProject.Repository.Data
         public DbSet<CourseMaterial> courseMaterials { get; set; }
         public DbSet<StudentCourse> studentCourses { get; set; }
         public DbSet<Consultation> consultations { get; set; }
-       // public DbSet<Course_Feedback> course_Feedbacks { get; set; }
-       // public DbSet<Instructor_Feedback> instructor_Feedbacks { get; set; }
-        //public DbSet<General_Feedback> general_Feedbacks { get; set; }
+      
         public DbSet<Student_Task_Submissions> Student_Task_Submissions { get; set; }
         public DbSet<Feedback> feedbacks { get; set; }
         public DbSet<StudentConsultations> StudentConsultations { get; set; }

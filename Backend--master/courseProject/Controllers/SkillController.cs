@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using courseProject.Core.Models;
+﻿using courseProject.Core.Models;
 using courseProject.Core.Models.DTO.InstructorsDTO;
 using courseProject.Repository.GenericRepository;
 using courseProject.Services.Skill;
@@ -96,8 +95,9 @@ namespace courseProject.Controllers
         [Authorize("Instructor")]
         public async Task<IActionResult> GetAllOptionsToInstructorDropdown(Guid instructorId)
         {
-           
-            return Ok( new ApiResponce { Result= await skillsServices.getAllSkillOptionsToInstructor(instructorId) });
+            var getSkills = await skillsServices.getAllSkillOptionsToInstructor(instructorId);
+            if(getSkills.IsError ) return NotFound(new ApiResponce { ErrorMassages = getSkills.FirstError.Description });
+            return Ok( new ApiResponce { Result= getSkills.Value });
 
         }
 

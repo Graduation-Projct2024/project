@@ -104,32 +104,24 @@ namespace courseProject.Services.Courses
             return courses;
         }
 
-        public async Task<ErrorOr<Created>> createCourse(Course course, Request request, Guid? StudentId)
+        public async Task<ErrorOr<Created>> createCourse(Course course)
         {
             var instructorFound = await unitOfWork.UserRepository.ViewProfileAsync(course.InstructorId, "instructor");
             if (instructorFound == null) return ErrorInstructor.NotFound;
-            var SubAdminFound = await unitOfWork.UserRepository.ViewProfileAsync(course.SubAdminId, "subadmin");
+            var SubAdminFound = await unitOfWork.UserRepository.ViewProfileAsync(course.subAdminId, "subadmin");
             if (SubAdminFound == null) return ErrorSubAdmin.NotFound;
-            if (StudentId != null)
-            {
-                request.StudentId = StudentId;
-                var StudentFound = await unitOfWork.StudentRepository.getStudentByIdAsync(StudentId);
-                if (StudentFound == null) return ErrorStudent.NotFound;
-            }
+           
             if (course.image != null)
             {
                 course.ImageUrl = "Files\\" + await unitOfWork.FileRepository.UploadFile1(course.image);
             }
-            using (var transaction = await unitOfWork.SubAdminRepository.BeginTransactionAsync())
+            using (var transaction = await unitOfWork.UserRepository.BeginTransactionAsync())
             {
-               
-                    await unitOfWork.RequestRepository.CreateRequest(request);
-                    var success1 = await unitOfWork.StudentRepository.saveAsync();                   
-                    course.requestId = request.Id;
+                                  
                     await unitOfWork.CourseRepository.CreateCourse(course);
                     var success2 = await unitOfWork.StudentRepository.saveAsync();
 
-                    if (success1 > 0 && success2 > 0)
+                    if (success2 > 0)
                     {
                         await transaction.CommitAsync();
                         return Result.Created;
@@ -153,7 +145,7 @@ namespace courseProject.Services.Courses
             getCourse.status = Status;
             
             await unitOfWork.CourseRepository.updateCourse(getCourse);
-            await unitOfWork.SubAdminRepository.saveAsync();
+            await unitOfWork.UserRepository.saveAsync();
             return Result.Updated;
         }
 

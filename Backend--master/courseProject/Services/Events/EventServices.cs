@@ -36,24 +36,17 @@ namespace courseProject.Services.Events
             }
 
             // Begin a transaction
-            using (var transaction = await unitOfWork.SubAdminRepository.BeginTransactionAsync())
+            using (var transaction = await unitOfWork.UserRepository.BeginTransactionAsync())
             {
 
-                // Create the request
-                await unitOfWork.RequestRepository.CreateRequest(request);
-
-                // Save changes to the database
-                var success1 = await unitOfWork.StudentRepository.saveAsync();
-
-                // Set the request ID for the event
-                _event.requestId = request.Id;
+                
 
                 // Create the event
                 await unitOfWork.eventRepository.CreateEvent(_event);
                 var success2 = await unitOfWork.StudentRepository.saveAsync();
 
                 // Commit the transaction if both operations are successful
-                if (success1 > 0 && success2 > 0)
+                if ( success2 > 0)
                 {
                     await transaction.CommitAsync();
                     return Result.Created;
@@ -84,7 +77,7 @@ namespace courseProject.Services.Events
             // Update the event in the repository
             await unitOfWork.eventRepository.updateEvent(getEvent);
             // Save changes to the database
-            await unitOfWork.SubAdminRepository.saveAsync();
+            await unitOfWork.UserRepository.saveAsync();
             // Return a success message
             return Result.Updated;
         }

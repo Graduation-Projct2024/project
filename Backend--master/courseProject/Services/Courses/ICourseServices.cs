@@ -15,7 +15,7 @@ namespace courseProject.Services.Courses
         public Task<IReadOnlyList<Course>> GetAllCourses();
         public Task<IReadOnlyList<Course>> GetAllCoursesToStudent(Guid studentId);
         public Task<IReadOnlyList<Course>> GetAllCoursesForAccreditAsync();
-        public Task<ErrorOr<Created>> createCourse(Course course , Request request , Guid? StudentId);
+        public Task<ErrorOr<Created>> createCourse(Course course  );
         public Task<ErrorOr<Updated>> accreditCourse(Guid courseId, string Status);
         public Task<ErrorOr<Updated>> EditOnCOurseBeforeAnAccredit(Guid courseId , CourseForEditDTO course);
         public Task<ErrorOr<IReadOnlyList<Course>>> GetALlUndefinedCoursesForSubAdmins(Guid subAdminId);

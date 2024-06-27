@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using courseProject.Core.IGenericRepository;
 using courseProject.Core.Models;
-using courseProject.Repository.Data;
 using courseProject.Repository.GenericRepository;
 using Microsoft.AspNetCore.Authorization;
 using courseProject.Core.Models.DTO.CoursesDTO;
@@ -106,14 +104,14 @@ namespace courseProject.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize(Policy = "SubAdmin , Main-SubAdmin")]
 
-        public async Task<IActionResult> createCourse([FromForm] CourseForCreateDTO model, Guid? StudentId)
+        public async Task<IActionResult> createCourse([FromForm] CourseForCreateDTO model)
         {
          
 
             var courseMapped = mapper.Map<Course>(model);
-            var requestMapped = mapper.Map<Request>(model);
+            
 
-            var createCourse = await courseServices.createCourse(courseMapped, requestMapped, StudentId);
+            var createCourse = await courseServices.createCourse(courseMapped);
             if (createCourse.IsError) return NotFound( new ApiResponce { ErrorMassages =  createCourse.FirstError.Description });
             return Ok( new ApiResponce { Result="The Course Is Created Successfully"});
             
@@ -313,6 +311,7 @@ namespace courseProject.Controllers
         {
 
             var enrolledCourses = await courseServices.GetAllEnrolledCourses(studentid);
+            if (enrolledCourses.IsError) return NotFound(new ApiResponce { ErrorMassages = enrolledCourses.FirstError.Description });
             return Ok( new ApiResponce { Result = 
                 (Pagination<StudentCourse>.CreateAsync(enrolledCourses.Value, paginationRequest.pageNumber, paginationRequest.pageSize)).Result}); 
             

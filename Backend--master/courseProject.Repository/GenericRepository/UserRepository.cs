@@ -185,23 +185,14 @@ namespace courseProject.Repository.GenericRepository
 
         public async Task<User> ViewProfileAsync(Guid id, string role)
         {
-            if (role.ToLower() == "admin")
-            {
-                return await dbContext.users.Include(x => x.admin).FirstOrDefaultAsync(x => x.UserId == id);
-            }
-            if (role.ToLower() == "subadmin" || role.ToLower() == "main-subadmin")
-            {
-                return await dbContext.users.Include(x => x.subadmin).FirstOrDefaultAsync(x => x.UserId == id);
-            }
-            if (role.ToLower() == "instructor")
-            {
-                return await dbContext.users.Include(x => x.instructor).FirstOrDefaultAsync(x => x.UserId == id);
-            }
-            if (role.ToLower() == "student")
-            {
-                return await dbContext.users.Include(x => x.student).FirstOrDefaultAsync(x => x.UserId == id);
-            }
-            return await dbContext.Set<User>().FindAsync(id);
+         return await dbContext.users.Where(x=>x.role.ToLower()==role.ToLower()).FirstOrDefaultAsync(x => x.UserId == id);
+            
+        }
+
+
+        public async Task editRole(User user)
+        {
+            dbContext.users.Update(user);
         }
     }
 }

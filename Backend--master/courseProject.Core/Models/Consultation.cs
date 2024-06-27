@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Timers;
+
 
 namespace courseProject.Core.Models
 {
@@ -16,7 +12,7 @@ namespace courseProject.Core.Models
 
         public string type { get; set; }
 
-        public string status { get; set; } = "off";
+        //public string status { get; set; } = "off";
 
         public DateTime date { get; set; } 
         public TimeSpan startTime { get; set; }
@@ -24,14 +20,16 @@ namespace courseProject.Core.Models
         public TimeSpan endTime { get; set; }
          public TimeSpan Duration { get; set; }
         public DateTime dateOfAdded { get; set; } = DateTime.Now;
-        [ForeignKey("Student")]
+        [ForeignKey("User")]
         public Guid StudentId { get; set; }
-
-        [ForeignKey("Instructor")]
+        [ForeignKey("User")]
         public Guid InstructorId { get; set; }
 
-        public Student student { get; set; }
-         public Instructor instructor { get; set; }
+      
+        public User instructor { get; set; }
+     
+        public User student { get; set; }
+        
         public List<StudentConsultations> studentConsultations { get; set; }
     }
 }

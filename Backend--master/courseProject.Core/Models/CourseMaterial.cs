@@ -1,11 +1,8 @@
 ﻿using courseProject.core.Models;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
+
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace courseProject.Core.Models
 {
@@ -27,7 +24,7 @@ namespace courseProject.Core.Models
         public string? linkUrl { get; set; }
         public bool isHidden {  get; set; }
 
-        [ForeignKey("Instructor")]
+        [ForeignKey("User")]
         public Guid InstructorId {  get; set; }
 
         [ForeignKey("Course")]
@@ -37,7 +34,8 @@ namespace courseProject.Core.Models
         public Guid? consultationId { get; set; }
         public Course Course { get; set; }
         public Consultation consultation { get; set; }
-        public Instructor Instructor { get; set; }
+        [ForeignKey("InstructorId")]
+        public User instructor { get; set; }
         public List<Student_Task_Submissions> Student_Task_Submissions { get; set; }
         public List<MaterialFiles> MaterialFiles { get; set; }
 

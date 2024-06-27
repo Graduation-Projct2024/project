@@ -29,6 +29,7 @@ namespace courseProject.Core.IGenericRepository
         public  Task<User> createEmployeeAccount(User user);
 
         public Task<User> ViewProfileAsync(Guid id, string role);
+        public Task editRole(User user);
         // void LogOut();
     }
 }

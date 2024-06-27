@@ -24,8 +24,8 @@ namespace courseProject.Repository.GenericRepository
         //get a course by it's Id
         public async Task<Course> GetCourseByIdAsync(Guid? id)
         {
-           return  await dbContext.courses.Include(x=>x.Instructor).ThenInclude(x=>x.user)
-                .Include(x=>x.SubAdmin).ThenInclude(x=>x.user)
+           return  await dbContext.courses.Include(x=>x.instructor).Include(x=>x.subAdmin)
+                
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 
@@ -42,9 +42,9 @@ namespace courseProject.Repository.GenericRepository
 
         public async Task<IReadOnlyList<Course>> GetAllUndefinedCoursesBySubAdminIdAsync(Guid subAdminId)
         {
-            return await dbContext.courses.Include(x=>x.Instructor).ThenInclude(x=>x.user)
-                                          .Include(x=>x.SubAdmin).ThenInclude(x=>x.user)
-                .Where(x=>x.SubAdminId == subAdminId && x.status.ToLower()=="undefined")
+            return await dbContext.courses.Include(x=>x.instructor).Include(x => x.subAdmin)
+
+                .Where(x=>x.subAdminId == subAdminId && x.status.ToLower()=="undefined")
                 .OrderByDescending(x=>x.dateOfAdded)
                 .ToListAsync();
         }
@@ -82,11 +82,11 @@ namespace courseProject.Repository.GenericRepository
 
             // Fetch all courses from the database that are not undefined or rejected
             var allCourses = await dbContext.courses
-                .Where(x => x.status.ToLower() != "undefined" || x.status.ToLower()!="reject")
+                .Where(x => x.status.ToLower() != "undefined" && x.status.ToLower()!="reject")
                 
                 .Include(x => x.studentCourses)
-                .Include(x => x.Instructor).ThenInclude(x => x.user)
-                .Include(x => x.SubAdmin).ThenInclude(x => x.user)
+                .Include(x => x.instructor)
+                
                 .OrderByDescending(x=>x.dateOfAdded)
                 .ToListAsync();
 
@@ -112,8 +112,7 @@ namespace courseProject.Repository.GenericRepository
                         studentCourse.isEnrolled = true;
                     }
 
-                    else
-                    {
+                   
                         // If the course deadline has passed or the course limit is reached and the course is not finished, mark it as unavailable
                         if (((course.Deadline.Value < DateTime.Now.Date) ||course.limitNumberOfStudnet <= studentCourseCount) && course.status.ToLower()!="finish")
                         {
@@ -124,7 +123,7 @@ namespace courseProject.Repository.GenericRepository
                         {
                             course.isAvailable = true;
                         }
-                    }
+                    
                 }
             }
             return allCourses;
@@ -152,7 +151,7 @@ namespace courseProject.Repository.GenericRepository
 
                 return await dbContext.courses
                     .Where(x => x.status.ToLower() == "accredit" || x.status.ToLower() == "start" || x.status.ToLower() == "finish")
-                    .Include(x => x.Instructor.user).Include(x => x.SubAdmin.user)
+                    .Include(x => x.instructor).Include(x => x.subAdmin)
                     .OrderByDescending(x=>x.dateOfAdded)
                     .ToListAsync();
            
@@ -166,7 +165,7 @@ namespace courseProject.Repository.GenericRepository
         {
             
                 return await dbContext.courses
-                    .Include(x => x.SubAdmin.user).Include(x => x.Instructor.user).OrderByDescending(x => x.dateOfAdded).ToListAsync();
+                    .Include(x => x.instructor).Include(x => x.subAdmin).OrderByDescending(x => x.dateOfAdded).ToListAsync();
            
         }
 

@@ -26,13 +26,13 @@ namespace courseProject.Services.Students
             var Students = await unitOfWork.StudentRepository.GetAllStudentsAsync();
             foreach(var student in Students)
             {
-                if (student.user.ImageUrl != null)
+                if (student.ImageUrl != null)
                 {
-                    student.user.ImageUrl = await unitOfWork.FileRepository.GetFileUrl(student.user.ImageUrl);
+                    student.ImageUrl = await unitOfWork.FileRepository.GetFileUrl(student.ImageUrl);
                 }
             }
          
-            var mappedStudentDTO = mapper.Map<IReadOnlyList<Student>, IReadOnlyList<StudentsInformationDto>>(Students);
+            var mappedStudentDTO = mapper.Map<IReadOnlyList<User>, IReadOnlyList<StudentsInformationDto>>(Students);
             return mappedStudentDTO;
         }
 
@@ -43,7 +43,7 @@ namespace courseProject.Services.Students
             var courseFound = await unitOfWork.CourseRepository.getAccreditCourseByIdAcync(courseId);
             if (courseFound == null) return ErrorCourse.NotFound;
             var GetStudents = await unitOfWork.StudentRepository.GetAllStudentsInTheSameCourseAsync(courseId);
-            var StudentMapper = mapper.Map<IReadOnlyList<Student>, IReadOnlyList<StudentsInformationDto>>(GetStudents);
+            var StudentMapper = mapper.Map<IReadOnlyList<User>, IReadOnlyList<StudentsInformationDto>>(GetStudents);
             return StudentMapper.ToErrorOr();
                 
         }

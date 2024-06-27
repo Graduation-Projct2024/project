@@ -30,16 +30,16 @@ namespace courseProject.Core.Models
         public string? address { get; set; }
         public string? ImageUrl { get; set; }
         public DateTime dateOfAdded {  get; set; }
+        public string? skillDescription { get; set; }
 
-        public Student student { get; set; }
-
-        public Instructor instructor { get; set; }
-
-        public Admin admin { get; set; }
-        public SubAdmin subadmin { get; set; }
-
-       // public List<General_Feedback> general_feedback { get; set; }
+       
         public List<Feedback> feedbacks { get; set; }
+        public List<Request> requests { get; set; }
+        public List<StudentCourse> studentCourses { get; set; }
+        public List<Course> courses { get; set; }   
+        public List<Consultation> consultations { get; set; }
+        public List<InstructorSkills> instructorSkills { get; set; }
+        public List<Event> events { get; set; }
 
     }
 }

@@ -6,7 +6,7 @@ using courseProject.Repository.Data;
 
 namespace courseProject.Repository.GenericRepository
 {
-    public class instructorRepositpry : GenericRepository1<Instructor>, IinstructorRepositpry
+    public class instructorRepositpry : GenericRepository1<User>, IinstructorRepositpry
     {
         private readonly projectDbContext dbContext;
 
@@ -31,14 +31,11 @@ namespace courseProject.Repository.GenericRepository
 
             
 
-        public async Task<Instructor> getInstructorByIdAsync(Guid id)
-        {
-            return await dbContext.instructors.Include(x=>x.user).FirstOrDefaultAsync(x => x.InstructorId == id);
-        }
+        
 
         public async Task<IReadOnlyList<Instructor_Working_Hours>> getAllInstructorsOfficeHoursAsync()
         {
-           return await dbContext.Instructor_Working_Hours.Include(x=>x.instructor).ThenInclude(x=>x.user).ToListAsync();
+           return await dbContext.Instructor_Working_Hours.Include(x=>x.instructor).ToListAsync();
         }
 
        
@@ -52,13 +49,13 @@ namespace courseProject.Repository.GenericRepository
         // get a list of instructor depends on inputs when student added to book a lecture
         public async Task<IReadOnlyList<Instructor_Working_Hours>> getAListOfInstructorDependOnSkillsAndOfficeTime(Guid skillID, TimeSpan startTime, TimeSpan endTime, DateTime date )
         {
-            return await dbContext.Instructor_Working_Hours.Include(x => x.instructor).ThenInclude(x => x.Consultations)
-                .Include(x=>x.instructor.user)
+            return await dbContext.Instructor_Working_Hours.Include(x => x.instructor).ThenInclude(x => x.consultations)
+                .Include(x=>x.instructor)
                 
                 .Where(x => x.day == date.DayOfWeek)
                 .Where(x => x.startTime <= startTime && x.endTime >= endTime)
                 .Where(x=>x.instructor.instructorSkills.Any(y=>y.skillId ==skillID))
-                .Where(x => !x.instructor.Consultations.Any(y =>
+                .Where(x => !x.instructor.consultations.Any(y =>
         y.date == date.Date && (
             (startTime >= y.startTime && startTime < y.endTime) ||
             (endTime > y.startTime && endTime <= y.endTime) ||
@@ -67,11 +64,16 @@ namespace courseProject.Repository.GenericRepository
     .ToListAsync();
         }
 
-
-        public async Task createInstructorAccountAsync(Instructor entity)
+        public async Task<IReadOnlyList<User>> getAllInstructors()
         {
-            await dbContext.Set<Instructor>().AddAsync(entity);
+            return await dbContext.users.Where(x => x.role.ToLower() == "instructor").ToListAsync();
         }
+
+        public async Task<User> getInstructorById(Guid instructorId)
+        {
+           return  await dbContext.users.Where(x => x.role.ToLower() == "instructor").FirstOrDefaultAsync(x=>x.UserId==instructorId);
+        }
+       
 
     }
 }

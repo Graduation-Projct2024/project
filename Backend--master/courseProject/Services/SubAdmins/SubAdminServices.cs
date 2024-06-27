@@ -14,16 +14,16 @@ namespace courseProject.Services.SubAdmins
             this.unitOfWork = unitOfWork;
         }
 
-        public async Task<IReadOnlyList<SubAdmin>> GetAllSubAdmins()
+        public async Task<IReadOnlyList<User>> GetAllSubAdmins()
         {
-            return await unitOfWork.SubAdminRepository.GetAllEmployeeAsync();
+            return await unitOfWork.UserRepository.GetAllEmployeeAsync();
         }
-        public async Task<ErrorOr<SubAdmin>> getSubAdminById(Guid subAdminId)
+        public async Task<ErrorOr<User>> getSubAdminById(Guid subAdminId)
         {
 
             var SubAdminFound = await unitOfWork.UserRepository.ViewProfileAsync(subAdminId, "subadmin");
             if (SubAdminFound == null) return ErrorSubAdmin.NotFound;
-            return await unitOfWork.SubAdminRepository.GetSubAdminByIdAsync(subAdminId);
+            return await unitOfWork.UserRepository.getUserByIdAsync(subAdminId);
         }
     }
 }

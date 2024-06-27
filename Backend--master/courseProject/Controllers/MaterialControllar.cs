@@ -33,7 +33,7 @@ namespace courseProject.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        [Authorize(Policy ="Instructor")]
+        [Authorize(Policy = "Instructor")]
         public async Task<IActionResult> AddTask( [FromForm] TaskDTO taskDTO)
         {
             var addTask = await materialServices.AddTask(taskDTO);
@@ -120,7 +120,7 @@ namespace courseProject.Controllers
         
         public async Task<IActionResult> EditTask(Guid id, [FromForm] TaskForEditDTO taskDTO)
         {
-            await materialServices.deleteFiles(id);
+            if(taskDTO.pdf!=null)await materialServices.deleteFiles(id);
             var editedTask = await materialServices.EditTask(id, taskDTO);
             if (editedTask.IsError) return NotFound(new ApiResponce { ErrorMassages=editedTask.FirstError.Description});
             return Ok(new ApiResponce { Result = "The task is updated successfully" });
@@ -140,7 +140,7 @@ namespace courseProject.Controllers
         [Authorize(Policy = "InstructorwhoGiveTheMaterial")]
         public async Task<IActionResult> EditFile(Guid id, [FromForm] FileToEditDTO fileDTO)
         {
-            await materialServices.deleteFiles(id);
+            if (fileDTO.pdf != null) await materialServices.deleteFiles(id);
             var editedFile = await materialServices.EditFile(id, fileDTO);
             if (editedFile.IsError) return NotFound(new ApiResponce { ErrorMassages = editedFile.FirstError.Description });
             return Ok(new ApiResponce { Result = "The file is updated successfully" });

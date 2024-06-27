@@ -26,23 +26,24 @@ namespace courseProject.Services.Instructors
 
        
 
-        public async Task<IReadOnlyList<Instructor>> GetAllInstructors()
+        public async Task<IReadOnlyList<User>> GetAllInstructors()
         {
-            return await unitOfWork.instructorRepositpry.GetAllEmployeeAsync();
+            return await unitOfWork.instructorRepositpry.getAllInstructors();
         }
 
-        public async Task<ErrorOr<Instructor>> getInstructorById(Guid InstructorId)
+        public async Task<ErrorOr<User>> getInstructorById(Guid InstructorId)
         {
-            var instructorFound = await unitOfWork.UserRepository.ViewProfileAsync(InstructorId, "instructor");
-            if (instructorFound == null) return ErrorInstructor.NotFound;
-            return await unitOfWork.instructorRepositpry.getInstructorByIdAsync(InstructorId);
+                    
+            var getInstructor =  await unitOfWork.instructorRepositpry.getInstructorById(InstructorId);
+            if (getInstructor == null ) return ErrorInstructor.NotFound;
+            return getInstructor;
         }
 
         public async Task<ErrorOr<Created>> AddOfficeHours(Guid InstructorId, WorkingHourDTO _Working_Hours)
         {
            
-            var instructorFound = await unitOfWork.instructorRepositpry.GetEmployeeById(InstructorId);
-            if (instructorFound == null) return ErrorInstructor.NotFound;
+            var instructorFound = await unitOfWork.UserRepository.getUserByIdAsync(InstructorId);
+            if (instructorFound == null || instructorFound.role.ToLower()!="instructor") return ErrorInstructor.NotFound;
 
             if (!CommonClass.IsValidTimeFormat(_Working_Hours.startTime) || !CommonClass.IsValidTimeFormat(_Working_Hours.endTime))
                 return ErrorInstructor.InvalidTime;
@@ -57,8 +58,8 @@ namespace courseProject.Services.Instructors
 
         public async Task<ErrorOr<IReadOnlyList<GetWorkingHourDTO>>> GetInstructorOfficeHours(Guid InstructorId)
         {
-            var instructorFound = await unitOfWork.instructorRepositpry.GetEmployeeById(InstructorId);
-            if (instructorFound == null)
+            var instructorFound = await unitOfWork.UserRepository.getUserByIdAsync(InstructorId);
+            if (instructorFound == null || instructorFound.role.ToLower()!="instructor")
                 return ErrorInstructor.NotFound;
             var InstructorOfficeHours = await unitOfWork.instructorRepositpry.GetOfficeHourByIdAsync(InstructorId);
             var InstructorOfficeHoursMapper = mapper.Map<IReadOnlyList<Instructor_Working_Hours>, IReadOnlyList<GetWorkingHourDTO>>(InstructorOfficeHours);
@@ -69,7 +70,7 @@ namespace courseProject.Services.Instructors
         {
             var GetInstructors = await unitOfWork.instructorRepositpry.GetAllEmployeeAsync();
            
-            var CustomCoursesMapper = mapper.Map<IReadOnlyList<Instructor>, IReadOnlyList<EmployeeListDTO>>(GetInstructors);
+            var CustomCoursesMapper = mapper.Map<IReadOnlyList<User>, IReadOnlyList<EmployeeListDTO>>(GetInstructors);
             return CustomCoursesMapper;
         }
 
@@ -100,11 +101,11 @@ namespace courseProject.Services.Instructors
 
         public async Task<ErrorOr<Updated>> AddSkillDescription(Guid instructorId, SkillDescriptionDTO skillDescriptionDTO)
         {
-            var instructor = await unitOfWork.instructorRepositpry.getInstructorByIdAsync(instructorId);
+            var instructor = await unitOfWork.UserRepository.ViewProfileAsync(instructorId , "instructor");
             if (instructor == null) return ErrorInstructor.NotFound;
 
             instructor.skillDescription = skillDescriptionDTO.skillDescription;
-            await unitOfWork.instructorRepositpry.updateEmployeeAsync(instructor);
+            await unitOfWork.UserRepository.UpdateUser(instructor);
             await unitOfWork.instructorRepositpry.saveAsync();
             return Result.Updated;
         }

@@ -12,7 +12,7 @@ namespace courseProject.Core.Models
     public class Instructor_Working_Hours
     {
         [Key]
-        [ForeignKey("Instructor")]
+        [ForeignKey("User")]
         public Guid InstructorId {  get; set; }
         [Key]
         public DayOfWeek day {  get; set; }
@@ -22,6 +22,6 @@ namespace courseProject.Core.Models
         public TimeSpan endTime { get; set; }
 
 
-        public Instructor instructor { get; set; }
+        public User instructor { get; set; }
     }
 }

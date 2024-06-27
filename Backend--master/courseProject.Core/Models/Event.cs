@@ -23,13 +23,13 @@ namespace courseProject.Core.Models
         public string category { get; set; }
         public string status { get; set; } = "undefined";
 
-        [ForeignKey("SubAdmin")]
+        [ForeignKey("User")]
         public Guid SubAdminId { get; set; }
-        [ForeignKey("Request")]
-        public Guid requestId { get; set; }
-
-        public SubAdmin SubAdmin { get; set; }
-        public Request Request { get; set; }
+        //[ForeignKey("Request")]
+        //public Guid requestId { get; set; }
+        [ForeignKey("SubAdminId")]
+        public User subAdmin { get; set; }
+        //public Request Request { get; set; }
 
     }
 }

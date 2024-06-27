@@ -23,7 +23,7 @@ namespace courseProject.Repository.GenericRepository
 
         public async Task<IReadOnlyList<Feedback>> GetAllFeedbacksAsync()
         {
-            return await dbContext.feedbacks.Include(x => x.User).Include(x => x.User.student)
+            return await dbContext.feedbacks.Include(x => x.student).Include(x => x.instructor)
                 .OrderByDescending(x=>x.dateOfAdded)
                 .ToListAsync();
         }
@@ -31,7 +31,7 @@ namespace courseProject.Repository.GenericRepository
         public async Task<IReadOnlyList<Feedback>> GetFeedbacksByTypeAsync(string type, Guid? instructorId, Guid? courseId)
         {
             // Start with the base query
-            var query = dbContext.feedbacks.Include(x => x.User).ThenInclude(x => x.student).Where(x => x.type == type);
+            var query = dbContext.feedbacks.Include(x => x.student).Include(x => x.instructor).Where(x => x.type == type);
 
             // Apply filters conditionally based on instructorId and courseId
             if (instructorId != null)
@@ -51,7 +51,7 @@ namespace courseProject.Repository.GenericRepository
 
         public async Task<Feedback> GetFeedbackByIdAsync(Guid id)
         {
-            return await dbContext.feedbacks.Include(x => x.User).ThenInclude(x => x.student).FirstOrDefaultAsync(x => x.Id == id);
+            return await dbContext.feedbacks.Include(x => x.student).Include(x => x.instructor).FirstOrDefaultAsync(x => x.Id == id);
         }
 
     }

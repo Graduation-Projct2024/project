@@ -27,8 +27,8 @@ namespace courseProject.Services.Feedbacks
             if (getStudent == null) return ErrorStudent.NotFound;
             
 
-            var getInstructors = await unitOfWork.instructorRepositpry.getInstructorByIdAsync(InstructorId);
-            if (getInstructors == null) return ErrorInstructor.NotFound;
+            var getInstructors = await unitOfWork.UserRepository.getUserByIdAsync(InstructorId);
+            if (getInstructors == null || getInstructors.role.ToLower() != "instructor") return ErrorInstructor.NotFound;
          
 
             var feddbackMapper = mapper.Map<FeedbackDTO, Feedback>(Feedback);

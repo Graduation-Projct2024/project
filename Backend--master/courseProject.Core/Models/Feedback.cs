@@ -27,12 +27,13 @@ namespace courseProject.Core.Models
             public Guid? CourseId { get; set; }
 
             // public Instructor Instructor { get; set; }
-            [ForeignKey("User , User")]
+            [ForeignKey("User")]
             public Guid StudentId { get; set; }
+        [ForeignKey("User")]
+        public Guid? InstructorId { get; set; }
 
-            public Guid? InstructorId { get; set; }
-
-            public User User { get; set; }
+            public User student { get; set; }
+            public User instructor { get; set; }
             public Course course { get; set; }
         }
     }

@@ -29,5 +29,6 @@ namespace courseProject.Core.Models.DTO.CoursesDTO
         public Guid SubAdminId { get; set; }
         public string SubAdminName { get; set; }
         public bool isEnrolled { get; set; }
+        public bool isAvailable { get; set; }
     }
 }

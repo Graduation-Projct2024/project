@@ -32,25 +32,23 @@ namespace courseProject.Core.Models
 
         [NotMapped] public bool? isAvailable { get; set; }
 
-        [ForeignKey("Instructor")]
-        public Guid InstructorId { get; set; } 
+        [ForeignKey("User")]
+        public Guid InstructorId { get; set; }
+        [ForeignKey("User")]
+        public Guid subAdminId { get; set; } 
+        //[ForeignKey("Request")]
+        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        //public Guid requestId { get; set; }
 
-        [ForeignKey("SubAdmin")]
-        public Guid SubAdminId { get; set; } 
-        [ForeignKey("Request")]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid requestId { get; set; } 
-
-        public Instructor Instructor { get; set; }
-
-        public SubAdmin SubAdmin { get; set; }
+     
+        public User instructor { get; set; }    
+        public User subAdmin { get; set; }
 
         public List<CourseMaterial> Materials { get; set; }
 
         public List<StudentCourse> studentCourses { get; set; }
 
-      //  public List<Course_Feedback> course_Feedbacks { get; set; }
-        public Request Request { get; set; }
+        //public Request Request { get; set; }
         public List<Feedback> Feedbacks { get; set; }
 
     }
