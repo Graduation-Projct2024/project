@@ -78,7 +78,7 @@ const DownloadMaterial = async (url) => {
   const apiUrl = process.env.NEXT_PUBLIC_EDUCODING_API;
   const baseApiUrl = apiUrl.substring(0, apiUrl.lastIndexOf("api/"));
   let cleanUrl = url.replace(`${baseApiUrl}`, "");
-  let fileName = url.replace(`${baseApiUrl}Files\\`, "");
+  let fileName = url.substring(url.lastIndexOf('/') + 1);
 
 
   const { data } = await axios.get(

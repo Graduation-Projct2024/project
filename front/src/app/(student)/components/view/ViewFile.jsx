@@ -50,10 +50,9 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 export default function ViewFile({ materialID }) {
  const [material, setMaterial]=useState(null);
  const {userToken, setUserToken, userData}=useContext(UserContext);
-
- const [loading ,setLoading]=useState(true);
+console.log(materialID)
  const getMaterial=async()=>{
-  if(userToken){
+  if(userData){
     try{
   const {data}= await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}MaterialControllar/GetMaterialById?id=${materialID}`,
   {headers :{Authorization:`Bearer ${userToken}`}}
@@ -61,7 +60,6 @@ export default function ViewFile({ materialID }) {
   )
 
   setMaterial(data.result);
-  setLoading(false);
 
   }
 catch(error){
@@ -71,7 +69,7 @@ catch(error){
  useEffect(() => {
     getMaterial();
   
-}, [materialID, userToken]);
+}, [materialID, userData,]);
 
 
   const style = {
@@ -103,13 +101,13 @@ catch(error){
     fileDownload(data, fileName);
   };
   
-if (loading) {
-  return (
-    <Box sx={{ display: "flex", justifyContent: "center" }}>
-      <CircularProgress color="primary" />
-    </Box>
-  );
-}
+// if (loading) {
+//   return (
+//     <Box sx={{ display: "flex", justifyContent: "center" }}>
+//       <CircularProgress color="primary" />
+//     </Box>
+//   );
+// }
   return (
     <div className='studentMaterial mt-5 pt-5'>
          <TableContainer component={Paper} sx={{ width: '84%', mt: 7 , align:'center', ml:7, }} className='filee'>

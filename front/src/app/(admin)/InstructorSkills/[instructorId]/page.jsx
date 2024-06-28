@@ -116,19 +116,7 @@ return matchesSearchTerm ;
           <MenuItem value={50}>50</MenuItem>
         </Select>
       </FormControl> */}
-                <div className="icons d-flex gap-2 pt-2">
-                    
-                    <div className="dropdown">
-  <button className="dropdown-toggle border-0 bg-white edit-pen" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-    <FontAwesomeIcon icon={faFilter} />
-  </button>
-  <ul className="dropdown-menu">
- 
-  </ul>
-</div>
-<FontAwesomeIcon icon={faArrowUpFromBracket} />
-                    
-                </div>
+               
                 </form>
                
 
@@ -150,9 +138,9 @@ return matchesSearchTerm ;
   </thead>
   <tbody>
   {filteredISkills.length ? (
-    filteredISkills.map((skill) =>(
+    filteredISkills.map((skill,index) =>(
       <tr key={skill.id}>
-      <th scope="row">{skill.id}</th>
+      <th scope="row">{++index}</th>
       <td>{skill.name}</td>
      
 
