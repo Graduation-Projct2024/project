@@ -7,55 +7,55 @@ using courseProject.Repository.Data;
 
 namespace courseProject.Repository.GenericRepository
 {
-    public class SubAdminRepository /*: GenericRepository1<SubAdmin>, ISubAdminRepository*/
+    public class SubAdminRepository /*: GenericRepository1<User>, ISubAdminRepository*/
     {
         private readonly projectDbContext dbContext;
-       
+
 
         //public SubAdminRepository(projectDbContext dbContext) : base(dbContext)
         //{
         //    this.dbContext = dbContext;
-         
+
         //}
 
 
 
 
 
-        //public async Task createSubAdminAccountAsync(SubAdmin entity)
+        //public async Task<IReadOnlyList<User>> getAllSubAdminAndMainSubAdmin()
         //{
-        //    await dbContext.Set<SubAdmin>().AddAsync(entity);
+        //    return await dbContext.users.Where(x => x.role.ToLower() == "subadmin" || x.role.ToLower() == "main-subadmin").ToListAsync();
         //}
 
 
-       
 
-      
 
-      
+
+
+
 
         //public async Task<SubAdmin> GetSubAdminByIdAsync(Guid id)
         //{
         //   return await dbContext.subadmins.Include(x=>x.user).FirstOrDefaultAsync(x => x.SubAdminId == id);
- 
+
         //}
 
-       
+
 
         //public async Task<SubAdmin> getSubAdminByIdAsync(Guid subAdminId)
         //{
         //    return await dbContext.subadmins.FirstOrDefaultAsync(x => x.SubAdminId == subAdminId);
         //}
 
-       
+
 
         //public async Task RemoveSubAdmin(SubAdmin subAdmin)
         //{
         //    dbContext.subadmins.Remove(subAdmin);
         //}
 
-       
 
-        
+
+
     }
 }

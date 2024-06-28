@@ -27,6 +27,9 @@ namespace courseProject.Services.Events
         {
             // Check if the SubAdmin exists
             var SubAdminFound = await unitOfWork.UserRepository.ViewProfileAsync(_event.SubAdminId, "subadmin");
+           
+            var MainSubAdminFound = await unitOfWork.UserRepository.ViewProfileAsync(_event.SubAdminId, "main-subadmin");
+            if (SubAdminFound == null && MainSubAdminFound == null) return ErrorSubAdmin.NotFound;
             if (SubAdminFound == null) return ErrorSubAdmin.NotFound;
 
             // Upload event image if provided
