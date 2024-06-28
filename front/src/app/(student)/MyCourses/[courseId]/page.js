@@ -12,7 +12,6 @@ import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import EmailIcon from '@mui/icons-material/Email';
 import Link from '@mui/material/Link';
 import Box from '@mui/material/Box';
-// import '../../../../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js'
 import './style.css'
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
@@ -27,6 +26,7 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import Layout from '../../studentLayout/Layout.jsx';
 import { UserContext } from '../../../../context/user/User.jsx';
 import AuthError from '../../../../component/Error/AuthError.jsx';
+import { useRouter } from 'next/navigation'
 
 export default function page() {
   useEffect(() => {
@@ -36,9 +36,10 @@ export default function page() {
   }, []);
   const {userToken, setUserToken, userData}=useContext(UserContext);
   const [error, setError] = useState(null);
-if(!userToken){
-  return(<AuthError/>)
-}
+  const router = useRouter();
+  if(!userToken){
+    return router.push('/login')
+  }
     const contents=[
         {
             title:'Task 1',
@@ -105,11 +106,9 @@ const [materialId, setMaterialId]=useState();
 
           
         );
-        // console.log(data);
         setMaterials(data.result);
-        // console.log(materials);
       }catch(error){
-        throw new Error('auth is required');
+        console.log(error);
       }
       }
       };

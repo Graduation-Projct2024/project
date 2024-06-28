@@ -9,13 +9,18 @@ import { useParams } from 'next/navigation';
 import Layout from '../../../studentLayout/Layout';
 import axios from 'axios';
 import './style.css'
+import AuthError from '../../../../../component/Error/AuthError.jsx';
+import { useRouter } from 'next/navigation'
 
 import { UserContext } from '../../../../../context/user/User';
-
 
 export default function page() {
   const {userToken, setUserToken, userData}=useContext(UserContext);
     const[error,setError]=useState();
+    const router = useRouter();
+    if(!userToken){
+      return router.push('/login')
+    }
 
     const[type,setType]=useState();
     const[name,setName]=useState();
@@ -34,7 +39,8 @@ const{materialId, courseId}=useParams();
 
         console.log(data)
         }catch(error){
-          setError(error);
+          console.log(error);
+          setError(error.response.status);
          
         }
     }
@@ -50,13 +56,11 @@ const{materialId, courseId}=useParams();
   };
 
   if (error) {
-    return (
-     <div>
-        <h2>Something went wrong!</h2>
-        <p>{error.message}</p>
-        <button onClick={resetError}>Try again</button>
-      </div>
-    );
+    if (error=='403'||error=='404') {
+      return(<AuthError/>)
+  }else if(error=='401'){
+    return router.push('/login')
+  }
   }
 
   return (
