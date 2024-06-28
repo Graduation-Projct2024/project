@@ -104,19 +104,7 @@ export default function UnAccreditEvents() {
           <MenuItem value={15}>15</MenuItem>
         </Select>
       </FormControl>
-                <div className="icons d-flex gap-2 pt-3">
-                    
-                    <div className="dropdown">
-  <button className="dropdown-toggle border-0 bg-white edit-pen" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-    <FontAwesomeIcon icon={faFilter} />
-  </button>
-  <ul className="dropdown-menu">
- 
-  </ul>
-</div>
-<FontAwesomeIcon icon={faArrowUpFromBracket} />
-                    
-                </div>
+                
                 </form>
 
             </div>

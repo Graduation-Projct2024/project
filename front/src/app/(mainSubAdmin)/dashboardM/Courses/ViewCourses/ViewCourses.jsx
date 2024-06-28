@@ -159,7 +159,6 @@ const handleClickOpen = () => {
                     </li>
                   </ul>
                 </div>
-<FontAwesomeIcon icon={faArrowUpFromBracket} />
                     
                 </div>
                 </form>
