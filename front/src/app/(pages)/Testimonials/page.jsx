@@ -24,7 +24,6 @@ export default function Testimonials() {
     try{
     const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}Employee/GetAllEmployee?pageNumber=1&pageSize=1000`);
 
-    console.log(data);
     setContacts(data.result.items);
   }
     catch(error){

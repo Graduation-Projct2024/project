@@ -2,7 +2,6 @@
 import Layout from '@/app/(admin)/AdminLayout/Layout';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
-
 import React, { useEffect, useState } from 'react'
 import { faFacebookF, faGithub, faLinkedinIn } from '@fortawesome/free-brands-svg-icons'
 import { faUser } from '@fortawesome/free-regular-svg-icons';
@@ -19,13 +18,11 @@ export default function Profile({params}) {
     console.log(id)
     const getUser =async ()=>{
       try {
-        //setLoading(false)
-        const {data} = await axios.get(`http://localhost:5134/api/Employee/GetEmployeeById?id=${params.id}`,{headers: {
+        const {data} = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}Employee/GetEmployeeById?id=${params.id}`,{headers: {
           'Content-Type': 'multipart/form-data','Content-Type': 'application/json',
         }}
         );
         if(data.isSuccess){
-          console.log(data);
         setUser(data);
         setLoading(false)
         }}
@@ -60,12 +57,6 @@ export default function Profile({params}) {
               <p className='text-uppercase fw-bold  text-xl-end text-lg-center text-md-center text-sm-center text-center'><span className='name'>{user.name}</span></p>
             
             </div>
-            {/* <div className="col-xl-8 col-lg-12">
-              <div className="edit-profile d-flex gap-2 pt-lg-3 justify-content-xl-start justify-content-lg-center justify-content-md-center justify-content-sm-center justify-content-center">
-                <FontAwesomeIcon icon={faPen} className='pt-1'/>
-                <p className='text-decoration-underline'>Edit profile</p>
-              </div>
-            </div> */}
              <div className="d-flex ps-xl-4 pt-3 gap-2 role justify-content-xl-start fs-5 fw-bold justify-content-lg-center justify-content-md-center justify-content-sm-center justify-content-center">
                 <FontAwesomeIcon icon={faUser} className='pt-1'/>
                 <p className='text-uppercase'>{user.type}</p>

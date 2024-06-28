@@ -32,7 +32,6 @@ export default function AddTaskSubmission({materialID}) {
     setAlertOpen(false);
   };
   const handelFieldChang = (event) => {
-    console.log(event);
     formik.setFieldValue("pdf", event.target.files[0]);
   };
  
@@ -57,7 +56,7 @@ const { data } = await axios.post(
  router.back();
 
 }catch(error){
-  console.log(data);
+  console.log(error);
 }
   };
   const validationSchema = yup.object({

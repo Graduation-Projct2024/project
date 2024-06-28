@@ -2,11 +2,13 @@ import { UserContext } from '@/context/user/User';
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react'
 import './Profile.css'
+import { useRouter } from 'next/navigation';
 export default function ViewWeeklyHours({id}) {
     const {userToken, setUserToken, userData}=useContext(UserContext);
     const [weeklyHours, setWeeklyHours] = useState([]);
-
+    const router = useRouter();
     const fetchWeeklyHours = async () => {
+        
         if(userData&&userToken){
         try{
         const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}Instructor/GetInstructorOfficeHours?Instructorid=${id}`,
@@ -60,11 +62,19 @@ export default function ViewWeeklyHours({id}) {
         ));
     };
   return (
-<div className='p-5'>
+    <div className="weekly-hours-container">
+        {userData? 
+        <div className='p-5'>
 <h2 className='pr '>Weekly Hours</h2>
 <div className="row justify-content-center ps-3">
 {renderWeeklyHours()}
 </div>
+</div>:
+<div className='d-flex justify-content-center align-items-center flex-column'>
+    <p>Please login then you can see the weekly hours for this instructor</p>
+    <button className='showAv w-auto' onClick={()=>router.push('/login')}>Login</button>
+    </div>}
+
 </div>
 )
 }

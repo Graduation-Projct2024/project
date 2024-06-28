@@ -116,7 +116,7 @@ const sidebarItems = [
             fontWeight= {700}
           >
             {/* LOGO */}
-            <img src="./logoEdu.png" alt="Educoding" className='img-fluid'/>
+            <img src="/logoEdu.png" alt="Educoding" className='img-fluid'/>
           </Link>
             </Stack>
       <Divider />

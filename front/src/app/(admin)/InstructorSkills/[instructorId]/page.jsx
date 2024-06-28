@@ -10,11 +10,9 @@ import '../../dashboard/dashboard.css'
 export default function InstructorSkills({params}) {
     const {userToken, setUserToken, userData}=useContext(UserContext);
     const [instructorSkills,setInstructorSkills] = useState([])
-    console.log(instructorSkills)
     const [employeeName, setEmployeeName] = useState('');
     const [loading, setLoading] = useState(false);
-  // const {id} = useParams();
-  // console.log(useParams());
+
     // const [pageNumber, setPageNumber] = useState(1);
     // const [pageSize, setPageSize] = useState(10);
     // const [totalPages, setTotalPages] = useState(0);
@@ -41,7 +39,6 @@ export default function InstructorSkills({params}) {
         if(userData){
         try{
         const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}Employee/GetAllEmployee`);
-        console.log(data);
         setEmployees(data.result.items);
       }
         catch(error){
@@ -70,7 +67,6 @@ export default function InstructorSkills({params}) {
         setEmployeeName(`${employee.fName} ${employee.lName}`);
     }
 }, [employees, params.instructorId]);
-// console.log(employeeName)
 
   const [searchTerm, setSearchTerm] = useState('');
 

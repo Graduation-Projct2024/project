@@ -5,8 +5,7 @@ import  './about.css'
 import { Player, Controls } from '@lottiefiles/react-lottie-player';
 import LocalLibraryIcon from '@mui/icons-material/LocalLibrary';
 import Avatar from '@mui/material/Avatar';
-import { Typography } from '@mui/material';
-import Box from '@material-ui/core/Box';
+import { Box, Typography } from '@mui/material';
 import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
 import DirectionsRunOutlinedIcon from '@mui/icons-material/DirectionsRunOutlined';
 import AccessTimeFilledOutlinedIcon from '@mui/icons-material/AccessTimeFilledOutlined';
@@ -24,9 +23,8 @@ export default function page() {
   const [instructors, setInstructors] = useState([]);
   const getInstructors = async () => {
     try{
-      const { data } = await axios.get(`https://localhost:7116/api/Employee/GetAllEmployee?pageNumber=1&pageSize=1000`);
+      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}Employee/GetAllEmployee?pageNumber=1&pageSize=1000`);
   
-      console.log(data);
       setInstructors(data.result.items);
     }
       catch(error){
@@ -63,7 +61,7 @@ export default function page() {
           >
             <Controls visible={false} buttons={['play', 'repeat', 'frame', 'debug']} />
           </Player> */}
-
+ 
 
   </div>
   <div className='col-md-5'>
@@ -200,7 +198,7 @@ export default function page() {
             <SwiperSlide className='d-flex justify-content-center'>
            {!instructor.imageUrl?(<AccountCircleIcon  sx={{fontSize:150, color:"#4c5372" , mt:5}}/>):(<img src={instructor.imageUrl}/>)}
            <div className='ps-5 pt-5'>
-            <h4 className='pt-3'>{instructor.userName} {instructor.lName}</h4>
+            <h4 className='pt-3'>{instructor.fName} {instructor.lName}</h4>
             <h5 className='pt-3'>Email : {instructor.email}</h5>
             <h5 className='pt-3'>Phone : {instructor.phoneNumber}</h5>
 </div>

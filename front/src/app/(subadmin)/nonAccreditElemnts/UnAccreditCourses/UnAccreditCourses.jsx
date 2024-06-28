@@ -24,7 +24,6 @@ export default function UnAccreditCourses() {
 
 const handleClickOpenUpdate = (id) => {
   setCourseId(id);
-    console.log(id)
     setOpenUpdate(true);
 };
 const handleCloseUpdate = () => {
@@ -41,7 +40,6 @@ const handleCloseUpdate = () => {
             },
         }
         );
-        console.log(data);
         setNonAccreditCourses(data.result.items);
         setTotalPages(data.result.totalPages);
       } catch (error) {
@@ -62,7 +60,6 @@ const handleCloseUpdate = () => {
   const handlePageChange = (event, value) => {
     setPageNumber(value);
   };
-//  console.log(courses)
 
   const [searchTerm, setSearchTerm] = useState("");
 

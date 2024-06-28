@@ -14,7 +14,6 @@ export default function page() {
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
-console.log(userToken);
   const [courses, setCourses] = useState([]);
   const getCourses = async (pageNum = pageNumber, pageSizeNum = pageSize) => {
     try{

@@ -96,44 +96,36 @@ const [materialId, setMaterialId]=useState();
   const handleAddContent=(type)=>{
 if (type=='task'){
   setOpenTaskDialog(true);
-  console.log(type);
 
 }
 if (type=='file'){
   setOpenFileDialog(true);
-  console.log(type);
 
 }
 if (type=='link'){
   setOpenLinkDialog(true);
-  console.log(type);
 
 }
 if (type=='announcement'){
   setOpenAnnouncementDialog(true);
-  console.log(type);
 
 }
 }  
 const handleViewContent=(type, mId)=>{
   if (type=='Task'){
     setOpenViewTaskDialog(true);
-    console.log(type);
   
   }
   if (type=='file'){
     setOpenFileDialog(true);
-    console.log(type);
   
   }
   if (type=='link'){
     setOpenLinkDialog(true);
-    console.log(type);
   
   }
   if (type=='announcement'){
     setOpenAnnouncementDialog(true);
-    console.log(type);
   
   }
   }  
@@ -158,9 +150,7 @@ const handleCloseViewTaskDialog = () => {
     setOpen(false);
   };
     const [materials, setMaterials] = useState([]);
-    // console.log(useParams());
     const { courseId } = useParams();
-    // console.log(courseId);
     const [courseName, setCourseName]=useState();
     const [course, setCourse]=useState({});
     const getCourses = async () => {
@@ -172,7 +162,6 @@ if(userToken){
 
       );
     setCourse(data.data.result)
-    // console.log(data)
       setCourseName(data.data.result.name);
     }};
     const accreditCourse = async (courseId , Status) => {
@@ -195,7 +184,6 @@ if(userToken){
                   },
                 });
     
-              console.log(data);
               if (Status == "finish") {
                 Swal.fire({
                   title: `Course Finished Successully`,
@@ -220,9 +208,7 @@ if(userToken){
 
           
         );
-        console.log(data);
         setMaterials(data.result);
-        // console.log(materials);
       }
       };
       const [participants, setParticipants]= useState();

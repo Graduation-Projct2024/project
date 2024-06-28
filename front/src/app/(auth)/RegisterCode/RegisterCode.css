@@ -25,9 +25,9 @@ body{
     border: 1px solid #4C5372;
     border-radius: 10px;
 }
-.animationForget{
-    width: 500px !important;
-    height: 500px !important;
+iframe{
+    width: 600px !important;
+    height: 600px !important;
 }
 .addEmailForget{
     border: 1px solid #4C5372;

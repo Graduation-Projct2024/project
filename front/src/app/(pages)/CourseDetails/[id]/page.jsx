@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import Layout from '../../Layout/Layout'
 import '../CourseDetails.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faClock, faCode, faEnvelope, faHourglassHalf, faLayerGroup, faPersonChalkboard, faStopwatch, faUser, faUserGraduate } from '@fortawesome/free-solid-svg-icons'
+import { faClock, faCode, faEnvelope, faHourglassHalf, faLayerGroup, faPersonChalkboard, faPhone, faStopwatch, faUser, faUserGraduate } from '@fortawesome/free-solid-svg-icons'
 import '../../../../../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js'
 import { UserContext } from '@/context/user/User';
 import axios from 'axios';
@@ -11,15 +11,12 @@ import { faCss3, faFacebookF, faGithub, faLinkedinIn } from '@fortawesome/free-b
 import { useSearchParams } from 'next/navigation'
 import Swal from 'sweetalert2'
 import Review from './Review.jsx'
+import { Tooltip } from '@mui/material'
+import Link from 'next/link'
 export default function CourseDetails({params}) {
   const {userToken, setUserToken, userData,userId}=useContext(UserContext);
 
-  // console.log(params.id)
-  // const searchParams = useSearchParams();
-  // console.log(searchParams.get('isEnrolled'));
-  // let isEnrolled = searchParams.get('isEnrolled')
-  // let[isEnrolled,setIsEnrolled] = useState(null);
-  // console.log(params.isEnrolled)
+
 
 
   let [course,setCourse] = useState({});
@@ -28,15 +25,11 @@ export default function CourseDetails({params}) {
   let[role,setRole] = useState();
  const fetchIns = async ()=>{
     const {data} = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}Employee/GetAllEmployee?pageNumber=1&pageSize=1000`);
-    // console.log(data)
      setInstructors(data.result.items);
   }
-  // console.log(instructors)
   const getCourse =async ()=>{
     try {
-      //setLoading(false)
       const {data} = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}CourseContraller/GetCourseById?id=${params.id}`,);
-        // console.log(data);
         setCourse(data.result);
     }
       catch (error) {
@@ -44,12 +37,7 @@ export default function CourseDetails({params}) {
       }
       
   }
-  // console.log(course)
 
-  // useEffect(()=>{
-  //   const params = new URLSearchParams(window.location.search);
-  //   setIsEnrolled(params.get('isEnrolled'));
-  // },[]);
 
   useEffect(() => {
     getCourse();
@@ -70,7 +58,6 @@ export default function CourseDetails({params}) {
       setRole(userData.role)
     }
   }, [userData]);
-  // console.log(role)
 
 
 
@@ -80,11 +67,9 @@ export default function CourseDetails({params}) {
         <h2 className='courseDetailsTitle'>Course Details</h2>
         <div className="shape1">
           <FontAwesomeIcon icon={faCode} style={{color: "#4c5372",}} className='shape1a fs-3'/>
-          {/* <img src="/tag.png" alt="tag" /> */}
         </div>
         <div className="shape2">
           <FontAwesomeIcon icon={faCss3} style={{color: "#4c5372",}} className='shape1a fs-3'/>
-          {/* <img src="/tag.png" alt="tag" /> */}
         </div>
       </div>
       <div className="section">
@@ -105,7 +90,6 @@ export default function CourseDetails({params}) {
     <div className="author-content">
       <a className="name" href="#">{course.instructorName}</a>
       <span className="Enroll">{course.limitNumberOfStudnet}  Students</span>
-      {/* {console.log(course.limitNumberOfStudnet)} */}
     </div>
   </div>
   {/* <div className="admin-rating">
@@ -138,12 +122,18 @@ export default function CourseDetails({params}) {
                       <div className="crsInsContent d-flex gap-2 flex-column justify-content-center align-items-center">
                           <img src={instructor.imageUrl} alt="instructor" className='' />
                           <h4>{course.instructorName}</h4>
-                          <ul className='d-flex pe-4 gap-2'>
+                          {/* <ul className='d-flex pe-4 gap-2'>
                             <li className=' social'><FontAwesomeIcon icon={faLinkedinIn} /></li>
                             <li className=' social'><FontAwesomeIcon icon={faGithub} /></li>
                             <li className=' social'><FontAwesomeIcon icon={faFacebookF} /></li>
                             <li className=' social'><FontAwesomeIcon icon={faEnvelope} /></li>
-                          </ul>
+                          </ul> */}
+                          <div className="d-flex justify-content-center gap-3 pt-3">
+                        <Tooltip title="phone" placement="top">
+                          <Link className='social' href={`tel:${instructor.phoneNumber}`}><FontAwesomeIcon icon={faPhone} /></Link></Tooltip>
+                        <Tooltip title="Email" placement="top">
+                          <Link className='social' href={`mailto:${instructor.email}`}><FontAwesomeIcon icon={faEnvelope} /></Link></Tooltip>
+                        </div>
                           <p>{instructor.skillDescription}</p>
                           {/* <ul className='d-flex gap-2 pe-4'>
                             <li className='social'>j</li>

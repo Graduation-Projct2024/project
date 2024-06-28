@@ -29,7 +29,7 @@ export const createEmployee = yup.object({
  
 
  export const createEvent = yup.object({
-   name:yup.string().required('Name is required').min(3,'Course Name must have at least 3 characters').max(30,'Course Name must have at most 30 characters'),
+   name:yup.string().required('Name is required').min(5,'Course Name must have at least 3 characters'),
    content:yup.string().required('content is required').min(10,'Course content must have at minimum 30 characters'),
    category:yup.string().required('Category is required').min(3,'Course Category must have at least 6 characters').max(30,'Course Category must have at most 30 characters'),
    dateOfEvent:yup.string().required('Start Date is required'),
@@ -49,7 +49,6 @@ export const AddEmailForgetPass = yup.object({
 export const editProfile = yup.object({
    FName:yup.string().required('First Name is required'),
    LName:yup.string().required('Last Name is required'),
-   
 })
 
 

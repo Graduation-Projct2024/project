@@ -24,7 +24,6 @@ export default function page() {
 
   const handleClickOpenUpdate = (id) => {
     setContactId(id);
-          console.log(id)
           setOpenUpdate(true);
       };
       const handleCloseUpdate = () => {
@@ -50,7 +49,6 @@ const handleClickOpen = () => {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${userToken}`
       }});
-    // console.log(data);
     setContacts(data.items);
     setTotalPages(data.totalPages);
   }
@@ -135,8 +133,7 @@ const handleClickOpen = () => {
             {filteredContacts.length ? (
               filteredContacts.map((contact, index) => (
                 <tr key={contact.id}>
-                  {/* {console.log(course.id)}
-        {console.log(course.imageUrl)} */}
+                 
                   <th scope="row">{++index}</th>
                   <td>{contact.name}</td>
                   <td>

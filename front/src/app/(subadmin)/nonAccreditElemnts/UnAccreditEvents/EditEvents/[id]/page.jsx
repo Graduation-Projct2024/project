@@ -40,7 +40,6 @@ export default function EditEvent({id   , name   , category    ,dateOfEvent   , 
         if(data.errorMassages != null){
           setErrmsg(data.errorMassages)
           
-          // console.log(data.errorMassages)
         }
         else{
           formik.resetForm();

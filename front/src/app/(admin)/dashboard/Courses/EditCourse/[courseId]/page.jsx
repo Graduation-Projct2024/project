@@ -24,10 +24,8 @@ export default function EditCourse({courseId , startDate , Deadline , Instructor
   const [selectedIns, setSelectedIns] = useState(InstructorId || '');
   const fetchIns = async ()=>{
     const {data} = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}Instructor/GetAllInstructorsList`,{headers :{Authorization:`Bearer ${userToken}`}});
-    // console.log(data)
      setInstructors(data.result);
   }
-  // console.log(instructors)
 
   useEffect(() => {
     fetchIns();
@@ -55,10 +53,8 @@ export default function EditCourse({courseId , startDate , Deadline , Instructor
         if(data.errorMassages != null){
           setErrmsg(data.errorMassages)
           
-          // console.log(data.errorMassages)
         }
         else{
-          console.log(data);
         formik.resetForm();
           setOpenUpdate(false);
           Swal.fire({

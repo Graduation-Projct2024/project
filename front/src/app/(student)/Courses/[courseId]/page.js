@@ -32,6 +32,7 @@ export default function page() {
   const {userToken, setUserToken, userData}=useContext(UserContext);
   const searchParams = useSearchParams();
   let isEnrolled = searchParams.get('isEnrolled')
+  let isAvailable = searchParams.get('isAvailable')
   const [open, setOpen] = React.useState(false);
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -49,7 +50,6 @@ try{
     const data = await axios.get(
       `${process.env.NEXT_PUBLIC_EDUCODING_API}CourseContraller/GetCourseById?id=${courseId}`
     );
-  
     setCourse(data.data.result);
   }catch(error){
     console.log(error);
@@ -71,7 +71,6 @@ try{
     );
     // router.push(`/MyCourses/${courseId}`);
     setOpen(true);
-    console.log(data);
   }catch(error){
     console.log(error);
   }};
@@ -81,7 +80,7 @@ try{
       setStudentId(userData.userId);
     }
     getCourses();
-  }, [userData, course, isEnrolled]);
+  }, [userData, course, isEnrolled,isAvailable]);
   if (isLoading) {
     return (
       <Box sx={{ display: "flex", justifyContent: "center" }}>
@@ -128,7 +127,7 @@ try{
             <Typography variant="h6">Deadline :{course.deadline}</Typography>
             <Typography variant="h6">Total hours :{course.totalHours}</Typography>
             <Typography variant="h6">Instructor :{course.instructorName}</Typography>
-            {isEnrolled=='true'  == "false"?(<Button disabled variant="contained" className="addButton" sx={{mt:2}}>Enroll Now!</Button>):(<Button onClick={enrollCourse} variant="contained" sx={{mt:2}}>Enroll Now!</Button>)}
+            {isEnrolled=='true' || isAvailable == 'false'?(<Button disabled variant="contained" className="addButton" sx={{mt:2}}>Enroll Now!</Button>):(<Button onClick={enrollCourse} variant="contained" sx={{mt:2}}>Enroll Now!</Button>)}
 
           </Box>
         </Grid>

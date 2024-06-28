@@ -15,12 +15,10 @@ import Layout from '../instructorLayout/Layout.jsx'
 import { UserContext } from '../../../context/user/User.jsx';
 export default function page() {
   const [courses, setCourses] = useState([]);
-  // const [loading , setLoading]=useState(true);
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
   const {userToken, setUserToken, userData}=useContext(UserContext);
-  console.log(userData);
 
   const getCourses = async (pageNum = pageNumber, pageSizeNum = pageSize) => {
     if(userData){
@@ -29,7 +27,6 @@ export default function page() {
     );
     setCourses(data.data.result.items);
     setTotalPages(data.data.result.totalPages);
-    // setLoading(false);
     }
     
   };
@@ -48,13 +45,7 @@ export default function page() {
         setPageNumber(value);
       };
 
-  // if (loading) {
-  //   return (
-  //     <Box sx={{ display: "flex", justifyContent: "center" }}>
-  //       <CircularProgress color="primary" />
-  //     </Box>
-  //   );
-  // }
+
   
   const [searchTerm, setSearchTerm] = useState('');
   const handleSearch = (event) => {
@@ -87,7 +78,7 @@ const filteredCourses = Array.isArray(courses) ? courses.filter((course) => {
     p={2}
     sx={{ border: '1px solid grey', borderRadius: 3, boxShadow: 3 }}
   >
-    {console.log(userData)}
+
     {userData &&<Typography variant='h4' sx={{ mt: 6, ml: 3 }} color={deepPurple[50]}>Welcome {userData.userName},</Typography>}
     <Typography variant='h6' sx={{ ml: 3 }} color={deepPurple[50]}>Have a nice day!</Typography>
   </Box>
@@ -146,7 +137,7 @@ const filteredCourses = Array.isArray(courses) ? courses.filter((course) => {
     
         {filteredCourses?.length ? (
           filteredCourses.map((course) => (
-            <Link href={`courses/${course.id}`}>
+            <Link href={`coursesI/${course.id}`}>
 <Card sx={{ maxWidth: 200 , borderRadius: 3, height:270 , display:'inline-block', m:2}}  key={course.id}>
       <CardActionArea>
        

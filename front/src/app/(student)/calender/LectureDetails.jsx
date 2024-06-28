@@ -45,7 +45,6 @@ export default function LectureDetails({ open, onClose, lectureID}) {
 
         );
 
-console.log(response);
 setLecture(response.data.result);
         
       }
@@ -63,7 +62,6 @@ setLecture(response.data.result);
           {headers :{Authorization:`Bearer ${userToken}`}}
 
         );
-        console.log(response);
 
         if (response.data.isSuccess) {
             setAlertOpen(true);

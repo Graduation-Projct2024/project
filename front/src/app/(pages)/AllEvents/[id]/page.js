@@ -20,7 +20,6 @@ export default function page() {
           const { data } = await axios.get(
             `${process.env.NEXT_PUBLIC_EDUCODING_API}EventContraller/GetEventById?eventId=${id}`
           );
-          console.log(data);
           setEvent(data.result);
   
         } catch (error) {

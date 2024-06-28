@@ -97,7 +97,6 @@ const handleClose = () => {
   setIsChecked(data.result.isHidden);
 
   setLoading(false);
-  console.log(data)
 
   }catch(error){
     console.log(error);
@@ -113,7 +112,6 @@ const handleClose = () => {
       {headers :{Authorization:`Bearer ${userToken}`}}
     
       )
-    console.log(data);
   }catch(error){
     console.log(error);
   }

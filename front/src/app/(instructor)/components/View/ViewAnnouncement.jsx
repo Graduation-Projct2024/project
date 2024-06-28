@@ -97,7 +97,6 @@ const handleClose = () => {
   setMaterial(data.result);
   setIsChecked(data.result.isHidden);
   setLoading(false);
-  console.log(data)
 
   }
 catch(error){
@@ -114,7 +113,6 @@ catch(error){
       {headers :{Authorization:`Bearer ${userToken}`}}
     
       )
-    console.log(data);
   }catch(error){
     console.log(error);
   }
@@ -135,7 +133,6 @@ catch(error){
  const handleEdit =()=>{
   setIsEditing(!isEditing);
  }
- console.log(isChecked);
  useEffect(() => {
     getMaterial();
   

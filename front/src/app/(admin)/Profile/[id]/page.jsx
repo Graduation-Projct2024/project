@@ -81,19 +81,7 @@ setOpenChange(false);
   
   return (
     <Layout>
-      {/* {loading ? (
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
-          <CircularProgress />
-          <div className='loading bg-white position-fixed vh-100 w-100 d-flex justify-content-center align-items-center z-3'>
-      <span class="loader"></span>
-    </div>
-          {/* <CircularProgress /> */}
-          {/* <div className='loading bg-white position-fixed vh-100 w-100 d-flex justify-content-center align-items-center z-3'> */}
-      {/* <span className="loader"></span> */}
-    {/* </div> */}
-        {/* </Box> */}
-        
-      {/* ) : ( */}
+ 
 
         <>
       <div className="container">

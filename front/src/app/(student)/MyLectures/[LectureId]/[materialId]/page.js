@@ -14,7 +14,6 @@ export default function page() {
 
     const[type,setType]=useState();
     const[name,setName]=useState();
-console.log(useParams())
 const{materialId, LectureId}=useParams();
     const getMaterial=async()=>{
       if(userToken){
@@ -27,7 +26,6 @@ const{materialId, LectureId}=useParams();
         setType(data.result.type);
         setName(data.result.name);
 
-        console.log(data)
         }catch(error){
           console.log(error);
         }

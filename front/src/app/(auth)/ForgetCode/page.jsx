@@ -45,8 +45,7 @@ export default function page() {
 };
 
 const resendCode = async()=>{
-  const {data} = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}/UserAuth/reSendCode?email=${email}`);
-  console.log(data);
+  const {data} = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}UserAuth/reSendCode?email=${email}`);
   
 }
 
@@ -59,7 +58,6 @@ const onSubmit = async (values) => {
               setErrmsg(data.errorMassages)
             }
             else{
-        console.log(data);
         formik.resetForm();
         router.push(`/ForgetPassword?email=${email}`)
       }} catch (error) {
@@ -79,7 +77,6 @@ const onSubmit = async (values) => {
     const email = params.get('email');
     setEmail(email);
   }, []);
-  console.log(email)
   return (
     <Layout>
       {/* <div>
@@ -134,10 +131,10 @@ const onSubmit = async (values) => {
                           </p>
                         ) : null}
                       </div>
-                      {/* <div className="resendCode row justify-content-center">
+                      <div className="resendCode row justify-content-center">
                           <p className='text-center'>Dont receive any code?</p>
                           <button onClick={resendCode} className='border-0 bg-transparent'>re-send code</button>
-                      </div> */}
+                      </div>
                       
                       <div className="text-center mt-3">
                         <Button

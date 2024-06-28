@@ -47,7 +47,6 @@ const { data } = await axios.post(
   }}
 
 );
-  console.log("test");
  formik.resetForm();
  onClose(); 
  handleCloseAdd();

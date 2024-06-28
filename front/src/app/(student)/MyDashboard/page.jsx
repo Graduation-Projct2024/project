@@ -25,10 +25,8 @@ export default function page() {
           `${process.env.NEXT_PUBLIC_EDUCODING_API}CourseContraller/GetAllEnrolledCoursesForAStudent?studentid=${userData.userId}&pageNumber=${pageNum}&pageSize=${pageSize}`,
           {headers :{Authorization:`Bearer ${userToken}`}}
         );
-        console.log(data.result);
          setCourses(data.result.items);
          setTotalPages(data.result.totalPages);
-        console.log(courses);
 
       }catch(error){
         console.log(error);

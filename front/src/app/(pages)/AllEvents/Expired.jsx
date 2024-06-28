@@ -18,7 +18,6 @@ export default function Expired() {
           const { data } = await axios.get(
             `${process.env.NEXT_PUBLIC_EDUCODING_API}EventContraller/GetAllAccreditEvents?dateStatus=expired&pageNumber=${pageNum}&pageSize=${pageSizeNum}`
           );
-          console.log(data);
           setEvents(data.result.items);
           setTotalPages(data.result.totalPages);
   

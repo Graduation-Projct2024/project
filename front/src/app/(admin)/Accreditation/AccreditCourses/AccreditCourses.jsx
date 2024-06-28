@@ -16,48 +16,25 @@ export default function AccreditCourses() {
   const {userToken, setUserToken, userData}=useContext(UserContext);
 
   const [accreditCourses, setAccreditCourses] = useState([]);
-  // let[loader,setLoader] = useState(false);
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
-  // const [loading, setLoading] = useState(true);
 
 
   const fetchCoursesForAccredit = async (pageNum = pageNumber, pageSizeNum = pageSize)=> {
     if(userData){
-      // setLoading(true)
     try{
     const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}CourseContraller/GetAllCoursesForAccredit?pageNumber=${pageNum}&pageSize=${pageSize}`);
-    // console.log(data);
     setAccreditCourses(data.result.items);
     setTotalPages(data.result.totalPages);
   }
     catch(error){
       console.log(error);
     }
-    // finally{
-    //   setLoading(false)
-    // }
+
   }
   };
 
-  // const accreditCourse = async (courseId , Status) => {
-  //   //setLoader(true);
-  //   console.log(courseId);
-  //   if(userData){
-  //   try{
-  //   const { data } = await axios.patch(`http://localhost:5134/api/CourseContraller/accreditCourse?courseId=${courseId}&Status=${Status}`,
-  // );
-  // if(data.isSuccess){
-  //   console.log(data);
-  //   //setLoader(false);
-  //   fetchCoursesForAccredit();
-  // }
-  // }
-  //   catch(error){
-  //     console.log(error);
-  //   }}
-  // };
 
   const accreditCourse = async (courseId , Status) => {
     if (userData) {
@@ -79,7 +56,6 @@ export default function AccreditCourses() {
                 },
               });
   
-            console.log(data);
             if (Status == "accredit") {
               Swal.fire({
                 title: `Course Accredit Successully`,
@@ -148,15 +124,7 @@ const getStatusStyle = (status) => {
 
   return (
     <>
-    {/* {loading ? (
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
-          <CircularProgress />
-          <div className='loading bg-white position-fixed vh-100 w-100 d-flex justify-content-center align-items-center z-3'>
-      <span class="loader"></span>
-    </div>
-        </Box>
-        
-      ) : ( */}
+
 
         <>
       <div className="filter py-2 text-end">
@@ -211,9 +179,7 @@ const getStatusStyle = (status) => {
         <tbody>
           {filteredAccreditCourses.length ? (
             filteredAccreditCourses.map((course,index) => (
-              <tr key={course.id} /*className={course.status === 'accredit' ? 'accredit-row' : course.status === 'reject' ? 'reject-row' : ''}*/>
-                {/* {console.log(course.id)} */}
-                {/* {console.log(course.imageUrl)} */}
+              <tr key={course.id} >
                 <th scope="row">{++index}</th>
                 <td>{course.name}</td>
                 <td>{course.price}</td>
@@ -232,18 +198,11 @@ const getStatusStyle = (status) => {
                   </Link>
                 </td>
                 <td className="d-flex gap-1">
-                  {/* <Link href={"/Profile"}>
-                    <button type="button" className="border-0 bg-white ">
-                      <FontAwesomeIcon icon={faEye} className="edit-pen" />
-                    </button>
-                  </Link> */}
+                  
                   <button type="button" className="btn accredit" onClick={()=>accreditCourse(course.id,'accredit')} disabled = {course.status == 'accredit' || course.status == 'reject' || course.status == 'finish'||course.status == 'start'} >
-                  {/* <FontAwesomeIcon icon={faSquareCheck} className='fs-2'/> */}
                   Accredit
                   </button>  
-                {/* <Link href='/dashboard' className='text-decoration-none acc'>Accredit </Link> */}
                 <button type="button" className="btn accredit" onClick={()=>accreditCourse(course.id,"reject")} disabled = {course.status == 'accredit' || course.status == 'reject' || course.status == 'finish'||course.status == 'start'} >
-                {/* <FontAwesomeIcon icon={faSquareXmark} className='fs-2'/> */}
                 Reject
                 </button>
 
@@ -271,7 +230,7 @@ const getStatusStyle = (status) => {
       />
     </Stack>
     </>
-    {/* )} */}
+    
     </>
   );
 }

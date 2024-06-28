@@ -75,7 +75,7 @@ export default function Review({courseId}) {
             'Authorization': `Bearer ${userToken}`
           }
         }
-      );
+      ); 
       setAlertOpen(true);
       setOpen(false);
     } catch (error) {
@@ -143,66 +143,9 @@ export default function Review({courseId}) {
           Your comment posted successfully!
         </Alert>
       </Snackbar>
-     <Dialog
-        fullScreen={fullScreen}
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="responsive-dialog-title"
-        sx={{
-          "& .MuiDialog-container": {
-            "& .MuiPaper-root": {
-              width: "100%",
-              maxWidth: "500px!important",  
-              minHeight: "250px!important",  
-
-                        },
-          },}}
-      >
-         <DialogTitle id="responsive-dialog-title" sx={{m:'auto'}}>
-          {"Add a Review"}
-        </DialogTitle>
-       <Stack  direction="column"
-  justifyContent="center"
-  alignItems="center"
-  spacing={2}
-  mt='5px'>
-        <Rating
-        sx={{display: 'flex',
-          justifyContent: 'center',}}
-        name="simple-controlled"
-        value={value}
-        onChange={(event, newValue) => {
-          setValue(newValue);
-        }}
-      />
-      <DialogContent sx={{m:'auto'}} className='post-review'>
-          
-          <DialogContentText  >
-            <form onSubmit={formik.handleSubmit} encType="multipart/form-data">
-           {renderInputs}
-       <Button  type="submit" autoFocus variant="contained" sx={{background:"#4c5372 !important", mt:3, ml:7}}>
-            Post
-          </Button>
-            </form>
-          
-          </DialogContentText>
-        </DialogContent>
-
-       </Stack> 
-        
-        
-        <DialogActions>
-          <Button autoFocus variant="outlined" color="success" onClick={handleClose} >
-            Cancle
-          </Button>
-         
-        </DialogActions>
-      </Dialog>
-    <Box sx={{display:'flex', justifyContent: 'flex-end'}}>
-    <IconButton aria-label="add" sx={{alignself:'end'}} onClick={handleClickOpen}>
-  <AddCommentIcon sx={{color:"#4c5372" , fontSize:30, mr:3}} />
-</IconButton>
-    </Box>
+      
+     
+    
     <List sx={{ width: '100%', bgcolor: 'background.paper' }} className='Reviews'>
   {reviews?.length ? (
     reviews.map((review, index) => (

@@ -43,10 +43,8 @@ export default function EditProfile({ id, FName, LName, gender, phoneNumber, Dat
       if(data.errorMassages != null){
         setErrmsg(data.errorMassages)
         
-        // console.log(data.errorMassages)
       }
       else{
-        console.log('Profile Updated');
         formik.resetForm();
         setOpenUpdate(false)
         Swal.fire({

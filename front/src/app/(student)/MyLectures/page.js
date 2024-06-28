@@ -51,7 +51,6 @@ export default function page() {
           `${process.env.NEXT_PUBLIC_EDUCODING_API}Lectures/GetAllConsultations?studentId=${userId}&pageNumber=${pageNum}&pageSize=${pageSizeNum}`,
           { headers: { Authorization: `Bearer ${userToken}` } }
         );
-        console.log(response.data);
         setLectures(response.data.result.items);
         setTotalPages(response.data.result.totalPages);
       } catch (error) {

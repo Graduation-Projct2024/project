@@ -36,11 +36,9 @@ export default function EditLink({materialID, name, linkURL, type, Id }) {
 
   const onSubmit = async (tasks) => {
     try {
-console.log("test")
 const formData = new FormData();
 formData.append("name", tasks.name);
 formData.append("linkUrl", tasks.linkUrl);
-console.log(tasks.pdf)
 formData.append(type , Id);
 formData.append("instructorId", userData.userId);
 
@@ -53,7 +51,6 @@ const { data } = await axios.put(
     'Content-Type': 'multipart/form-data','Content-Type': 'application/json',
 }}
 );
-  console.log(data);
  formik.resetForm();
  setAlertOpen(true);
  router.back();
@@ -81,7 +78,6 @@ const { data } = await axios.put(
     onSubmit,
     validationSchema: validationSchema,
   });
-  console.log(name);
   const inputs = [
     {
         id: "name",

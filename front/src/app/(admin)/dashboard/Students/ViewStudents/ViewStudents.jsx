@@ -27,9 +27,7 @@ export default function ViewStudents() {
           }
         );
   
-        // Check the response in the console
-        console.log('Response Headers:', response.headers);
-        console.log('Response Data:', response.data);
+
         const url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }));
         const link = document.createElement('a');
         link.href = url;
@@ -37,7 +35,6 @@ export default function ViewStudents() {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        console.log(response)
       }catch(error){
         console.log(error)
       }
@@ -55,10 +52,7 @@ export default function ViewStudents() {
             responseType: 'blob'
           }
         );
-  
-        // Check the response in the console
-        console.log('Response Headers:', response.headers);
-        console.log('Response Data:', response.data);
+
         const url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }));
         const link = document.createElement('a');
         link.href = url;
@@ -66,7 +60,6 @@ export default function ViewStudents() {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        console.log(response)
       }catch(error){
         console.log(error)
       }
@@ -78,7 +71,6 @@ export default function ViewStudents() {
     if(userData){
     try{
     const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}StudentsContraller/GetAllStudents?pageNumber=${pageNum}&pageSize=${pageSize}`,{ headers: { Authorization: `Bearer ${userToken}` } });
-    //console.log(data);
     setStudents(data.result.items);
     setTotalPages(data.result.totalPages);
   }
@@ -152,14 +144,7 @@ return matchesSearchTerm ;
       </FormControl>
                 <div className="icons d-flex gap-2 pt-3">
                     
-                    {/* <div className="dropdown">
-  <button className="dropdown-toggle border-0 bg-white edit-pen" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-    <FontAwesomeIcon icon={faFilter} />
-  </button>
-  <ul className="dropdown-menu">
- 
-  </ul>
-</div> */}
+                  
 
                     
                 </div>
@@ -189,9 +174,6 @@ return matchesSearchTerm ;
       <th scope="col">#</th>
       <th scope="col">Name</th>
       <th scope="col">Email</th>
-      {/* <th scope="col">Gender</th>
-      <th scope="col">Phone number</th>
-      <th scope="col">Address</th> */}
       <th scope="col">Option</th>
     </tr>
   </thead>
@@ -202,9 +184,6 @@ return matchesSearchTerm ;
       <th scope="row">{++index}</th>
       <td>{student.userName}</td>
       <td>{student.email}</td>
-      {/* <td>{student.gender}</td>
-      <td>{student.phoneNumber}</td>
-      <td>{student.address}</td> */}
       <td className='d-flex gap-1'>
 
       <Link href={`/Profile/${student.studentId}`}>

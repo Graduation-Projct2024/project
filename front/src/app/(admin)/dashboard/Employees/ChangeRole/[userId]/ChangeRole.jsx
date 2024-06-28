@@ -20,10 +20,8 @@ export default function ChangeRole({userId ,   role,    setOpenChange}) {
         if(data.errorMassages != null){
           setErrmsg(data.errorMassages)
           
-          // console.log(data.errorMassages)
         }
         else{
-          console.log('Profile Updated');
           formik.resetForm();
           setOpenChange(false);
           Swal.fire({
@@ -40,7 +38,6 @@ export default function ChangeRole({userId ,   role,    setOpenChange}) {
       initialValues: {
         role: role || '',
       },
-      // validationSchema: editProfile,
       onSubmit,
     });
   

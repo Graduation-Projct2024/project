@@ -31,7 +31,6 @@ const onSubmit = async (users) => {
         setErrmsg(data.errorMassages)
       }
       else{
-      console.log(data);
       formik.resetForm();
 
     router.push(`/ForgetCode?email=${users.email}`,undefined, { shallow: true })
@@ -83,13 +82,7 @@ const renderInputs = inputs.map((input,index)=>
         <div className="container">
           <div className="row align-items-center addEmailForget">
             <div className="col-lg-6 ">
-              {/* <div className="addEmailImg">
-                <img
-                  src="/addEmail2.png"
-                  alt="add email "
-                  className=" pb-5"
-                />
-              </div> */}
+              
               <iframe classname="animationForget" src="https://lottie.host/embed/f6b5b6ea-e09e-458e-b071-e4a75fcb4dc4/MtyUSDKS59.json" />
 
             </div>

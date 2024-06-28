@@ -15,10 +15,8 @@ export default function CreateCourse({setOpen}) {
   const [selectedIns, setSelectedIns] = useState('');
   const fetchIns = async ()=>{
     const {data} = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}Instructor/GetAllInstructorsList`,{headers :{Authorization:`Bearer ${userToken}`}});
-    // console.log(data)
      setInstructors(data.result);
   }
-  // console.log(instructors)
 
   useEffect(() => {
     fetchIns();
@@ -68,11 +66,8 @@ const onSubmit = async (values) => {
     if(data.errorMassages != null){
       setErrmsg(data.errorMassages)
       
-      // console.log(data.errorMassages)
     }
     else{
-    console.log(data);
-    console.log('course created');
     formik.resetForm();
     setOpen(false);
     Swal.fire({

@@ -24,7 +24,6 @@ export default function page({params}) {
           if(userData){
           try{
           const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}CourseContraller/GetAllAccreditCourses?pageNumber=1&pageSize=10000`,);
-          // console.log(data);
           setCourses(data.result.items);
         }
           catch(error){
@@ -37,7 +36,6 @@ export default function page({params}) {
           setCourseName(`${course.name}`);
       }
   }, [students, params.Courseid]);
-  console.log(courseName) 
   
   
   const fetchStudents =  async (pageNum = pageNumber, pageSizeNum = pageSize) => {
@@ -45,7 +43,6 @@ export default function page({params}) {
       try{
       const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}StudentsContraller/GetCourseParticipants?Courseid=${params.Courseid}&pageNumber=${pageNum}&pageSize=${pageSize}`,
         { headers: { Authorization: `Bearer ${userToken}` } });
-      console.log(data);
       setStudents(data.result.items);
       setTotalPages(data.result.totalPages);
     }
@@ -54,7 +51,6 @@ export default function page({params}) {
       }
     }
     };
-    console.log(students)
   useEffect(() => {
       fetchStudents();
       fetchCourses();
@@ -144,9 +140,6 @@ export default function page({params}) {
       <th scope="col">#</th>
       <th scope="col">Name</th>
       <th scope="col">Email</th>
-      {/* <th scope="col">Gender</th>
-      <th scope="col">Phone number</th>
-      <th scope="col">Address</th> */}
       <th scope="col">Option</th>
     </tr>
   </thead>
@@ -157,9 +150,6 @@ export default function page({params}) {
       <th scope="row">{++index}</th>
       <td>{student.userName}</td>
       <td>{student.email}</td>
-      {/* <td>{student.gender}</td>
-      <td>{student.phoneNumber}</td>
-      <td>{student.address}</td> */}
       <td className='d-flex gap-1'>
 
       <Link href={`/Profile/${student.studentId}`}>

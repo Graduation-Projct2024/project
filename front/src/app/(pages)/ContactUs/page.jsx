@@ -45,7 +45,6 @@ export default function page() {
       );
       setOpen(true);
       resetForm(); // Reset the form after successful submission
-      console.log(data);
     } catch (error) {
       console.log(error);
     }

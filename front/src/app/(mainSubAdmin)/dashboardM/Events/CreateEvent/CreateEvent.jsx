@@ -1,3 +1,4 @@
+'use client'
 import Input from '@/component/input/Input';
 import TextArea from '@/component/input/TextArea';
 import { createEvent } from '@/component/validation/validation';
@@ -5,7 +6,7 @@ import { UserContext } from '@/context/user/User';
 import { Button } from '@mui/material';
 import axios from 'axios';
 import { useFormik } from 'formik';
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import Swal from 'sweetalert2'
 
 
@@ -42,11 +43,8 @@ const onSubmit = async (values) => {
     if(data.errorMassages != null){
       setErrmsg(data.errorMassages)
       
-      // console.log(data.errorMassages)
     }
     else{
-    console.log(data);
-    console.log('tttt');
     formik.resetForm();
     setOpen(false);
     Swal.fire({
@@ -55,7 +53,6 @@ const onSubmit = async (values) => {
       icon: "success"
     });
 
-    console.log('jhbgyvftrgybuhnjimkjhb');
   }} catch (error) {
     // Handle the error here
     console.error('Error submitting form:', error);

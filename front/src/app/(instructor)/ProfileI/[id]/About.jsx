@@ -89,7 +89,6 @@ export default function About() {
 
    
     ];
-    console.log(inputs[0].value);
     const renderInputs = inputs.map((input, index) => (
       <TextArea
         type={input.type}

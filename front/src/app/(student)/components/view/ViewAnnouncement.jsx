@@ -57,7 +57,6 @@ export default function ViewAnnouncement({ materialID }) {
 
   setMaterial(data.result);
   setLoading(false);
-  console.log(data)
 
   }
 catch(error){

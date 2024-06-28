@@ -76,7 +76,7 @@ export default function Navbar({role}) {
           >
             {/* LOGO */}
             {/* <Link href='/'> */}
-            <img src="./logoEdu.png" alt="" className='img-fluid w-50' />
+            <img src="/logoEdu.png" alt="" className='img-fluid w-50' />
             {/* </Link> */}
           </Typography>
           
@@ -200,12 +200,11 @@ export default function Navbar({role}) {
             className='justify-content-center'
           >
             {/* LOGO */}
-            <img src="./logoEdu.png" alt="" className='img-fluid w-50' />
+            <img src="/logoEdu.png" alt="" className='img-fluid w-50' />
           </Typography>
           
 
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {console.log(role)}
             {userToken  && ((role == "admin" &&
               <Button
               key='1'

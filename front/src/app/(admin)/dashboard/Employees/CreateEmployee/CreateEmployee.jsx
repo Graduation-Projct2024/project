@@ -52,13 +52,10 @@ const onSubmit = async (users) => {
       if(data.errorMassages != null){
         setErrmsg(data.errorMassages)
         
-        // console.log(data.errorMassages)
       }
       else{
       
-      //console.log(data);
       setPageLoading(true);
-      //console.log('tttt');
       formik.resetForm();
       setOpen(false);
       // router.push('/dashboard');
@@ -143,26 +140,10 @@ const inputs =[
   title:'User address',
   value:formik.values.address,
 },
-// {
-//   type : 'text',
-//   id:'role',
-//   name:'role',
-//   title:'User role',
-//   value:formik.values.role,
-// },{
-//   type : 'text',
-//   id:'gender',
-//   name:'gender',
-//   title:'User gender',
-//   value:formik.values.gender,
-// },
+
 ]
 
-// const handleFormSubmit = (e) => {
-//   e.preventDefault();
-//   onSubmit({ ...formik.values});
-//   formik.resetForm();
-// };
+
 
 
 const renderInputs = inputs.map((input,index)=>
@@ -224,15 +205,7 @@ const renderInputs = inputs.map((input,index)=>
           <option value="instructor">Instructor</option>
         </select>
       </div> 
-      {/* <button
-        type="submit"
-        className="btn btn-primary createButton "
-        disabled={formik.isSubmitting || Object.keys(formik.errors).length > 0 || Object.keys(formik.touched).length === 0||!selectedGender || 
-        !selectedRole }
-      > */}
-        {/* CREATE ACCOUNT */}
-        {/* {loading ? 'Creating...' : 'CREATE ACCOUNT'}
-      </button> */}
+     
       <div className='text-center mt-3'>
       <Button sx={{px:2}} variant="contained"
               className="m-2 btn primaryBg"

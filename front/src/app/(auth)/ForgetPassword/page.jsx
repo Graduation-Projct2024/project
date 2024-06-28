@@ -22,7 +22,6 @@ export default function page() {
         const email = params.get('email');
         setEmail(email);
       }, []);
-      console.log(email)
 
 
 const onSubmit = async (values) => {
@@ -37,7 +36,6 @@ const onSubmit = async (values) => {
         setErrmsg(data.errorMassages)
       }
       else{
-      console.log(data);
       formik.resetForm();
 
     router.push(`/login`,undefined, { shallow: true })

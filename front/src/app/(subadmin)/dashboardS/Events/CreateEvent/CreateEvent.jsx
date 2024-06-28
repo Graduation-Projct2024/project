@@ -43,11 +43,8 @@ const onSubmit = async (values) => {
     if(data.errorMassages != null){
       setErrmsg(data.errorMassages)
       
-      // console.log(data.errorMassages)
     }
     else{
-    console.log(data);
-    console.log('tttt');
     formik.resetForm();
     setOpen(false);
     Swal.fire({
@@ -56,7 +53,6 @@ const onSubmit = async (values) => {
       icon: "success"
     });
 
-    console.log('jhbgyvftrgybuhnjimkjhb');
   } }catch (error) {
     // Handle the error here
     console.error('Error submitting form:', error);

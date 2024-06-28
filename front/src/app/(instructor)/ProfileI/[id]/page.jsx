@@ -38,7 +38,6 @@ export default function page({params}) {
     setValue(newValue);
   };
   let [user,setUser] = useState({})
-  // const [loading, setLoading] = useState(true);
   const [openUpdate, setOpenUpdate] = React.useState(false);
   const [openChange, setOpenChange] = React.useState(false);
   const theme = useTheme();
@@ -49,7 +48,6 @@ export default function page({params}) {
 
 const handleClickOpenUpdate = (id) => {
     setUserIdP(id);
-    console.log(id)
     setOpenUpdate(true);
 };
 const handleCloseUpdate = () => {
@@ -59,26 +57,19 @@ const handleCloseUpdate = () => {
 
 const handleClickOpenChange = (id) => {
   setUserIdP(id);
-  console.log(id)
   setOpenChange(true);
 };
 const handleCloseChange = () => {
 setOpenChange(false);
 };
-  // const {id} = useParams();
-  // console.log(useParams());
-// console.log(params)
+
   const getUser =async ()=>{
     if(userData){
-      // setLoading(true);
     try {
-      //setLoading(false)
       const {data} = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}UserAuth/GetProfileInfo?id=${params.id}`,
       {headers :{Authorization:`Bearer ${userToken}`}}
       );
-      console.log(data);
       setUser(data.result);
-      //setLoading(false)
       }
       catch (error) {
       console.log(error)
@@ -89,26 +80,13 @@ setOpenChange(false);
     }
       
   }
-  console.log(user)
   useEffect(()=>{
       getUser();
   },[user,userData])
   
   return (
     <Layout>
-      {/* {loading ? (
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
-          <CircularProgress />
-          <div className='loading bg-white position-fixed vh-100 w-100 d-flex justify-content-center align-items-center z-3'>
-      <span class="loader"></span>
-    </div>
-          {/* <CircularProgress /> */}
-          {/* <div className='loading bg-white position-fixed vh-100 w-100 d-flex justify-content-center align-items-center z-3'> */}
-      {/* <span className="loader"></span> */}
-    {/* </div> */}
-        {/* </Box> */}
-        
-      {/* ) : ( */}
+
 
         <>
       <div className="container">
@@ -248,22 +226,6 @@ setOpenChange(false);
                 
               </div>
 
-              {/* <div className="col-xl-6 col-lg-12">
-              
-            </div> */}
-              {/* <div className="modal fade" id={`exampleModal2-${params.id}`} tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div className="modal-dialog modal-dialog-centered modal-lg">
-                      <div className="modal-content row justify-content-center">
-                        <div className="modal-body text-center ">
-                          <h2>Edit Profile Info</h2>
-                          <div className="row">
-                            {userData &&
-                            <EditProfile id={params.id}  FName = {userData.userName} LName= {userData.lName}  gender = {userData.gender} phoneNumber = {userData.phoneNumber} DateOfBirth = {userData.dateOfBirth} address= {userData.address} image = {userData.imageUrl}/>
-                           }</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div> */}
 
               <div className="d-flex ps-xl-4 pt-3 gap-2 role justify-content-xl-start fs-5 fw-bold justify-content-lg-center justify-content-md-center justify-content-sm-start ">
                 <FontAwesomeIcon icon={faUser} className="pt-1 " />
@@ -302,20 +264,7 @@ setOpenChange(false);
                     </div>
                   </div>
 
-                  {/* <ul className="d-flex gap-4 justify-content-center">
-                    <li className=" social">
-                      <FontAwesomeIcon icon={faLinkedinIn} />
-                    </li>
-                    <li className=" social">
-                      <FontAwesomeIcon icon={faGithub} />
-                    </li>
-                    <li className=" social">
-                      <FontAwesomeIcon icon={faFacebookF} />
-                    </li>
-                    <li className=" social">
-                      <FontAwesomeIcon icon={faEnvelope} />
-                    </li>
-                  </ul> */}
+                
                 </div>
               </div>
             </div>
@@ -329,20 +278,19 @@ setOpenChange(false);
             <Tab icon={< PersonIcon/>} label="About" value="0"/>
       <Tab icon={<SchoolIcon />} label="Education" value="1" />
       <Tab icon={<AccessTimeIcon />} label="Availability" value="2"/>
-      <Tab icon={<ReviewsIcon />} label="ReviewS" value="3"/>
+      {/* <Tab icon={<ReviewsIcon />} label="ReviewS" value="3"/> */}
 
           </TabList>
         </Box>
         <TabPanel value="0" active><About id={params.id}/></TabPanel>
         <TabPanel value="1"><Education id={params.id}/></TabPanel>
         <TabPanel value="2"><ViewWeeklyHours id={params.id}/> <WeeklyHours/></TabPanel>
-        <TabPanel value="3"><Feedback id={params.id}/></TabPanel>
+        {/* <TabPanel value="3"><Feedback id={params.id}/></TabPanel> */}
 
       </TabContext>
     </Box>
       </div>
       </>
-      {/* )} */}
     </Layout>
   );
 }

@@ -30,10 +30,8 @@ export default function EditCourse({id,name, price,  category , instructorId , s
   const [selectedIns, setSelectedIns] = useState(instructorId || '');
   const fetchIns = async ()=>{
     const {data} = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}Instructor/GetAllInstructorsList`,{headers :{Authorization:`Bearer ${userToken}`}});
-    // console.log(data)
      setInstructors(data.result);
   }
-  // console.log(instructors)
 
   useEffect(() => {
     fetchIns();
@@ -66,10 +64,8 @@ export default function EditCourse({id,name, price,  category , instructorId , s
         if(data.errorMassages != null){
           setErrmsg(data.errorMassages)
           
-          // console.log(data.errorMassages)
         }
         else{
-          console.log('Profile Updated');
           formik.resetForm();
           setOpenUpdate(false);
           Swal.fire({

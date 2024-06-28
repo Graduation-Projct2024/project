@@ -93,7 +93,6 @@ const [materialId, setMaterialId]=useState();
     setOpen(false);
   };
     const [materials, setMaterials] = useState([]);
-    console.log(useParams());
     const { courseId } = useParams();
 
     const getCourseMaterial = async () => {
@@ -105,9 +104,7 @@ const [materialId, setMaterialId]=useState();
 
           
         );
-        // console.log(data);
         setMaterials(data.result);
-        // console.log(materials);
       }catch(error){
         throw new Error('auth is required');
       }

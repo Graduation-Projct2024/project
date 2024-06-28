@@ -24,7 +24,6 @@ export default function page({params}) {
     try {
       //setLoading(false)
       const {data} = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}CourseContraller/GetAllEnrolledCoursesForAStudent?studentid=${params.studentid}&pageNumber=${pageNum}&pageSize=${pageSize}`,{ headers: { Authorization: `Bearer ${userToken}` } });
-        console.log(data.result);
       setStudentCourses(data.result.items);
       setTotalPages(data.result.totalPages);
       //setLoading(false)
@@ -42,7 +41,6 @@ export default function page({params}) {
         if(userData){
         try{
         const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}StudentsContraller/GetAllStudents?pageNumber=1&pageSize=100000`,{ headers: { Authorization: `Bearer ${userToken}` } });
-        // console.log(data);
         setStudents(data.result.items);
       }
         catch(error){
@@ -71,7 +69,6 @@ export default function page({params}) {
         setStudentName(`${student.userName}`);
     }
 }, [students, params.studentid]);
-console.log(studentName) 
 
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -144,7 +141,6 @@ return matchesSearchTerm ;
   {filteredSCourses.length ? (
     filteredSCourses.map((course,index) =>(
       <tr key={course.course.id}>
-        {/* {console.log(course.id)} */}
       <th scope="row">{++index}</th>
       <td>{course.course.name}</td>
       <td>{course.course.price}</td>
