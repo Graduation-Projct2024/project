@@ -1,5 +1,5 @@
 import React from 'react'
-import '../../../../(admin)/dashboard/loading.css'
+import '../../../(admin)/dashboard/loading.css'
 
 export default function Loading() {
   return (
