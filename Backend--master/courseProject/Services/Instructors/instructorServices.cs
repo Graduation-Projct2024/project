@@ -68,7 +68,7 @@ namespace courseProject.Services.Instructors
 
         public async Task<IReadOnlyList<EmployeeListDTO>> GetAllInstructorsList()
         {
-            var GetInstructors = await unitOfWork.instructorRepositpry.GetAllEmployeeAsync();
+            var GetInstructors = await unitOfWork.instructorRepositpry.getAllInstructors();
            
             var CustomCoursesMapper = mapper.Map<IReadOnlyList<User>, IReadOnlyList<EmployeeListDTO>>(GetInstructors);
             return CustomCoursesMapper;
