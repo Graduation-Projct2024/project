@@ -10,19 +10,21 @@ import axios from 'axios';
 import { UserContext } from '../../../../../context/user/User.jsx';
 import '../style.css'
 import dynamic from 'next/dynamic';
-// const ViewTask = dynamic(() => import('../../../components/View/ViewTask.jsx'), { ssr: false });
-// const ViewFile = dynamic(() => import('../../../components/View/ViewFile.jsx'), { ssr: false });
-// const ViewLink = dynamic(() => import('../../../components/View/ViewLink.jsx'), { ssr: false });
-// const ViewAnnouncement = dynamic(() => import('../../../components/View/ViewAnnouncement.jsx'), { ssr: false });
+import AuthError from '../../../../../component/Error/AuthError.jsx';
+import { useRouter } from 'next/navigation'
 
 export default function page() {
   const {userToken, setUserToken, userData}=useContext(UserContext);
+  const[error,setError]=useState();
+  if(!userToken){
+    return router.push('/login')
+  }
 
     const[type,setType]=useState();
     const[name,setName]=useState();
 const{materialId, courseId}=useParams();
     const getMaterial=async()=>{
-      if(userData){
+      if(userToken){
         try{
         const {data}= await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}MaterialControllar/GetMaterialById?id=${materialId}`,
         {headers :{Authorization:`Bearer ${userToken}`}}
@@ -34,7 +36,15 @@ const{materialId, courseId}=useParams();
 
         }catch(error){
           console.log(error);
+          setError(error.response.status);
         }
+    }
+    }
+    if (error) {
+      if (error=='403'||error=='404') {
+        return(<AuthError/>)
+    }else if(error=='401'){
+      return router.push('/login')
     }
     }
     useEffect(() => {
