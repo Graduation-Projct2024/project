@@ -37,7 +37,6 @@ namespace courseProject
                 app.UseSwaggerUI();
             }
 
-            app.UseExceptionHandler("/Home/Error");
             app.UseCors("AllowOrigin");
             app.ConfigureStaticFiles();
 
