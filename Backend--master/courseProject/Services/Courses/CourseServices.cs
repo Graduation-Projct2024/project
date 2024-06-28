@@ -170,7 +170,8 @@ namespace courseProject.Services.Courses
         public async Task<ErrorOr<IReadOnlyList<Course>>> GetALlUndefinedCoursesForSubAdmins(Guid subAdminId)
         {
             var SubAdminFound = await unitOfWork.UserRepository.ViewProfileAsync(subAdminId, "subadmin");
-            if (SubAdminFound == null) return ErrorSubAdmin.NotFound;
+            var MainSubAdminFound = await unitOfWork.UserRepository.ViewProfileAsync(subAdminId, "main-subadmin");
+            if (SubAdminFound == null && MainSubAdminFound == null) return ErrorSubAdmin.NotFound;
             var allUndefinedCourses = await unitOfWork.CourseRepository.GetAllUndefinedCoursesBySubAdminIdAsync(subAdminId);
             foreach (var course in allUndefinedCourses)
             {
