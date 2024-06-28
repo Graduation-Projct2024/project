@@ -11,7 +11,6 @@ export default function CustomCoursesRequest() {
 
     const {userToken, setUserToken, userData}=useContext(UserContext);
     const [customCourses, setCustomCourses] = useState([]);
-    // const [loading,setLoading] = useState(true);
     const [pageNumber, setPageNumber] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [totalPages, setTotalPages] = useState(0);
@@ -22,7 +21,6 @@ const theme = useTheme();
   const [courseId, setCourseId] = useState(null);
 const handleClickOpenDisplay = (id) => {
   setCourseId(id);
-    console.log(id)
     setOpenDisplay(true);
 };
 const handleCloseDisplay = () => {
@@ -34,8 +32,6 @@ const handleCloseDisplay = () => {
       if(userData){
       try{
       const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}CourseContraller/GetAllCustomCourses?pageNumber=${pageNum}&pageSize=${pageSize}`,{headers :{Authorization:`Bearer ${userToken}`}});
-      // setLoading(false)
-       console.log(data);
       setCustomCourses(data.result.items);
       setTotalPages(data.result.totalPages);
     }

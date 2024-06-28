@@ -45,7 +45,6 @@ export default function page() {
 
 const resendCode = async()=>{
   const {data} = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}UserAuth/reSendCode?email=${email}`);
-  console.log(data);
   
 }
 
@@ -58,7 +57,6 @@ const onSubmit = async (values) => {
               setErrmsg(data.errorMassages)
             }
             else{
-        console.log(data);
         formik.resetForm();
         Swal.fire({
           title: "You registered Successfully!",
@@ -84,16 +82,9 @@ const onSubmit = async (values) => {
     const email = params.get('email');
     setEmail(email);
   }, []);
-  console.log(email)
   return (
     <Layout>
-      {/* <div>
-    {email ? (
-      <p>A verification code has been sent to your email: {email}</p>
-    ) : (
-      <p>Loading...</p>
-    )}
-  </div> */}
+
 
       <div className="registerCode pb-5">
         <div className="container">

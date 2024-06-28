@@ -13,53 +13,11 @@ export default function ChangePassword({setOpenChange}) {
   const { userData,userToken,userId } = useContext(UserContext);
   let [errmsg,setErrmsg] = useState()
 
-  // console.log(userToken)
   const initialValues={
     password: '',
     newpassword: '',
   };
 
-  // const onSubmit = async (values) => {
-  //     if(userData){
-  //           try {
-  //             const formData = new FormData();
-  //             formData.append(`userId`, userId)
-  //             formData.append('password', values.password);
-  //             formData.append('newpassword', values.newpassword);
-  //             const { data } = await axios.patch(`https://localhost:7116/api/UserAuth/changePassword?UserId=${userId}`,
-  //             formData,
-  //               {
-  //                 headers: {
-  //                   'Content-Type': 'application/json',
-  //                   'Authorization': `Bearer ${userToken}`
-  //                 }
-  //               });
-  //               if(data.errorMassages != null){
-  //                 setErrmsg(data.errorMassages)
-                  
-  //                 // console.log(data.errorMassages)
-  //               }
-  //               else{
-  //                  console.log(data);
-  //             formik.resetForm();
-  //             setOpenChange(false);
-              
-  //               Swal.fire({
-  //                 title: `Password Changed successfully`,
-  //                 text: "Request Accepted",
-  //                 icon: "success"
-  //               });
-  //               }
-             
-              
-    
-  //           } catch (error) {
-  //             console.log(error);
-  //           }
-  //         }
-        
-      
-  //     };
       const onSubmit = async (values) => {
         if(userData){
           Swal.fire({
@@ -91,10 +49,8 @@ export default function ChangePassword({setOpenChange}) {
                 if(data.errorMassages != null){
                   setErrmsg(data.errorMassages)
                   
-                  // console.log(data.errorMassages)
                 }
                 else{
-                   console.log(data);
               formik.resetForm();
               setOpenChange(false);
               

@@ -75,7 +75,6 @@ export default function page() {
     setOpen(false);
   };
   const [materials, setMaterials] = useState([]);
-  // console.log(useParams());
   const { LectureId } = useParams();
   const getCourseMaterial = async () => {
     if (userToken && LectureId) {
@@ -84,9 +83,7 @@ export default function page() {
           `${process.env.NEXT_PUBLIC_EDUCODING_API}MaterialControllar/GetAllMaterial?ConsultationId=${LectureId}`,
           { headers: { Authorization: `Bearer ${userToken}` } }
         );
-        console.log(data);
         setMaterials(data.result);
-        console.log(materials);
       } catch (error) {
         console.log(error);
       }
@@ -97,10 +94,9 @@ export default function page() {
     if (userToken && LectureId) {
       try {
         const data = await axios.get(
-          `https://localhost:7116/api/Lectures/GetConsultationById?consultationId=${LectureId}`,
+          `${process.env.NEXT_PUBLIC_EDUCODING_API}Lectures/GetConsultationById?consultationId=${LectureId}`,
           { headers: { Authorization: `Bearer ${userToken}` } }
         );
-        console.log(data);
         setLecture(data.data.result);
       } catch (error) {
         console.log(error);
@@ -112,14 +108,6 @@ export default function page() {
     getLecture();
   }, [userToken, LectureId]);
   const [participants, setParticipants] = useState();
-  // const getParticipants = async () => {
-
-  //   const data = await axios.get(
-  //     `http://localhost:5134/api/StudentsContraller/GetCourseParticipants?Courseid=${consultationId}`
-  //   );
-  // console.log(data);
-  //   setParticipants(data.data.result);
-  // };
 
   return (
     <Layout title={lecture?.name}>

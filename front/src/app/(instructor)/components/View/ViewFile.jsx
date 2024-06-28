@@ -81,13 +81,14 @@ export default function ViewFile({ materialID ,type, Id }) {
 };
 
 const DownloadMaterial = async (url) => {
-  let cleanUrl = url.replace("https://localhost:7116/", "");
-  let fileName = url.replace("https://localhost:7116/Files\\", "");
+  const apiUrl = process.env.NEXT_PUBLIC_EDUCODING_API;
+  const baseApiUrl = apiUrl.substring(0, apiUrl.lastIndexOf("api/"));
+  let cleanUrl = url.replace(`${baseApiUrl}`, "");
+  let fileName = url.replace(`${baseApiUrl}Files\\`, "");
 
-  console.log(fileName);
 
   const { data } = await axios.get(
-    `https://localhost:7116/api/Files/DownloadFile?filename=${cleanUrl}`,
+    `${process.env.NEXT_PUBLIC_EDUCODING_API}Files/DownloadFile?filename=${cleanUrl}`,
     {
       responseType: 'blob',
       headers: {
@@ -123,14 +124,12 @@ const handleClose = () => {
   setIsChecked(data.result.isHidden);
 
   setLoading(false);
-  console.log(data)
 
   }catch(error){
     console.log(error);
   }
 }
  }
- console.log(material)
  const [isChecked, setIsChecked] = useState();
 
  const hideMaterial= async(event)=>{

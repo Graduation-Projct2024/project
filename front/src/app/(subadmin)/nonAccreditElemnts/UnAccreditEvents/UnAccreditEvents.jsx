@@ -16,14 +16,12 @@ export default function UnAccreditEvents() {
     const [pageNumber, setPageNumber] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [totalPages, setTotalPages] = useState(0);
-    console.log(nonAccreditEvents)
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
     const [eventId, setEventId] = useState(null);
   
   const handleClickOpenUpdate = (id) => {
     setEventId(id);
-      console.log(id)
       setOpenUpdate(true);
   };
   const handleCloseUpdate = () => {
@@ -40,7 +38,6 @@ export default function UnAccreditEvents() {
               },
           }
           );
-          console.log(data);
           setNonAccreditEvents(data.result.items);
           setTotalPages(data.result.totalPages);
         } catch (error) {
@@ -61,7 +58,6 @@ export default function UnAccreditEvents() {
     const handlePageChange = (event, value) => {
       setPageNumber(value);
     };
-  //  console.log(courses)
   
     const [searchTerm, setSearchTerm] = useState("");
   
@@ -146,7 +142,6 @@ export default function UnAccreditEvents() {
   {filteredEventsBeforeAccreditation.length ? (
     filteredEventsBeforeAccreditation.map((event,index) =>(
       <tr key={event.id}>
-        {/* {console.log(event.id)} */}
       <th scope="row">{++index}</th>
       <td>{event.name}</td>
       <td>{event.category}</td>

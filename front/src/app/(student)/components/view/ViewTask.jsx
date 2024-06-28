@@ -62,7 +62,6 @@ export default function ViewTask({ materialID }) {
 
   setMaterial(data.result);
   setLoading(false);
-  console.log(data)
 
   }
 catch(error){
@@ -76,10 +75,11 @@ catch(error){
 
 
 const DownloadMaterial = async (url) => {
-  let cleanUrl = url.replace("https://localhost:7116/", "");
-  let fileName = url.replace("https://localhost:7116/Files\\", "");
+  const apiUrl = process.env.NEXT_PUBLIC_EDUCODING_API;
+  const baseApiUrl = apiUrl.substring(0, apiUrl.lastIndexOf("api/"));
+  let cleanUrl = url.replace(`${baseApiUrl}`, "");
+  let fileName = url.replace(`${baseApiUrl}Files\\`, "");
 
-  console.log(fileName);
 
   const { data } = await axios.get(
     `${process.env.NEXT_PUBLIC_EDUCODING_API}Files/DownloadFile?filename=${cleanUrl}`,
@@ -105,7 +105,8 @@ const DownloadMaterial = async (url) => {
     backgroundColor: 'background.paper',
   };
 
-
+  const apiUrl = process.env.NEXT_PUBLIC_EDUCODING_API;
+  const baseApiUrl = apiUrl.substring(0, apiUrl.lastIndexOf("api/"));
 
 if (loading) {
   return (
@@ -219,7 +220,7 @@ if (loading) {
           {material.student_Task_Submissions.map((submision, index) => (
             <StyledTableRow key={submision.name}>
               <StyledTableCell component="th" scope="row">
-              <Link href={`https://localhost:7116/${submision.pdfUrl}`} target='_blank'>File {++index}</Link>
+              <Link href={`${submision.pdfUrl}`} target='_blank'>File {++index}</Link>
               
               </StyledTableCell>
               <StyledTableCell align="left" ><p>{submision.description}</p></StyledTableCell>

@@ -12,7 +12,6 @@ import { Button, FormControl, InputLabel, MenuItem, Pagination, Select, Stack } 
 import { useRouter } from 'next/navigation';
 export default function page() {
   const {userToken, setUserToken, userData}=useContext(UserContext);
-console.log(userToken);
   const [courses, setCourses] = useState([]);
   const router = useRouter();
 
@@ -27,10 +26,8 @@ console.log(userToken);
         const {data} = await axios.get(
           `${process.env.NEXT_PUBLIC_EDUCODING_API}CourseContraller/GetAllEnrolledCoursesForAStudent?studentid=${userData.userId}&pageNumber=${pageNum}&pageSize=${pageSize}`,{headers :{Authorization:`Bearer ${userToken}`}}
         );
-        console.log(data.result);
          setCourses(data.result.items);
          setTotalPages(data.result.totalPages);
-        console.log(courses);
 
       }catch(error){
         console.log(error);
@@ -120,7 +117,6 @@ const filteredCourses = Array.isArray(courses) ? courses.filter((course) => {
           alt='Course Image'
         />  
         <Typography variant='h5'>{course.course.name }</Typography>
-      {  console.log(course.courseId)}
         {/* <Link href={`MyCourses/${course.courseId}`}> <ArrowCircleRightIcon sx={{ fontSize: 40 }} /></Link> */}
          <Button onClick={()=>router.push(`MyCourses/${course.courseId}`)}><ArrowCircleRightIcon sx={{ fontSize: 40 }} className='arrowIcon'/></Button>
         </Box>

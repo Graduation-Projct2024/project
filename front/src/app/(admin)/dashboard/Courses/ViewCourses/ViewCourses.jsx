@@ -31,7 +31,6 @@ export default function ViewCourses() {
 
 const handleClickOpenUpdate = (id) => {
   setCourseId(id);
-    console.log(id)
     setOpenUpdate(true);
 };
 const handleCloseUpdate = () => {
@@ -51,9 +50,7 @@ const handleCloseUpdate = () => {
           }
         );
   
-        // Check the response in the console
-        console.log('Response Headers:', response.headers);
-        console.log('Response Data:', response.data);
+        
         const url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }));
         const link = document.createElement('a');
         link.href = url;
@@ -61,7 +58,6 @@ const handleCloseUpdate = () => {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        console.log(response)
       }catch(error){
         console.log(error)
       }
@@ -73,16 +69,14 @@ const handleCloseUpdate = () => {
       try{
         const data = JSON.stringify(courses);
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_EDUCODING_API}export-all-data-to-excel?data=course`,
+          `${process.env.NEXT_PUBLIC_EDUCODING_API}Reports/export-all-data-to-excel?data=course`,
           {
             headers: { Authorization: `Bearer ${userToken}`, 'Content-Type': 'application/json' },
             responseType: 'blob'
           }
         );
   
-        // Check the response in the console
-        console.log('Response Headers:', response.headers);
-        console.log('Response Data:', response.data);
+       
         const url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }));
         const link = document.createElement('a');
         link.href = url;
@@ -90,7 +84,6 @@ const handleCloseUpdate = () => {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        console.log(response)
       }catch(error){
         console.log(error)
       }
@@ -98,20 +91,6 @@ const handleCloseUpdate = () => {
   }
 
 
-  // const fetchCourses = async () => {
-  //   if (userData) {
-  //     try {
-  //       const { data } = await axios.get(
-  //         `http://localhost:5134/api/CourseContraller?pageNumber=1&pageSize=10`
-  //       );
-  //       setTotalPages(data.result.totalPages);
-  //       //console.log(data);
-  //       setCourses(data.result.items);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   }
-  // };
   const fetchCourses = async (pageNum = pageNumber, pageSizeNum = pageSize) => {
     if (userData) {
       try {
@@ -148,7 +127,6 @@ const handleCloseUpdate = () => {
                 },
               });
   
-            console.log(data);
             if (Status == "finish") {
               Swal.fire({
                 title: `Course Finished Successully`,
@@ -165,13 +143,6 @@ const handleCloseUpdate = () => {
     }
   };
 
-//   useEffect(() => {
-//     fetchCourses();
-//   }, [courses,pageNumber, pageSize,userData]);
-// //  console.log(courses)
-// const handleChange = (event, value) => {
-//   setPageNumber(value);
-// };
 useEffect(() => {
   fetchCourses();
 }, [courses,userData, pageNumber, pageSize]);  // Fetch courses on mount and when page or size changes

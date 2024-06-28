@@ -11,7 +11,6 @@ import Swal from 'sweetalert2';
 export default function AddSkill({setOpen}) {
   let [errmsg,setErrmsg] = useState();
     const { userData,userToken } = useContext(UserContext);
-    console.log(userToken)
     const initialValues={
         skillName: '',
     };
@@ -30,10 +29,8 @@ export default function AddSkill({setOpen}) {
                 if(data.errorMassages != null){
                   setErrmsg(data.errorMassages)
                   
-                  // console.log(data.errorMassages)
                 }
                 else{
-            //console.log(data);
             formik.resetForm();
             setOpen(false);      
             Swal.fire({

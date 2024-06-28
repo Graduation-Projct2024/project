@@ -94,7 +94,6 @@ const [materialId, setMaterialId]=useState();
     setOpen(false);
   };
     const [materials, setMaterials] = useState([]);
-    console.log(useParams());
     const { courseId } = useParams();
 
     const getCourseMaterial = async () => {

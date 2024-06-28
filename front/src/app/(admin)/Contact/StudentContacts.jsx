@@ -9,10 +9,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPhone } from '@fortawesome/free-solid-svg-icons'
 import { faEnvelope } from '@fortawesome/free-regular-svg-icons'
 import '../Profile/[id]/Profile.css'
-import { faArrowUpFromBracket, faEye, faFilter } from '@fortawesome/free-solid-svg-icons'
 import { UserContext } from '@/context/user/User'
 import { FormControl, InputLabel, MenuItem, Pagination, Select, Stack, Tooltip } from '@mui/material'
-import ProfileImage from './ProfileImage/ProfileImage'
 
 export default function StudentContacts() {
     const {userToken, setUserToken, userData}=useContext(UserContext);
@@ -31,7 +29,6 @@ export default function StudentContacts() {
               Authorization: `Bearer ${userToken}`,
           },
       });
-      console.log(data);
       setContact(data.result.items);
       setTotalPages(data.result.totalPages);
     }
@@ -101,19 +98,7 @@ export default function StudentContacts() {
           <MenuItem value={15}>15</MenuItem>
         </Select>
       </FormControl>
-                {/* <div className="icons d-flex gap-2 pt-3">
-                    
-                    <div className="dropdown">
-  <button className="dropdown-toggle border-0 bg-white edit-pen" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-    <FontAwesomeIcon icon={faFilter} />
-  </button>
-  <ul className="dropdown-menu">
- 
-  </ul>
-</div>
-<FontAwesomeIcon icon={faArrowUpFromBracket} />
-                    
-                </div> */}
+                
                 </form>
                
 
@@ -128,29 +113,6 @@ export default function StudentContacts() {
           <div key={contact.email} className="col-md-4">
                     <div className="card text-center mb-3" style={{ width: "18rem" }}>
                       <div className="card-body m-3">
-                      {/* <img src={contact.imageUrl ? contact.imageUrl : "./user1.png"} 
-           className="pho pb-3 img-fluid" 
-           alt="Profile" 
-           onError={(e) => { 
-             console.error("Error loading image:", contact.imageUrl); 
-             e.target.onerror = null; // prevents looping
-             e.target.src = "./user1.png"; // default image if error
-           }} />                     */}
-       {/* <img 
-    src={contact.imageUrl ? contact.imageUrl : "./user1.png"} 
-    className="pho pb-3 img-fluid" 
-    alt="Profile" 
-    onError={(e) => { 
-        if (e.target.src !== "./user1.png") { // Prevents looping
-            e.target.onerror = null; // Prevents looping
-            e.target.src = "./user1.png"; // Default image if error
-        } else {
-            console.error("Error loading image:", contact.imageUrl);
-            // Handle 404 error here, for example, by setting a different default image
-            // e.target.src = "./404.png"; // Replace with your 404 image path
-        }
-    }} 
-/> */}
 
 {userData && contact.imageUrl ? (
               <img src={`${contact.imageUrl}`} className="pho pb-3 img-fluid" />
@@ -159,7 +121,6 @@ export default function StudentContacts() {
             )}
 
 
-           {/* <ProfileImage contact={contact}/> */}
                       <h4 className="card-title contactName">{contact.userName} {contact.lName}</h4>
                         
                         <div className="d-flex justify-content-center gap-3 pt-3">

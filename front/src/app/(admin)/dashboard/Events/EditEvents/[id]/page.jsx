@@ -39,9 +39,7 @@ export default function EditEvent({id   , name   , category    ,dateOfEvent   , 
         const { data } = await axios.put(`${process.env.NEXT_PUBLIC_EDUCODING_API}EventContraller/EditEvent?id=${id}`, formData, { headers: { Authorization: `Bearer ${userToken}` } });
         if(data.errorMassages != null){
           setErrmsg(data.errorMassages)
-          
-          // console.log(data.errorMassages)
-        }
+          }
         else{
           formik.resetForm();
           setOpenUpdate(false);

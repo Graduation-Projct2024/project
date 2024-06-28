@@ -60,7 +60,6 @@ export default function ViewLink({ materialID }) {
 
   setMaterial(data.result);
   setLoading(false);
-  console.log(data)
 
   }
 catch(error){

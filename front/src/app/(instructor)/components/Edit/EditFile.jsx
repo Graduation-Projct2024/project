@@ -15,9 +15,7 @@ import { useRouter } from 'next/navigation'
 
 export default function EditFile({materialID, name, description, pdf, type , Id }) {
   const router = useRouter();
-console.log(description)
   const {userData, userToken}=useContext(UserContext);
-console.log(materialID)
 const [files, setFiles] = useState([]);
 
 const handleFieldChange = (event) => {
@@ -42,7 +40,6 @@ const handleFieldChange = (event) => {
 
   const onSubmit = async (tasks) => {
     try {
-console.log("test")
 const formData = new FormData();
 formData.append("name", tasks.name);
 formData.append("description", tasks.description);
@@ -61,7 +58,6 @@ const { data } = await axios.put(
 
 
 );
-  console.log(data);
  formik.resetForm();
  setAlertOpen(true);
  router.back();
@@ -89,7 +85,6 @@ const { data } = await axios.put(
     onSubmit,
     validationSchema: validationSchema,
   });
-  console.log(name);
   const inputs = [
     {
       id: "name",

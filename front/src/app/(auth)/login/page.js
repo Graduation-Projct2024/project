@@ -81,7 +81,6 @@ export default function page() {
   });
 
   const onSubmit = async (users) => {
-    console.log(users);
 
     const { data } = await axios.post(
       `${process.env.NEXT_PUBLIC_EDUCODING_API}UserAuth/Login`,
@@ -91,15 +90,12 @@ export default function page() {
      if(data.errorMassages != null){
         setErrmsg(data.errorMassages)
         
-        // console.log(data.errorMassages)
       }
       else{
-        console.log(data);
       setOpen(true);
       localStorage.setItem("userToken", data.result.token);
       setUserToken(data.result.token);
       setUserData(data.result.user);
-      console.log(userToken);
       if(data.result.user.role === "admin") {
         router.push('/dashboard');
         }

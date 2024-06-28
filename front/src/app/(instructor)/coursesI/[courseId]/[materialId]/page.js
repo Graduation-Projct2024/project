@@ -1,4 +1,3 @@
-
 'use client';
 import React, { useContext, useEffect, useState } from 'react'
 import ViewTask from '../../../components/View/ViewTask.jsx'
@@ -23,7 +22,6 @@ export default function page() {
 
     const[type,setType]=useState();
     const[name,setName]=useState();
-console.log(useParams())
 const{materialId, courseId}=useParams();
     const getMaterial=async()=>{
       if(userToken){
@@ -36,7 +34,6 @@ const{materialId, courseId}=useParams();
         setType(data.result.type);
         setName(data.result.name);
 
-        console.log(data)
         }catch(error){
           console.log(error);
           setError(error.response.status);

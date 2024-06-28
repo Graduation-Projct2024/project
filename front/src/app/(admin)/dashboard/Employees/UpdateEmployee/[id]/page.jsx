@@ -14,21 +14,6 @@ export default function UpdateEmployee({id , fName , lName , email, gender, phon
     const [selectedGender, setSelectedGender] = useState(gender);
     const {userToken, setUserToken, userData,userId}=useContext(UserContext);
     let [errmsg,setErrmsg] = useState()
-    // useEffect(() => {
-    //   const fetchEmployeeData = async () => {
-    //     if(userData){
-    //     try {
-    //       const { data } = await axios.get(`http://localhost:5134/api/Employee/GetEmployeeById?id=${id}`);
-    //      // console.log(data.result);
-    //       setEmployeeData(data.result);
-    //     } catch (error) {
-    //       console.error('Error fetching employee data:', error);
-    //     }}
-    //   };
-
-    //   fetchEmployeeData();
-    // }, [id]);
-
     const onSubmit = async (updatedData) => {
       if(userData){
       try {
@@ -38,15 +23,14 @@ export default function UpdateEmployee({id , fName , lName , email, gender, phon
         formData.append('email', updatedData.email);
         formData.append('phoneNumber', updatedData.phoneNumber);
         formData.append('address', updatedData.address);
-        // formData.append('gender', users.gender);;
-        // formData.append('role', users.role);
+
         formData.append('gender', selectedGender); // Use selectedGender from state
 
         const {data} = await axios.put(`${process.env.NEXT_PUBLIC_EDUCODING_API}Employee/UpdateEmployeeFromAdmin?id=${id}`, formData, { headers: { Authorization: `Bearer ${userToken}` } });
         if(data.errorMassages != null){
           setErrmsg(data.errorMassages)
           
-          // console.log(data.errorMassages)
+         
         }
         else{
             formik.resetForm();
@@ -124,19 +108,6 @@ export default function UpdateEmployee({id , fName , lName , email, gender, phon
         title:'User address',
         value:formik.values.address,
       },
-      // {
-      //   type : 'text',
-      //   id:'role',
-      //   name:'role',
-      //   title:'User role',
-      //   value:formik.values.role,
-      // },{
-      //   type : 'text',
-      //   id:'gender',
-      //   name:'gender',
-      //   title:'User gender',
-      //   value:formik.values.gender,
-      // },
       ]
 
       const renderInputs = inputs.map((input,index)=>
@@ -176,13 +147,6 @@ export default function UpdateEmployee({id , fName , lName , email, gender, phon
         </select>
       </div>
       
-      {/* <button
-        type="submit"
-        className="btn btn-primary createButton mt-3 fs-3 px-3 w-50"
-        disabled={formik.isSubmitting || Object.keys(formik.errors).length > 0 || Object.keys(formik.touched).length === 0||!selectedGender }
-      >
-        UPDATE ACCOUNT
-      </button> */}
     <div className='text-center mt-3'>
       <Button sx={{px:2}} variant="contained"
               className="m-2 btn primaryBg"

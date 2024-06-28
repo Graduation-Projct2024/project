@@ -103,7 +103,6 @@ export default function Education() {
           setOpenAlert(true);
 
         
-        console.log(data);
       } catch (error) {
         console.log(error);
       }
@@ -112,11 +111,9 @@ export default function Education() {
   
   const handleEdit =()=>{
     setIsEditing(!isEditing);
-    console.log(isEditing);
    }
    const handleCloseAlert =()=>{
     setOpenAlert(false);
-    console.log(isEditing);
    }
   useEffect(() => {
     getAllSkills();

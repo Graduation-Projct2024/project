@@ -32,16 +32,12 @@ export default function page() {
     endDate: "",
   };
   const onSubmit = async (courses) => {
-console.log("test")
 const formData = new FormData();
 formData.append("name", courses.name);
 formData.append("description", courses.description);
 formData.append("startDate", courses.startDate);
 formData.append("endDate", courses.endDate);
-console.log( courses.name)
-console.log(  courses.description)
-console.log( courses.startDate)
-console.log( courses.endDate)
+
 
 const { data } = await axios.post(
   `${process.env.NEXT_PUBLIC_EDUCODING_API}Request/RequestToCreateCustomCourse?studentid=${userId}`,

@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import axios from 'axios';
 import { faFacebookF, faGithub, faLinkedinIn } from '@fortawesome/free-brands-svg-icons'
 import { faUser } from '@fortawesome/free-regular-svg-icons';
-import { faEnvelope, faPen } from '@fortawesome/free-solid-svg-icons'
+import { faEnvelope, faPen, faPhone } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './Profile.css'
 import '../../../(admin)/dashboard/dashboard.css'
@@ -14,7 +14,7 @@ import ViewWeeklyHours from './ViewWeeklyHours';
 import Education from './Education.jsx';
 import Feedback from './Feedback.jsx';
 import About from './About.jsx';
-import { Button, useMediaQuery, useTheme } from '@mui/material';
+import { Button, Tooltip, useMediaQuery, useTheme } from '@mui/material';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import SchoolIcon from '@mui/icons-material/School';
@@ -90,7 +90,7 @@ const handleCloseUpdate = () => {
       </div>
       <div className="row">
         <div className="col-xl-4 text-center justify-content-center">
-          {user.imageUrl ? <img src={`https://localhost:7116/${user.imageUrl}`} className='profile img-fluid'/> :<img src='/user.jpg' className='profile img-fluid'/>}
+          {user.imageUrl ? <img src={`${user.imageUrl}`} className='profile img-fluid'/> :<img src='/user.jpg' className='profile img-fluid'/>}
           
         </div>
         <div className="col-xl-8">
@@ -135,12 +135,18 @@ const handleCloseUpdate = () => {
                   </div>
               </div>
                 
-                <ul className='d-flex gap-4 '>
+                {/* <ul className='d-flex gap-4 '>
                   <li className=' social'><FontAwesomeIcon icon={faLinkedinIn} /></li>
                   <li className=' social'><FontAwesomeIcon icon={faGithub} /></li>
                   <li className=' social'><FontAwesomeIcon icon={faFacebookF} /></li>
                   <li className=' social'><FontAwesomeIcon icon={faEnvelope} /></li>
-                </ul>
+                </ul> */}
+                <div className="d-flex justify-content-center gap-3 pt-3 border-top">
+                        <Tooltip title="phone" placement="top">
+                          <Link className='social' href={`tel:${user.phoneNumber}`}><FontAwesomeIcon icon={faPhone} /></Link></Tooltip>
+                        <Tooltip title="Email" placement="top">
+                          <Link className='social' href={`mailto:${user.email}`}><FontAwesomeIcon icon={faEnvelope} /></Link></Tooltip>
+                        </div>
                 
               </div>
             </div>
@@ -156,14 +162,14 @@ const handleCloseUpdate = () => {
             <Tab icon={< PersonIcon/>} label="About" value="0"/>
       <Tab icon={<SchoolIcon />} label="Education" value="1" />
       <Tab icon={<AccessTimeIcon />} label="Availability" value="2"/>
-      <Tab icon={<ReviewsIcon />} label="ReviewS" value="3"/>
+      {/* <Tab icon={<ReviewsIcon />} label="ReviewS" value="3"/> */}
 
           </TabList>
         </Box>
         <TabPanel value="0" active><About id={params.id}/></TabPanel>
         <TabPanel value="1"><Education id={params.id}/></TabPanel>
         <TabPanel value="2"><ViewWeeklyHours id={params.id}/></TabPanel>
-        <TabPanel value="3"><Feedback id={params.id}/></TabPanel>
+        {/* <TabPanel value="3"><Feedback id={params.id}/></TabPanel> */}
 
       </TabContext>
     </Box>

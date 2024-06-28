@@ -110,7 +110,6 @@ export default function Review({courseId,isEnrolled}) {
         const data = await axios.get(
           `${process.env.NEXT_PUBLIC_EDUCODING_API}Feedback/GetAllCourseFeedback?courseId=${courseId}`
         );
-      console.log(data);
         setReviews(data.data.result.items);
       }catch(error){
         console.log(error);
@@ -202,10 +201,10 @@ export default function Review({courseId,isEnrolled}) {
         </DialogActions>
       </Dialog>
     <Box sx={{display:'flex', justifyContent: 'flex-end'}}>
-      {isEnrolled &&
+      
     <IconButton aria-label="add" sx={{alignself:'end'}} onClick={handleClickOpen}>
-  <AddCommentIcon sx={{color:"#4c5372" , fontSize:30, mr:3}} />
-</IconButton>}
+  {isEnrolled &&<AddCommentIcon sx={{color:"#4c5372" , fontSize:30, mr:3}} />}
+</IconButton>
     </Box>
     <List sx={{ width: '100%', bgcolor: 'background.paper' }} className='Reviews'>
   {reviews?.length ? (

@@ -14,14 +14,12 @@ export default function JoinCoursesRequests() {
     const [pageNumber, setPageNumber] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [totalPages, setTotalPages] = useState(0);
-    // console.log(joinCoursesReq)
 
     const fetchRequestsForJoinCourses = async (pageNum = pageNumber, pageSizeNum = pageSize) => {
       if(userData){
       try{
       const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}Request/GetAllRequestToJoinCourses?pageNumber=${pageNum}&pageSize=${pageSize}`,{headers :{Authorization:`Bearer ${userToken}`}});
-      // setLoading(false)
-      // console.log(data);
+
 
       setJoinCoursesReq(data.result.items);
       setTotalPages(data.result.totalPages);
@@ -31,42 +29,6 @@ export default function JoinCoursesRequests() {
       }
     }
     };
-
-    // const joinCourse = async (courseId, studentId , status) => {
-    //     //setLoader(true);
-    //     if(userData){
-    //     try{
-    //     const { data } = await axios.patch(`http://localhost:5134/api/StudentsContraller/ApprovelToJoin?courseId=${courseId}&studentId=${studentId}&status=${status}`, {},
-    //     {
-    //         headers: {
-    //             Authorization: `Bearer ${userToken}`,
-    //         },
-    //     });
-      
-    //   console.log(data,status);
-    //   if(status == "joined"){
-    //   Swal.fire({
-    //     title: `This student enrolled to this course Successfully`,
-    //      text: "Request Accepted",
-    //     icon: "success"
-    //   });}
-    //   else if(status == 'reject'){
-    //     Swal.fire({
-    //       icon: "error",
-    //       title: "Request Rejected ):",
-    //       text: "Opsss...",
-          
-    //     });
-    
-    //   }
-    
-    //   }
-    //     catch(error){
-    //       console.log(error);
-    //     }
-    
-    //   }
-    //   };
 
     const joinCourse = async (courseId, studentId, status) => {
       if (userData) {
@@ -88,7 +50,6 @@ export default function JoinCoursesRequests() {
                   },
                 });
     
-              console.log(data, status);
               if (status == "joind") {
                 Swal.fire({
                   title: `This student enrolled to this course Successfully`,
@@ -131,15 +92,7 @@ export default function JoinCoursesRequests() {
       setSearchTerm(event.target.value);
     };
 
-//     const filteredRequestsToJoinCourses = joinCoursesReq?  joinCoursesReq.filter((req) => {
 
-//       const matchesSearchTerm =
-//       Object.values(req).some(
-//           (value) =>
-//           typeof value === 'string' && value.toLowerCase().includes(searchTerm.toLowerCase())
-//       );
-//       return matchesSearchTerm;
-// }):<p>null</p>;
 
 const filteredRequestsToJoinCourses = Array.isArray(joinCoursesReq) ? joinCoursesReq.filter((course) => {
   const matchesSearchTerm = Object.values(course).some(

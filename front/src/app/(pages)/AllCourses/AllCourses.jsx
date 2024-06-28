@@ -18,7 +18,6 @@ export default function AllCourses() {
           const { data } = await axios.get(
             `${process.env.NEXT_PUBLIC_EDUCODING_API}CourseContraller/GetAllAccreditCourses?pageNumber=1&pageSize=100`
           );
-          console.log(data);
           setCourses(data.result.items);
         } catch (error) {
           console.log(error);
@@ -59,7 +58,6 @@ export default function AllCourses() {
               <div className="col-lg-4 col-md-6 col-sm-12 pb-4" key={course.id}>
                <div className="singleCourse">
                 <div className="course-image row">
-                  {/* <img src={course.imageUrl} alt="Courses" className='col-md-6'/> */}
                   {course.imageUrl ? (
                   <img src={`${course.imageUrl}`} className="pho pb-3 img-fluid" />
             ) : (

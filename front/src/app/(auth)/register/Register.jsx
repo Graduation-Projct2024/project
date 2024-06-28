@@ -34,7 +34,6 @@ export default function Register() {
   };
   const onSubmit = async (users) => {
     try{
-console.log("test")
 const formData = new FormData();
 formData.append("userName", users.userName);
 formData.append("email", users.email);
@@ -51,12 +50,9 @@ const { data } = await axios.post(
 if(data.errorMassages != null){
   setErrmsg(data.errorMassages)
   
-  // console.log(data.errorMassages)
 }
 else{
-console.log(data);
 setResult(data.result);
-  console.log("test");
 //   formik.resetForm();
 setOpen(true);
 router.push(`/RegisterCode?email=${users.email}`);
@@ -167,24 +163,7 @@ setErrors(error.response.data.errors.errorMassages);
         <p className='text-danger'>{errmsg}</p>
           
           </form>
-      {/* <div className="form-container sign-up">
-      <form onSubmit={formik.handleSubmit} encType="multipart/form-data">
-        <h2>Create Account</h2>
-        
-        {renderInputs}
-        <div className="text-center mt-3">
-        <button
-              className="m-2 btn "
-              type="submit"
-              disabled={!formik.isValid}
-            >
-              Register
-            </button>
-        </div>
-        {errors&&<p className='text-danger'>{errors}</p>}
-        <p className='text-danger'>{errmsg}</p>
-      </form>
-    </div> */}
+
     </>
   );
 }

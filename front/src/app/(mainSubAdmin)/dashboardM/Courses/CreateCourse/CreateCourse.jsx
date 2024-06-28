@@ -1,3 +1,4 @@
+
 'use client'
 import Input from '@/component/input/Input';
 import TextArea from '@/component/input/TextArea';
@@ -13,17 +14,15 @@ export default function CreateCourse({setOpen}) {
   const {userToken, setUserToken, userData,userId}=useContext(UserContext);
   let [instructors,setInstructors] = useState([]);
   const [selectedIns, setSelectedIns] = useState('');
-  let [errmsg,setErrmsg] = useState()
   const fetchIns = async ()=>{
     const {data} = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}Instructor/GetAllInstructorsList`,{headers :{Authorization:`Bearer ${userToken}`}});
-    // console.log(data)
      setInstructors(data.result);
   }
-  // console.log(instructors)
 
   useEffect(() => {
     fetchIns();
   }, [instructors,userData]);
+  let [errmsg,setErrmsg] = useState()
 
   const initialValues={
     name: '',
@@ -68,12 +67,8 @@ const onSubmit = async (values) => {
     if(data.errorMassages != null){
       setErrmsg(data.errorMassages)
       
-      // console.log(data.errorMassages)
     }
     else{
-    
-    console.log(data);
-    console.log('course created');
     formik.resetForm();
     setOpen(false);
     Swal.fire({
@@ -81,8 +76,6 @@ const onSubmit = async (values) => {
       text: "Wait for Admin accredit this Course",
       icon: "success"
     });
-
-    
 
   } }catch (error) {
     if (error.isAxiosError) {
@@ -133,7 +126,7 @@ const inputs =[
       title:'limit number of studnets',
       value:formik.values.limitNumberOfStudnet,
   },
-  
+
 {
   type : 'date',
   id:'startDate',
@@ -150,14 +143,6 @@ const inputs =[
 },
 {
   type : 'number',
-  id:'subAdminId',
-  name:'subAdminId',
-  title:`SubAdmin Id`,
-  value:formik.values.subAdminId,
-  disabled: true,
-},
-{
-  type : 'number',
   id:'totalHours',
   name:'totalHours',
   title:'# of hours',
@@ -171,6 +156,16 @@ const inputs =[
         title:'image',
         onChange:handleFieldChange,
     },
+      
+  {
+    type : 'text',
+    id:'subAdminId',
+    name:'subAdminId',
+    title:`SubAdmin Id`,
+    value:formik.values.subAdminId,
+    disabled: true,
+},
+
     {
       type : 'text',
       id:'description',
@@ -211,7 +206,7 @@ const renderInputs =  inputs.slice(0, -1).map((input,index)=>
     );
   return (
     <form onSubmit={formik.handleSubmit} encType="multipart/form-data" >
-      <div className="row justify-content-center">
+      <div className="row justify-content-center align-items-center">
           {renderInputs}
           <div className="col-md-10">
         <select
@@ -233,6 +228,8 @@ const renderInputs =  inputs.slice(0, -1).map((input,index)=>
         </select>
       </div> 
         {textAraeInput}
+      
+        
         
       </div>
       
@@ -241,18 +238,11 @@ const renderInputs =  inputs.slice(0, -1).map((input,index)=>
               
       
 
-      {/* <button
-        type="submit"
-        className="btn btn-primary createButton mt-3 fs-3 px-3 w-50"
-        disabled={formik.isSubmitting || Object.keys(formik.errors).length > 0 || Object.keys(formik.touched).length === 0}
-      >
-        CREATE COURSE
-      </button> */}
       <div className='text-center mt-3'>
       <Button sx={{px:2}} variant="contained"
               className="m-2 btn primaryBg"
               type="submit"
-              disabled={formik.isSubmitting || Object.keys(formik.errors).length > 0 || Object.keys(formik.touched).length === 0 || !selectedIns}
+              disabled={formik.isSubmitting || Object.keys(formik.errors).length > 0 || Object.keys(formik.touched).length === 0 }
             >
               Add
             </Button>

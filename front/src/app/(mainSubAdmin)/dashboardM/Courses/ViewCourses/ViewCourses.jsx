@@ -4,11 +4,11 @@ import React, { useContext, useEffect, useState } from 'react'
 import { faArrowUpFromBracket, faEllipsisVertical, faEye, faFilter, faPen } from '@fortawesome/free-solid-svg-icons'
 import Link from 'next/link';
 import axios from 'axios';
-import CreateCourse from '../CreateCourse/CreateCourse';
+// import CreateCourse from '../CreateCourse/CreateCourse';
 import { UserContext } from '@/context/user/User';
-import EditCourse from '../EditCourse/[id]/page';
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Pagination, Select, Stack, Tooltip, useMediaQuery, useTheme } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import CreateCourse from '@/app/(subadmin)/dashboardS/Courses/CreateCourse/CreateCourse';
 
 
 export default function ViewCourses() {
@@ -37,7 +37,6 @@ const handleClickOpen = () => {
     if(userData){
     try{
     const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}CourseContraller/GetAllAccreditCourses?pageNumber=${pageNum}&pageSize=${pageSize}`);
-    // console.log(data.result);
     setCourses(data.result.items);
     setTotalPages(data.result.totalPages);
   }
@@ -250,8 +249,6 @@ const handleClickOpen = () => {
     filteredCourses.map((course,index) =>(
       
       <tr key={course.id}>
-        {/* {console.log(course.id)}
-        {console.log(course.imageUrl)} */}
       <th scope="row">{++index}</th>
       <td>{course.name}</td>
       <td>{course.price}</td>

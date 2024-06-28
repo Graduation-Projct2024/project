@@ -13,7 +13,6 @@ export default function ViewWeeklyHours({id}) {
         {headers :{Authorization:`Bearer ${userToken}`}}
 
         );
-        console.log(data);
         setWeeklyHours(data.result);
       }
         catch(error){

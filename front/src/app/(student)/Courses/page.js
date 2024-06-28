@@ -30,14 +30,13 @@ const [role, setRole]=useState('student');
     const getCourses = async (pageNum = pageNumber, pageSizeNum = pageSize)=> {
       if(userId&&userToken){
         try{
-      const data = await axios.get(
+      const {data} = await axios.get(
         `${process.env.NEXT_PUBLIC_EDUCODING_API}CourseContraller/GetAllCoursesToStudent?studentId=${userId}&pageNumber=${pageNumber}&pageSize=${pageSize}`,
         {headers :{Authorization:`Bearer ${userToken}`}}
 
       );
     
-      console.log(data);
-       setCourses(data.data.result.items);
+       setCourses(data.result.items);
        setTotalPages(data.result.totalPages);
     }catch(error){
       console.log(error);
@@ -54,7 +53,7 @@ const [role, setRole]=useState('student');
     };
 
     const handleClick = (course) => {
-      router.push(`/Courses/${course.id}?isEnrolled=${course.isEnrolled}`);
+      router.push(`/Courses/${course.id}?isEnrolled=${course.isEnrolled}&isAvailable=${course.isAvailable}`);
     };
     
   useEffect(() => {
@@ -215,18 +214,7 @@ if (role=='student'){
         </Box>
         </Box>
       </Grid>
-      <Stack spacing={2} sx={{ width: '100%', maxWidth: 500, margin: '0 auto' }} className='pt-5'>
-        <Pagination
-          className="pb-3"
-          count={totalPages}
-          page={pageNumber}
-          onChange={handlePageChange}
-          variant="outlined"
-          color="secondary"
-          showFirstButton
-          showLastButton
-        />
-      </Stack>
+      
       
     </Grid>
     </Layout>

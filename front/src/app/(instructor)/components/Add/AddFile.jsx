@@ -47,7 +47,6 @@ tasks.pdf.forEach(file => {
 });
 formData.append(type, Id);
 formData.append("InstructorId",userData.userId);
-console.log(tasks.pdf)
 
 const { data } = await axios.post(
     `${process.env.NEXT_PUBLIC_EDUCODING_API}MaterialControllar/AddFile`,
@@ -57,7 +56,6 @@ const { data } = await axios.post(
 
 
 );
-  console.log("test");
  formik.resetForm();
  setAlertOpen(true);
  onClose(); 

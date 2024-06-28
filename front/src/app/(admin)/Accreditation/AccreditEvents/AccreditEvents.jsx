@@ -1,7 +1,5 @@
 'use client'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useContext, useEffect, useState } from 'react'
-import { faArrowUpFromBracket, faEye, faFilter } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { UserContext } from '@/context/user/User';
@@ -11,7 +9,6 @@ export default function AccreditEvents() {
 
     const [accreditEvents, setAccreditEvents] = useState([]);
   let[loader,setLoader] = useState(false);
-  // const [processingEvent, setProcessingEvent] = useState(null); // State to track which event is being processed
   const {userToken, setUserToken, userData}=useContext(UserContext);
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -26,8 +23,6 @@ export default function AccreditEvents() {
           Authorization: `Bearer ${userToken}`,
       },
   });
-    console.log(data);
-    // setAccreditEvents(data);
     setTotalPages(data.result.totalPages);
     setAccreditEvents(data.result.items);
   }
@@ -36,39 +31,6 @@ export default function AccreditEvents() {
     }}
   };
 
-
-
-  // const accreditEvent = async (eventId , Status) => {
-  //   //setLoader(true);
-  //   console.log(eventId);
-  //   if(userData){
-  //   try{
-  //   const { data } = await axios.patch(`http://localhost:5134/api/CourseContraller/accreditEvent?eventId=${eventId}&Status=${Status}`,
-  // );
-  // console.log(data);
-  // if(Status === 'accredit'){
-  // Swal.fire({
-  //   title: `Event Accredited Successfully`,
-  //   text: "Check View Events page",
-  //   icon: "success"
-  // });}
-  // else if(Status === 'reject'){
-  //   Swal.fire({
-  //     icon: "error",
-  //     title: "Event Rejected ):",
-  //     text: "Opsss...",
-      
-  //   });
-
-  // }
-
-  // }
-  //   catch(error){
-  //     console.log(error);
-  //   }
-
-  // }
-  // };
   const accreditEvent = async (eventId , Status) => {
     if (userData) {
       Swal.fire({
@@ -89,7 +51,6 @@ export default function AccreditEvents() {
                 },
               });
   
-            console.log(data);
             if (Status == "accredit") {
               Swal.fire({
                 title: `Event Accredit Successully`,
@@ -130,7 +91,6 @@ export default function AccreditEvents() {
 if(loader){
   return <p>Loading ...</p>
 }
-// console.log(accreditEvents);
 
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -188,22 +148,7 @@ const getStatusStyle = (status) => {
           <MenuItem value={15}>15</MenuItem>
         </Select>
       </FormControl>
-              {/* <div className="icons d-flex gap-2 pt-3">
-                <div className="dropdown">
-                  <button
-                    className="dropdown-toggle border-0 bg-white edit-pen"
-                    type="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  >
-                    <FontAwesomeIcon icon={faFilter} />
-                  </button>
-                  <ul className="dropdown-menu">
-                    <li>uuu</li>
-                  </ul>
-                </div>
-                <FontAwesomeIcon icon={faArrowUpFromBracket} />
-              </div> */}
+             
             </form>
           </div>
         </nav>
@@ -225,23 +170,16 @@ const getStatusStyle = (status) => {
         <tbody>
           {filteredAccreditEvents.length ? (
             filteredAccreditEvents.map((event,index) => (
-               <tr key={event.id} /*className={event.accredited ? "accredited-row" : ""}*/>
-              {/* <tr key={event.id} style={{ backgroundColor: accreditRow(event) ? 'green' : (rejectRow(event) ? 'red' : 'white') }}> */}
+               <tr key={event.id} >
                 <th scope="row">{++index}</th>
                 <td >{event.name}</td>
                 <td>{event.category}</td>
                 <td>{event.dateOfEvent}</td>
                 <td className='text-center'>{event.subAdminFName} {event.subAdminLName}</td>
                 <td className='text-center align-content-center'><span className='p-2 border-2' style={getStatusStyle(event.status)}>{event.status}</span></td>
-                {/* {console.log (event.status)} */}
                 <td className="d-flex gap-1">
-                  {/* <Link href={"/Profile"}>
-                    <button type="button" className="border-0 bg-white ">
-                      <FontAwesomeIcon icon={faEye} className="edit-pen" />
-                    </button>
-                  </Link> */}
+                 
                   <button type="button" className="btn accredit" onClick={()=>accreditEvent(event.id,'accredit')} disabled = {event.status == 'accredit' || event.status == 'reject'} >Accredit</button>  
-                {/* <Link href='/dashboard' className='text-decoration-none acc'>Accredit </Link> */}
                 <button type="button" className="btn accredit" onClick={()=>accreditEvent(event.id,"reject")} disabled = {event.status == 'accredit' || event.status == 'reject'}>Reject</button>
 
                 </td>

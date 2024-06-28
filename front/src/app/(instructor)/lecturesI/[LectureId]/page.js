@@ -93,44 +93,36 @@ const [materialId, setMaterialId]=useState();
   const handleAddContent=(type)=>{
 if (type=='task'){
   setOpenTaskDialog(true);
-  console.log(type);
 
 }
 if (type=='file'){
   setOpenFileDialog(true);
-  console.log(type);
 
 }
 if (type=='link'){
   setOpenLinkDialog(true);
-  console.log(type);
 
 }
 if (type=='announcement'){
   setOpenAnnouncementDialog(true);
-  console.log(type);
 
 }
 }  
 const handleViewContent=(type, mId)=>{
   if (type=='Task'){
     setOpenViewTaskDialog(true);
-    console.log(type);
   
   }
   if (type=='file'){
     setOpenFileDialog(true);
-    console.log(type);
   
   }
   if (type=='link'){
     setOpenLinkDialog(true);
-    console.log(type);
   
   }
   if (type=='announcement'){
     setOpenAnnouncementDialog(true);
-    console.log(type);
   
   }
   }  
@@ -155,9 +147,7 @@ const handleCloseViewTaskDialog = () => {
     setOpen(false);
   };
     const [materials, setMaterials] = useState([]);
-    console.log(useParams());
     const { LectureId } = useParams();
-    // console.log(courseId);
     const [lecture, setLectre]=useState();
     const getLecture = async () => {
 if(userToken&&LectureId){
@@ -166,7 +156,6 @@ if(userToken&&LectureId){
         {headers :{Authorization:`Bearer ${userToken}`}}
 
       );
-    console.log(data);
      setLectre(data.data.result);
     }};
     const getLectureMaterial = async () => {
@@ -178,9 +167,7 @@ if(userToken&&LectureId){
 
           
         );
-         console.log(data);
         setMaterials(data.result);
-        // console.log(materials);
       }catch(error){
         console.log(error);
       }}
@@ -189,18 +176,7 @@ if(userToken&&LectureId){
       const [pageNumber, setPageNumber] = useState(1);
       const [pageSize, setPageSize] = useState(10);
       const [totalPages, setTotalPages] = useState(0);
-      // const getParticipants =async (pageNum = pageNumber, pageSizeNum = pageSize) => {
-      //   if(userToken){
-
-      //   const data = await axios.get(
-      //     `https://localhost:7116/api/StudentsContraller/GetCourseParticipants?Courseid=${LectureId}&pageNumber=${pageNum}&pageSize=${pageSize}`,
-      //     {headers :{Authorization:`Bearer ${userToken}`}}
-
-      //   );
-      // console.log(data);
-      //   setParticipants(data.data.result.items);
-      //   setTotalPages(data.data.result.totalPages);
-      // }};
+    
 
       useEffect(() => {
         getLectureMaterial();

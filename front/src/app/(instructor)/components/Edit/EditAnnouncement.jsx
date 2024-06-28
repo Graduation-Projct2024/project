@@ -14,7 +14,6 @@ import TextArea from '../../../../component/input/TextArea.jsx';
 
 export default function EditAnnouncement({materialID, name, description, type ,Id }) {
   const {userData, userToken}=useContext(UserContext);
-console.log(materialID)
 const router = useRouter();
 
   const [Alertopen, setAlertOpen] = React.useState(false);
@@ -51,7 +50,6 @@ const { data } = await axios.put(
 
 
 );
-  console.log(data);
  formik.resetForm();
  setAlertOpen(true);
  router.back();
@@ -79,7 +77,6 @@ const { data } = await axios.put(
     onSubmit,
     validationSchema: validationSchema,
   });
-  console.log(name);
   const inputs = [
     {
       id: "name",

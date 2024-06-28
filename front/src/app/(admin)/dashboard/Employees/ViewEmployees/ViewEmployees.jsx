@@ -20,7 +20,6 @@ const api = process.env.NEXT_PUBLIC_EDUCODING_API;
 
 export default function ViewEmployees() {
 
-    console.log("Api" , api)
       const {userToken, setUserToken, userData}=useContext(UserContext);
       const [employees, setEmployees] = useState([]);
       // const [loading,setLoading] = useState(true);
@@ -37,7 +36,6 @@ export default function ViewEmployees() {
 
     const handleClickOpenUpdate = (id) => {
         setEmployeeId(id);
-        console.log(id)
         setOpenUpdate(true);
     };
     const handleCloseUpdate = () => {
@@ -45,7 +43,6 @@ export default function ViewEmployees() {
     };
     const handleClickOpenChange = (id) => {
       setEmployeeId(id);
-      console.log(id)
       setOpenChange(true);
   };
   const handleCloseChange = () => {
@@ -58,25 +55,18 @@ export default function ViewEmployees() {
       const handleClose = () => {
         setOpen(false);
       };
-      // console.log(employees)
       const fetchEmployees = async (pageNum = pageNumber, pageSizeNum = pageSize)  => {
         if(userData){
-          // setLoading(true);
         try{
-          // ${process.env.NEXT_PUBLIC_EDUCODING_API}
         const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}Employee/GetAllEmployee?pageNumber=${pageNum}&pageSize=${pageSize}`);
-        // setLoading(false)
-      //  console.log(data);
         setEmployees(data.result.items);
         setTotalPages(data.result.totalPages);
 
       }
         catch(error){
-       //   console.log(error);
+         console.log(error);
         }
-        // finally {
-        //   setLoading(false);
-        // }
+        
       }
       };
 
@@ -85,16 +75,13 @@ export default function ViewEmployees() {
           try{
             const data = JSON.stringify(employees);
             const response = await axios.get(
-              `https://localhost:7116/api/Reports/export-all-Data-To-PDF?data=employee`,
+              `${process.env.NEXT_PUBLIC_EDUCODING_API}Reports/export-all-Data-To-PDF?data=employee`,
               {
                 headers: { Authorization: `Bearer ${userToken}`, 'Content-Type': 'application/json' },
                 responseType: 'blob'
               }
             );
       
-            // Check the response in the console
-            console.log('Response Headers:', response.headers);
-            console.log('Response Data:', response.data);
             const url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }));
             const link = document.createElement('a');
             link.href = url;
@@ -102,7 +89,6 @@ export default function ViewEmployees() {
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            console.log(response)
           }catch(error){
             console.log(error)
           }
@@ -114,16 +100,14 @@ export default function ViewEmployees() {
           try{
             const data = JSON.stringify(employees);
             const response = await axios.get(
-              `https://localhost:7116/api/Reports/export-all-data-to-excel?data=employee`,
+              `${process.env.NEXT_PUBLIC_EDUCODING_API}Reports/export-all-data-to-excel?data=employee`,
               {
                 headers: { Authorization: `Bearer ${userToken}`, 'Content-Type': 'application/json' },
                 responseType: 'blob'
               }
             );
       
-            // Check the response in the console
-            console.log('Response Headers:', response.headers);
-            console.log('Response Data:', response.data);
+            
             const url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }));
             const link = document.createElement('a');
             link.href = url;
@@ -131,16 +115,12 @@ export default function ViewEmployees() {
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            console.log(response)
           }catch(error){
             console.log(error)
           }
         }
       }
 
-      // useEffect(() => {
-      //   fetchEmployees();
-      // }, [employees,userData]);
 
       useEffect(() => {
         fetchEmployees();
@@ -180,16 +160,7 @@ export default function ViewEmployees() {
 
   return (
     
-    // <>
-    // {loading ? (
-    //     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
-    //       <CircularProgress />
-    //       <div className='loading bg-white position-fixed vh-100 w-100 d-flex justify-content-center align-items-center z-3'>
-    //   <span class="loader"></span>
-    // </div>
-    //     </Box>
-        
-    //   ) : (
+
 
         <>
      
@@ -288,9 +259,6 @@ export default function ViewEmployees() {
                 </Tooltip>
                 
 
-            {/* <button type="button" className="btn btn-primary ms-2 addEmp" data-bs-toggle="modal" data-bs-target="#staticBackdrop2">
-              <span>+ Add new</span>
-            </button> */}
                <Box
         sx={{
           display: 'flex',
@@ -347,11 +315,7 @@ export default function ViewEmployees() {
       </div>
 
 
-      {/* {loading ? (
-        <Box display="flex" justifyContent="center" alignItems="center" height="50vh">
-          <CircularProgress />
-        </Box>
-      ) : ( */}
+
       <table className="table">
         <thead>
           <tr>

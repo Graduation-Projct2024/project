@@ -34,7 +34,6 @@ export default function ViewEvents() {
       if(userData){
       try{
       const { data } = await axios.get(`${process.env.NEXT_PUBLIC_EDUCODING_API}EventContraller/GetAllAccreditEvents?pageNumber=${pageNum}&pageSize=${pageSize}`);
-      // console.log(data);
       setEvent(data.result.items);
       setTotalPages(data.result.totalPages);
     }
@@ -114,10 +113,7 @@ export default function ViewEvents() {
                     
                 </div>
                 </form>
-                {/* <button type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop"> */}
-                {/* <button type="button" className="btn btn-primary ms-2 addEmp" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                    <span>+ Add new</span> 
-                </button> */}
+               
                 <Box
         sx={{
           display: 'flex',
@@ -197,7 +193,6 @@ export default function ViewEvents() {
   {filteredEvents.length ? (
     filteredEvents.map((event,index) =>(
       <tr key={event.id}>
-        {/* {console.log(event.id)} */}
       <th scope="row">{++index}</th>
       <td>{event.name}</td>
       <td>{event.category}</td>
