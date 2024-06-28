@@ -8,24 +8,24 @@ using System.Threading.Tasks;
 
 namespace courseProject.Core.IGenericRepository
 {
-    public interface ISubAdminRepository/*:IGenericRepository1<SubAdmin>*/
+    public interface ISubAdminRepository/*:IGenericRepository1<User>*/
     {
 
 
 
 
-
+        //public  Task<IReadOnlyList<User>> getAllSubAdminAndMainSubAdmin();
   //      public Task createSubAdminAccountAsync(SubAdmin entity);
-        
-       
-    //    public Task<SubAdmin> GetSubAdminByIdAsync(Guid id); 
-    
-       
-     //   public Task<SubAdmin> getSubAdminByIdAsync(Guid subAdminId);
-     
-      //  public Task RemoveSubAdmin(SubAdmin subAdmin);
-       
-       // public Task<Event> GetEventById(int id);
+
+
+        //    public Task<SubAdmin> GetSubAdminByIdAsync(Guid id); 
+
+
+        //   public Task<SubAdmin> getSubAdminByIdAsync(Guid subAdminId);
+
+        //  public Task RemoveSubAdmin(SubAdmin subAdmin);
+
+        // public Task<Event> GetEventById(int id);
 
     }
 }

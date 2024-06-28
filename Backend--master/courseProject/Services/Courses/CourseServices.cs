@@ -109,7 +109,8 @@ namespace courseProject.Services.Courses
             var instructorFound = await unitOfWork.UserRepository.ViewProfileAsync(course.InstructorId, "instructor");
             if (instructorFound == null) return ErrorInstructor.NotFound;
             var SubAdminFound = await unitOfWork.UserRepository.ViewProfileAsync(course.subAdminId, "subadmin");
-            if (SubAdminFound == null) return ErrorSubAdmin.NotFound;
+            var MainSubAdminFound = await unitOfWork.UserRepository.ViewProfileAsync(course.subAdminId, "main-subadmin");
+            if (SubAdminFound == null && MainSubAdminFound==null) return ErrorSubAdmin.NotFound;
            
             if (course.image != null)
             {
