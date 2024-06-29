@@ -17,7 +17,7 @@ import AdbIcon from '@mui/icons-material/Adb';
 import Link from '@mui/material/Link';
 import { useRouter } from 'next/navigation'
 const pages = ['About', 'ContactUs', 'FAQ', 'AllCourses', 'AllEvents'];
-const settings = ['Login', 'Register'];
+const settings = ['Login'];
 
 import { UserContext } from '@/context/user/User';
 export default function Navbar({role}) {
